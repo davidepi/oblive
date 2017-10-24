@@ -1,5 +1,5 @@
 language: c
-script: mkdir -p build && cd build/ && cmake .. && cmake -build .
+script: mkdir -p build && cd build/ && cmake .. && cmake --build .
 matrix:
     include:
         - os: linux
