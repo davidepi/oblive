@@ -1,0 +1,23 @@
+language: c
+script: mkdir -p build && cd build/ && cmake .. && cmake -build .
+matrix:
+    include:
+        - os: linux
+          dist: trusty
+          sudo: true
+          before_install: 
+            - sudo apt-get update -q
+            - sudo apt-get install libzip-dev -y
+          compiler: gcc
+        - os: linux
+          dist: trusty
+          sudo: true
+          before_install:
+              - sudo apt-get update -q
+              - sudo apt-get install libzip-dev -y
+          compiler: clang
+        - os: osx
+          before_install:
+              - brew update
+              - brew install libzip
+          compiler: clang
