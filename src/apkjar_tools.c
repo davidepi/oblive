@@ -47,7 +47,8 @@ int extract_apkjar(const char* input, const char* output)
     za = zip_open(input, 0, &err);
     if(za == NULL)
         return ZIP_ERROR_UNABLE_TO_OPEN_ZIP;
-    for(int i=0;i<zip_get_num_entries(za,0);i++) //for every zipped file
+    int i;
+    for(i=0;i<zip_get_num_entries(za,0);i++) //for every zipped file
     {
         if(zip_stat_index(za,i,0,&zs)==0)
         {

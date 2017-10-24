@@ -1,3 +1,6 @@
+#ifndef __WINDOWS_DEFINES_H__
+#define __WINDOWS_DEFINES_H__
+
 #if defined(WIN32) || defined(WIN64)
 #include <io.h>
 #include <direct.h>
@@ -29,3 +32,4 @@
 #define PATH_SEPARATOR_STRING "/"
 #endif
 
+#endif

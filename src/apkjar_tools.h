@@ -1,3 +1,6 @@
+#ifndef __APKJAR_TOOLS_H__
+#define __APKJAR_TOOLS_H__
+
 #include "windows_defines.h"
 #include "utility_macros.h"
 #include<stdio.h>
@@ -19,3 +22,5 @@
 #define ZIP_ERROR_UNABLE_TO_READ_ZIP_CONTENT -9
 
 int extract_apkjar(const char* input, const char* output);
+
+#endif
