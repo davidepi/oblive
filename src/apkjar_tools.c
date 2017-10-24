@@ -1,4 +1,42 @@
 #include "apkjar_tools.h"
+
+//check if the file exists
+static inline int check_existance(const char* input)
+{
+    if(!EXISTS(input))
+        return ZIP_ERROR_INPUT_NOT_FOUND;
+    else
+        return ZIP_OK;
+}
+//check if the file is readable and if it is a zip/apk/jar file
+static int check_signature(const char* input)
+{
+    int res = check_existance(input);
+    int fd;
+    uint8_t values[4];
+    if(res != 1)
+        return res;
+    if(!READABLE(input) || ((fd = FD_RO_BINARY(input))==-1))
+        return ZIP_ERROR_INPUT_NOT_READABLE;
+    uint8_t len = read(fd,values,4);
+    close(fd);
+    if(len<4)
+        return ZIP_ERROR_TRUNCATED_FILE;
+    if(values[0]==0x50 && values[1]==0x4B)
+    {
+        if(values[2] == 0x03 && values[3] == 0x04)
+            return ZIP_OK;
+        else if(values[2]==0x05 && values[3]==0x06)
+            return ZIP_EMPTY_ARCHIVE;
+        else if(values[2] == 0x07 && values[3] == 0x08)
+            return ZIP_SPANNED_ARCHIVE;
+        else
+            return ZIP_ERROR_WRONG_SIGNATURE;
+    }
+    else
+        return ZIP_ERROR_WRONG_SIGNATURE;
+}
+
 int extract_apkjar(const char* input, const char* output)
 {
     if(input == 0x0)//otherwise strlen(output) will break
@@ -8,6 +46,10 @@ int extract_apkjar(const char* input, const char* output)
     struct zip* za;
     struct zip_file* zf;
     struct zip_stat zs;
+    
+    int res = check_signature(input);
+    if(res < 0)
+        return res;
 
     //create filename.apk.content strings
     char* FOLDER_EXT = ".content";
@@ -20,10 +62,6 @@ int extract_apkjar(const char* input, const char* output)
 
     //assert filename.apk existance and filename.apk.zip and 
     //filename.apk.zip.content non-existance
-    if(!EXISTS(input))
-        return ZIP_ERROR_INPUT_NOT_FOUND;
-    if(!READABLE(input))
-        return ZIP_ERROR_INPUT_NOT_READABLE;
     if(EXISTS(folder))
         return ZIP_ERROR_OUTPUT_ALREADY_EXISTENT;
     if(!WRITABLE(output))
@@ -81,7 +119,7 @@ int extract_apkjar(const char* input, const char* output)
             if(!zf)
                 return ZIP_ERROR_ZIP_EXTRACTION_FAILED;
             //open file description in write mode
-            f = FD_WR_BINARY(name);
+            f = FD_WO_BINARY(name);
             if(f<0)
                 return ZIP_ERROR_SAVING_EXTRACTED_FILES;
 

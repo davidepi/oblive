@@ -10,6 +10,7 @@
 
 #define BLOCK_SIZE 4096
 
+#define ZIP_EMPTY_ARCHIVE 1
 #define ZIP_OK 0
 #define ZIP_ERROR_NULL_INPUT -1
 #define ZIP_ERROR_INPUT_NOT_FOUND -2
@@ -20,6 +21,9 @@
 #define ZIP_ERROR_ZIP_EXTRACTION_FAILED -7
 #define ZIP_ERROR_SAVING_EXTRACTED_FILES -8
 #define ZIP_ERROR_UNABLE_TO_READ_ZIP_CONTENT -9
+#define ZIP_ERROR_TRUNCATED_FILE -10
+#define ZIP_ERROR_WRONG_SIGNATURE -11
+#define ZIP_SPANNED_ARCHIVE -12
 
 int extract_apkjar(const char* input, const char* output);
 

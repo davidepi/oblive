@@ -13,7 +13,9 @@
 #define unlink(path) _unlink(path)
 #define rmdir(path) _rmdir(path)
 //in windows _S_IWRITE = S_IREAD|S_IWRITE
-#define FD_WR_BINARY(p) _open(p,_O_WRONLY|_O_BINARY|_O_CREAT|_O_TRUNC,_S_IWRITE)
+#define FD_WO_BINARY(p) _open(p,_O_WRONLY|_O_BINARY|_O_CREAT|_O_TRUNC,_S_IWRITE)
+#define FD_RO_BINARY(p) _open(p,_O_RDONLY)
+#define read(a,b,c) _read(a,b,c)
 #define write(a,b,c) _write(a,b,c)
 #define PATH_SEPARATOR_CHAR '\\'
 #define PATH_SEPARATOR_STRING "\\"
@@ -27,7 +29,8 @@
 #define READ_WRITE(path) (access(path,R_OK|W_OK)!=-1)
 #define WRITE_BINARY(path) open(path, O_CREAT | O_TRUNC
 #define MKDIR(path) mkdir(path,0700)
-#define FD_WR_BINARY(p) open(p,O_WRONLY|O_CREAT|O_TRUNC,S_IREAD|S_IWRITE)
+#define FD_WO_BINARY(p) open(p,O_WRONLY|O_CREAT|O_TRUNC,S_IREAD|S_IWRITE)
+#define FD_RO_BINARY(p) open(p,O_RDONLY)
 #define PATH_SEPARATOR_CHAR '/'
 #define PATH_SEPARATOR_STRING "/"
 #endif
