@@ -12,6 +12,8 @@
 #define MKDIR(path) _mkdir(path)
 #define unlink(path) _unlink(path)
 #define rmdir(path) _rmdir(path)
+#define UNREADABLE_CHMOD(p) _chmod(p,0)
+#define RW_CHMOD(p) _chmod(p,_S_IREAD | _S_IWRITE)
 //in windows _S_IWRITE = S_IREAD|S_IWRITE
 #define FD_WO_BINARY(p) _open(p,_O_WRONLY|_O_BINARY|_O_CREAT|_O_TRUNC,_S_IWRITE)
 #define FD_RO_BINARY(p) _open(p,_O_RDONLY)
@@ -31,6 +33,8 @@
 #define MKDIR(path) mkdir(path,0700)
 #define FD_WO_BINARY(p) open(p,O_WRONLY|O_CREAT|O_TRUNC,S_IREAD|S_IWRITE)
 #define FD_RO_BINARY(p) open(p,O_RDONLY)
+#define UNREADABLE_CHMOD(p) chmod(p,0)
+#define DEFAULT_CHMOD(p) chmod(p,S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
 #define PATH_SEPARATOR_CHAR '/'
 #define PATH_SEPARATOR_STRING "/"
 #endif

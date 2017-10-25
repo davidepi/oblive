@@ -6,6 +6,7 @@
 #include <setjmp.h>
 #include <cmocka.h>
 
+#include <sys/stat.h>
 #include "apkjar_tools.h"
 
 void test00_apkjartools_existence(void **state);
