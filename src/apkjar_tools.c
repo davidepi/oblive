@@ -39,14 +39,38 @@ int check_signature(const char* input)
 
 int extract_apkjar(const char* input, const char* output)
 {
+    char* folder;
     if(input == NULL)//otherwise strlen(output) will break
         return ZIP_ERROR_NULL_INPUT;
     if(output == NULL)
-        output = input;
-    if(output[strlen(output-1)]!=PATH_SEPARATOR_CHAR)
-      return ZIP_ERROR_OUTPUT_IS_NOT_A_FOLDER;
-    if(!EXISTS(output))
-        return ZIP_ERROR_OUTPUT_FOLDER_DOES_NOT_EXISTS;
+    {
+        //create filename.apk.content strings
+        char FOLDER_EXT[] = ".content";
+        //2 because of / (or \) and \0
+        const int FOLDER_LEN = (int)(strlen(input)+strlen(FOLDER_EXT)+2);
+        folder = (char*)malloc(sizeof(char)*FOLDER_LEN);
+        strcpy(folder,input);
+        strcat(folder,FOLDER_EXT);
+        strcat(folder,PATH_SEPARATOR_STRING);
+        
+        if(EXISTS(folder))
+            return ZIP_ERROR_OUTPUT_ALREADY_EXISTENT;
+    }
+    else
+    {
+        //check if output is actually a folder and existent
+        if(output[strlen(output)-1]!=PATH_SEPARATOR_CHAR)
+            return ZIP_ERROR_OUTPUT_IS_NOT_A_FOLDER;
+        const int FOLDER_LEN = (int)(strlen(output)+1);
+        folder = (char*)malloc(sizeof(char)*FOLDER_LEN);
+        strcpy(folder,output);
+        if(!EXISTS(output))
+            return ZIP_ERROR_OUTPUT_FOLDER_DOES_NOT_EXISTS;
+        
+        if(!WRITABLE(output))
+            return ZIP_ERROR_OUTPUT_NOT_WRITABLE;
+    }
+    
     struct zip* za;
     struct zip_file* zf;
     struct zip_stat zs;
@@ -54,22 +78,6 @@ int extract_apkjar(const char* input, const char* output)
     int res = check_signature(input);
     if(res < 0)
         return res;
-
-    //create filename.apk.content strings
-    char FOLDER_EXT[] = ".content";
-    //2 because of / (or \) and \0
-    const int FOLDER_LEN = (int)(strlen(output)+strlen(FOLDER_EXT)+2);
-    char* folder = (char*)malloc(sizeof(char)*FOLDER_LEN);
-    strcpy(folder,output);
-    strcat(folder,FOLDER_EXT);
-    strcat(folder,PATH_SEPARATOR_STRING);
-
-    //assert filename.apk existance and filename.apk.zip and 
-    //filename.apk.zip.content non-existance
-    if(EXISTS(folder))
-        return ZIP_ERROR_OUTPUT_ALREADY_EXISTENT;
-    if(!WRITABLE(output))
-        return ZIP_ERROR_OUTPUT_NOT_WRITABLE;
 
     //create folder where the content will be extracted
     SAFE_CREATE_DIR(folder);
