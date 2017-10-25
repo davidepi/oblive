@@ -1,5 +1,17 @@
 language: c
-script: mkdir -p build && cd build/ && cmake .. && cmake --build .
+script:
+    - mkdir -p build
+    - cd build/
+    - cmake -DCMAKE_BUILD_TYPE=Coverage ..
+    - cmake --build .
+    - ./apk2c-testsuite
+    - cd CMakeFiles/apk2c-testsuite.dir/src
+    - gcov *
+env:
+    global:
+        - CODECOV_TOKEN=:uuid-repo-token
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
 matrix:
     include:
         - os: linux

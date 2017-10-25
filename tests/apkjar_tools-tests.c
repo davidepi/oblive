@@ -20,8 +20,8 @@ void test01_apkjartools_signature(void **state)
     res = check_signature(TESTS_RES_PATH "truncated.apk");
     assert_int_equal(res, ZIP_ERROR_TRUNCATED_FILE);
     
-//    res = check_signature(TESTS_RES_PATH "spanned.apk");
-//    assert_int_equal(res, ZIP_SPANNED_ARCHIVE);
+    res = check_signature(TESTS_RES_PATH "spanned.apk");
+    assert_int_equal(res, ZIP_SPANNED_ARCHIVE);
     
     res = check_signature(TESTS_RES_PATH "app-debug.apk");
     assert_int_equal(res, ZIP_OK);
