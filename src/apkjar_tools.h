@@ -3,10 +3,11 @@
 
 #include "windows_defines.h"
 #include "utility_macros.h"
-#include<stdio.h>
-#include<zip.h>
-#include<string.h> //strcat, strcpy
-#include<fcntl.h> //open
+#include <stdio.h>
+#include <zip.h>
+#include <string.h> //strcat, strcpy
+#include <fcntl.h> //open
+#include <stddef.h> //NULL
 
 #define BLOCK_SIZE 4096
 
@@ -24,6 +25,8 @@
 #define ZIP_ERROR_TRUNCATED_FILE -10
 #define ZIP_ERROR_WRONG_SIGNATURE -11
 #define ZIP_SPANNED_ARCHIVE -12
+#define ZIP_ERROR_OUTPUT_IS_NOT_A_FOLDER -13
+#define ZIP_ERROR_OUTPUT_FOLDER_DOES_NOT_EXISTS -14
 
 int extract_apkjar(const char* input, const char* output);
 

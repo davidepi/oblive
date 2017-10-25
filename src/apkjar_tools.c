@@ -14,7 +14,7 @@ static int check_signature(const char* input)
     int res = check_existance(input);
     int fd;
     uint8_t values[4];
-    if(res != 1)
+    if(res != ZIP_OK)
         return res;
     if(!READABLE(input) || ((fd = FD_RO_BINARY(input))==-1))
         return ZIP_ERROR_INPUT_NOT_READABLE;
@@ -39,10 +39,14 @@ static int check_signature(const char* input)
 
 int extract_apkjar(const char* input, const char* output)
 {
-    if(input == 0x0)//otherwise strlen(output) will break
+    if(input == NULL)//otherwise strlen(output) will break
         return ZIP_ERROR_NULL_INPUT;
-    if(output == 0x0)
+    if(output == NULL)
         output = input;
+    if(output[strlen(output-1)]!=PATH_SEPARATOR_CHAR)
+      return ZIP_ERROR_OUTPUT_IS_NOT_A_FOLDER;
+    if(!EXISTS(output))
+        return ZIP_ERROR_OUTPUT_FOLDER_DOES_NOT_EXISTS;
     struct zip* za;
     struct zip_file* zf;
     struct zip_stat zs;
@@ -52,9 +56,9 @@ int extract_apkjar(const char* input, const char* output)
         return res;
 
     //create filename.apk.content strings
-    char* FOLDER_EXT = ".content";
+    char FOLDER_EXT[] = ".content";
     //2 because of / (or \) and \0
-    const int FOLDER_LEN = (int)strlen(output+strlen(FOLDER_EXT)+2);
+    const int FOLDER_LEN = (int)(strlen(output)+strlen(FOLDER_EXT)+2);
     char* folder = (char*)malloc(sizeof(char)*FOLDER_LEN);
     strcpy(folder,output);
     strcat(folder,FOLDER_EXT);
@@ -78,7 +82,7 @@ int extract_apkjar(const char* input, const char* output)
     char name_copy_short[BUFFER_SIZE];
     //if zs.name is longer than the name_copy buffer, it will be stored here
     char* name_copy = 0x0;
-    char name_copy_allocated=0;
+    char name_copy_allocated = 0;
     char* ar_fold; //folders inside the archive
     char name[BUFFER_SIZE];
     uint8_t buffer[BLOCK_SIZE];
@@ -136,7 +140,7 @@ int extract_apkjar(const char* input, const char* output)
             {
                 //deallocate it
                 free(name_copy);
-                name_copy = 0x0;
+                name_copy = NULL;
                 name_copy_allocated = 0;
             }
             close(f);
@@ -145,4 +149,5 @@ int extract_apkjar(const char* input, const char* output)
     }
     zip_close(za);
     return ZIP_OK;
+    free(folder);
 }
