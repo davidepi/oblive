@@ -6,7 +6,9 @@
 #include <setjmp.h>
 #include <cmocka.h>
 
-void testfunction_success(void **state);
-void testfunction_fail(void **state);
+#include "apkjar_tools.h"
+
+void test00_apkjartools_existence(void **state);
+void test01_apkjartools_signature(void **state);
 
 #endif
