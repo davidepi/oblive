@@ -31,5 +31,6 @@
 int check_existence(const char* input);
 int check_signature(const char* input);
 int extract_apkjar(const char* input, const char* output);
+void print_zip_error(int code, char fatal);
 
 #endif
