@@ -90,6 +90,7 @@ void test03_apkjartools_extractapkjar_fullrun(void** state)
     unlink(TRP "app-debug.apk.content" PS "META-INF" PS "MANIFEST.MF");
     rmdir(TRP "app-debug.apk.content" PS "META-INF" PS);
     rmdir(TRP "app-debug.apk.content" PS);
+    assert_int_equal(res, 0);
     
 #undef EX
 #undef TRP
