@@ -4,3 +4,4 @@
 
 ## DEPENDENCIES
 * [libzip](https://libzip.org/)
+* [dex2jar](https://sourceforge.net/projects/dex2jar/)
