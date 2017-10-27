@@ -1,7 +1,7 @@
 #include "apkjar_tools.h"
 
 //check if the file exists
-int check_existence(const char* input)
+int check_existence_apkjar(const char* input)
 {
     if(!EXISTS(input))
         return ZIP_ERROR_INPUT_NOT_FOUND;
@@ -9,9 +9,9 @@ int check_existence(const char* input)
         return ZIP_OK;
 }
 //check if the file is readable and if it is a zip/apk/jar file
-int check_signature(const char* input)
+int check_signature_apkjar(const char* input)
 {
-    int res = check_existence(input);
+    int res = check_existence_apkjar(input);
     int fd;
     uint8_t values[4];
     if(res != ZIP_OK)
@@ -75,7 +75,7 @@ int extract_apkjar(const char* input, const char* output)
     struct zip_file* zf;
     struct zip_stat zs;
     
-    int res = check_signature(input);
+    int res = check_signature_apkjar(input);
     if(res < 0)
         return res;
 

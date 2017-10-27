@@ -28,9 +28,9 @@
 #define ZIP_ERROR_OUTPUT_IS_NOT_A_FOLDER -13
 #define ZIP_ERROR_OUTPUT_FOLDER_DOES_NOT_EXISTS -14
 
-int check_existence(const char* input);
-int check_signature(const char* input);
+int check_existence_apkjar(const char* input);
+int check_signature_apkjar(const char* input);
 int extract_apkjar(const char* input, const char* output);
-void print_zip_error(int code, char fatal);
+void print_apkjar_error(int code, char fatal);
 
 #endif
