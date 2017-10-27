@@ -126,24 +126,31 @@ int extract_apkjar(const char* input, const char* output)
             name[strlen(name)-1]='\0';//remove separator at the end of the path
             //the last entry should be a file, not a dir
 
-            //extract file            
-            zf = zip_fopen_index(za,i,0);
-            if(!zf)
-                return ZIP_ERROR_ZIP_EXTRACTION_FAILED;
-            //open file description in write mode
-            f = FD_WO_BINARY(name);
-            if(f<0)
-                return ZIP_ERROR_SAVING_EXTRACTED_FILES;
+            if(zs.size>0) //handle files
+            {
+                //extract file
+                zf = zip_fopen_index(za,i,0);
+                if(!zf)
+                    return ZIP_ERROR_ZIP_EXTRACTION_FAILED;
+                //open file description in write mode
+                f = FD_WO_BINARY(name);
+                if(f<0)
+                    return ZIP_ERROR_SAVING_EXTRACTED_FILES;
 
-            wrote = 0;
-            while(wrote < zs.size) //process content of the file
-            {                     //writing BUFFER_SIZE bytes at time
-                len = (int)zip_fread(zf,buffer,BLOCK_SIZE);
-                if(len<0)
-                    return ZIP_ERROR_UNABLE_TO_READ_ZIP_CONTENT;
-                write(f,buffer,len);
-                wrote+=len;
+                wrote = 0;
+                while(wrote < zs.size) //process content of the file
+                {                     //writing BUFFER_SIZE bytes at time
+                    len = (int)zip_fread(zf,buffer,BLOCK_SIZE);
+                    if(len<0)
+                        return ZIP_ERROR_UNABLE_TO_READ_ZIP_CONTENT;
+                    write(f,buffer,len);
+                    wrote+=len;
+                }
+                close(f);
+                zip_fclose(zf);
             }
+            else //handle empty folders
+                SAFE_CREATE_DIR(name);
             if(name_copy_allocated) //if the long name was allocated
             {
                 //deallocate it
@@ -151,8 +158,6 @@ int extract_apkjar(const char* input, const char* output)
                 name_copy = NULL;
                 name_copy_allocated = 0;
             }
-            close(f);
-            zip_fclose(zf);
         }
     }
     zip_close(za);

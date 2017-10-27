@@ -20,4 +20,8 @@ int main(int argc, char* argv[])
         print_apkjar_error(res, 1);
     
     dex2jar(argv[1], dexfile, jarfile);
+    
+    res = extract_apkjar(jarfile, NULL);
+    if(res<0)
+        print_apkjar_error(res, 1);
 }
