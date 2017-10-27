@@ -4,6 +4,6 @@
 #include <string.h>
 #include <stdio.h>
 
-void dex2jar(const char* argv1, const char* dexfile);
+void dex2jar(const char* argv1, const char* dexfile, const char* outputfile);
 
 #endif

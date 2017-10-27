@@ -5,7 +5,10 @@ set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -pipe -march=native -mtu
 project(java2c C)
 file(GLOB_RECURSE main_file src/apk2c-main.c)
 file(GLOB_RECURSE main_testfile tests/apk2c-testsuite.c)
-file(GLOB_RECURSE sources src/apkjar_tools.c src/error_handler.c)
+file(GLOB_RECURSE sources 
+    src/apkjar_tools.c 
+    src/error_handler.c 
+    src/dex2jar.c)
 file(GLOB_RECURSE test_sources tests/apkjar_tools-tests.c)
 include_directories(src)
 add_executable(apk2c ${main_file} ${sources})

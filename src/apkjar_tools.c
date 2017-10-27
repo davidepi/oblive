@@ -64,11 +64,11 @@ int extract_apkjar(const char* input, const char* output)
         const int FOLDER_LEN = (int)(strlen(output)+1);
         folder = (char*)malloc(sizeof(char)*FOLDER_LEN);
         strcpy(folder,output);
-        if(!EXISTS(output))
-            return ZIP_ERROR_OUTPUT_FOLDER_DOES_NOT_EXISTS;
         
         if(!WRITABLE(output))
             return ZIP_ERROR_OUTPUT_NOT_WRITABLE;
+        else if(!EXISTS(output))
+            SAFE_CREATE_DIR(output);
     }
     
     struct zip* za;

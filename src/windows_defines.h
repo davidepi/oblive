@@ -12,6 +12,7 @@
 #define MKDIR(path) _mkdir(path)
 #define unlink(path) _unlink(path)
 #define rmdir(path) _rmdir(path)
+#define chdir(path) _chdir(path)
 #define UNREADABLE_CHMOD(p) _chmod(p,0)
 #define RW_CHMOD(p) _chmod(p,_S_IREAD | _S_IWRITE)
 //in windows _S_IWRITE = S_IREAD|S_IWRITE

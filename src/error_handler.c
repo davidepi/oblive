@@ -1,7 +1,7 @@
 #include "apkjar_tools.h"
 #define ER(msg) fprintf(stderr,msg CR)
 
-void print_zip_error(int code, char fatal)
+void print_apkjar_error(int code, char fatal)
 {
     switch(code)
     {
