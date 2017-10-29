@@ -29,7 +29,7 @@ public class ClassExplorer extends ClassVisitor
         if(mv!=null)
         {
 
-            AnnotatedMethodExplorer ame = new AnnotatedMethodExplorer(mv,name+signature);
+            AnnotatedMethodExplorer ame = new AnnotatedMethodExplorer(mv,name+desc);
             if(ame.shouldObfuscate())
             {
                 try
