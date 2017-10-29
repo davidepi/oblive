@@ -2,3 +2,6 @@ build/
 *.xcodeproj/
 .DS_Store
 lib/
+.gradle/
+.idea/
+out/
