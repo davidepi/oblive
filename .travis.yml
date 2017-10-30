@@ -1,16 +1,3 @@
-language: c
-script:
-    - mkdir -p build
-    - cd build/
-    - cmake -DCMAKE_BUILD_TYPE=Debug ..
-    - cmake --build .
-      # - cmake -DCMAKE_BUILD_TYPE=Coverage ..
-      #- cmake --build .
-      #- ./apk2c-testsuite
-      #- cd CMakeFiles/apk2c-testsuite.dir/src
-      #- gcov *
-      #after_success:
-      # - bash <(curl -s https://codecov.io/bash)
 matrix:
     include:
         - os: linux
@@ -20,6 +7,12 @@ matrix:
             - sudo apt-get update -q
             - sudo apt-get install libzip-dev -y
           compiler: gcc
+          language: c
+          script:
+              - mkdir -p build
+              - cd build/
+              - cmake -DCMAKE_BUILD_TYPE=Debug ..
+              - cmake --build .
         - os: linux
           dist: trusty
           sudo: true
@@ -27,8 +20,32 @@ matrix:
               - sudo apt-get update -q
               - sudo apt-get install libzip-dev -y
           compiler: clang
+          language: c
+          script:
+              - mkdir -p build
+              - cd build/
+              - cmake -DCMAKE_BUILD_TYPE=Debug ..
+              - cmake --build .
         - os: osx
           before_install:
               - brew update
               - brew install libzip
           compiler: clang
+          language: c
+          script:
+              - mkdir -p build
+              - cd build/
+              - cmake -DCMAKE_BUILD_TYPE=Debug ..
+              - cmake --build .
+        - os: linux
+          dist: trusty
+          sudo: false
+          language: java
+          jdk: oraclejdk8
+          script:
+            - ./gradlew build
+        - os: osx
+          language: java
+          jdk: oraclejdk8
+          script:
+            - ./gradlew build

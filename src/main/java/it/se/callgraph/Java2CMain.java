@@ -1,10 +1,11 @@
 package it.se.callgraph;
 
-import it.se.callgraph.obfuscator.ClassExplorer;
-import jdk.internal.org.objectweb.asm.ClassReader;
-import jdk.internal.org.objectweb.asm.ClassWriter;
+import it.se.callgraph.obfuscator.ClassAnnotationExplorer;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
 
 import java.io.*;
+import java.util.ArrayList;
 
 public class Java2CMain
 {
@@ -18,20 +19,24 @@ public class Java2CMain
         OutputStream oi;
         ClassReader cr;
         ClassWriter cw;
-        ClassExplorer ca;
+        ClassAnnotationExplorer cae;
         byte[][] classes = new byte[parse.length][];
         for(int i=0;i<parse.length;i++)
         {
             io = new FileInputStream(parse[i]);
             cr = new ClassReader(io);
-            cw = new ClassWriter(cr,ClassWriter.COMPUTE_MAXS);
-            ca = new ClassExplorer(cw,parse[i]+".native");
-            cr.accept(ca,0);
-            //classes[i] = cw.toByteArray();
-            io.close();
-            oi = new FileOutputStream(parse[i]);
-            oi.write(cw.toByteArray());
-            oi.close();
+
+            //first pass, visit annotated methods
+            cae = new ClassAnnotationExplorer();
+            cr.accept(cae,0);
+            ArrayList<String> toProcess = cae.obfuscateThese();
+
+//            cw = new ClassWriter(cr,ClassWriter.COMPUTE_MAXS);
+//            //classes[i] = cw.toByteArray();
+//            io.close();
+//            oi = new FileOutputStream(parse[i]);
+//            oi.write(cw.toByteArray());
+//            oi.close();
         }
     }
 
