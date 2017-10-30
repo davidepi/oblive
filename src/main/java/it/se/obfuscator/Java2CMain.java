@@ -1,6 +1,5 @@
-package it.se.callgraph;
+package it.se.obfuscator;
 
-import it.se.callgraph.obfuscator.ClassAnnotationExplorer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
@@ -29,7 +28,7 @@ public class Java2CMain
             //first pass, visit annotated methods
             cae = new ClassAnnotationExplorer();
             cr.accept(cae,0);
-            ArrayList<String> toProcess = cae.obfuscateThese();
+            ArrayList<ClassMethodPair> toProcess = cae.obfuscateThese();
 
 //            cw = new ClassWriter(cr,ClassWriter.COMPUTE_MAXS);
 //            //classes[i] = cw.toByteArray();

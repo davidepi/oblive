@@ -1,4 +1,4 @@
-package it.se.callgraph.obfuscator;
+package it.se.obfuscator;
 
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -9,11 +9,13 @@ public class AnnotatedMethodExplorer extends MethodVisitor
 {
     private boolean obf_annotated;
     private String methodName;
+    private String signature;
 
-    public AnnotatedMethodExplorer(String methodName)
+    public AnnotatedMethodExplorer(String methodName, String signature)
     {
         super(ASM5);
         this.methodName = methodName;
+        this.signature = signature;
     }
 
     @Override
@@ -31,8 +33,8 @@ public class AnnotatedMethodExplorer extends MethodVisitor
         return this.obf_annotated;
     }
 
-    public String getMethodName()
+    public ClassMethodPair getMethod()
     {
-        return this.methodName;
+        return new ClassMethodPair("",methodName,signature);
     }
 }

@@ -1,4 +1,4 @@
-package it.se.callgraph.obfuscator;
+package it.se.obfuscator;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -29,18 +29,22 @@ public class ClassAnnotationExplorer extends ClassVisitor
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exception)
     {
             //store every method explorer inside an array + the name. Process them after the visit
-            AnnotatedMethodExplorer ame = new AnnotatedMethodExplorer("::"+name+desc);
+            AnnotatedMethodExplorer ame = new AnnotatedMethodExplorer(name,desc);
             this.obfuscateMethods.add(ame);
             return ame;
     }
 
-    public ArrayList<String> obfuscateThese()
+    public ArrayList<ClassMethodPair> obfuscateThese()
     {
         //when the visit is finished, check for every method if it has the @Obfuscate annotation
-        ArrayList<String> annotated = new ArrayList<String>();
+        ArrayList<ClassMethodPair> annotated = new ArrayList<ClassMethodPair>();
         for(int i=0;i<obfuscateMethods.size();i++)
             if(obfuscateMethods.get(i).shouldObfuscate())
-                annotated.add(this.name+obfuscateMethods.get(i).getMethodName());
+            {
+                ClassMethodPair cmp = obfuscateMethods.get(i).getMethod();
+                cmp.setClassName(this.name);
+                annotated.add(cmp);
+            }
         return annotated;
     }
 
