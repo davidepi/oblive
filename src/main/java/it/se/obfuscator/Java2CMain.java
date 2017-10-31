@@ -22,29 +22,38 @@ public class Java2CMain
         ClassWriter cw;
         ClassAnnotationExplorer cae;
         ClassBytecodeExtractor cbe;
+        ClassCodeElimination cce;
         byte[][] classes = new byte[parse.length][];
         for(int i=0;i<parse.length;i++)
         {
             io = new FileInputStream(parse[i]);
             cr = new ClassReader(io);
+            cw = new ClassWriter(cr,0);
 
             //first pass, visit annotated methods
             cae = new ClassAnnotationExplorer();
             cr.accept(cae,0);
             ArrayList<ClassMethodPair> toProcess = cae.obfuscateThese();
+            if(toProcess.size()==0) //nothing to obfuscate in this class
+            {
+                io.close();
+                continue;
+            }
 
             //second pass, extract instructions from methods
             cbe = new ClassBytecodeExtractor(toProcess);
             cr.accept(cbe,0);
             ExtractedBytecode eb = cbe.getBytecode();
 
+            //third pass, modify the class by removing the methods' bodies and adding static init
+            cce = new ClassCodeElimination(toProcess,cw);
+            cr.accept(cce,0);
 
-//            cw = new ClassWriter(cr,ClassWriter.COMPUTE_MAXS);
-//            //classes[i] = cw.toByteArray();
-//            io.close();
-//            oi = new FileOutputStream(parse[i]);
-//            oi.write(cw.toByteArray());
-//            oi.close();
+            classes[i] = cw.toByteArray();
+            io.close();
+            oi = new FileOutputStream(parse[i]);
+            oi.write(cw.toByteArray());
+            oi.close();
         }
     }
 
