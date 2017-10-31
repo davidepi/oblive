@@ -1,5 +1,7 @@
 package it.se.obfuscator;
 
+import it.se.obfuscator.support.ClassMethodPair;
+import it.se.obfuscator.support.ExtractedBytecode;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
@@ -19,6 +21,7 @@ public class Java2CMain
         ClassReader cr;
         ClassWriter cw;
         ClassAnnotationExplorer cae;
+        ClassBytecodeExtractor cbe;
         byte[][] classes = new byte[parse.length][];
         for(int i=0;i<parse.length;i++)
         {
@@ -29,6 +32,12 @@ public class Java2CMain
             cae = new ClassAnnotationExplorer();
             cr.accept(cae,0);
             ArrayList<ClassMethodPair> toProcess = cae.obfuscateThese();
+
+            //second pass, extract instructions from methods
+            cbe = new ClassBytecodeExtractor(toProcess);
+            cr.accept(cbe,0);
+            ExtractedBytecode eb = cbe.getBytecode();
+
 
 //            cw = new ClassWriter(cr,ClassWriter.COMPUTE_MAXS);
 //            //classes[i] = cw.toByteArray();

@@ -1,5 +1,6 @@
 package it.se.obfuscator;
 
+import it.se.obfuscator.support.ClassMethodPair;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.MethodVisitor;
 

@@ -1,4 +1,4 @@
-package it.se.obfuscator;
+package it.se.obfuscator.support;
 
 public class ClassMethodPair
 {
