@@ -24,12 +24,13 @@ public class CSourceGenerator
             sb.append(sign.get(i));
             sb.append(" ");
             sb.append("var");
-            sb.append(i);
+            sb.append(i+1); //since var0 is called `this`
         }
         sb.append(")\n");
         sb.append("{\n");
 
         //generate stack vars
+        sb.append("uint32_t _index = 0;\n");
         sb.append("void* _stack[");
         sb.append(eb.maxStack);
         sb.append("];\n");

@@ -33,7 +33,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
     {
         switch(opcode)
         {
-            case ILOAD: eb.statements.add("_ILoad("+var+");");break;
+            case ILOAD: eb.statements.add("_ILoad(_stack,_vars,&_index,"+var+");");break;
             default: System.err.println("Unimplemented opcode: "+ opcode);System.exit(1);
         }
     }
@@ -43,8 +43,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
     {
         switch(opcode)
         {
-            case IADD: eb.statements.add("_IAdd();");break;
-            case IRETURN: eb.statements.add("IRETURN");break;
+            case IADD: eb.statements.add("_IAdd(_stack,&_index);");break;
+            case IRETURN: eb.statements.add("IRETURN;");break;
             default: System.err.println("Unimplemented opcode: "+opcode);System.exit(1);
         }
     }
