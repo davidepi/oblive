@@ -2,9 +2,7 @@ package it.se.obfuscator;
 
 import org.objectweb.asm.MethodVisitor;
 
-import static org.objectweb.asm.Opcodes.ASM5;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
-import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.*;
 
 public class StaticInitExplorer extends MethodVisitor
 {

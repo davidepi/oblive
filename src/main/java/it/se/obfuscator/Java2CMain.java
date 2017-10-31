@@ -43,11 +43,23 @@ public class Java2CMain
             //second pass, extract instructions from methods
             cbe = new ClassBytecodeExtractor(toProcess);
             cr.accept(cbe,0);
-            ExtractedBytecode eb = cbe.getBytecode();
+            ArrayList<ExtractedBytecode> eb = cbe.getBytecode();
 
             //third pass, modify the class by removing the methods' bodies and adding static init
             cce = new ClassCodeElimination(toProcess,cw);
             cr.accept(cce,0);
+
+            //next step: convert the ExtractedBytecode to actual c code
+            String c = "#include <jni.h>\n#include \"obframework.h\"\n\n";
+            for(int j=0;j<eb.size();j++)
+            {
+                ClassMethodPair cmp = toProcess.get(i);
+                ExtractedBytecode bytecode = eb.get(i);
+                c += CSourceGenerator.generateCode(cmp.getClassName(),cmp.getMethodName(),cmp.getSignature(),bytecode);
+            }
+            PrintWriter pw = new PrintWriter(parse[i]+".c");
+            pw.write(c);
+            pw.close();
 
             classes[i] = cw.toByteArray();
             io.close();

@@ -14,17 +14,21 @@ public class ClassBytecodeExtractor extends ClassVisitor
 {
     private ArrayList<ClassMethodPair> toObfuscate;
     private String className;
-    private MethodBytecodeExtractor mbe;
+    private ArrayList<MethodBytecodeExtractor> mbe;
 
     public ClassBytecodeExtractor(ArrayList<ClassMethodPair> obfuscateme)
     {
         super(ASM5);
         this.toObfuscate = obfuscateme;
+        this.mbe = new ArrayList<MethodBytecodeExtractor>();
     }
 
-    public ExtractedBytecode getBytecode()
+    public ArrayList<ExtractedBytecode> getBytecode()
     {
-        return mbe.getBytecode();
+        ArrayList<ExtractedBytecode> res = new ArrayList<ExtractedBytecode>();
+        for(int i=0;i<mbe.size();i++)
+            res.add(mbe.get(i).getBytecode());
+        return res;
     }
 
     @Override
@@ -50,8 +54,9 @@ public class ClassBytecodeExtractor extends ClassVisitor
                 }
                 else
                 {
-                    this.mbe = new MethodBytecodeExtractor();
-                    return this.mbe;
+                    MethodBytecodeExtractor met = new MethodBytecodeExtractor();
+                    this.mbe.add(met);
+                    return met;
                 }
             }
         }

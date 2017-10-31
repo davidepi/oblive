@@ -4,7 +4,6 @@ package it.se.obfuscator;
 import it.se.obfuscator.support.ClassMethodPair;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
 
 import java.util.ArrayList;
 
@@ -65,9 +64,8 @@ public class ClassCodeElimination extends ClassVisitor
     @Override
     public void visitEnd()
     {
-        if(!hasStaticInit) //has static import missed, craft manually
+        if(!hasStaticInit) //missing static import, craft manually
         {
-            System.out.println("crafted");
             //TODO: change lib name?
             MethodVisitor mv = super.visitMethod(ACC_STATIC, "<clinit>", "()V", null, null);
             mv.visitCode();

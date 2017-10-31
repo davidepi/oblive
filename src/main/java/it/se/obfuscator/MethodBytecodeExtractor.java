@@ -44,7 +44,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
         switch(opcode)
         {
             case IADD: eb.statements.add("_IAdd();");break;
-            case IRETURN: eb.statements.add("_IReturn();");break;
+            case IRETURN: eb.statements.add("IRETURN");break;
             default: System.err.println("Unimplemented opcode: "+opcode);System.exit(1);
         }
     }
