@@ -55,7 +55,7 @@ void test02_apkjartools_extractapkjar(void **state)
     
     res = extract_apkjar(TESTS_RES_PATH "app-debug.apk",
                          TESTS_RES_PATH "random/");
-    assert_int_equal(res, ZIP_ERROR_OUTPUT_FOLDER_DOES_NOT_EXISTS);
+    assert_int_equal(res, ZIP_ERROR_OUTPUT_NOT_WRITABLE);
     
     res = extract_apkjar(TESTS_RES_PATH "spanned.apk",
                          NULL);
