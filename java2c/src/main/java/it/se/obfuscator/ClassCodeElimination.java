@@ -3,6 +3,7 @@ package it.se.obfuscator;
 
 import it.se.obfuscator.support.ClassMethodPair;
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 
 import java.util.ArrayList;
@@ -15,9 +16,9 @@ public class ClassCodeElimination extends ClassVisitor
     private String className;
     private boolean hasStaticInit;
 
-    public ClassCodeElimination(ArrayList<ClassMethodPair> obfuscateme, ClassVisitor cv)
+    public ClassCodeElimination(ArrayList<ClassMethodPair> obfuscateme, ClassWriter cw)
     {
-        super(ASM5,cv);
+        super(ASM5,cw);
         this.toObfuscate = obfuscateme;
         this.hasStaticInit = false;
     }

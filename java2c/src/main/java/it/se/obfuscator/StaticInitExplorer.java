@@ -14,6 +14,7 @@ public class StaticInitExplorer extends MethodVisitor
     @Override
     public void visitInsn(int opcode)
     {
+        //TODO: dentro la visit code
         //end of the static block
         if(opcode == RETURN)
         {

@@ -23,12 +23,10 @@ public class Java2CMain
         ClassAnnotationExplorer cae;
         ClassBytecodeExtractor cbe;
         ClassCodeElimination cce;
-        byte[][] classes = new byte[parse.length][];
         for(int i=0;i<parse.length;i++)
         {
             io = new FileInputStream(parse[i]);
             cr = new ClassReader(io);
-            cw = new ClassWriter(cr,0);
 
             //first pass, visit annotated methods
             cae = new ClassAnnotationExplorer();
@@ -46,6 +44,7 @@ public class Java2CMain
             ArrayList<ExtractedBytecode> eb = cbe.getBytecode();
 
             //third pass, modify the class by removing the methods' bodies and adding static init
+            cw = new ClassWriter(cr,0);
             cce = new ClassCodeElimination(toProcess,cw);
             cr.accept(cce,0);
 
@@ -61,7 +60,6 @@ public class Java2CMain
             pw.write(c);
             pw.close();
 
-            classes[i] = cw.toByteArray();
             io.close();
             oi = new FileOutputStream(parse[i]);
             oi.write(cw.toByteArray());

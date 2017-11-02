@@ -9,6 +9,7 @@ matrix:
           compiler: gcc
           language: c
           script:
+              - cd apkextractor/
               - mkdir -p build
               - cd build/
               - cmake -DCMAKE_BUILD_TYPE=Debug ..
@@ -22,16 +23,19 @@ matrix:
           compiler: clang
           language: c
           script:
+              - cd apkextractor/
               - mkdir -p build
               - cd build/
               - cmake -DCMAKE_BUILD_TYPE=Debug ..
               - cmake --build .
         - os: osx
           before_install:
+              - brew update
               - brew install libzip
           compiler: clang
           language: c
           script:
+              - cd apkextractor/
               - mkdir -p build
               - cd build/
               - cmake -DCMAKE_BUILD_TYPE=Debug ..
@@ -40,11 +44,6 @@ matrix:
           dist: trusty
           sudo: false
           language: java
-          jdk: openjdk7
+          jdk: oraclejdk8
           script:
-            - ./gradlew assemble && ./gradlew check
-        - os: osx
-          language: java
-          jdk: openjdk7
-          script:
-            - ./gradlew assemble && ./gradlew check
+            - ./gradlew build

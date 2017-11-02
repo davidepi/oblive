@@ -49,8 +49,8 @@ public class ClassBytecodeExtractor extends ClassVisitor
             {
                 if((access & ACC_NATIVE) != 0) //check that native method is not annotated with @Obfuscate
                 {
-                    System.err.println("Can't annotate native methods");
-                    System.exit(1);
+                    throw new IllegalPatternException("Can't annotate native method: "+cmp.getClassName()+"."+
+                                                      cmp.getMethodName()+cmp.getSignature());
                 }
                 else
                 {
