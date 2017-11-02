@@ -46,4 +46,5 @@ matrix:
           language: java
           jdk: oraclejdk8
           script:
+            - cd java2c/
             - ./gradlew build
