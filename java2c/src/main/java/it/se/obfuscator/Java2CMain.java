@@ -16,6 +16,8 @@ public class Java2CMain
 
     private void parseClass(final String[] parse) throws IOException
     {
+        final String OUTPUT_PATH = "../libsrc/";
+        new File(OUTPUT_PATH).mkdirs(); //create output directory
         InputStream io;
         OutputStream oi;
         ClassReader cr;
@@ -50,13 +52,14 @@ public class Java2CMain
 
             //next step: convert the ExtractedBytecode to actual c code
             String c = "#include <jni.h>\n#include \"obframework.h\"\n\n";
+
             for(int j=0;j<eb.size();j++)
             {
-                ClassMethodPair cmp = toProcess.get(i);
+                ClassMethodPair className = toProcess.get(i);;
                 ExtractedBytecode bytecode = eb.get(i);
-                c += CSourceGenerator.generateCode(cmp.getClassName(),cmp.getMethodName(),cmp.getSignature(),bytecode);
+                c += CSourceGenerator.generateCode(className.getClassName(),className.getMethodName(),className.getSignature(),bytecode);
             }
-            PrintWriter pw = new PrintWriter(parse[i]+".c");
+            PrintWriter pw = new PrintWriter(OUTPUT_PATH+"lib.c");
             pw.write(c);
             pw.close();
 
