@@ -14,7 +14,7 @@ public class Java2CMain
     public Java2CMain()
     { }
 
-    private void parseClass(final String[] parse) throws IOException
+    public void parseClass(final String[] parse) throws IOException
     {
         String output_path = parse[parse.length-1];
         if(output_path.charAt(output_path.length()-1)!=File.separatorChar)
