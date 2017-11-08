@@ -16,8 +16,13 @@ public class Java2CMain
 
     private void parseClass(final String[] parse) throws IOException
     {
-        final String OUTPUT_PATH = "../libsrc/";
-        new File(OUTPUT_PATH).mkdirs(); //create output directory
+        String output_path = parse[parse.length-1];
+        if(output_path.charAt(output_path.length()-1)!=File.separatorChar)
+            output_path+=File.separator;
+        output_path+="libsrc"+File.separator;
+        File output_file = new File(output_path); //create output directory
+        if(!output_file.mkdirs())
+            throw new IOException();
         InputStream io;
         OutputStream oi;
         ClassReader cr;
@@ -25,7 +30,7 @@ public class Java2CMain
         ClassAnnotationExplorer cae;
         ClassBytecodeExtractor cbe;
         ClassCodeElimination cce;
-        for(int i=0;i<parse.length;i++)
+        for(int i=0;i<parse.length-1;i++) //last element is the output dir
         {
             io = new FileInputStream(parse[i]);
             cr = new ClassReader(io);
@@ -59,7 +64,7 @@ public class Java2CMain
                 ExtractedBytecode bytecode = eb.get(i);
                 c += CSourceGenerator.generateCode(className.getClassName(),className.getMethodName(),className.getSignature(),bytecode);
             }
-            PrintWriter pw = new PrintWriter(OUTPUT_PATH+"lib.c");
+            PrintWriter pw = new PrintWriter(output_path+"libobf.c");
             pw.write(c);
             pw.close();
 
@@ -72,9 +77,9 @@ public class Java2CMain
 
     public static void main(String[] args)
     {
-        if(args.length < 1)
+        if(args.length < 2)
         {
-            System.err.println("Missing argument: class names");
+            System.err.println("Missing arguments");
             System.exit(1);
         }
         try

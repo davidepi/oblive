@@ -1,7 +1,8 @@
 .PHONY: clean
 CC=gcc
 CFLAGS=
-SRC=$(shell find ../libsrc/ -name '*.c')
+PARENTDIR=.
+SRC=$(PARENTDIR)/libsrc/libobf.c
 INCLUDE= -I${JAVA_HOME}/include
 FRAMEWORK= -Isrc/
 LIB=libobf
@@ -13,7 +14,7 @@ else
 	INCLUDE += -I${JAVA_HOME}/include/linux/
 	LIBEXT=.so
 endif
-OUTDIR=../libsrc
+OUTDIR=$(PARENTDIR)/libsrc
 EXE=libobf.o
 
 
@@ -22,6 +23,7 @@ all: $(SRC)
 	mkdir -p $(OUTDIR)
 	$(CC) -c $(CFLAGS) $(FRAMEWORK) $(INCLUDE) $(SRC) -o $(OUTDIR)/$(EXE)
 	$(CC) $(OUTDIR)/libobf.o -shared -o $(OUTDIR)/$(LIB)$(LIBEXT)
+	rm $(OUTDIR)/libobf.o
 
 clean:
 	rm $(OUTDIR)/$(EXE) $(OUTDIR)/$(LIB)
