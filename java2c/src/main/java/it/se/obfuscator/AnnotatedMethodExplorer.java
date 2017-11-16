@@ -22,8 +22,7 @@ public class AnnotatedMethodExplorer extends MethodVisitor
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible)
     {
-        //TODO: change annotation
-        if(desc.equals("Lit/se/jnitest/Obfuscate;"))
+        if(desc.equals("L"+Obfuscate.class.getName().replace('.','/')+";"))
             this.obf_annotated = true;
         else
             this.obf_annotated = false;
