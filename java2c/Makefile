@@ -19,7 +19,6 @@ EXE=libobf.o
 
 
 all: $(SRC)
-	echo $(INCLUDE)
 	mkdir -p $(OUTDIR)
 	$(CC) -c $(CFLAGS) $(FRAMEWORK) $(INCLUDE) $(SRC) -o $(OUTDIR)/$(EXE)
 	$(CC) $(OUTDIR)/libobf.o -shared -o $(OUTDIR)/$(LIB)$(LIBEXT)

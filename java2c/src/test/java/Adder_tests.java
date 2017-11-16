@@ -1,11 +1,11 @@
 import it.se.obfuscator.Java2CMain;
+import it.se.obfuscator.Obfuscate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 public class Adder_tests
 {
@@ -17,14 +17,24 @@ public class Adder_tests
     }
 
     @Before
-    public void copy_class()
+    public void convert_class()
     {
+        //locate .class file
         ClassLoader classLoader = getClass().getClassLoader();
         File source = new File(classLoader.getResource("Adder.class").getFile());
-        File dest =  new File(source.getParentFile().getAbsolutePath()+"/Adder_copy.class");
+        Java2CMain trans = new Java2CMain();
+        String args[] = new String[2];
+        args[0] = source.getAbsolutePath(); //Adder.class path
+        args[1] = source.getParentFile().getAbsolutePath(); //Adder.class parent folder (output)
+
+        //makefile
+        ProcessBuilder makefileRun = new ProcessBuilder("/usr/bin/make","PARENTDIR="+source.getParentFile().getAbsolutePath());
+        makefileRun.inheritIO();
+        makefileRun.directory(new File(source.getParentFile().getParentFile().getParentFile().getParentFile().getAbsolutePath()));
         try
         {
-            Files.copy(source.toPath(),dest.toPath());
+            trans.parseClass(args);
+            makefileRun.start();
         }
         catch (IOException e)
         {
@@ -35,25 +45,7 @@ public class Adder_tests
     @Test
     public void test_Adder_sum()
     {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File source = new File(classLoader.getResource("Adder.class").getFile());
-        Java2CMain trans = new Java2CMain();
-        String args[] = new String[2];
-        args[0] = source.getParentFile().getAbsolutePath()+"/Adder_copy.class";
-        args[1] = source.getParentFile().getAbsolutePath();
-        ProcessBuilder makefileRun = new ProcessBuilder("/usr/bin/make","PARENTDIR="+source.getParentFile().getAbsolutePath());
-        makefileRun.inheritIO();
-        makefileRun.directory(new File("/Users/davide/Documents/Xcode/java2c/java2c/"));
-        try
-        {
-            trans.parseClass(args);
-            makefileRun.start();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        
+
     }
 
     @After
@@ -61,9 +53,15 @@ public class Adder_tests
     {
         ClassLoader classLoader = getClass().getClassLoader();
         File source = new File(classLoader.getResource("Adder.class").getFile());
-        File toDelete = new File(source.getParentFile().getAbsolutePath()+"/Adder_copy.class");
-        File libsrcDirToDelete = new File(source.getParentFile().getAbsolutePath()+"/libsrc");
-        toDelete.delete();
-        libsrcDirToDelete.delete();
+
+        //delete libsrc and content
+        //make fails if uncommenting these...
+//        File libsrc = new File(source.getParentFile().getAbsolutePath()+"/libsrc");
+//        File[] contents = libsrc.listFiles();
+//        for(int i=0;i<contents.length;i++)
+//            contents[i].delete();
+//        libsrc.delete();
+
+        source.delete(); //delete .class file, otherwise next time it won't be converted properly
     }
 }
