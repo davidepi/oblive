@@ -1,6 +1,7 @@
 import it.se.obfuscator.Java2CMain;
 import it.se.obfuscator.Obfuscate;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,9 +35,11 @@ public class Adder_tests
         try
         {
             trans.parseClass(args);
-            makefileRun.start();
+            Process child = makefileRun.start();
+            child.waitFor();
+
         }
-        catch (IOException e)
+        catch (IOException | InterruptedException e)
         {
             e.printStackTrace();
         }
@@ -45,7 +48,8 @@ public class Adder_tests
     @Test
     public void test_Adder_sum()
     {
-
+        Adder a = new Adder();
+        Assert.assertEquals(33,a.add(15,18));
     }
 
     @After
