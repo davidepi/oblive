@@ -8,6 +8,7 @@ import org.objectweb.asm.MethodVisitor;
 import java.util.ArrayList;
 
 import static org.objectweb.asm.Opcodes.ACC_NATIVE;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
 import static org.objectweb.asm.Opcodes.ASM5;
 
 public class ClassBytecodeExtractor extends ClassVisitor
@@ -54,7 +55,7 @@ public class ClassBytecodeExtractor extends ClassVisitor
                 }
                 else
                 {
-                    MethodBytecodeExtractor met = new MethodBytecodeExtractor();
+                    MethodBytecodeExtractor met = new MethodBytecodeExtractor((access & ACC_STATIC) > 0);
                     this.mbe.add(met);
                     return met;
                 }

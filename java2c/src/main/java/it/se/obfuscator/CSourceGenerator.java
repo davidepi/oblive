@@ -17,7 +17,11 @@ public class CSourceGenerator
         sb.append(className.replace('/','_'));
         sb.append('_');
         sb.append(methodName);
-        sb.append("(JNIEnv* env, jobject this");
+        sb.append("(JNIEnv* env, ");
+        if(!eb.isStatic)
+            sb.append("jobject this");
+        else
+            sb.append("jclass staticClass");
         for(int i=0;i<sign.size()-1;i++)
         {
             sb.append(", ");
@@ -39,14 +43,29 @@ public class CSourceGenerator
         sb.append("];\n");
 
         //push arguments into local vars
-        sb.append("_vars[0] = (void*)this;\n");
-        for(int i=1;i<sign.size();i++)
+        if(!eb.isStatic)
         {
-            sb.append("_vars[");
-            sb.append(i);
-            sb.append("] = (void*)var");
-            sb.append(i);
-            sb.append(";\n");
+            sb.append("_vars[0] = (void*)this;\n"); //this pointer is pushed only if the class is not static
+            for(int i=1;i<sign.size();i++)
+            {
+                sb.append("_vars[");
+                sb.append(i);
+                sb.append("] = (void*)var");
+                sb.append(i);
+                sb.append(";\n");
+            }
+        }
+        else
+        {
+            for(int i=1;i<sign.size();i++)
+            {
+                sb.append("_vars[");
+                sb.append(i-1); //this is the difference between static and non-static:
+                                //if static the vars[] array in c is offset by 1 because var[0] (this) is missing
+                sb.append("] = (void*)var");
+                sb.append(i);
+                sb.append(";\n");
+            }
         }
         sb.append('\n');
 

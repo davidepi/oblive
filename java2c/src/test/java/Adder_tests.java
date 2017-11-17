@@ -1,5 +1,4 @@
 import it.se.obfuscator.Java2CMain;
-import it.se.obfuscator.Obfuscate;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -36,7 +35,7 @@ public class Adder_tests
         {
             trans.parseClass(args);
             Process child = makefileRun.start();
-            child.waitFor();
+            child.waitFor(); //wait for make to end, otherwise tests will run with the library not ready
 
         }
         catch (IOException | InterruptedException e)

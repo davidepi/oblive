@@ -9,10 +9,10 @@ public class MethodBytecodeExtractor extends MethodVisitor
 {
     ExtractedBytecode eb;
 
-    public MethodBytecodeExtractor()
+    public MethodBytecodeExtractor(boolean isStatic)
     {
         super(ASM5);
-        eb = new ExtractedBytecode();
+        eb = new ExtractedBytecode(isStatic);
     }
 
     public ExtractedBytecode getBytecode()
