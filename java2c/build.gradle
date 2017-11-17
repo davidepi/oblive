@@ -15,5 +15,5 @@ dependencies {
 }
 
 tasks.withType(Test) {
-systemProperty "java.library.path","./out/test/classes/libsrc"
+systemProperty "java.library.path","build/classes/test/libsrc"
 }
