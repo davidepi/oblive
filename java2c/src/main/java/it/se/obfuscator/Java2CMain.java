@@ -21,8 +21,8 @@ public class Java2CMain
             output_path+=File.separator;
         output_path+="libsrc"+File.separator;
         File output_file = new File(output_path); //create output directory
-        if(!output_file.mkdirs())
-            throw new IOException();
+        if(!output_file.exists())
+            output_file.mkdirs();
         InputStream io;
         OutputStream oi;
         ClassReader cr;

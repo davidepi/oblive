@@ -47,5 +47,5 @@ matrix:
           jdk: oraclejdk8
           script:
             - cd java2c/
-#- mkdir -p build/classes/test/libsrc
+            - mkdir -p build/libsrc
             - ./gradlew build
