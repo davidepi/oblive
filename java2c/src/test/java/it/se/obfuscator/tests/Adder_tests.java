@@ -63,11 +63,15 @@ public class Adder_tests
         Assert.assertEquals(33,a.add(15,18));
     }
 
-//    @After
-//    public void delete_class()
-//    {
-//        ClassLoader classLoader = getClass().getClassLoader();
-//        File source = new File(classLoader.getResource("Adder.class").getFile());
-//        source.delete(); //delete .class file, otherwise next time it won't be converted properly
-//    }
+    @AfterClass
+    public static void delete_converted()
+    {
+        try
+        {
+            ConvertClasses.deleteConverted();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

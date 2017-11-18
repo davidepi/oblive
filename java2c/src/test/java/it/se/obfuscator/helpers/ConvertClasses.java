@@ -24,6 +24,13 @@ public class ConvertClasses
         }
     }
 
+    public static void deleteConverted() throws IOException
+    {
+        Path dest = Paths.get("./build/convertedclasses");
+        if(Files.exists(dest))
+            deleteFolder(dest);
+    }
+
     private static void copyFolder(Path source, Path dest) throws IOException
     {
         if(Files.isDirectory(source)) //ensure it is a folder
@@ -38,6 +45,24 @@ public class ConvertClasses
                 else
                     Files.copy(entry,Paths.get(dest.toString()+"/"+entry.getFileName()));
             }
+        }
+        else
+            return;
+    }
+
+    private static void deleteFolder(Path source) throws IOException
+    {
+        if(Files.isDirectory(source))
+        {
+            DirectoryStream<Path> stream = Files.newDirectoryStream(source);
+            for(Path entry : stream)
+            {
+                if(Files.isDirectory(entry))
+                    deleteFolder(entry);
+                else
+                    Files.delete(entry);
+            }
+            Files.delete(source);
         }
         else
             return;
