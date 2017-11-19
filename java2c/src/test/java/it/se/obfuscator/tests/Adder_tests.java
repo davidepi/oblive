@@ -1,6 +1,6 @@
 package it.se.obfuscator.tests;
 
-import it.se.obfuscator.helpers.ConvertClasses;
+import it.se.obfuscator.helpers.ClassConverter;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,7 +20,7 @@ public class Adder_tests
     {
         try
         {
-            ConvertClasses.convertAll();
+            ClassConverter.convertAll();
         } catch (IOException | InterruptedException e)
         {
             e.printStackTrace();

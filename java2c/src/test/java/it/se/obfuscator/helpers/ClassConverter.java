@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConvertClasses
+public class ClassConverter
 {
     private final static String TESTS_PACKAGE = "testclasses";
 
@@ -20,7 +20,7 @@ public class ConvertClasses
         Path source = Paths.get("build/convertedclasses/test/"+TESTS_PACKAGE);
         if(Files.notExists(source)) //if the converted classes do not exist
         {
-            ConvertClasses.copyFiles();
+            ClassConverter.copyFiles();
             Java2CMain trans = new Java2CMain();
             List<String> files = new ArrayList<String>();
             files = getFileNames(files,source); //get files
