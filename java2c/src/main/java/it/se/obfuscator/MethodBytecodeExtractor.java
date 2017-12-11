@@ -34,6 +34,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
         switch(opcode)
         {
             case ILOAD: eb.statements.add("_ILoad(_stack,_vars,&_index,"+var+");");break;
+            case ALOAD: eb.statements.add("_ALoad(_stack,_vars,&_index,"+var+");");break;
             default: System.err.println("Unimplemented opcode: "+ opcode);System.exit(1);
         }
     }
@@ -45,6 +46,28 @@ public class MethodBytecodeExtractor extends MethodVisitor
         {
             case IADD: eb.statements.add("_IAdd(_stack,&_index);");break;
             case IRETURN: eb.statements.add("IRETURN;");break;
+            default: System.err.println("Unimplemented opcode: "+opcode);System.exit(1);
+        }
+    }
+
+    @Override
+    public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf)
+    {
+        switch(opcode)
+        {
+            case INVOKEVIRTUAL:
+            {
+                //void
+                if(desc.charAt(desc.length()-1)=='I')
+                {
+                    eb.statements.add("_InvokeVirtual_int(env,_stack,&_index,\"" + owner + "\",\"" + name + "\",\"" + desc + "\");");
+                }
+                else
+                {
+                    System.err.println("Unimplemented opcode: "+opcode);System.exit(1);
+                }
+                break;
+            }
             default: System.err.println("Unimplemented opcode: "+opcode);System.exit(1);
         }
     }
