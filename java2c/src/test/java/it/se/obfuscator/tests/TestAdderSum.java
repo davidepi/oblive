@@ -8,7 +8,7 @@ public class TestAdderSum extends TestMethodTemplate
     @Override
     public String getTestClassName()
     {
-        return "testclasses.Adder";
+        return testclasses.Adder.class.getName();
     }
 
     @Override
@@ -33,11 +33,5 @@ public class TestAdderSum extends TestMethodTemplate
     public Object getMethodExpectedResult()
     {
         return 36;
-    }
-
-    @Override
-    public boolean isStaticMethod()
-    {
-        return false;
     }
 }

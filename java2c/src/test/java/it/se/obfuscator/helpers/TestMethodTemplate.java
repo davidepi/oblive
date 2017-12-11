@@ -1,6 +1,5 @@
 package it.se.obfuscator.helpers;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
@@ -13,30 +12,19 @@ import static org.junit.Assert.assertEquals;
 
 public abstract class TestMethodTemplate
 {
-    @BeforeClass
-    public static void convert_classes()
-    {
-        try
-        {
-            ClassConverter.convertAll();
-        } catch (IOException | InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-    }
 
     @Test
-    public void TestMethod()
+    public void testMethod() throws IllegalAccessException, InvocationTargetException, IOException, InstantiationException, NoSuchMethodException, ClassNotFoundException, InterruptedException
     {
-        try
-        {
-            runOriginalCode();
-            runConvertedCode();
-        }
-        catch(IOException|ClassNotFoundException|IllegalAccessException|InstantiationException|NoSuchMethodException|InvocationTargetException e)
-        {
-            e.printStackTrace();
-        }
+        transformClass(getTestClassName());
+        runOriginalCode();
+        runConvertedCode();
+    }
+
+    private void transformClass(final String classname) throws IOException, InterruptedException
+    {
+        String classNameSlash = classname.replace('.','/')+".class";
+        ClassTransformer.transform(classNameSlash);
     }
 
     private void runOriginalCode() throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
@@ -52,12 +40,12 @@ public abstract class TestMethodTemplate
 
     private void runConvertedCode() throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException
     {
-        URL transformed = new URL("file://" + (new File("build/convertedclasses/test/").getAbsolutePath()) + "/");
+        URL transformed = new URL("file://" + (new File("build/transformedclasses/test/").getAbsolutePath()) + "/");
         URL[] urls = {transformed};
         // should be parent last class loader
         String[] transformedClasses = {getTestClassName()};
         ClassLoader defaultClassLoader = this.getClass().getClassLoader();
-        ConvertedClassLoader newLoader = new ConvertedClassLoader(urls, defaultClassLoader, transformedClasses);
+        TransformedClassLoader newLoader = new TransformedClassLoader(urls, defaultClassLoader, transformedClasses);
         Class<?> testClass;
         testClass = newLoader.loadClass(transformedClasses[0]);
         Object classInstance = testClass.newInstance();
@@ -72,5 +60,4 @@ public abstract class TestMethodTemplate
     public abstract Class[] getMethodParamsSignature();
     public abstract Object[] getMethodParams();
     public abstract Object getMethodExpectedResult();
-    public abstract boolean isStaticMethod();
 }

@@ -50,7 +50,7 @@ public class CSourceGenerator
             {
                 sb.append("_vars[");
                 sb.append(i);
-                sb.append("] = (void*)var");
+                sb.append("] = (void*)(uintptr_t)var"); //uintptr_t is used to suppress the upcast warning
                 sb.append(i);
                 sb.append(";\n");
             }
@@ -62,7 +62,7 @@ public class CSourceGenerator
                 sb.append("_vars[");
                 sb.append(i-1); //this is the difference between static and non-static:
                                 //if static the vars[] array in c is offset by 1 because var[0] (this) is missing
-                sb.append("] = (void*)var");
+                sb.append("] = (void*)(uintptr_t)var"); //uintptr_t is used to suppress the upcast warning
                 sb.append(i);
                 sb.append(";\n");
             }

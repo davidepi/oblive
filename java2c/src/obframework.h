@@ -15,9 +15,9 @@ static inline void* pop(void** stack, uint32_t* index)
 
 static inline void _IAdd(void** stack, uint32_t* index)
 {
-    int a = (int)pop(stack,index);
-    int b = (int)pop(stack,index);
-    push(stack,index,(void*)(a+b));
+    jint a = (jint)pop(stack,index);
+    jint b = (jint)pop(stack,index);
+    push(stack,index,(void*)(uintptr_t)(a+b));
 }
 
 static inline void _ILoad(void** stack, void** arg, uint32_t* index, int value)

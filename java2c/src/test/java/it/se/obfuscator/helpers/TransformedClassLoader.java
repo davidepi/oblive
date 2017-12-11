@@ -29,7 +29,7 @@ import java.util.Set;
  * @author Andrea Nasato
  * @author mariano
  */
-public class ConvertedClassLoader extends URLClassLoader {
+public class TransformedClassLoader extends URLClassLoader {
 
     /**
      * List of classes that we permit to search in the parent class loader.
@@ -48,17 +48,17 @@ public class ConvertedClassLoader extends URLClassLoader {
 
     //private String[] jars;
 
-    public ConvertedClassLoader(URL[] urls, ClassLoader parent, String[] localClasses) {
+    public TransformedClassLoader(URL[] urls, ClassLoader parent, String[] localClasses) {
         super(urls, parent);
         initializeLocalFields(localClasses);
     }
 
-    public ConvertedClassLoader(URL[] urls, String[] localClasses) {
+    public TransformedClassLoader(URL[] urls, String[] localClasses) {
         super(urls);
         initializeLocalFields(localClasses);
     }
 
-    public ConvertedClassLoader(URL[] urls, ClassLoader parent, URLStreamHandlerFactory factory, String[] localClasses) {
+    public TransformedClassLoader(URL[] urls, ClassLoader parent, URLStreamHandlerFactory factory, String[] localClasses) {
         super(urls, parent, factory);
         initializeLocalFields(localClasses);
     }
