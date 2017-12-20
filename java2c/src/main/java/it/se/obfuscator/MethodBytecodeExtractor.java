@@ -35,7 +35,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
         {
             case ILOAD: eb.statements.add("_ILoad(_stack,_vars,&_index,"+var+");");break;
             case ALOAD: eb.statements.add("_ALoad(_stack,_vars,&_index,"+var+");");break;
-            default: System.err.println("Unimplemented opcode: "+ opcode);System.exit(1);
+            default:
+                throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
     }
 
@@ -46,7 +47,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
         {
             case IADD: eb.statements.add("_IAdd(_stack,&_index);");break;
             case IRETURN: eb.statements.add("IRETURN;");break;
-            default: System.err.println("Unimplemented opcode: "+opcode);System.exit(1);
+            default:
+                throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
     }
 
@@ -64,11 +66,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 }
                 else
                 {
-                    System.err.println("Unimplemented opcode: "+opcode);System.exit(1);
+                    throw new IllegalPatternException("Unimplemented opcode: "+opcode);
                 }
                 break;
             }
-            default: System.err.println("Unimplemented opcode: "+opcode);System.exit(1);
+            default:
+                throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
     }
 }

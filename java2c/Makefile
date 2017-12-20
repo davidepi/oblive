@@ -1,11 +1,11 @@
 .PHONY: clean
-CC=gcc
-CFLAGS=
-PARENTDIR=.
-SRC=$(PARENTDIR)/libsrc/libobf.c
+CC=gcc-7
 INCLUDE= -I${JAVA_HOME}/include
 FRAMEWORK= -Isrc/
-LIB=libobf
+CFLAGS=
+PARENTDIR=.
+LIBNAME=obf
+SRC=$(PARENTDIR)/libsrc/$(LIBNAME).o
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 	INCLUDE += -I${JAVA_HOME}/include/darwin/
@@ -15,14 +15,13 @@ else
 	LIBEXT=.so
 endif
 OUTDIR=$(PARENTDIR)/libsrc
-EXE=libobf.o
+EXE=$(LIBNAME).o
 
-
-all: $(SRC)
+all: $(OUTDIR)/$(EXE)
 	mkdir -p $(OUTDIR)
 	$(CC) -c $(CFLAGS) $(FRAMEWORK) $(INCLUDE) $(SRC) -o $(OUTDIR)/$(EXE)
-	$(CC) $(OUTDIR)/libobf.o -shared -o $(OUTDIR)/$(LIB)$(LIBEXT)
-	rm $(OUTDIR)/libobf.o
+	$(CC) $(OUTDIR)/$(LIBNAME) -shared -o $(OUTDIR)/$(LIBNAME)$(LIBEXT)
+	rm $(OUTDIR)/$(LIBNAME)
 
 clean:
 	rm $(OUTDIR)/$(EXE) $(OUTDIR)/$(LIB)

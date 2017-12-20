@@ -27,7 +27,7 @@ public class ClassTransformer
         files.add(libsrcPath); //output for the c files
 
         //makefile
-        ProcessBuilder makefileRun = new ProcessBuilder("make","PARENTDIR="+libsrcPath);
+        ProcessBuilder makefileRun = new ProcessBuilder("make","PARENTDIR="+libsrcPath,"LIBNAME="+classname.replace('/','.'));
         makefileRun.inheritIO();
         makefileRun.directory(new File(Paths.get(".").toAbsolutePath().toString()));
         trans.parseClass(files.toArray(new String[0]));

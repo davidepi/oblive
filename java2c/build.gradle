@@ -15,5 +15,6 @@ dependencies {
 }
 
 tasks.withType(Test) {
-systemProperty "java.library.path","build/libsrc"
+    systemProperty "java.library.path","build/libsrc"
+    maxParallelForks = 1
 }

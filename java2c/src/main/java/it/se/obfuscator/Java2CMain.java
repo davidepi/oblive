@@ -64,7 +64,8 @@ public class Java2CMain
                 ExtractedBytecode bytecode = eb.get(i);
                 c += CSourceGenerator.generateCode(className.getClassName(),className.getMethodName(),className.getSignature(),bytecode);
             }
-            PrintWriter pw = new PrintWriter(output_path+"libobf.c");
+            //the className will always be the same
+            PrintWriter pw = new PrintWriter(output_path+toProcess.get(0).getClassName().replace('/','.')+".class.c");
             pw.write(c);
             pw.close();
 

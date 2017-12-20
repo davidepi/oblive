@@ -49,11 +49,11 @@ static inline void _InvokeVirtual_int(JNIEnv* env, void** stack, uint32_t* index
         exit(EXIT_FAILURE);
     }
 
-    jvalue args[2];
+    jvalue args[2]; //in the transformed .c
     for(int i=1;i>=0;i--)
         args[i].i = (jint)pop(stack,index);
-    jobject class_instance = pop(stack,index);
 
+    jobject class_instance = pop(stack,index);
     void* res = (void*)(uintptr_t)(*env)->CallIntMethodA(env,class_instance,method_id,args);
     push(stack,index,res);
 }

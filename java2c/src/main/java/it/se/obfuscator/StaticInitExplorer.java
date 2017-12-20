@@ -6,9 +6,12 @@ import static org.objectweb.asm.Opcodes.*;
 
 public class StaticInitExplorer extends MethodVisitor
 {
-    public StaticInitExplorer(MethodVisitor mv)
+    private String className;
+
+    public StaticInitExplorer(MethodVisitor mv,String className)
     {
         super(ASM5,mv);
+        this.className = className.replace('/','.');
     }
 
     @Override
@@ -18,9 +21,7 @@ public class StaticInitExplorer extends MethodVisitor
         //end of the static block
         if(opcode == RETURN)
         {
-            //add the library
-            //TODO: change lib name?
-            super.visitLdcInsn("obf");
+            super.visitLdcInsn(className);
             super.visitMethodInsn(INVOKESTATIC,"java/lang/System","loadLibrary","(Ljava/lang/String;)V",false);
         }
         super.visitInsn(opcode);
