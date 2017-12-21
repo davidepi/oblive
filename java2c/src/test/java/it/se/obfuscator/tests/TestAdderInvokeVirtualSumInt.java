@@ -1,14 +1,15 @@
 package it.se.obfuscator.tests;
 
 import it.se.obfuscator.helpers.TestMethodTemplate;
+import testclasses.AdderInvokeMethodInt;
 
-public class TestAdderInvokedSum extends TestMethodTemplate
+public class TestAdderInvokeVirtualSumInt extends TestMethodTemplate
 {
 
     @Override
     public String getTestClassName()
     {
-        return testclasses.AdderInvokeMethod.class.getName();
+        return AdderInvokeMethodInt.class.getName();
     }
 
     @Override

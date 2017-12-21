@@ -35,8 +35,10 @@ public class MethodBytecodeExtractor extends MethodVisitor
     {
         switch(opcode)
         {
-            case ILOAD: eb.statements.add("_ILoad(_stack,_vars,&_index,"+var+");");break;
-            case ALOAD: eb.statements.add("_ALoad(_stack,_vars,&_index,"+var+");");break;
+            case ILOAD:
+            case ALOAD:
+            case DLOAD:
+                eb.statements.add("_Load(_stack,_vars,&_index,"+var+");");break;
             default: System.err.println("Unimplemented opcode: "+ opcode);System.exit(1);
         }
     }
@@ -70,9 +72,14 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 String inputParamsSignature = jobjectRemover(desc.substring(openParIndex+1,closeParIndex));
                 String argumentsName = "function_vals"+count_functions;
                 eb.statements.add("jvalue "+argumentsName+"["+inputParamsSignature.length()+"];");
-                for(int i =0;i<inputParamsSignature.length();i++)
-                    eb.statements.add(argumentsName+"["+i+"]."+Character.toLowerCase(inputParamsSignature.charAt(i))+
-                            "=("+CSourceGenerator.signature2string(inputParamsSignature.charAt(i))+")pop(_stack,&_index);");
+                for(int i=inputParamsSignature.length()-1;i>=0;i--)
+                    if(inputParamsSignature.charAt(i)!='D' && inputParamsSignature.charAt(i)!='F')
+                        eb.statements.add(argumentsName+"["+i+"]."+Character.toLowerCase(inputParamsSignature.charAt(i))+"=("+CSourceGenerator.signature2string(inputParamsSignature.charAt(i))+")pop(_stack,&_index);");
+                    else
+                    {
+                        eb.statements.add("tmpdouble = pop(_stack,&_index);");
+                        eb.statements.add(argumentsName + "[" + i + "]." + Character.toLowerCase(inputParamsSignature.charAt(i)) + "=*(" + CSourceGenerator.signature2string(inputParamsSignature.charAt(i)) + "*)&tmpdouble;");
+                    }
                 eb.statements.add("_InvokeVirtual_"+CSourceGenerator.signature2string(returnType)+"(env,_stack,&_index,\"" + owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
                 break;
             }

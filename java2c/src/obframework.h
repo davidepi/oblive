@@ -23,14 +23,9 @@ static inline void _IAdd(void** stack, uint32_t* index)
     push(stack,index,(void*)(uintptr_t)(a+b));
 }
 
-static inline void _ILoad(void** stack, void** arg, uint32_t* index, int value)
+static inline void _Load(void** stack, void** arg, uint32_t* index, int valueIndex)
 {
-    push(stack,index,arg[value]);
-}
-
-static inline void _ALoad(void** stack, void** arg, uint32_t* index, int value)
-{
-    push(stack,index,arg[value]);
+    push(stack,index,arg[valueIndex]);
 }
 
 static inline void _InvokeVirtual_jint(JNIEnv* env, void** stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
@@ -105,10 +100,17 @@ static inline void _InvokeVirtual_jobject(JNIEnv* env, void** stack, uint32_t* i
     push(stack,index,res);
 }
 
+static inline void _InvokeVirtual_void(JNIEnv* env, void** stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
+{
+    INVOKEVIRTUAL_ID_RESOLVER
+    jobject class_instance = pop(stack,index);
+    (*env)->CallObjectMethodA(env,class_instance,method_id,values);
+}
+
 #define ARETURN return (jobject)pop(_stack,&index)
 #define IRETURN return (jint)pop(_stack,&_index)
 #define LRETURN return (jlong)pop(_stack,&_index)
 #define FRETURN return (jfloat)pop(_stack,&_index)
-#define DRETURN return (jdouble)pop(_stack,&_index)
+#define DRETURN tmpdouble=pop(_stack,&_index);return *(jdouble*)&tmpdouble;
 #define VRETURN return
 #endif

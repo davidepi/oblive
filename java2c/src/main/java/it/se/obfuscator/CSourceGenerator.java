@@ -35,6 +35,7 @@ public class CSourceGenerator
 
         //generate stack vars
         sb.append("uint32_t _index = 0;\n");
+        sb.append("void* tmpdouble;");
         sb.append("void* _stack[");
         sb.append(eb.maxStack);
         sb.append("];\n");
