@@ -10,10 +10,9 @@ public class AdderInvokeMethodVoid
     }
 
     @Obfuscate
-    public boolean add(int a, int b)
+    public void add(int a, int b)
     {
         print(a,b);
-        return true;
     }
 
     public void print(int a, int b)

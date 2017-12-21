@@ -34,6 +34,6 @@ public class TestAdderInvokeVirtualSumVoid extends TestMethodTemplate
     @Override
     public Object getMethodExpectedResult()
     {
-        return true;
+        return null;
     }
 }
