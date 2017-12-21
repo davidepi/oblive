@@ -104,13 +104,13 @@ static inline void _InvokeVirtual_void(JNIEnv* env, void** stack, uint32_t* inde
 {
     INVOKEVIRTUAL_ID_RESOLVER
     jobject class_instance = pop(stack,index);
-    (*env)->CallObjectMethodA(env,class_instance,method_id,values);
+    (*env)->CallVoidMethodA(env,class_instance,method_id,values);
 }
 
 #define ARETURN return (jobject)pop(_stack,&index)
 #define IRETURN return (jint)pop(_stack,&_index)
 #define LRETURN return (jlong)pop(_stack,&_index)
-#define FRETURN return (jfloat)pop(_stack,&_index)
+#define FRETURN tmpdouble=pop(_stack,&_index);return *(jfloat*)&tmpdouble;
 #define DRETURN tmpdouble=pop(_stack,&_index);return *(jdouble*)&tmpdouble;
 #define VRETURN return
 #endif
