@@ -79,7 +79,7 @@ public class CSourceGenerator
         return sb.toString();
     }
 
-    private static String signature2string(char sign)
+    public static String signature2string(char sign)
     {
         switch(sign)
         {

@@ -8,11 +8,13 @@ import static org.objectweb.asm.Opcodes.*;
 public class MethodBytecodeExtractor extends MethodVisitor
 {
     ExtractedBytecode eb;
+    private int count_functions;
 
     public MethodBytecodeExtractor(boolean isStatic)
     {
         super(ASM5);
         eb = new ExtractedBytecode(isStatic);
+        count_functions = 0;
     }
 
     public ExtractedBytecode getBytecode()
@@ -60,7 +62,13 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 //void
                 if(desc.charAt(desc.length()-1)=='I')
                 {
-                    eb.statements.add("_InvokeVirtual_int(env,_stack,&_index,\"" + owner + "\",\"" + name + "\",\"" + desc + "\");");
+                    String signatureWoReturn = desc.substring(1,desc.indexOf(')',1));
+                    String argumentsName = "function_vals"+count_functions;
+                    eb.statements.add("jvalue "+argumentsName+"["+signatureWoReturn.length()+"];");
+                    for(int i =0;i<signatureWoReturn.length();i++)
+                        eb.statements.add(argumentsName+"["+i+"]."+Character.toLowerCase(signatureWoReturn.charAt(i))+
+                                "=("+CSourceGenerator.signature2string(signatureWoReturn.charAt(i))+")pop(_stack,&_index);");
+                    eb.statements.add("_InvokeVirtual_int(env,_stack,&_index,\"" + owner + "\",\"" + name + "\",\"" + desc + "\","+argumentsName+");");
                 }
                 else
                 {

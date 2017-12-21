@@ -32,7 +32,7 @@ static inline void _ALoad(void** stack, void** arg, uint32_t* index, int value)
     push(stack,index,arg[value]);
 }
 
-static inline void _InvokeVirtual_int(JNIEnv* env, void** stack, uint32_t* index, const char* owner, const char* name, const char* signature)
+static inline void _InvokeVirtual_int(JNIEnv* env, void** stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
 {
     jmethodID method_id;
     jclass caller_class = (*env)->FindClass(env, owner);
@@ -49,12 +49,9 @@ static inline void _InvokeVirtual_int(JNIEnv* env, void** stack, uint32_t* index
         exit(EXIT_FAILURE);
     }
 
-    jvalue args[2];
-    for(int i=1;i>=0;i--)
-        args[i].i = (jint)pop(stack,index);
     jobject class_instance = pop(stack,index);
 
-    void* res = (void*)(uintptr_t)(*env)->CallIntMethodA(env,class_instance,method_id,args);
+    void* res = (void*)(uintptr_t)(*env)->CallIntMethodA(env,class_instance,method_id,values);
     push(stack,index,res);
 }
 
