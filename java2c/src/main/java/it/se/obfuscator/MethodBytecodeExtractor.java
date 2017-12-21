@@ -47,7 +47,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
         switch(opcode)
         {
             case IADD: eb.statements.add("_IAdd(_stack,&_index);");break;
+            case ARETURN: eb.statements.add("ARETURN;");break;
             case IRETURN: eb.statements.add("IRETURN;");break;
+            case LRETURN: eb.statements.add("LRETURN;");break;
+            case FRETURN: eb.statements.add("FRETURN;");break;
+            case DRETURN: eb.statements.add("DRETURN;");break;
+            case RETURN: eb.statements.add("VRETURN;");break;
             default: System.err.println("Unimplemented opcode: "+opcode);System.exit(1);
         }
     }
@@ -59,24 +64,39 @@ public class MethodBytecodeExtractor extends MethodVisitor
         {
             case INVOKEVIRTUAL:
             {
-                //void
-                if(desc.charAt(desc.length()-1)=='I')
-                {
-                    String signatureWoReturn = desc.substring(1,desc.indexOf(')',1));
-                    String argumentsName = "function_vals"+count_functions;
-                    eb.statements.add("jvalue "+argumentsName+"["+signatureWoReturn.length()+"];");
-                    for(int i =0;i<signatureWoReturn.length();i++)
-                        eb.statements.add(argumentsName+"["+i+"]."+Character.toLowerCase(signatureWoReturn.charAt(i))+
-                                "=("+CSourceGenerator.signature2string(signatureWoReturn.charAt(i))+")pop(_stack,&_index);");
-                    eb.statements.add("_InvokeVirtual_int(env,_stack,&_index,\"" + owner + "\",\"" + name + "\",\"" + desc + "\","+argumentsName+");");
-                }
-                else
-                {
-                    System.err.println("Unimplemented opcode: "+opcode);System.exit(1);
-                }
+                int openParIndex = desc.indexOf('(');
+                int closeParIndex = desc.indexOf(')');
+                char returnType = desc.substring(closeParIndex+1,desc.length()).charAt(0);
+                String inputParamsSignature = jobjectRemover(desc.substring(openParIndex+1,closeParIndex));
+                String argumentsName = "function_vals"+count_functions;
+                eb.statements.add("jvalue "+argumentsName+"["+inputParamsSignature.length()+"];");
+                for(int i =0;i<inputParamsSignature.length();i++)
+                    eb.statements.add(argumentsName+"["+i+"]."+Character.toLowerCase(inputParamsSignature.charAt(i))+
+                            "=("+CSourceGenerator.signature2string(inputParamsSignature.charAt(i))+")pop(_stack,&_index);");
+                eb.statements.add("_InvokeVirtual_"+CSourceGenerator.signature2string(returnType)+"(env,_stack,&_index,\"" + owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
                 break;
             }
             default: System.err.println("Unimplemented opcode: "+opcode);System.exit(1);
         }
+    }
+
+    //since I don't care the name of the class I transform it into a simple L to know that it should be a jobject
+    private String jobjectRemover(String in)
+    {
+        StringBuilder sb = new StringBuilder();
+        boolean parsing = false;
+
+        for(int i = 0;i<in.length();i++)
+            if(in.charAt(i)=='L')
+            {
+                parsing = true;
+                sb.append('L');
+            }
+            else if(in.charAt(i)==';' && parsing)
+                parsing = false;
+            else if(!parsing)
+                sb.append(in.charAt(i));
+
+        return sb.toString();
     }
 }
