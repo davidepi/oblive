@@ -44,28 +44,23 @@ public class CSourceGenerator
         sb.append("];\n");
 
         //push arguments into local vars
+        int vars_index = 0; //vars_index, could differ from actual operands index because of static functions or double words;
         if(!eb.isStatic)
         {
             sb.append("_vars[0] = (generic_t)this;\n"); //this pointer is pushed only if the class is not static
-            for(int i=1;i<sign.size();i++)
-            {
-                sb.append("_vars[");
-                sb.append(i);
-                sb.append("] = (generic_t)var");
-                sb.append(i);
-                sb.append(";\n");
-            }
+            vars_index++;
         }
-        else
+        for(int i=1;i<sign.size();i++)
         {
-            for(int i=1;i<sign.size();i++)
+            sb.append("_vars[");
+            sb.append(vars_index);
+            vars_index++;
+            sb.append("] = (generic_t)var");
+            sb.append(i);
+            sb.append(";\n");
+            if(sign.get(i).equals("jlong") || sign.get(i).equals("jlong")) //64bit
             {
-                sb.append("_vars[");
-                sb.append(i-1); //this is the difference between static and non-static:
-                                //if static the vars[] array in c is offset by 1 because var[0] (this) is missing
-                sb.append("] = (generic_t)var");
-                sb.append(i);
-                sb.append(";\n");
+                vars_index++;
             }
         }
         sb.append('\n');

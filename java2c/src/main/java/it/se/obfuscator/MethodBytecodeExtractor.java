@@ -36,11 +36,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
         switch(opcode)
         {
             case ILOAD:
-            case LLOAD:
             case ALOAD:
             case FLOAD:
-            case DLOAD:
                 eb.statements.add("_Load(_stack,_vars,&_index,"+var+");");break;
+            case LLOAD:
+            case DLOAD:
+                eb.statements.add("_Load2(_stack,_vars,&_index,"+var+");");break;
             default: System.err.println("Unimplemented opcode: "+ opcode);System.exit(1);
         }
     }
@@ -77,7 +78,14 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 eb.statements.add("jvalue "+argumentsName+"["+inputParamsSignature.length()+"];");
                 for(int i=inputParamsSignature.length()-1;i>=0;i--)
                     if(inputParamsSignature.charAt(i)!='D' && inputParamsSignature.charAt(i)!='F')
-                        eb.statements.add(argumentsName+"["+i+"]."+Character.toLowerCase(inputParamsSignature.charAt(i))+"=("+CSourceGenerator.signature2string(inputParamsSignature.charAt(i))+")pop(_stack,&_index);");
+                    {
+                        if(inputParamsSignature.charAt(i)!='J') //32 bit
+                            eb.statements.add(argumentsName + "[" + i + "]." + Character.toLowerCase(inputParamsSignature.charAt(i)) + "=(" + CSourceGenerator.signature2string(inputParamsSignature.charAt(i)) + ")pop(_stack,&_index);");
+                        else //64 bit
+                        {
+                            eb.statements.add(argumentsName + "[" + i + "]." + Character.toLowerCase(inputParamsSignature.charAt(i)) + "=(" + CSourceGenerator.signature2string(inputParamsSignature.charAt(i)) + ")pop2(_stack,&_index);");
+                        }
+                    }
                     else
                     {
                         eb.statements.add("tmpdouble = pop(_stack,&_index);");

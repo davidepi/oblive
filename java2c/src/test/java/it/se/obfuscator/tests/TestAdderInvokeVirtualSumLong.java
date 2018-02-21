@@ -27,12 +27,12 @@ public class TestAdderInvokeVirtualSumLong extends TestMethodTemplate
     @Override
     public Object[] getMethodParams()
     {
-        return new Object[]{3,1};
+        return new Object[]{0x200000001L,0x400000002L};
     }
 
     @Override
     public Object getMethodExpectedResult()
     {
-        return 4L;
+        return 0x600000003L;
     }
 }

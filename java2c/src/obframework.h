@@ -14,9 +14,21 @@ static inline void push(generic_t* stack, uint32_t* index, generic_t val)
     stack[(*index)++] = val;
 }
 
+static inline void push2(generic_t* stack, uint32_t* index, generic_t val)
+{
+  stack[(*index)++] = val;
+  (*index)++;
+}
+
 static inline generic_t pop(generic_t* stack, uint32_t* index)
 {
     return stack[--(*index)];
+}
+
+static inline generic_t pop2(generic_t* stack, uint32_t* index)
+{
+  --(*index);
+  return stack[--(*index)];
 }
 
 static inline void _IAdd(generic_t* stack, uint32_t* index)
@@ -29,6 +41,11 @@ static inline void _IAdd(generic_t* stack, uint32_t* index)
 static inline void _Load(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
 {
     push(stack,index,arg[valueIndex]);
+}
+
+static inline void _Load2(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
+{
+    push2(stack,index,arg[valueIndex]);
 }
 
 static inline void _InvokeVirtual_jint(JNIEnv* env, generic_t* stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
@@ -70,7 +87,7 @@ static inline void _InvokeVirtual_jlong(JNIEnv* env, generic_t* stack, uint32_t*
 {
     INVOKEVIRTUAL_ID_RESOLVER
     generic_t res = (generic_t)(*env)->CallLongMethodA(env,class_instance,method_id,values);
-    push(stack,index,res);
+    push2(stack,index,res);
 }
 
 static inline void _InvokeVirtual_jfloat(JNIEnv* env, generic_t* stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
@@ -102,7 +119,7 @@ static inline void _InvokeVirtual_void(JNIEnv* env, generic_t* stack, uint32_t* 
 
 #define ARETURN return (jobject)pop(_stack,&index)
 #define IRETURN return (jint)pop(_stack,&_index)
-#define LRETURN return (jlong)pop(_stack,&_index)
+#define LRETURN return (jlong)pop2(_stack,&_index)
 #define FRETURN tmpdouble=pop(_stack,&_index);return *(jfloat*)&tmpdouble;
 #define DRETURN tmpdouble=pop(_stack,&_index);return *(jdouble*)&tmpdouble;
 #define VRETURN return
