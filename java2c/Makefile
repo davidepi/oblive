@@ -1,6 +1,6 @@
 .PHONY: clean
 CC=gcc
-CFLAGS=
+CFLAGS=-Wno-int-to-void-pointer-cast
 PARENTDIR=.
 SRC=$(PARENTDIR)/libsrc/libobf.c
 INCLUDE= -I${JAVA_HOME}/include

@@ -35,23 +35,23 @@ public class CSourceGenerator
 
         //generate stack vars
         sb.append("uint32_t _index = 0;\n");
-        sb.append("void* tmpdouble;");
-        sb.append("void* _stack[");
+        sb.append("void* tmpdouble;\n");
+        sb.append("generic_t _stack[");
         sb.append(eb.maxStack);
         sb.append("];\n");
-        sb.append("void* _vars[");
+        sb.append("generic_t _vars[");
         sb.append(eb.maxLVar);
         sb.append("];\n");
 
         //push arguments into local vars
         if(!eb.isStatic)
         {
-            sb.append("_vars[0] = (void*)this;\n"); //this pointer is pushed only if the class is not static
+            sb.append("_vars[0] = (generic_t)this;\n"); //this pointer is pushed only if the class is not static
             for(int i=1;i<sign.size();i++)
             {
                 sb.append("_vars[");
                 sb.append(i);
-                sb.append("] = (void*)(uintptr_t)var"); //uintptr_t is used to suppress the upcast warning
+                sb.append("] = (generic_t)var");
                 sb.append(i);
                 sb.append(";\n");
             }
@@ -63,7 +63,7 @@ public class CSourceGenerator
                 sb.append("_vars[");
                 sb.append(i-1); //this is the difference between static and non-static:
                                 //if static the vars[] array in c is offset by 1 because var[0] (this) is missing
-                sb.append("] = (void*)(uintptr_t)var"); //uintptr_t is used to suppress the upcast warning
+                sb.append("] = (generic_t)var");
                 sb.append(i);
                 sb.append(";\n");
             }

@@ -7,9 +7,7 @@ import org.objectweb.asm.MethodVisitor;
 
 import java.util.ArrayList;
 
-import static org.objectweb.asm.Opcodes.ACC_NATIVE;
-import static org.objectweb.asm.Opcodes.ACC_STATIC;
-import static org.objectweb.asm.Opcodes.ASM5;
+import static org.objectweb.asm.Opcodes.*;
 
 public class ClassBytecodeExtractor extends ClassVisitor
 {
@@ -48,7 +46,7 @@ public class ClassBytecodeExtractor extends ClassVisitor
                name.equals(cmp.getMethodName())&&
                this.className.equals((cmp.getClassName()))) //check if method has to be obfuscated
             {
-                if((access & ACC_NATIVE) != 0) //check that native method is not annotated with @Obfuscate
+                if(((access & ACC_NATIVE) | (access & ACC_ABSTRACT)) != 0) //check that native method is not annotated with @Obfuscate
                 {
                     throw new IllegalPatternException("Can't annotate native method: "+cmp.getClassName()+"."+
                                                       cmp.getMethodName()+cmp.getSignature());
