@@ -27,7 +27,6 @@ public class JniType
     //true if the jniName is a float or double
     private final boolean floatingPoint;
 
-
     /**
      *  Construct a new JniType by decoding the input string. The input string can be an object in the bytecode notation
      *  (i.e. Ljava/util/logging/Logger; ) or a letter representing the type (i.e. I for integer, Z for boolean).
@@ -93,8 +92,10 @@ public class JniType
                 this.floatingPoint = true;
                 break;
             case 'L':
+                if(bytecodeName.charAt(bytecodeName.length()-1)!=';') //not in the canonical form
+                    throw new IllegalPatternException("Unknown bytecode type " + bytecodeName);
                 this.jniName = "jobject";
-                this.name = bytecodeName.substring(1, bytecodeName.length()-2);
+                this.name = bytecodeName.substring(1, bytecodeName.length() - 1);
                 this.doubleLength = false;
                 this.floatingPoint = false;
                 break;
