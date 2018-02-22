@@ -1,10 +1,9 @@
 package it.se.obfuscator.helpers;
 
-import it.se.obfuscator.Java2CMain;
+import it.se.obfuscator.JavaToC;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,7 +18,6 @@ public class ClassTransformer
     public static void transform(final String classname) throws IOException,InterruptedException
     {
         ClassTransformer.copyFile(classname);
-        Java2CMain trans = new Java2CMain();
         List<String> files = new ArrayList<String>();
         String transformMe = Paths.get("build/transformedclasses/test/"+classname).toAbsolutePath().toString();
         String libsrcPath = Paths.get("build").toAbsolutePath().toString();
@@ -30,7 +28,8 @@ public class ClassTransformer
         ProcessBuilder makefileRun = new ProcessBuilder("make","PARENTDIR="+libsrcPath);
         makefileRun.inheritIO();
         makefileRun.directory(new File(Paths.get(".").toAbsolutePath().toString()));
-        trans.parseClass(files.toArray(new String[0]));
+        //TODO: change this
+        //JavaToC.parseClass(files.toArray(new String[0]));
         Process child = makefileRun.start();
         child.waitFor(); //wait for make to end, otherwise tests will run with the library not ready
     }

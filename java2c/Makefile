@@ -8,21 +8,21 @@ FRAMEWORK= -Isrc/
 LIB=libobf
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
-	INCLUDE += -I${JAVA_HOME}/include/darwin/
-	LIBEXT=.dylib
+INCLUDE += -I${JAVA_HOME}/include/darwin/
+LIBEXT=.dylib
 else
-	INCLUDE += -I${JAVA_HOME}/include/linux/
-	LIBEXT=.so
+INCLUDE += -I${JAVA_HOME}/include/linux/
+LIBEXT=.so
 endif
 OUTDIR=$(PARENTDIR)/libsrc
 EXE=libobf.o
 
 
 all: $(SRC)
-	mkdir -p $(OUTDIR)
-	$(CC) -c $(CFLAGS) $(FRAMEWORK) $(INCLUDE) $(SRC) -o $(OUTDIR)/$(EXE)
-	$(CC) $(OUTDIR)/libobf.o -shared -o $(OUTDIR)/$(LIB)$(LIBEXT)
-	rm $(OUTDIR)/libobf.o
+		mkdir -p $(OUTDIR)
+		$(CC) -c $(CFLAGS) $(FRAMEWORK) $(INCLUDE) $(SRC) -o $(OUTDIR)/$(EXE)
+		$(CC) $(OUTDIR)/libobf.o -shared -o $(OUTDIR)/$(LIB)$(LIBEXT)
+		rm $(OUTDIR)/libobf.o
 
 clean:
-	rm $(OUTDIR)/$(EXE) $(OUTDIR)/$(LIB)
+		rm $(OUTDIR)/$(EXE) $(OUTDIR)/$(LIB)
