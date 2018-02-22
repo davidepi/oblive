@@ -99,6 +99,7 @@ public class JniType
                 this.doubleLength = false;
                 this.floatingPoint = false;
                 break;
+            //TODO: array support
             default:
                 throw new IllegalPatternException("Unknown bytecode type "+ bytecodeName);
         }
