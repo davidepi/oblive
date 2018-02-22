@@ -13,7 +13,7 @@ public class MethodSignature
     //array list containing the input types
     private final ArrayList<JniType> input;
     //the return type
-    private final JniType output;
+    private final JniType returnType;
 
     /**
      * Constructs a MethodSignature after giving a signature in bytecode notation. The signature is expected as
@@ -27,15 +27,17 @@ public class MethodSignature
         StringBuilder currentType = new StringBuilder();
         char currentLetter;
 
-        //check if ( and ) are present in the method signature
+        //check if ( and ) are present in the method signature and there is a return type
+        //then every other problem belongs to the JniType class
         int lastParenthesisIndex = bytecodeDesc.indexOf(')');
-        if(bytecodeDesc.charAt(0)!='(' || lastParenthesisIndex<0)
+        if(bytecodeDesc.charAt(0)!='(' || lastParenthesisIndex<0 || lastParenthesisIndex+1==bytecodeDesc.length())
             throw new IllegalPatternException(bytecodeDesc + "is not a valid method signature");
 
         //parse the signature, input parameters
         //TODO: array support will change something inside here
-        for(int i=0;i<lastParenthesisIndex;i++)
+        for(int i=1;i<lastParenthesisIndex;i++)
         {
+            currentType.setLength(0);
             currentLetter = bytecodeDesc.charAt(i);
             currentType.append(currentLetter);
             if(currentLetter=='L') //object, need to parse everything until the ;
@@ -51,7 +53,7 @@ public class MethodSignature
         }
 
         //parse return type
-        this.output = new JniType(bytecodeDesc.substring(lastParenthesisIndex+1));
+        this.returnType = new JniType(bytecodeDesc.substring(lastParenthesisIndex+1));
     }
 
     /**
@@ -64,11 +66,11 @@ public class MethodSignature
     }
 
     /**
-     * Returns the output parameter of this method
-     * @return the output parameter of this method
+     * Returns the returnType parameter of this method
+     * @return the returnType parameter of this method
      */
-    public JniType getOutput()
+    public JniType getReturnType()
     {
-        return output;
+        return returnType;
     }
 }
