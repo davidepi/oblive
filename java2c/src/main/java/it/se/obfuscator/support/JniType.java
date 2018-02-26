@@ -22,6 +22,8 @@ public class JniType
 {
     //name of the jniName in c (jint, jboolean, etc...)
     private final String jniName;
+    //letter used in the jvalue union
+    private final char jvalueLetter;
     //if the jniName is an object this is the full name of the ojbect, including L and ; like Ljava/lang/String;
     private final String name;
     //true if the jniName is 64 bit long
@@ -44,54 +46,63 @@ public class JniType
                 this.name = this.jniName;
                 this.doubleLength = false;
                 this.floatingPoint = false;
+                this.jvalueLetter = 'i';
                 break;
             case 'V':
                 this.jniName = "void";
                 this.name = this.jniName;
                 this.doubleLength = false;
                 this.floatingPoint = false;
+                this.jvalueLetter = '\0';
                 break;
             case 'Z':
                 this.jniName = "jboolean";
                 this.name = this.jniName;
                 this.doubleLength = false;
                 this.floatingPoint = false;
+                this.jvalueLetter = 'z';
                 break;
             case 'B':
                 this.jniName = "jbyte";
                 this.name = this.jniName;
                 this.doubleLength = false;
                 this.floatingPoint = false;
+                this.jvalueLetter = 'b';
                 break;
             case 'C':
                 this.jniName = "jchar";
                 this.name = this.jniName;
                 this.doubleLength = false;
                 this.floatingPoint = false;
+                this.jvalueLetter = 'c';
                 break;
             case 'S':
                 this.jniName = "jshort";
                 this.name = this.jniName;
                 this.doubleLength = false;
                 this.floatingPoint = false;
+                this.jvalueLetter = 's';
                 break;
             case 'J':
                 this.jniName = "jlong";
                 this.name = this.jniName;
                 this.doubleLength = true;
                 this.floatingPoint = false;
+                this.jvalueLetter = 'j';
                 break;
             case 'F':
                 this.jniName = "jfloat";
                 this.name = this.jniName;
                 this.doubleLength = false;
                 this.floatingPoint = true;
+                this.jvalueLetter = 'f';
                 break;
             case 'D':
                 this.jniName = "jdouble";
                 this.name = this.jniName;
                 this.doubleLength = true;
                 this.floatingPoint = true;
+                this.jvalueLetter = 'd';
                 break;
             case 'L':
                 if(bytecodeName.charAt(bytecodeName.length()-1)!=';') //not in the canonical form
@@ -100,6 +111,7 @@ public class JniType
                 this.name = bytecodeName.substring(1, bytecodeName.length() - 1);
                 this.doubleLength = false;
                 this.floatingPoint = false;
+                this.jvalueLetter = 'l';
                 if(this.name.length()==0)
                     throw new IllegalPatternException("Empty object name");
                 break;
@@ -126,6 +138,15 @@ public class JniType
     public String getJniName()
     {
         return jniName;
+    }
+
+    /**
+     * Returns the letter used in the jvalue jni union to represent this type
+     * @return The jvalue letter for this type
+     */
+    public char getJvalueLetter()
+    {
+        return jvalueLetter;
     }
 
     /**
