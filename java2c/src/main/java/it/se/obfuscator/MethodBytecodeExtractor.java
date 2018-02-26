@@ -80,17 +80,14 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 for(int i=signature.getInput().size()-1;i>=0;i--)
                 {
                     //EXAMPLE:
-                    //function_vals0[1].i = (jint)pop(_stack,&_index);
+                    //function_vals0[1] = pop(_stack,&_index);
                     statementBuilder.setLength(0);
                     currentType = signature.getInput().get(i);
-                    statementBuilder.append(argumentsName).append("[").append(i).append("].");
-                    statementBuilder.append(currentType.getJvalueLetter());
-                    statementBuilder.append("=(");
-                    statementBuilder.append(currentType.getJniName());
+                    statementBuilder.append(argumentsName).append("[").append(i).append("]=");
                     if(currentType.isDoubleLength())
-                        statementBuilder.append(")pop2(_stack,&_index);");
+                        statementBuilder.append("pop2(_stack,&_index);");
                     else
-                        statementBuilder.append(")pop(_stack,&_index);");
+                        statementBuilder.append("pop(_stack,&_index);");
                     eb.statements.add(statementBuilder.toString());
                 }
                 eb.statements.add("_InvokeVirtual_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +

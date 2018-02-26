@@ -1,6 +1,6 @@
 .PHONY: clean
 CC=gcc
-CFLAGS=-Wno-int-to-void-pointer-cast
+CFLAGS=
 SRCDIR=
 OUTDIR=
 SRCNAME=

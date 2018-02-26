@@ -1,6 +1,7 @@
 package it.se.obfuscator;
 
 import it.se.obfuscator.support.ExtractedBytecode;
+import it.se.obfuscator.support.JniType;
 import it.se.obfuscator.support.MethodSignature;
 
 import java.util.ArrayList;
@@ -46,17 +47,20 @@ public class CSourceGenerator
         int vars_index = 0; //vars_index, could differ from actual operands index because of static functions or double words;
         if(!eb.isStatic)
         {
-            sb.append("_vars[0] = (generic_t)this;\n"); //this pointer is pushed only if the class is not static
+            sb.append("_vars[0].l=this;\n"); //this pointer is pushed only if the class is not static
             vars_index++;
         }
         for(int i=0;i<signature.getInput().size();i++)
         {
+            JniType currentType = signature.getInput().get(i);
             sb.append("_vars[");
             sb.append(vars_index++);
-            sb.append("] = (generic_t)var");
+            sb.append("].");
+            sb.append(currentType.getJvalueLetter());
+            sb.append("=var");
             sb.append(i+1);
             sb.append(";\n");
-            if(signature.getInput().get(i).isDoubleLength())
+            if(currentType.isDoubleLength())
             {
                 vars_index++;
             }

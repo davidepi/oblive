@@ -5,9 +5,9 @@
 #include <stdio.h> //fprintf
 #include <stdlib.h> //exit
 
-typedef void* generic_t;
+typedef jvalue generic_t;
 
-#define INVOKEVIRTUAL_ID_RESOLVER   jmethodID method_id;jclass caller_class = (*env)->FindClass(env, owner);if(caller_class == NULL){fprintf(stderr,"Class %s not found\n",owner);exit(EXIT_FAILURE);}method_id = (*env)->GetMethodID(env, caller_class, name, signature);if(method_id == NULL){fprintf(stderr,"Method %s not found\n",owner);exit(EXIT_FAILURE);}jobject class_instance = (jobject)pop(stack,index);
+#define INVOKEVIRTUAL_ID_RESOLVER   jmethodID method_id;jclass caller_class = (*env)->FindClass(env, owner);if(caller_class == NULL){fprintf(stderr,"Class %s not found\n",owner);exit(EXIT_FAILURE);}method_id = (*env)->GetMethodID(env, caller_class, name, signature);if(method_id == NULL){fprintf(stderr,"Method %s not found\n",owner);exit(EXIT_FAILURE);}jobject class_instance = pop(stack,index).l;
 
 static inline void push(generic_t* stack, uint32_t* index, generic_t val)
 {
@@ -33,9 +33,11 @@ static inline generic_t pop2(generic_t* stack, uint32_t* index)
 
 static inline void _IAdd(generic_t* stack, uint32_t* index)
 {
-    jint a = (jint)pop(stack,index);
-    jint b = (jint)pop(stack,index);
-    push(stack,index,(generic_t)(a+b));
+    jint a = pop(stack,index).i;
+    jint b = pop(stack,index).i;
+    generic_t res;
+    res.i = a+b;
+    push(stack,index,res);
 }
 
 static inline void _Load(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
@@ -51,63 +53,72 @@ static inline void _Load2(generic_t* stack, generic_t* arg, uint32_t* index, int
 static inline void _InvokeVirtual_jint(JNIEnv* env, generic_t* stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
 {
     INVOKEVIRTUAL_ID_RESOLVER
-    generic_t res = (generic_t)(*env)->CallIntMethodA(env,class_instance,method_id,values);
+    generic_t res;
+    res.i = (*env)->CallIntMethodA(env,class_instance,method_id,values);
     push(stack,index,res);
 }
 
 static inline void _InvokeVirtual_jboolean(JNIEnv* env, generic_t* stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
 {
     INVOKEVIRTUAL_ID_RESOLVER
-    generic_t res = (generic_t)(*env)->CallBooleanMethodA(env,class_instance,method_id,values);
+    generic_t res;
+    res.z = (*env)->CallBooleanMethodA(env,class_instance,method_id,values);
     push(stack,index,res);
 }
 
 static inline void _InvokeVirtual_jbyte(JNIEnv* env, generic_t* stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
 {
     INVOKEVIRTUAL_ID_RESOLVER
-    generic_t res = (generic_t)(*env)->CallByteMethodA(env,class_instance,method_id,values);
+    generic_t res;
+    res.b = (*env)->CallByteMethodA(env,class_instance,method_id,values);
     push(stack,index,res);
 }
 
 static inline void _InvokeVirtual_jchar(JNIEnv* env, generic_t* stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
 {
     INVOKEVIRTUAL_ID_RESOLVER
-    generic_t res = (generic_t)(*env)->CallCharMethodA(env,class_instance,method_id,values);
+    generic_t res;
+    res.c = (*env)->CallCharMethodA(env,class_instance,method_id,values);
     push(stack,index,res);
 }
 
 static inline void _InvokeVirtual_jshort(JNIEnv* env, generic_t* stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
 {
     INVOKEVIRTUAL_ID_RESOLVER
-    generic_t res = (generic_t)(*env)->CallShortMethodA(env,class_instance,method_id,values);
+    generic_t res;
+    res.s = (*env)->CallShortMethodA(env,class_instance,method_id,values);
     push(stack,index,res);
 }
 
 static inline void _InvokeVirtual_jlong(JNIEnv* env, generic_t* stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
 {
     INVOKEVIRTUAL_ID_RESOLVER
-    generic_t res = (generic_t)(*env)->CallLongMethodA(env,class_instance,method_id,values);
+    generic_t res;
+    res.j = (*env)->CallLongMethodA(env,class_instance,method_id,values);
     push2(stack,index,res);
 }
 
 static inline void _InvokeVirtual_jfloat(JNIEnv* env, generic_t* stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
 {
     INVOKEVIRTUAL_ID_RESOLVER
-    generic_t res = (generic_t)(uintptr_t)(*env)->CallFloatMethodA(env,class_instance,method_id,values);
+    generic_t res;
+    res.f = (*env)->CallFloatMethodA(env,class_instance,method_id,values);
     push(stack,index,res);
 }
 
 static inline void _InvokeVirtual_jdouble(JNIEnv* env, generic_t* stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
 {
     INVOKEVIRTUAL_ID_RESOLVER
-    generic_t res = (generic_t)(uintptr_t)(*env)->CallDoubleMethodA(env,class_instance,method_id,values);
+    generic_t res;
+    res.d = (*env)->CallDoubleMethodA(env,class_instance,method_id,values);
     push2(stack,index,res);
 }
 
 static inline void _InvokeVirtual_jobject(JNIEnv* env, generic_t* stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
 {
     INVOKEVIRTUAL_ID_RESOLVER
-    generic_t res = (generic_t)(*env)->CallObjectMethodA(env,class_instance,method_id,values);
+    generic_t res;
+    res.l = (*env)->CallObjectMethodA(env,class_instance,method_id,values);
     push(stack,index,res);
 }
 
@@ -117,10 +128,10 @@ static inline void _InvokeVirtual_void(JNIEnv* env, generic_t* stack, uint32_t* 
     (*env)->CallVoidMethodA(env,class_instance,method_id,values);
 }
 
-#define ARETURN return (jobject)pop(_stack,&index)
-#define IRETURN return (jint)pop(_stack,&_index)
-#define LRETURN return (jlong)pop2(_stack,&_index)
-#define FRETURN tmpdouble=pop(_stack,&_index);return *(jfloat*)&tmpdouble;
-#define DRETURN tmpdouble=pop(_stack,&_index);return *(jdouble*)&tmpdouble;
-#define VRETURN return
+#define ARETURN {jvalue __areturn_retval__ = pop(_stack,&_index); return __areturn_retval__.l;}
+#define IRETURN {jvalue __ireturn_retval__ = pop(_stack,&_index); return __ireturn_retval__.i;}
+#define LRETURN {jvalue __lreturn_retval__ = pop2(_stack,&_index); return __lreturn_retval__.j;}
+#define FRETURN {jvalue __freturn_retval__ = pop(_stack,&_index); return __freturn_retval__.f;}
+#define DRETURN {jvalue __dreturn_retval__ = pop2(_stack,&_index); return __dreturn_retval__.d;}
+#define VRETURN {return;}
 #endif
