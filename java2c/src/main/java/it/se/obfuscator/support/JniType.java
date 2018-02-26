@@ -15,6 +15,8 @@ import it.se.obfuscator.IllegalPatternException;
  *  F - float
  *  D - double
  *  Lpackage/name; - object
+ *
+ *  @author davidepi &lt;dpizzolotto@fbk.eu&gt;
  */
 public class JniType
 {
@@ -142,5 +144,17 @@ public class JniType
     public boolean isFloatingPoint()
     {
         return floatingPoint;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(object==null || (!JniType.class.isAssignableFrom(object.getClass())))
+            return false;
+        else
+        {
+            final JniType other = (JniType)object;
+            return this.name.equals(other.getName());
+        }
     }
 }

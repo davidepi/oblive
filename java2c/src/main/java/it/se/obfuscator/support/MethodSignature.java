@@ -7,6 +7,8 @@ import java.util.ArrayList;
 /**
  * Parses a signature in bytecode format and returns the various input types and the return type as JniType classes
  * An input example is the following (II)I
+ *
+ *  @author davidepi &lt;dpizzolotto@fbk.eu&gt;
  */
 public class MethodSignature
 {
@@ -73,5 +75,17 @@ public class MethodSignature
     public JniType getReturnType()
     {
         return returnType;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(object==null || (!MethodSignature.class.isAssignableFrom(object.getClass())))
+            return false;
+        else
+        {
+            final MethodSignature other = (MethodSignature) object;
+            return this.input.equals(other.getInput()) && this.returnType.equals(other.getReturnType());
+        }
     }
 }

@@ -111,4 +111,25 @@ public class TestMethodSignature
     {
         MethodSignature ms = new MethodSignature("(II)");
     }
+
+    @Test
+    public void testEquals()
+    {
+        MethodSignature ms0 = new MethodSignature("()V");
+        MethodSignature ms1 = new MethodSignature("(I)V");
+        MethodSignature ms2 = new MethodSignature("(II)V");
+        MethodSignature ms3 = new MethodSignature("()S");
+        MethodSignature ms4 = new MethodSignature("(ISLjava/lang/String;F)V");
+        MethodSignature ms5 = new MethodSignature("(ISLjava/lang/String;F)V");
+
+        assertEquals(false, ms0.equals(null));
+        assertEquals(false, ms0.equals(new JniType("V")));
+
+        assertEquals(true, ms4.equals(ms5));
+        //different inputs
+        assertEquals(false, ms0.equals(ms1));
+        assertEquals(false, ms0.equals(ms2));
+        //different return type
+        assertEquals(false, ms0.equals(ms3));
+    }
 }
