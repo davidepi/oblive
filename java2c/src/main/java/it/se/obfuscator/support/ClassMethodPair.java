@@ -4,13 +4,15 @@ public class ClassMethodPair
 {
     private String className;
     private String methodName;
-    private String signature;
+    private String desc;
+    private MethodSignature signature;
 
     public ClassMethodPair(String sclass, String smethod, String ssignature)
     {
         this.className = sclass;
         this.methodName = smethod;
-        this.signature = ssignature;
+        this.desc = ssignature;
+        this.signature = new MethodSignature(ssignature);
     }
 
     public String getClassName()
@@ -33,13 +35,23 @@ public class ClassMethodPair
         this.methodName = methodName;
     }
 
-    public String getSignature()
+    public MethodSignature getSignature()
     {
         return signature;
     }
 
     public void setSignature(String signature)
     {
-        this.signature = signature;
+        this.signature = new MethodSignature(signature);
+    }
+
+    public String getDesc()
+    {
+        return desc;
+    }
+
+    public void setDesc(String desc)
+    {
+        this.desc = desc;
     }
 }

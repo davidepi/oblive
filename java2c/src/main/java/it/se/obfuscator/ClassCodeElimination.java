@@ -39,16 +39,14 @@ public class ClassCodeElimination extends ClassVisitor
             hasStaticInit = true;
             //add the library import while visiting static init
             MethodVisitor mv = super.visitMethod(access,name,desc,signature,exceptions);
-            StaticInitExplorer sie = new StaticInitExplorer(mv);
-            return sie;
+            return new StaticInitExplorer(mv);
         }
 
         //check if obfuscated
         for(int i=0;i<toObfuscate.size();i++)
         {
             ClassMethodPair cmp = toObfuscate.get(i);
-            if(desc.equals(cmp.getSignature()) &&
-                    name.equals(cmp.getMethodName())&&
+            if(desc.equals(cmp.getDesc()) && name.equals(cmp.getMethodName())&&
                     this.className.equals((cmp.getClassName()))) //check if method has to be obfuscated
             {
                 //alter the method declaration by adding native
