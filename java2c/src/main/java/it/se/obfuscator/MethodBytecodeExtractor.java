@@ -1,6 +1,8 @@
 package it.se.obfuscator;
 
 import it.se.obfuscator.support.ExtractedBytecode;
+import it.se.obfuscator.support.JniType;
+import it.se.obfuscator.support.MethodSignature;
 import org.objectweb.asm.MethodVisitor;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -66,55 +68,36 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf)
     {
+        MethodSignature signature = new MethodSignature(desc);
         switch(opcode)
         {
             case INVOKEVIRTUAL:
             {
-                int openParIndex = desc.indexOf('(');
-                int closeParIndex = desc.indexOf(')');
-                char returnType = desc.substring(closeParIndex+1,desc.length()).charAt(0);
-                String inputParamsSignature = jobjectRemover(desc.substring(openParIndex+1,closeParIndex));
                 String argumentsName = "function_vals"+count_functions;
-                eb.statements.add("jvalue "+argumentsName+"["+inputParamsSignature.length()+"];");
-                for(int i=inputParamsSignature.length()-1;i>=0;i--)
-                    if(inputParamsSignature.charAt(i)!='D' && inputParamsSignature.charAt(i)!='F')
-                    {
-                        if(inputParamsSignature.charAt(i)!='J') //32 bit
-                            eb.statements.add(argumentsName + "[" + i + "]." + Character.toLowerCase(inputParamsSignature.charAt(i)) + "=(" + CSourceGenerator.signature2string(inputParamsSignature.charAt(i)) + ")pop(_stack,&_index);");
-                        else //64 bit
-                        {
-                            eb.statements.add(argumentsName + "[" + i + "]." + Character.toLowerCase(inputParamsSignature.charAt(i)) + "=(" + CSourceGenerator.signature2string(inputParamsSignature.charAt(i)) + ")pop2(_stack,&_index);");
-                        }
-                    }
+                JniType currentType;
+                StringBuilder statementBuilder = new StringBuilder();
+                eb.statements.add("jvalue "+argumentsName+"["+signature.getInput().size()+"];");
+                for(int i=signature.getInput().size()-1;i>=0;i--)
+                {
+                    //EXAMPLE:
+                    //function_vals0[1].i = (jint)pop(_stack,&_index);
+                    statementBuilder.setLength(0);
+                    currentType = signature.getInput().get(i);
+                    statementBuilder.append(argumentsName).append("[").append(i).append("].");
+                    statementBuilder.append(currentType.getJvalueLetter());
+                    statementBuilder.append("=(");
+                    statementBuilder.append(currentType.getJniName());
+                    if(currentType.isDoubleLength())
+                        statementBuilder.append(")pop2(_stack,&_index);");
                     else
-                    {
-                        eb.statements.add("tmpdouble = pop(_stack,&_index);");
-                        eb.statements.add(argumentsName + "[" + i + "]." + Character.toLowerCase(inputParamsSignature.charAt(i)) + "=*(" + CSourceGenerator.signature2string(inputParamsSignature.charAt(i)) + "*)&tmpdouble;");
-                    }
-                eb.statements.add("_InvokeVirtual_"+CSourceGenerator.signature2string(returnType)+"(env,_stack,&_index,\"" + owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
+                        statementBuilder.append(")pop(_stack,&_index);");
+                    eb.statements.add(statementBuilder.toString());
+                }
+                eb.statements.add("_InvokeVirtual_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
+                                  owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
                 break;
             }
             default: System.err.println("Unimplemented opcode: "+opcode);System.exit(1);
         }
-    }
-
-    //since I don't care the name of the class I transform it into a simple L to know that it should be a jobject
-    private String jobjectRemover(String in)
-    {
-        StringBuilder sb = new StringBuilder();
-        boolean parsing = false;
-
-        for(int i = 0;i<in.length();i++)
-            if(in.charAt(i)=='L')
-            {
-                parsing = true;
-                sb.append('L');
-            }
-            else if(in.charAt(i)==';' && parsing)
-                parsing = false;
-            else if(!parsing)
-                sb.append(in.charAt(i));
-
-        return sb.toString();
     }
 }
