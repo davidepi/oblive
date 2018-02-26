@@ -2,9 +2,9 @@ package testclasses;
 
 import it.se.obfuscator.Obfuscate;
 
-public class AdderInvokeMethodShort
+public class InvokeVirtualShort
 {
-    public AdderInvokeMethodShort()
+    public InvokeVirtualShort()
     {
 
     }

@@ -37,7 +37,7 @@ public class ClassTransformer
     public static void copyFile(final String classname) throws IOException
     {
         Path dest = Paths.get("build/transformedclasses/test/"+classname);
-        Path source = Paths.get("build/classes/test/"+classname);
+        Path source = Paths.get("build/classes/java/test/"+classname);
         if(Files.notExists(source)) //also the sources are missing
             throw new IOException();
         if(Files.notExists(dest.getParent())) //create the transformedclass folder if not exists

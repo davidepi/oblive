@@ -1,15 +1,15 @@
 package it.se.obfuscator.tests;
 
 import it.se.obfuscator.helpers.TestMethodTemplate;
-import testclasses.AdderInvokeMethodShort;
+import testclasses.InvokeVirtualChar;
 
-public class TestAdderInvokeVirtualSumShort extends TestMethodTemplate
+public class TestInvokeVirtualChar extends TestMethodTemplate
 {
 
     @Override
     public String getTestClassName()
     {
-        return AdderInvokeMethodShort.class.getName();
+        return InvokeVirtualChar.class.getName();
     }
 
     @Override
@@ -21,18 +21,18 @@ public class TestAdderInvokeVirtualSumShort extends TestMethodTemplate
     @Override
     public Class[] getMethodParamsSignature()
     {
-        return new Class[]{short.class,short.class};
+        return new Class[]{char.class,char.class};
     }
 
     @Override
     public Object[] getMethodParams()
     {
-        return new Object[]{(short)3,(short)1};
+        return new Object[]{'A','!'};
     }
 
     @Override
     public Object getMethodExpectedResult()
     {
-        return (short)4;
+        return 'b';
     }
 }

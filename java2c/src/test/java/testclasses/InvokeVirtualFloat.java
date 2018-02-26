@@ -2,9 +2,9 @@ package testclasses;
 
 import it.se.obfuscator.Obfuscate;
 
-public class AdderInvokeMethodFloat
+public class InvokeVirtualFloat
 {
-    public AdderInvokeMethodFloat()
+    public InvokeVirtualFloat()
     {
 
     }

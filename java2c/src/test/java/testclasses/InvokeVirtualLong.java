@@ -2,20 +2,19 @@ package testclasses;
 
 import it.se.obfuscator.Obfuscate;
 
-public class AdderInvokeMethodDouble
+public class InvokeVirtualLong
 {
-    public AdderInvokeMethodDouble()
+    public InvokeVirtualLong()
     {
 
     }
 
     @Obfuscate
-    public double add(double a, double b)
+    public long add(long a, long b)
     {
         return normalAdd(a,b);
     }
-
-    public double normalAdd(double a, double b)
+    public long normalAdd(long a, long b)
     {
         return a + b;
     }

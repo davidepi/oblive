@@ -1,16 +1,15 @@
 package it.se.obfuscator.tests;
 
 import it.se.obfuscator.helpers.TestMethodTemplate;
-import testclasses.AdderInvokeMethodInt;
-import testclasses.AdderInvokeMethodVoid;
+import testclasses.InvokeVirtualInt;
 
-public class TestAdderInvokeVirtualSumVoid extends TestMethodTemplate
+public class TestInvokeVirtualInt extends TestMethodTemplate
 {
 
     @Override
     public String getTestClassName()
     {
-        return AdderInvokeMethodVoid.class.getName();
+        return InvokeVirtualInt.class.getName();
     }
 
     @Override
@@ -34,6 +33,6 @@ public class TestAdderInvokeVirtualSumVoid extends TestMethodTemplate
     @Override
     public Object getMethodExpectedResult()
     {
-        return null;
+        return 36;
     }
 }

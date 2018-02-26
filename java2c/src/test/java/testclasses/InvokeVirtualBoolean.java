@@ -2,9 +2,9 @@ package testclasses;
 
 import it.se.obfuscator.Obfuscate;
 
-public class TesterInvokeMethodBoolean
+public class InvokeVirtualBoolean
 {
-    public TesterInvokeMethodBoolean()
+    public InvokeVirtualBoolean()
     {
 
     }

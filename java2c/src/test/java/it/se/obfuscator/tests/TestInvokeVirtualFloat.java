@@ -1,15 +1,15 @@
 package it.se.obfuscator.tests;
 
 import it.se.obfuscator.helpers.TestMethodTemplate;
-import testclasses.AdderInvokeMethodDouble;
+import testclasses.InvokeVirtualFloat;
 
-public class TestAdderInvokeVirtualSumDouble extends TestMethodTemplate
+public class TestInvokeVirtualFloat extends TestMethodTemplate
 {
 
     @Override
     public String getTestClassName()
     {
-        return AdderInvokeMethodDouble.class.getName();
+        return InvokeVirtualFloat.class.getName();
     }
 
     @Override
@@ -21,18 +21,18 @@ public class TestAdderInvokeVirtualSumDouble extends TestMethodTemplate
     @Override
     public Class[] getMethodParamsSignature()
     {
-        return new Class[]{double.class,double.class};
+        return new Class[]{float.class,float.class};
     }
 
     @Override
     public Object[] getMethodParams()
     {
-        return new Object[]{3.5,0.5};
+        return new Object[]{3.5f,0.5f};
     }
 
     @Override
     public Object getMethodExpectedResult()
     {
-        return 4.0;
+        return 4.f;
     }
 }

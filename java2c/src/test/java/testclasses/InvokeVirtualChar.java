@@ -2,9 +2,9 @@ package testclasses;
 
 import it.se.obfuscator.Obfuscate;
 
-public class AdderInvokeMethodChar
+public class InvokeVirtualChar
 {
-    public AdderInvokeMethodChar()
+    public InvokeVirtualChar()
     {
 
     }

@@ -1,38 +1,38 @@
 package it.se.obfuscator.tests;
 
 import it.se.obfuscator.helpers.TestMethodTemplate;
-import testclasses.AdderInvokeMethodLong;
+import testclasses.InvokeVirtualObject;
 
-public class TestAdderInvokeVirtualSumLong extends TestMethodTemplate
+public class TestInvokeVirtualObject extends TestMethodTemplate
 {
 
     @Override
     public String getTestClassName()
     {
-        return AdderInvokeMethodLong.class.getName();
+        return InvokeVirtualObject.class.getName();
     }
 
     @Override
     public String getMethodName()
     {
-        return "add";
+        return "concatenate";
     }
 
     @Override
     public Class[] getMethodParamsSignature()
     {
-        return new Class[]{long.class,long.class};
+        return new Class[]{java.lang.String.class,char.class};
     }
 
     @Override
     public Object[] getMethodParams()
     {
-        return new Object[]{0x200000001L,0x400000002L};
+        return new Object[]{"hello world",'!'};
     }
 
     @Override
     public Object getMethodExpectedResult()
     {
-        return 0x600000003L;
+        return "hello world!";
     }
 }

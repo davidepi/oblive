@@ -2,9 +2,9 @@ package testclasses;
 
 import it.se.obfuscator.Obfuscate;
 
-public class AdderInvokeMethodInt
+public class InvokeVirtualInt
 {
-    public AdderInvokeMethodInt()
+    public InvokeVirtualInt()
     {
 
     }
