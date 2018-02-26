@@ -42,12 +42,13 @@ public class MethodSignature
             currentType.append(currentLetter);
             if(currentLetter=='L') //object, need to parse everything until the ;
             {
+                currentLetter = bytecodeDesc.charAt(++i);
                 while (currentLetter != ';')
                 {
                     currentType.append(currentLetter);
                     currentLetter = bytecodeDesc.charAt(++i);
                 }
-                currentType.append(currentLetter);
+                currentType.append(currentLetter); //append also the ;
             }
             this.input.add(new JniType(currentType.toString()));
         }

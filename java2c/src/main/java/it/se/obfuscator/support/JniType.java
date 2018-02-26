@@ -98,6 +98,8 @@ public class JniType
                 this.name = bytecodeName.substring(1, bytecodeName.length() - 1);
                 this.doubleLength = false;
                 this.floatingPoint = false;
+                if(this.name.length()==0)
+                    throw new IllegalPatternException("Empty object name");
                 break;
             //TODO: array support
             default:
