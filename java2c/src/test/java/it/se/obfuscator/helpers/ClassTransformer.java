@@ -1,10 +1,9 @@
 package it.se.obfuscator.helpers;
 
-import it.se.obfuscator.Java2CMain;
+import it.se.obfuscator.JavaToC;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,18 +18,18 @@ public class ClassTransformer
     public static void transform(final String classname) throws IOException,InterruptedException
     {
         ClassTransformer.copyFile(classname);
-        Java2CMain trans = new Java2CMain();
-        List<String> files = new ArrayList<String>();
+        String libname = classname.replaceFirst("\\.class","").replace('/','.');
         String transformMe = Paths.get("build/transformedclasses/test/"+classname).toAbsolutePath().toString();
-        String libsrcPath = Paths.get("build").toAbsolutePath().toString();
-        files.add(transformMe); //file that will be transformed
-        files.add(libsrcPath); //output for the c files
+        String libsrcPath = Paths.get("build/libsrc").toAbsolutePath().toString();
+
+        //transform class
+        JavaToC.parseClass(transformMe,libsrcPath,libname);
 
         //makefile
-        ProcessBuilder makefileRun = new ProcessBuilder("make","PARENTDIR="+libsrcPath,"LIBNAME="+classname.replace('/','.'));
+        ProcessBuilder makefileRun = new ProcessBuilder("make","SRCDIR="+libsrcPath,"OUTDIR="+libsrcPath,
+                                                        "SRCNAME="+libname,"LIBNAME="+libname);
         makefileRun.inheritIO();
         makefileRun.directory(new File(Paths.get(".").toAbsolutePath().toString()));
-        trans.parseClass(files.toArray(new String[0]));
         Process child = makefileRun.start();
         child.waitFor(); //wait for make to end, otherwise tests will run with the library not ready
     }
@@ -38,7 +37,7 @@ public class ClassTransformer
     public static void copyFile(final String classname) throws IOException
     {
         Path dest = Paths.get("build/transformedclasses/test/"+classname);
-        Path source = Paths.get("build/classes/test/"+classname);
+        Path source = Paths.get("build/classes/java/test/"+classname);
         if(Files.notExists(source)) //also the sources are missing
             throw new IOException();
         if(Files.notExists(dest.getParent())) //create the transformedclass folder if not exists

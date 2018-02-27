@@ -10,17 +10,19 @@ import java.util.ArrayList;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class ClassCodeElimination extends ClassVisitor
+public class ClassCodeEliminator extends ClassVisitor
 {
     private ArrayList<ClassMethodPair> toObfuscate;
     private String className;
+    private String libname;
     private boolean hasStaticInit;
 
-    public ClassCodeElimination(ArrayList<ClassMethodPair> obfuscateme, ClassWriter cw)
+    public ClassCodeEliminator(ArrayList<ClassMethodPair> obfuscateme, String libname, ClassWriter cw)
     {
         super(ASM5,cw);
         this.toObfuscate = obfuscateme;
         this.hasStaticInit = false;
+        this.libname = libname;
     }
 
     @Override
@@ -39,16 +41,14 @@ public class ClassCodeElimination extends ClassVisitor
             hasStaticInit = true;
             //add the library import while visiting static init
             MethodVisitor mv = super.visitMethod(access,name,desc,signature,exceptions);
-            StaticInitExplorer sie = new StaticInitExplorer(mv,className);
-            return sie;
+            return new StaticInitExplorer(mv,className);
         }
 
         //check if obfuscated
         for(int i=0;i<toObfuscate.size();i++)
         {
             ClassMethodPair cmp = toObfuscate.get(i);
-            if(desc.equals(cmp.getSignature()) &&
-                    name.equals(cmp.getMethodName())&&
+            if(desc.equals(cmp.getDesc()) && name.equals(cmp.getMethodName())&&
                     this.className.equals((cmp.getClassName()))) //check if method has to be obfuscated
             {
                 //alter the method declaration by adding native
@@ -67,10 +67,9 @@ public class ClassCodeElimination extends ClassVisitor
     {
         if(!hasStaticInit) //missing static import, craft manually
         {
-            //TODO: change lib name?
             MethodVisitor mv = super.visitMethod(ACC_STATIC, "<clinit>", "()V", null, null);
             mv.visitCode();
-            mv.visitLdcInsn("obf");
+            mv.visitLdcInsn(libname);
             mv.visitMethodInsn(INVOKESTATIC,"java/lang/System","loadLibrary","(Ljava/lang/String;)V",false);
             mv.visitInsn(RETURN);
             mv.visitMaxs(1,0);

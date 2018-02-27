@@ -33,11 +33,11 @@ DEFAULT_JVM_OPTS=""
 # Use the maximum available, or set MAX_FD != -1 to use that value.
 MAX_FD="maximum"
 
-warn ( ) {
+warn () {
     echo "$*"
 }
 
-die ( ) {
+die () {
     echo
     echo "$*"
     echo
@@ -116,7 +116,7 @@ if $cygwin ; then
     JAVACMD=`cygpath --unix "$JAVACMD"`
 
     # We build the pattern for arguments to be converted via cygpath
-    ROOTDIRSRAW=`find -L / -maxdepth 1 -mindepth 1 -type d 2>/dev/null`
+    ROOTDIRSRAW=`find -L / -maxdepth 1 -mindepth 1 -jniName d 2>/dev/null`
     SEP=""
     for dir in $ROOTDIRSRAW ; do
         ROOTDIRS="$ROOTDIRS$SEP$dir"
@@ -155,7 +155,7 @@ if $cygwin ; then
 fi
 
 # Escape application args
-save ( ) {
+save () {
     for i do printf %s\\n "$i" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/' \\\\/" ; done
     echo " "
 }

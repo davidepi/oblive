@@ -1,27 +1,27 @@
 .PHONY: clean
-CC=gcc-7
+CC=gcc
+CFLAGS=
+SRCDIR=
+OUTDIR=
+SRCNAME=
+LIBNAME=
+LIB=lib
 INCLUDE= -I${JAVA_HOME}/include
 FRAMEWORK= -Isrc/
-CFLAGS=
-PARENTDIR=.
-LIBNAME=obf
-SRC=$(PARENTDIR)/libsrc/$(LIBNAME).o
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
-	INCLUDE += -I${JAVA_HOME}/include/darwin/
-	LIBEXT=.dylib
+INCLUDE += -I${JAVA_HOME}/include/darwin/
+LIBEXT=.dylib
 else
-	INCLUDE += -I${JAVA_HOME}/include/linux/
-	LIBEXT=.so
+INCLUDE += -I${JAVA_HOME}/include/linux/
+LIBEXT=.so
 endif
-OUTDIR=$(PARENTDIR)/libsrc
-EXE=$(LIBNAME).o
+all: $(OUTDIR)/lib$(LIBNAME)$(LIBEXT)
 
-all: $(OUTDIR)/$(EXE)
-	mkdir -p $(OUTDIR)
-	$(CC) -c $(CFLAGS) $(FRAMEWORK) $(INCLUDE) $(SRC) -o $(OUTDIR)/$(EXE)
-	$(CC) $(OUTDIR)/$(LIBNAME) -shared -o $(OUTDIR)/$(LIBNAME)$(LIBEXT)
-	rm $(OUTDIR)/$(LIBNAME)
+$(OUTDIR)/lib$(LIBNAME)$(LIBEXT): $(OUTDIR)/$(SRCNAME).o
+		$(CC) $^ -shared -o $@
 
-clean:
-	rm $(OUTDIR)/$(EXE) $(OUTDIR)/$(LIB)
+$(OUTDIR)/$(SRCNAME).o: $(SRCDIR)/$(SRCNAME).c
+		mkdir -p $(OUTDIR)
+		$(CC) -c $(CFLAGS) $(FRAMEWORK) $(INCLUDE) $^ -o $@
+
