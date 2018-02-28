@@ -1,14 +1,14 @@
-package it.se.obfuscator.tests.invoke;
+package it.se.obfuscator.tests.invoke.invokevirtual;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestInvokeVirtualShort extends AbstractTestMethodTemplate
+public class TestInvokeVirtualChar extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.invoke.invokevirtual.InvokeVirtualShort.class;
+    private Class<?> className = testclasses.invoke.invokevirtual.InvokeVirtualChar.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{short.class,short.class}};
-    private Object[][] methodArgs = {new Object[]{(short)15000,(short)21000}};
+    private Class[][] methodParam = {new Class[]{char.class,char.class}};
+    private Object[][] methodArgs = {new Object[]{'A','b'}};
 
 
     @Override
