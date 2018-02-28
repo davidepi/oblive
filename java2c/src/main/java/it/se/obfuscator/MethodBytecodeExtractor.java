@@ -92,6 +92,9 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case INVOKEVIRTUAL:
                 eb.statements.add("_InvokeVirtual_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
                                   owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
+            case INVOKESPECIAL:
+                eb.statements.add("_InvokeSpecial_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
+                        owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
             case INVOKESTATIC:
                 eb.statements.add("_InvokeStatic_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
                         owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;

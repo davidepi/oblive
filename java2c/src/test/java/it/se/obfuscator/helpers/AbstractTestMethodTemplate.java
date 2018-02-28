@@ -1,6 +1,7 @@
 package it.se.obfuscator.helpers;
 
 import it.se.obfuscator.JavaToC;
+import org.objectweb.asm.Opcodes;
 
 import java.io.File;
 import java.io.IOException;

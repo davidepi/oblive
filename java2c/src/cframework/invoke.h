@@ -18,6 +18,17 @@ static inline void _InvokeStatic_jint(JNIEnv* env, generic_t* stack, uint32_t* i
     push(stack,index,res);
 }
 
+static inline void _InvokeSpecial_jint(JNIEnv* env, generic_t* stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
+{
+    VIRTUAL_METHOD_ID_RESOLVER
+    jobject class_instance = pop(stack,index).l;
+    generic_t res;
+    //Nonvirtual because invokespecial is used to call super.method(). 
+    //If CallIntMethodA is used, if there is an ovveride of the method in a subclass that will be called instead, and it is wrong
+    res.i = (*env)->CallNonvirtualIntMethodA(env,class_instance,caller_class,method_id,values);
+    push(stack,index,res);
+}
+
 static inline void _InvokeVirtual_jboolean(JNIEnv* env, generic_t* stack, uint32_t* index, const char* owner, const char* name, const char* signature, jvalue* values)
 {
     VIRTUAL_METHOD_ID_RESOLVER
