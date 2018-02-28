@@ -1,5 +1,5 @@
 .PHONY: clean
-CC=gcc-7
+CC=gcc
 CFLAGS=-fpic -Wall -Wpedantic -Werror
 SRCDIR=
 OUTDIR=
