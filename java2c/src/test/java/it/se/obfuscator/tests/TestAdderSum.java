@@ -1,37 +1,44 @@
 package it.se.obfuscator.tests;
 
+import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 import it.se.obfuscator.helpers.TestMethodTemplate;
 
-public class TestAdderSum extends TestMethodTemplate
+public class TestAdderSum extends AbstractTestMethodTemplate
 {
 
+    private Class<?> className = testclasses.Adder.class;
+    private String[] methodTest = {"add"};
+    private Class[][] methodParam = {new Class[]{int.class,int.class}};
+    private Object[][] methodArgs = {new Object[]{15,21}};
+
+
     @Override
-    public String getTestClassName()
+    public Class<?> getTestClass()
     {
-        return testclasses.Adder.class.getName();
+        return className;
     }
 
     @Override
-    public String getMethodName()
+    public String getTestMethodName(int position)
     {
-        return "add";
+        return methodTest[position];
     }
 
     @Override
-    public Class[] getMethodParamsSignature()
+    public int getTestMethodSize()
     {
-        return new Class[]{int.class,int.class};
+        return 1;
     }
 
     @Override
-    public Object[] getMethodParams()
+    public Class<?>[] getTestMethodParams(int position)
     {
-        return new Object[]{15,21};
+        return methodParam[position];
     }
 
     @Override
-    public Object getMethodExpectedResult()
+    public Object[] getTestMethodArgs(int position)
     {
-        return 36;
+        return methodArgs[position];
     }
 }
