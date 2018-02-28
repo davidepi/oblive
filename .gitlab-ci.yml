@@ -1,0 +1,15 @@
+stages:
+- build
+- test
+
+build_job:
+  stage: build
+  script:
+  - cd java2c/
+  - ./gradlew assemble
+
+test_job:
+  stage: test
+  script:
+  - cd java2c/
+  - ./gradlew test
