@@ -2,14 +2,34 @@ stages:
 - build
 - test
 
-build_job:
+x86_build:
   stage: build
   script:
   - cd java2c/
   - ./gradlew assemble
+  tags:
+  - x86_64_linux
 
-test_job:
+x86_test:
   stage: test
   script:
   - cd java2c/
   - ./gradlew test
+  tags:
+  - x86_64_linux
+
+arm_build:
+  stage: build
+  script:
+  - cd java2c/
+  - ./gradlew assemble
+  tags:
+  - armv6
+
+arm_test:
+  stage: test
+  script:
+  - cd java2c/
+  - ./gradlew test
+  tags:
+  - armv6
