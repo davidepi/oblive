@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class JavaToC
 {
-    public JavaToC(){};
+    public JavaToC(){}
 
     public static void parseClass(final String input, final String output, final String libname) throws IOException
     {

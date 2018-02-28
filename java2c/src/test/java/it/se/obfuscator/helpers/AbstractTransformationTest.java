@@ -165,10 +165,9 @@ public abstract class AbstractTransformationTest {
 		destdNotAnnotatedMethodNodes4 = getOtherMethodNodes(getDestDir(), getTestClass(), destAnnotatedMethodNodes2); //TODO: not sure about this line
 
 		//TODO: this can't work, since I need to add <clinit>
-		//Assert.assertEquals("class " + getTestClass().getName() + " Original and transformed code have the same number of methods",
-		//		sourceNotAnnotatedMethodNodes3.length, destdNotAnnotatedMethodNodes4.length);
-		//int length2 = methodNodes3s.length;
-		
+//		Assert.assertEquals("class " + getTestClass().getName() + " Original and transformed code have the same number of methods",
+//				sourceNotAnnotatedMethodNodes3.length, destdNotAnnotatedMethodNodes4.length);
+
 		// check that NON-transformed methods have the same code before and after transformation
 		if (!changesBeyondAnnotatedMethods())
 			checkCodeInPreservedMethods();
