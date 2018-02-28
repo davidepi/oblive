@@ -70,31 +70,31 @@ public class MethodBytecodeExtractor extends MethodVisitor
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf)
     {
         MethodSignature signature = new MethodSignature(desc);
+        String argumentsName = "function_vals"+count_functions;
+        JniType currentType;
+        StringBuilder statementBuilder = new StringBuilder();
+        eb.statements.add("jvalue "+argumentsName+"["+signature.getInput().size()+"];");
+        for(int i=signature.getInput().size()-1;i>=0;i--)
+        {
+            //EXAMPLE:
+            //function_vals0[1] = pop(_stack,&_index);
+            statementBuilder.setLength(0);
+            currentType = signature.getInput().get(i);
+            statementBuilder.append(argumentsName).append("[").append(i).append("]=");
+            if(currentType.isDoubleLength())
+                statementBuilder.append("pop2(_stack,&_index);");
+            else
+                statementBuilder.append("pop(_stack,&_index);");
+            eb.statements.add(statementBuilder.toString());
+        }
         switch(opcode)
         {
             case INVOKEVIRTUAL:
-            {
-                String argumentsName = "function_vals"+count_functions;
-                JniType currentType;
-                StringBuilder statementBuilder = new StringBuilder();
-                eb.statements.add("jvalue "+argumentsName+"["+signature.getInput().size()+"];");
-                for(int i=signature.getInput().size()-1;i>=0;i--)
-                {
-                    //EXAMPLE:
-                    //function_vals0[1] = pop(_stack,&_index);
-                    statementBuilder.setLength(0);
-                    currentType = signature.getInput().get(i);
-                    statementBuilder.append(argumentsName).append("[").append(i).append("]=");
-                    if(currentType.isDoubleLength())
-                        statementBuilder.append("pop2(_stack,&_index);");
-                    else
-                        statementBuilder.append("pop(_stack,&_index);");
-                    eb.statements.add(statementBuilder.toString());
-                }
                 eb.statements.add("_InvokeVirtual_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
-                                  owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
-                break;
-            }
+                                  owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
+            case INVOKESTATIC:
+                eb.statements.add("_InvokeStatic_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
+                        owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }

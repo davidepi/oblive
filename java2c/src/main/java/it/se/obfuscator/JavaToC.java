@@ -53,7 +53,7 @@ public class JavaToC
         classReader.accept(codeEliminator,0);
 
         //next step: convert the ExtractedBytecode to actual c code
-        StringBuilder c = new StringBuilder("#include <jni.h>\n#include \"obframework.h\"\n\n");
+        StringBuilder c = new StringBuilder("#include <jni.h>\n#include \"cframework.h\"\n\n");
 
         //this cannot change since only 1 file is processed as input
         ClassMethodPair className;

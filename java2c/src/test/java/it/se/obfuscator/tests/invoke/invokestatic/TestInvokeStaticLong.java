@@ -1,13 +1,15 @@
-package it.se.obfuscator.tests;
+package it.se.obfuscator.tests.invoke.invokestatic;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestAdderStaticSum extends AbstractTestMethodTemplate
+public class TestInvokeStaticLong extends AbstractTestMethodTemplate
 {
-    private Class<?> className = testclasses.AdderStaticMethod.class;
+
+    private Class<?> className = testclasses.invoke.invokestatic.InvokeStaticLong.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{int.class, int.class}};
-    private Object[][] methodArgs = {new Object[]{15, 21}};
+    private Class[][] methodParam = {new Class[]{long.class,long.class}};
+    private Object[][] methodArgs = {new Object[]{0x200000001L,0x400000002L}};
+
 
     @Override
     public Class<?> getTestClass()
