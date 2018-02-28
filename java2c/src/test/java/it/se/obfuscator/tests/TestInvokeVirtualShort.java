@@ -1,38 +1,43 @@
 package it.se.obfuscator.tests;
 
-import it.se.obfuscator.helpers.TestMethodTemplate;
-import testclasses.InvokeVirtualShort;
+import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestInvokeVirtualShort extends TestMethodTemplate
+public class TestInvokeVirtualShort extends AbstractTestMethodTemplate
 {
 
+    private Class<?> className = testclasses.InvokeVirtualShort.class;
+    private String[] methodTest = {"add"};
+    private Class[][] methodParam = {new Class[]{short.class,short.class}};
+    private Object[][] methodArgs = {new Object[]{(short)15000,(short)21000}};
+
+
     @Override
-    public String getTestClassName()
+    public Class<?> getTestClass()
     {
-        return InvokeVirtualShort.class.getName();
+        return className;
     }
 
     @Override
-    public String getMethodName()
+    public String getTestMethodName(int position)
     {
-        return "add";
+        return methodTest[position];
     }
 
     @Override
-    public Class[] getMethodParamsSignature()
+    public int getTestMethodSize()
     {
-        return new Class[]{short.class,short.class};
+        return 1;
     }
 
     @Override
-    public Object[] getMethodParams()
+    public Class<?>[] getTestMethodParams(int position)
     {
-        return new Object[]{(short)3,(short)1};
+        return methodParam[position];
     }
 
     @Override
-    public Object getMethodExpectedResult()
+    public Object[] getTestMethodArgs(int position)
     {
-        return (short)4;
+        return methodArgs[position];
     }
 }

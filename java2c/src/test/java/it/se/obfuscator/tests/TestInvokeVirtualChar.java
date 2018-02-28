@@ -1,38 +1,43 @@
 package it.se.obfuscator.tests;
 
-import it.se.obfuscator.helpers.TestMethodTemplate;
-import testclasses.InvokeVirtualChar;
+import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestInvokeVirtualChar extends TestMethodTemplate
+public class TestInvokeVirtualChar extends AbstractTestMethodTemplate
 {
 
+    private Class<?> className = testclasses.InvokeVirtualChar.class;
+    private String[] methodTest = {"add"};
+    private Class[][] methodParam = {new Class[]{char.class,char.class}};
+    private Object[][] methodArgs = {new Object[]{'A','b'}};
+
+
     @Override
-    public String getTestClassName()
+    public Class<?> getTestClass()
     {
-        return InvokeVirtualChar.class.getName();
+        return className;
     }
 
     @Override
-    public String getMethodName()
+    public String getTestMethodName(int position)
     {
-        return "add";
+        return methodTest[position];
     }
 
     @Override
-    public Class[] getMethodParamsSignature()
+    public int getTestMethodSize()
     {
-        return new Class[]{char.class,char.class};
+        return 1;
     }
 
     @Override
-    public Object[] getMethodParams()
+    public Class<?>[] getTestMethodParams(int position)
     {
-        return new Object[]{'A','!'};
+        return methodParam[position];
     }
 
     @Override
-    public Object getMethodExpectedResult()
+    public Object[] getTestMethodArgs(int position)
     {
-        return 'b';
+        return methodArgs[position];
     }
 }

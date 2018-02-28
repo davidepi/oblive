@@ -1,38 +1,43 @@
 package it.se.obfuscator.tests;
 
-import it.se.obfuscator.helpers.TestMethodTemplate;
-import testclasses.InvokeVirtualFloat;
+import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestInvokeVirtualFloat extends TestMethodTemplate
+public class TestInvokeVirtualFloat extends AbstractTestMethodTemplate
 {
 
+    private Class<?> className = testclasses.InvokeVirtualFloat.class;
+    private String[] methodTest = {"add"};
+    private Class[][] methodParam = {new Class[]{float.class,float.class}};
+    private Object[][] methodArgs = {new Object[]{3.5f,-2.5f}};
+
+
     @Override
-    public String getTestClassName()
+    public Class<?> getTestClass()
     {
-        return InvokeVirtualFloat.class.getName();
+        return className;
     }
 
     @Override
-    public String getMethodName()
+    public String getTestMethodName(int position)
     {
-        return "add";
+        return methodTest[position];
     }
 
     @Override
-    public Class[] getMethodParamsSignature()
+    public int getTestMethodSize()
     {
-        return new Class[]{float.class,float.class};
+        return 1;
     }
 
     @Override
-    public Object[] getMethodParams()
+    public Class<?>[] getTestMethodParams(int position)
     {
-        return new Object[]{3.5f,0.5f};
+        return methodParam[position];
     }
 
     @Override
-    public Object getMethodExpectedResult()
+    public Object[] getTestMethodArgs(int position)
     {
-        return 4.f;
+        return methodArgs[position];
     }
 }

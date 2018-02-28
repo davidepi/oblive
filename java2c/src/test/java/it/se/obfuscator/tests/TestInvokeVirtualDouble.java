@@ -1,38 +1,43 @@
 package it.se.obfuscator.tests;
 
-import it.se.obfuscator.helpers.TestMethodTemplate;
-import testclasses.InvokeVirtualDouble;
+import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestInvokeVirtualDouble extends TestMethodTemplate
+public class TestInvokeVirtualDouble extends AbstractTestMethodTemplate
 {
 
+    private Class<?> className = testclasses.InvokeVirtualDouble.class;
+    private String[] methodTest = {"add"};
+    private Class[][] methodParam = {new Class[]{double.class,double.class}};
+    private Object[][] methodArgs = {new Object[]{3.14159265359,2.7182818284}};
+
+
     @Override
-    public String getTestClassName()
+    public Class<?> getTestClass()
     {
-        return InvokeVirtualDouble.class.getName();
+        return className;
     }
 
     @Override
-    public String getMethodName()
+    public String getTestMethodName(int position)
     {
-        return "add";
+        return methodTest[position];
     }
 
     @Override
-    public Class[] getMethodParamsSignature()
+    public int getTestMethodSize()
     {
-        return new Class[]{double.class,double.class};
+        return 1;
     }
 
     @Override
-    public Object[] getMethodParams()
+    public Class<?>[] getTestMethodParams(int position)
     {
-        return new Object[]{3.5,0.5};
+        return methodParam[position];
     }
 
     @Override
-    public Object getMethodExpectedResult()
+    public Object[] getTestMethodArgs(int position)
     {
-        return 4.0;
+        return methodArgs[position];
     }
 }

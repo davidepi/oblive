@@ -1,7 +1,6 @@
 package it.se.obfuscator.tests;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
-import it.se.obfuscator.helpers.TestMethodTemplate;
 
 public class TestAdderSum extends AbstractTestMethodTemplate
 {

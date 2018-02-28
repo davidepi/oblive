@@ -1,38 +1,45 @@
 package it.se.obfuscator.tests;
 
-import it.se.obfuscator.helpers.TestMethodTemplate;
-import testclasses.InvokeVirtualBoolean;
+import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestInvokeVirtualBoolean extends TestMethodTemplate
+public class TestInvokeVirtualBoolean extends AbstractTestMethodTemplate
 {
 
+    private Class<?> className = testclasses.InvokeVirtualBoolean.class;
+    private String[] methodTest = {"and","and","and","and"};
+    private Class[][] methodParam = {new Class[]{boolean.class,boolean.class},new Class[]{boolean.class,boolean.class},
+                                     new Class[]{boolean.class,boolean.class},new Class[]{boolean.class,boolean.class}};
+    private Object[][] methodArgs = {new Object[]{false,false},new Object[]{true,false},
+                                     new Object[]{false,true},new Object[]{true,true}};
+
+
     @Override
-    public String getTestClassName()
+    public Class<?> getTestClass()
     {
-        return InvokeVirtualBoolean.class.getName();
+        return className;
     }
 
     @Override
-    public String getMethodName()
+    public String getTestMethodName(int position)
     {
-        return "and";
+        return methodTest[position];
     }
 
     @Override
-    public Class[] getMethodParamsSignature()
+    public int getTestMethodSize()
     {
-        return new Class[]{boolean.class,boolean.class};
+        return 4;
     }
 
     @Override
-    public Object[] getMethodParams()
+    public Class<?>[] getTestMethodParams(int position)
     {
-        return new Object[]{true,true};
+        return methodParam[position];
     }
 
     @Override
-    public Object getMethodExpectedResult()
+    public Object[] getTestMethodArgs(int position)
     {
-        return true;
+        return methodArgs[position];
     }
 }

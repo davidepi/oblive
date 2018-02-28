@@ -1,38 +1,43 @@
 package it.se.obfuscator.tests;
 
-import it.se.obfuscator.helpers.TestMethodTemplate;
-import testclasses.InvokeVirtualObject;
+import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestInvokeVirtualObject extends TestMethodTemplate
+public class TestInvokeVirtualObject extends AbstractTestMethodTemplate
 {
 
+    private Class<?> className = testclasses.InvokeVirtualObject.class;
+    private String[] methodTest = {"concatenate"};
+    private Class[][] methodParam = {new Class[]{java.lang.String.class,char.class}};
+    private Object[][] methodArgs = {new Object[]{"hello world",'!'}};
+
+
     @Override
-    public String getTestClassName()
+    public Class<?> getTestClass()
     {
-        return InvokeVirtualObject.class.getName();
+        return className;
     }
 
     @Override
-    public String getMethodName()
+    public String getTestMethodName(int position)
     {
-        return "concatenate";
+        return methodTest[position];
     }
 
     @Override
-    public Class[] getMethodParamsSignature()
+    public int getTestMethodSize()
     {
-        return new Class[]{java.lang.String.class,char.class};
+        return 1;
     }
 
     @Override
-    public Object[] getMethodParams()
+    public Class<?>[] getTestMethodParams(int position)
     {
-        return new Object[]{"hello world",'!'};
+        return methodParam[position];
     }
 
     @Override
-    public Object getMethodExpectedResult()
+    public Object[] getTestMethodArgs(int position)
     {
-        return "hello world!";
+        return methodArgs[position];
     }
 }
