@@ -7,7 +7,7 @@ SRCNAME=
 LIBNAME=
 LIB=lib
 INCLUDE= -I${JAVA_HOME}/include
-FRAMEWORK= -Isrc/
+FRAMEWORK= -Isrc/cframework
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 INCLUDE += -I${JAVA_HOME}/include/darwin/

@@ -1,11 +1,11 @@
-package it.se.obfuscator.tests;
+package it.se.obfuscator.tests.invoke;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
 public class TestInvokeVirtualBoolean extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.InvokeVirtualBoolean.class;
+    private Class<?> className = testclasses.invoke.invokevirtual.InvokeVirtualBoolean.class;
     private String[] methodTest = {"and","and","and","and"};
     private Class[][] methodParam = {new Class[]{boolean.class,boolean.class},new Class[]{boolean.class,boolean.class},
                                      new Class[]{boolean.class,boolean.class},new Class[]{boolean.class,boolean.class}};

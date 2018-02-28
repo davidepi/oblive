@@ -1,4 +1,4 @@
-package testclasses;
+package testclasses.invoke.invokevirtual;
 
 import it.se.obfuscator.Obfuscate;
 

@@ -9,7 +9,6 @@ public class TestAdderStaticSum extends AbstractTestMethodTemplate
     private Class[][] methodParam = {new Class[]{int.class, int.class}};
     private Object[][] methodArgs = {new Object[]{15, 21}};
 
-
     @Override
     public Class<?> getTestClass()
     {
