@@ -1,7 +1,6 @@
 package testclasses.invoke.invokespecial;
 
 import it.se.obfuscator.Obfuscate;
-import testclasses.invoke.invokevirtual.InvokeVirtualDouble;
 
 public class InvokeSpecialDouble extends InvokeVirtualDouble
 {

@@ -89,6 +89,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
         }
         switch(opcode)
         {
+            case INVOKEINTERFACE:
             case INVOKEVIRTUAL:
                 eb.statements.add("_InvokeVirtual_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
                                   owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
