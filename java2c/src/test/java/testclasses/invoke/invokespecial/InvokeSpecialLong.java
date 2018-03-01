@@ -1,8 +1,6 @@
 package testclasses.invoke.invokespecial;
 
 import it.se.obfuscator.Obfuscate;
-import testclasses.invoke.invokevirtual.InvokeVirtualInt;
-import testclasses.invoke.invokevirtual.InvokeVirtualLong;
 
 public class InvokeSpecialLong extends InvokeVirtualLong
 {

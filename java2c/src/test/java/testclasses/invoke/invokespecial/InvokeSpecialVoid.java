@@ -1,8 +1,6 @@
 package testclasses.invoke.invokespecial;
 
 import it.se.obfuscator.Obfuscate;
-import testclasses.invoke.invokevirtual.InvokeVirtualInt;
-import testclasses.invoke.invokevirtual.InvokeVirtualVoid;
 
 import static org.junit.Assert.fail;
 

@@ -1,8 +1,6 @@
 package testclasses.invoke.invokespecial;
 
 import it.se.obfuscator.Obfuscate;
-import testclasses.invoke.invokevirtual.InvokeVirtualDouble;
-import testclasses.invoke.invokevirtual.InvokeVirtualFloat;
 
 public class InvokeSpecialFloat extends InvokeVirtualFloat
 {

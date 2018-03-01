@@ -1,8 +1,6 @@
 package testclasses.invoke.invokespecial;
 
 import it.se.obfuscator.Obfuscate;
-import testclasses.invoke.invokevirtual.InvokeVirtualByte;
-import testclasses.invoke.invokevirtual.InvokeVirtualChar;
 
 public class InvokeSpecialChar extends InvokeVirtualChar
 {
