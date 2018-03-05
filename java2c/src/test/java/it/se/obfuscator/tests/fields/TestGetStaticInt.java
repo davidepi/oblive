@@ -1,12 +1,13 @@
 package it.se.obfuscator.tests.fields;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
+import testclasses.fields.GetStaticInt;
 
-public class TestGetFieldInt extends AbstractTestMethodTemplate
+public class TestGetStaticInt extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.fields.GetFieldInt.class;
-    private String[] methodTest = {"getField"};
+    private Class<?> className = GetStaticInt.class;
+    private String[] methodTest = {"getStatic"};
     private Class[][] methodParam = {new Class[]{}};
     private Object[][] methodArgs = {new Object[]{}};
 
