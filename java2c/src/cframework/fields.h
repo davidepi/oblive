@@ -46,7 +46,7 @@ static inline void _GetStatic_jshort(JNIEnv* env, generic_t* stack, uint32_t* in
 {
     STATIC_FIELD_ID_RESOLVER
     generic_t res;
-    res.s = (*env)->GetStaticIntField(env,caller_class,field_id);
+    res.s = (*env)->GetStaticShortField(env,caller_class,field_id);
     push(stack,index,res);
 }
 
@@ -55,14 +55,14 @@ static inline void _SetField_jshort(JNIEnv* env, generic_t* stack, uint32_t* ind
     FIELD_ID_RESOLVER
     jshort value = pop(stack,index).s;
     jobject class_instance = pop(stack,index).l;
-    (*env)->SetIntField(env,class_instance,field_id,value);
+    (*env)->SetShortField(env,class_instance,field_id,value);
 }
 
 static inline void _SetStatic_jshort(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     STATIC_FIELD_ID_RESOLVER
     jshort value = pop(stack,index).s;
-    (*env)->SetStaticIntField(env,caller_class,field_id,value);
+    (*env)->SetStaticShortField(env,caller_class,field_id,value);
 }
 
 static inline void _GetField_jbyte(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -70,7 +70,7 @@ static inline void _GetField_jbyte(JNIEnv* env, generic_t* stack, uint32_t* inde
     FIELD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
     generic_t res;
-    res.b = (*env)->GetShortField(env,class_instance,field_id);
+    res.b = (*env)->GetByteField(env,class_instance,field_id);
     push(stack,index,res);
 }
 
@@ -78,21 +78,53 @@ static inline void _GetStatic_jbyte(JNIEnv* env, generic_t* stack, uint32_t* ind
 {
     STATIC_FIELD_ID_RESOLVER
     generic_t res;
-    res.b = (*env)->GetStaticIntField(env,caller_class,field_id);
+    res.b = (*env)->GetStaticByteField(env,caller_class,field_id);
     push(stack,index,res);
 }
 
 static inline void _SetField_jbyte(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
-    jshort value = pop(stack,index).b;
+    jbyte value = pop(stack,index).b;
     jobject class_instance = pop(stack,index).l;
-    (*env)->SetIntField(env,class_instance,field_id,value);
+    (*env)->SetByteField(env,class_instance,field_id,value);
 }
 
 static inline void _SetStatic_jbyte(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     STATIC_FIELD_ID_RESOLVER
-    jshort value = pop(stack,index).b;
-    (*env)->SetStaticIntField(env,caller_class,field_id,value);
+    jbyte value = pop(stack,index).c;
+    (*env)->SetStaticByteField(env,caller_class,field_id,value);
+}
+
+static inline void _GetField_jchar(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    FIELD_ID_RESOLVER
+    jobject class_instance = pop(stack,index).l;
+    generic_t res;
+    res.c = (*env)->GetCharField(env,class_instance,field_id);
+    push(stack,index,res);
+}
+
+static inline void _GetStatic_jchar(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    STATIC_FIELD_ID_RESOLVER
+    generic_t res;
+    res.c = (*env)->GetStaticCharField(env,caller_class,field_id);
+    push(stack,index,res);
+}
+
+static inline void _SetField_jchar(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    FIELD_ID_RESOLVER
+    jchar value = pop(stack,index).c;
+    jobject class_instance = pop(stack,index).l;
+    (*env)->SetCharField(env,class_instance,field_id,value);
+}
+
+static inline void _SetStatic_jchar(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    STATIC_FIELD_ID_RESOLVER
+    jchar value = pop(stack,index).c;
+    (*env)->SetStaticCharField(env,caller_class,field_id,value);
 }
