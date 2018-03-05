@@ -128,3 +128,35 @@ static inline void _SetStatic_jchar(JNIEnv* env, generic_t* stack, uint32_t* ind
     jchar value = pop(stack,index).c;
     (*env)->SetStaticCharField(env,caller_class,field_id,value);
 }
+
+static inline void _GetField_jboolean(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    FIELD_ID_RESOLVER
+    jobject class_instance = pop(stack,index).l;
+    generic_t res;
+    res.z = (*env)->GetBooleanField(env,class_instance,field_id);
+    push(stack,index,res);
+}
+
+static inline void _GetStatic_jboolean(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    STATIC_FIELD_ID_RESOLVER
+    generic_t res;
+    res.z = (*env)->GetStaticBooleanField(env,caller_class,field_id);
+    push(stack,index,res);
+}
+
+static inline void _SetField_jboolean(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    FIELD_ID_RESOLVER
+    jboolean value = pop(stack,index).z;
+    jobject class_instance = pop(stack,index).l;
+    (*env)->SetBooleanField(env,class_instance,field_id,value);
+}
+
+static inline void _SetStatic_jboolean(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    STATIC_FIELD_ID_RESOLVER
+    jboolean value = pop(stack,index).z;
+    (*env)->SetStaticBooleanField(env,caller_class,field_id,value);
+}
