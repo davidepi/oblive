@@ -25,3 +25,10 @@ static inline void _SetField_jint(JNIEnv* env, generic_t* stack, uint32_t* index
     jobject class_instance = pop(stack,index).l;
     (*env)->SetIntField(env,class_instance,field_id,value);
 }
+
+static inline void _SetStatic_jint(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    STATIC_FIELD_ID_RESOLVER
+    jint value = pop(stack,index).i;
+    (*env)->SetStaticIntField(env,caller_class,field_id,value);
+}

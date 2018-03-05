@@ -2,14 +2,14 @@ package it.se.obfuscator.tests.fields;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestSetFieldInt extends AbstractTestMethodTemplate
+public class TestSetStaticInt extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.fields.SetFieldInt.class;
-    private String[] methodTest = {"getField"};
+    private Class<?> className = testclasses.fields.SetStaticInt.class;
+    private String[] methodTest = {"getStatic"};
     private Class[][] methodParam = {new Class[]{}};
     private Object[][] methodArgs = {new Object[]{}};
-    private String[] annotatedMethod = {"setField"};
+    private String[] annotatedMethod = {"setStatic"};
     private Class[][] annotatedParams = {new Class[]{int.class}};
 
 

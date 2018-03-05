@@ -119,6 +119,9 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case PUTFIELD:
                 eb.statements.add("_SetField_"+type.getJniName()+"(env,_stack,&_index,\""+owner+"\",\""+name+"\",\""+desc+"\");");
                 break;
+            case PUTSTATIC:
+                eb.statements.add("_SetStatic_"+type.getJniName()+"(env,_stack,&_index,\""+owner+"\",\""+name+"\",\""+desc+"\");");
+                break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
