@@ -2,18 +2,21 @@ package testclasses.fields;
 
 import it.se.obfuscator.Obfuscate;
 
-public class GetFieldInt
+public class SetFieldInt
 {
     private int fieldI;
 
-    public GetFieldInt()
+    public SetFieldInt()
     {
         this.fieldI = 1000000;
+        this.setField(-1000000);
     }
 
-    @Obfuscate
     public int getField()
     {
         return this.fieldI;
     }
+
+    @Obfuscate
+    public void setField(int value){this.fieldI = value;}
 }
