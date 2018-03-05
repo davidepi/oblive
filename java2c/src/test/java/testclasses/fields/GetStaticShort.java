@@ -4,7 +4,7 @@ import it.se.obfuscator.Obfuscate;
 
 public class GetStaticShort
 {
-    private static int fieldS;
+    private static short fieldS;
 
     public GetStaticShort()
     {
@@ -12,7 +12,7 @@ public class GetStaticShort
     }
 
     @Obfuscate
-    public int getStatic()
+    public short getStatic()
     {
         return GetStaticShort.fieldS;
     }

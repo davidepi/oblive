@@ -10,7 +10,7 @@ public class TestSetStaticShort extends AbstractTestMethodTemplate
     private Class[][] methodParam = {new Class[]{}};
     private Object[][] methodArgs = {new Object[]{}};
     private String[] annotatedMethod = {"setStatic"};
-    private Class[][] annotatedParams = {new Class[]{int.class}};
+    private Class[][] annotatedParams = {new Class[]{short.class}};
 
 
     @Override

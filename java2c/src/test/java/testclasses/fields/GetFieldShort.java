@@ -4,7 +4,7 @@ import it.se.obfuscator.Obfuscate;
 
 public class GetFieldShort
 {
-    private int fieldS;
+    private short fieldS;
 
     public GetFieldShort()
     {
@@ -12,7 +12,7 @@ public class GetFieldShort
     }
 
     @Obfuscate
-    public int getField()
+    public short getField()
     {
         return this.fieldS;
     }
