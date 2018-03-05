@@ -1,9 +1,11 @@
 stages:
-- build
-- test
+- build_main
+- test_main
+- build_others
+- test_others
 
 x86_build:
-  stage: build
+  stage: build_main
   script:
   - cd java2c/
   - ./gradlew assemble
@@ -11,7 +13,7 @@ x86_build:
   - x86_64_linux
 
 x86_test:
-  stage: test
+  stage: test_main
   script:
   - cd java2c/
   - ./gradlew test
@@ -19,7 +21,7 @@ x86_test:
   - x86_64_linux
 
 arm_build:
-  stage: build
+  stage: build_others
   script:
   - cd java2c/
   - ./gradlew assemble
@@ -27,7 +29,7 @@ arm_build:
   - armv6
 
 arm_test:
-  stage: test
+  stage: test_others
   script:
   - cd java2c/
   - ./gradlew test
