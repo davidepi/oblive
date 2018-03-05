@@ -76,7 +76,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
         eb.statements.add("jvalue "+argumentsName+"["+signature.getInput().size()+"];");
         for(int i=signature.getInput().size()-1;i>=0;i--)
         {
-            //EXAMPLE:
+            //EXAMPLE RESULT OF THE STRING BUILDER:
             //function_vals0[1] = pop(_stack,&_index);
             statementBuilder.setLength(0);
             currentType = signature.getInput().get(i);
@@ -99,6 +99,20 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case INVOKESTATIC:
                 eb.statements.add("_InvokeStatic_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
                         owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
+            default:
+                throw new IllegalPatternException("Unimplemented opcode: "+opcode);
+        }
+    }
+
+    @Override
+    public void visitFieldInsn(int opcode, String owner, String name, String desc)
+    {
+        JniType type = new JniType(desc);
+        switch(opcode)
+        {
+            case GETFIELD:
+                eb.statements.add("_GetField_"+type.getJniName()+"(env,_stack,&_index,\""+owner+"\",\""+name+"\",\""+desc+"\");");
+                break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
