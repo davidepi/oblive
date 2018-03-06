@@ -160,3 +160,35 @@ static inline void _SetStatic_jboolean(JNIEnv* env, generic_t* stack, uint32_t* 
     jboolean value = pop(stack,index).z;
     (*env)->SetStaticBooleanField(env,caller_class,field_id,value);
 }
+
+static inline void _GetField_jfloat(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    FIELD_ID_RESOLVER
+    jobject class_instance = pop(stack,index).l;
+    generic_t res;
+    res.f = (*env)->GetFloatField(env,class_instance,field_id);
+    push(stack,index,res);
+}
+
+static inline void _GetStatic_jfloat(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    STATIC_FIELD_ID_RESOLVER
+    generic_t res;
+    res.f = (*env)->GetStaticFloatField(env,caller_class,field_id);
+    push(stack,index,res);
+}
+
+static inline void _SetField_jfloat(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    FIELD_ID_RESOLVER
+    jfloat value = pop(stack,index).f;
+    jobject class_instance = pop(stack,index).l;
+    (*env)->SetFloatField(env,class_instance,field_id,value);
+}
+
+static inline void _SetStatic_jfloat(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    STATIC_FIELD_ID_RESOLVER
+    jfloat value = pop(stack,index).f;
+    (*env)->SetStaticFloatField(env,caller_class,field_id,value);
+}
