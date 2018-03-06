@@ -224,3 +224,35 @@ static inline void _SetStatic_jdouble(JNIEnv* env, generic_t* stack, uint32_t* i
     jdouble value = pop2(stack,index).d;
     (*env)->SetStaticDoubleField(env,caller_class,field_id,value);
 }
+
+static inline void _GetField_jlong(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    FIELD_ID_RESOLVER
+    jobject class_instance = pop(stack,index).l;
+    generic_t res;
+    res.j = (*env)->GetLongField(env,class_instance,field_id);
+    push2(stack,index,res);
+}
+
+static inline void _GetStatic_jlong(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    STATIC_FIELD_ID_RESOLVER
+    generic_t res;
+    res.j = (*env)->GetStaticLongField(env,caller_class,field_id);
+    push2(stack,index,res);
+}
+
+static inline void _SetField_jlong(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    FIELD_ID_RESOLVER
+    jlong value = pop2(stack,index).j;
+    jobject class_instance = pop(stack,index).l;
+    (*env)->SetLongField(env,class_instance,field_id,value);
+}
+
+static inline void _SetStatic_jlong(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    STATIC_FIELD_ID_RESOLVER
+    jlong value = pop2(stack,index).j;
+    (*env)->SetStaticLongField(env,caller_class,field_id,value);
+}
