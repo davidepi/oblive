@@ -192,3 +192,35 @@ static inline void _SetStatic_jfloat(JNIEnv* env, generic_t* stack, uint32_t* in
     jfloat value = pop(stack,index).f;
     (*env)->SetStaticFloatField(env,caller_class,field_id,value);
 }
+
+static inline void _GetField_jdouble(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    FIELD_ID_RESOLVER
+    jobject class_instance = pop(stack,index).l;
+    generic_t res;
+    res.d = (*env)->GetDoubleField(env,class_instance,field_id);
+    push2(stack,index,res);
+}
+
+static inline void _GetStatic_jdouble(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    STATIC_FIELD_ID_RESOLVER
+    generic_t res;
+    res.d = (*env)->GetStaticDoubleField(env,caller_class,field_id);
+    push2(stack,index,res);
+}
+
+static inline void _SetField_jdouble(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    FIELD_ID_RESOLVER
+    jdouble value = pop2(stack,index).d;
+    jobject class_instance = pop(stack,index).l;
+    (*env)->SetDoubleField(env,class_instance,field_id,value);
+}
+
+static inline void _SetStatic_jdouble(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+{
+    STATIC_FIELD_ID_RESOLVER
+    jdouble value = pop2(stack,index).d;
+    (*env)->SetStaticDoubleField(env,caller_class,field_id,value);
+}
