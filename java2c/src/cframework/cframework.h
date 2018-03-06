@@ -9,5 +9,6 @@ typedef jvalue generic_t;
 #include "stack.h"
 #include "invoke.h"
 #include "fields.h"
+#include "new.h"
 
 #endif

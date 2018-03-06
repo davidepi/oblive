@@ -11,10 +11,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
 {
     ExtractedBytecode eb;
     private int count_functions;
+    private boolean processingNew;
 
     public MethodBytecodeExtractor(boolean isStatic)
     {
         super(ASM5);
+        processingNew = false;
         eb = new ExtractedBytecode(isStatic);
         count_functions = 0;
     }
@@ -40,10 +42,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case ILOAD:
             case ALOAD:
             case FLOAD:
-                eb.statements.add("_Load(_stack,_vars,&_index,"+var+");");break;
+                eb.statements.add("_Load(_stack,_vars,&_index,"+var+");");
+                break;
             case LLOAD:
             case DLOAD:
-                eb.statements.add("_Load2(_stack,_vars,&_index,"+var+");");break;
+                eb.statements.add("_Load2(_stack,_vars,&_index,"+var+");");
+                break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
@@ -61,6 +65,13 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case FRETURN: eb.statements.add("FRETURN;");break;
             case DRETURN: eb.statements.add("DRETURN;");break;
             case RETURN: eb.statements.add("VRETURN;");break;
+            case DUP:
+                if(!processingNew)
+                    //TODO: duplicate stack
+                    ;
+                else
+                    /* do nothing */;
+                break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
@@ -94,8 +105,17 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 eb.statements.add("_InvokeVirtual_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
                                   owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
             case INVOKESPECIAL:
-                eb.statements.add("_InvokeSpecial_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
-                        owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
+                if(!processingNew)
+                    eb.statements.add("_InvokeSpecial_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
+                        owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
+                else
+                {
+                    assert(name.equals("<init>"));
+                    assert(signature.getReturnType().getJniName().equals("void"));
+                    eb.statements.add("_New(env,_stack,&_index,\"" + owner + "\",\"" + desc + "\"," + argumentsName + ");");
+                    processingNew = false;
+                }
+                break;
             case INVOKESTATIC:
                 eb.statements.add("_InvokeStatic_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
                         owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
@@ -121,6 +141,19 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 break;
             case PUTSTATIC:
                 eb.statements.add("_SetStatic_"+type.getJniName()+"(env,_stack,&_index,\""+owner+"\",\""+name+"\",\""+desc+"\");");
+                break;
+            default:
+                throw new IllegalPatternException("Unimplemented opcode: "+opcode);
+        }
+    }
+
+    @Override
+    public void visitTypeInsn(int opcode, String type)
+    {
+        switch(opcode)
+        {
+            case NEW:
+                    processingNew = true;
                 break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
