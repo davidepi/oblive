@@ -1,13 +1,13 @@
 package testclasses.newobj;
 
 
-//////////////////////////////////////////
-//  Used in the NewObjectNoLdc class    //
-//////////////////////////////////////////
+//////////////////////////////////
+//  Used in the NewObjectNoLdc  //
+//////////////////////////////////
 
 import java.io.PrintStream;
 
-public class ObjNoLdc
+public class TestingObjectNoLdc
 {
     int a;
     long b;
@@ -15,7 +15,7 @@ public class ObjNoLdc
     String d;
     PrintStream e;
 
-    public ObjNoLdc(int a, long b, PrintStream e, double c, String d)
+    public TestingObjectNoLdc(int a, long b, PrintStream e, double c, String d)
     {
         this.a = a;
         this.b = b;
@@ -26,11 +26,11 @@ public class ObjNoLdc
     @Override
     public boolean equals(Object object)
     {
-        if(object==null || (!ObjNoLdc.class.isAssignableFrom(object.getClass())))
+        if(object==null || (!TestingObjectNoLdc.class.isAssignableFrom(object.getClass())))
             return false;
         else
         {
-            final ObjNoLdc other = (ObjNoLdc)object;
+            final TestingObjectNoLdc other = (TestingObjectNoLdc)object;
             return this.a==other.a && this.b==other.b && this.c==other.c && this.d.equals(other.d);
         }
     }

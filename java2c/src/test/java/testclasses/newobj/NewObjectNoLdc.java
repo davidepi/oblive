@@ -10,8 +10,8 @@ public class NewObjectNoLdc
     }
 
     @Obfuscate
-    public ObjNoLdc getObject(int a, long b, double c, String d)
+    public TestingObjectNoLdc getObject(int a, long b, double c, String d)
     {
-        return new ObjNoLdc(a,b,System.out,c,d);
+        return new TestingObjectNoLdc(a,b,System.out,c,d);
     }
 }
