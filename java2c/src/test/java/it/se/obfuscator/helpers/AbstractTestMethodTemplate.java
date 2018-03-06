@@ -69,10 +69,17 @@ public abstract class AbstractTestMethodTemplate extends AbstractTransformationT
     {
         String libname = this.getTestClass().toString().replaceFirst("class\\s","");
         String className = libname.replaceAll("\\.","/")+".class";
-        try
+        try //tranformation
         {
             JavaToC.parseClass(this.getDestDir()+"/"+className,this.outputLibDir,libname);
-            //makefile
+        } catch (IOException e)
+        {
+            fail("Transformation failed");
+            e.printStackTrace();
+        }
+
+        try //building
+        {
             ProcessBuilder makefileRun;
             makefileRun = new ProcessBuilder("make","SRCDIR="+this.outputLibDir,"OUTDIR="+this.outputLibDir,
                     "SRCNAME="+libname,"LIBNAME="+libname);
@@ -80,9 +87,11 @@ public abstract class AbstractTestMethodTemplate extends AbstractTransformationT
             makefileRun.directory(new File(Paths.get(".").toAbsolutePath().toString()));
             Process child = makefileRun.start();
             child.waitFor();
-        } catch (IOException | InterruptedException e)
+            if(child.exitValue()!=0)
+                fail("C Compiler error");
+        } catch (InterruptedException | IOException e)
         {
-            fail("Transformation failed");
+            fail("C compilation failed");
             e.printStackTrace();
         }
     }
