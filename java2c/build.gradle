@@ -2,6 +2,7 @@ group 'java2c'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'jacoco'
 
 sourceCompatibility = 1.8
 
@@ -16,6 +17,6 @@ dependencies {
 }
 
 tasks.withType(Test) {
-    systemProperty "java.library.path","build/libsrc"
+    systemProperty "java.library.path","$buildDir/libsrc"
     maxParallelForks = 1
 }

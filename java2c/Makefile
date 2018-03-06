@@ -1,6 +1,6 @@
 .PHONY: clean
 CC=gcc
-CFLAGS=-fpic -Wall -Wpedantic -Werror
+CFLAGS=-fpic -Wall
 SRCDIR=
 OUTDIR=
 SRCNAME=
