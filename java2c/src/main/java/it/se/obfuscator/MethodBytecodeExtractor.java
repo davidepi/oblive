@@ -162,6 +162,9 @@ public class MethodBytecodeExtractor extends MethodVisitor
         switch(cls.getName())
         {
             case "java.lang.Integer": eb.statements.add("pushi(_stack,&_index,"+(Integer)cst+");");break;
+            case "java.lang.Long": eb.statements.add("pushl(_stack,&_index,"+(Long)cst+");");break;
+            case "java.lang.Float": eb.statements.add("pushf(_stack,&_index,"+(Float)cst+");");break;
+            case "java.lang.Double": eb.statements.add("pushd(_stack,&_index,"+(Double)cst+");");break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: LDC");
         }
