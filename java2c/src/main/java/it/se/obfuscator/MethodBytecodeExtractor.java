@@ -75,8 +75,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case ICONST_5: eb.statements.add("pushi(_stack,&_index,5);");break;
             case LCONST_0: eb.statements.add("pushl(_stack,&_index,0);");break;
             case LCONST_1: eb.statements.add("pushl(_stack,&_index,1);");break;
+            case FCONST_0: eb.statements.add("pushf(_stack,&_index,0.f);");break;
+            case FCONST_1: eb.statements.add("pushf(_stack,&_index,1.f);");break;
+            case FCONST_2: eb.statements.add("pushf(_stack,&_index,2.f);");break;
             case IADD: eb.statements.add("_IAdd(_stack,&_index);");break;
             case LADD: eb.statements.add("_LAdd(_stack,&_index);");break;
+            case FADD: eb.statements.add("_FAdd(_stack,&_index);");break;
             case ARETURN: eb.statements.add("ARETURN;");break;
             case IRETURN: eb.statements.add("IRETURN;");break;
             case LRETURN: eb.statements.add("LRETURN;");break;

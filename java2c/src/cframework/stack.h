@@ -23,6 +23,13 @@ static inline void pushl(generic_t* stack, uint32_t* index, jlong val)
   push2(stack,index,pushme);
 }
 
+static inline void pushf(generic_t* stack, uint32_t* index, jfloat val)
+{
+  generic_t pushme;
+  pushme.f = val;
+  push(stack,index,pushme);
+}
+
 static inline generic_t pop(generic_t* stack, uint32_t* index)
 {
     return stack[--(*index)];
@@ -50,6 +57,15 @@ static inline void _LAdd(generic_t* stack, uint32_t* index)
   generic_t res;
   res.j = a+b;
   push2(stack,index,res);
+}
+
+static inline void _FAdd(generic_t* stack, uint32_t* index)
+{
+  jfloat a = pop(stack,index).f;
+  jfloat b = pop(stack,index).f;
+  generic_t res;
+  res.f = a+b;
+  push(stack,index,res);
 }
 
 static inline void _Load(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
