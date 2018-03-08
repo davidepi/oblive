@@ -9,6 +9,13 @@ static inline void push2(generic_t* stack, uint32_t* index, generic_t val)
   (*index)++;
 }
 
+static inline void pushi(generic_t* stack, uint32_t* index, int val)
+{
+  generic_t pushme;
+  pushme.i = val;
+  push(stack,index,pushme);
+}
+
 static inline generic_t pop(generic_t* stack, uint32_t* index)
 {
     return stack[--(*index)];
@@ -37,6 +44,11 @@ static inline void _Load(generic_t* stack, generic_t* arg, uint32_t* index, int 
 static inline void _Load2(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
 {
     push2(stack,index,arg[valueIndex]);
+}
+
+static inline void _Store(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
+{
+  arg[valueIndex] = pop(stack,index);
 }
 
 #define ARETURN {jvalue __areturn_retval__ = pop(_stack,&_index); return __areturn_retval__.l;}
