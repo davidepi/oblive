@@ -53,6 +53,9 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case FSTORE:
                 eb.statements.add("_Store(_stack,_vars,&_index,"+var+");");
                 break;
+            case LSTORE:
+                eb.statements.add("_Store2(_stack,_vars,&_index,"+var+");");
+                break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
@@ -70,7 +73,10 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case ICONST_3: eb.statements.add("pushi(_stack,&_index,3);");break;
             case ICONST_4: eb.statements.add("pushi(_stack,&_index,4);");break;
             case ICONST_5: eb.statements.add("pushi(_stack,&_index,5);");break;
+            case LCONST_0: eb.statements.add("pushl(_stack,&_index,0);");break;
+            case LCONST_1: eb.statements.add("pushl(_stack,&_index,1);");break;
             case IADD: eb.statements.add("_IAdd(_stack,&_index);");break;
+            case LADD: eb.statements.add("_LAdd(_stack,&_index);");break;
             case ARETURN: eb.statements.add("ARETURN;");break;
             case IRETURN: eb.statements.add("IRETURN;");break;
             case LRETURN: eb.statements.add("LRETURN;");break;
