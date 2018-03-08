@@ -94,13 +94,33 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case DUP:
                 if(!processingNew)
                     //TODO: duplicate stack
-                    ;
+                    throw new IllegalPatternException("Unimplemented opcode: "+opcode);
                 else
                     /* do nothing */;
                 break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
+   }
+
+    @Override
+    public void visitIntInsn(int opcode, int operand)
+    {
+        switch(opcode)
+        {
+            case BIPUSH:
+            case SIPUSH:
+                eb.statements.add("pushi(_stack,&_index,"+operand+");");break;
+            case NEWARRAY:
+            default:
+                throw new IllegalPatternException("Unimplemented opcode: "+opcode);
+        }
+    }
+
+    @Override
+    public void visitLdcInsn(Object cst)
+    {
+        throw new IllegalPatternException("Unimplemented opcode: LDC");
     }
 
     @Override
