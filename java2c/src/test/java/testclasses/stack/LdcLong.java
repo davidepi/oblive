@@ -3,9 +3,9 @@ package testclasses.stack;
 
 import it.se.obfuscator.Obfuscate;
 
-public class LLdc
+public class LdcLong
 {
-    public LLdc()
+    public LdcLong()
     {
 
     }

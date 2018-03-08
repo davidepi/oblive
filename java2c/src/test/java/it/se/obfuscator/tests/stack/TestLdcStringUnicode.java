@@ -2,10 +2,10 @@ package it.se.obfuscator.tests.stack;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestFLdc extends AbstractTestMethodTemplate
+public class TestLdcStringUnicode extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.stack.FLdc.class;
+    private Class<?> className = testclasses.stack.LdcStringUnicode.class;
     private String[] methodTest = {"exec"};
     private Class[][] methodParam = {new Class[]{}};
     private Object[][] methodArgs = {new Object[]{}};

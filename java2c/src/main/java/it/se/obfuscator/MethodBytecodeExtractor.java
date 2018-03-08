@@ -6,6 +6,7 @@ import it.se.obfuscator.support.MethodSignature;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import static org.objectweb.asm.Opcodes.*;
 
@@ -165,6 +166,16 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case "java.lang.Long": eb.statements.add("pushl(_stack,&_index,"+(Long)cst+");");break;
             case "java.lang.Float": eb.statements.add("pushf(_stack,&_index,"+(Float)cst+");");break;
             case "java.lang.Double": eb.statements.add("pushd(_stack,&_index,"+(Double)cst+");");break;
+            case "java.lang.String":
+            {
+                String str = (String)cst;
+                int stringID = System.identityHashCode(str);
+                eb.statements.add("jchar string_"+ stringID+"["+str.length()+"];");
+                for(int i=0;i<str.length();i++)
+                    eb.statements.add("string_"+stringID+"["+i+"]="+(short)str.charAt(i)+";");
+                eb.statements.add("_Ldc(env,_stack,&_index,string_"+stringID+","+str.length() + ");");
+                break;
+            }
             default:
                 throw new IllegalPatternException("Unimplemented opcode: LDC");
         }
