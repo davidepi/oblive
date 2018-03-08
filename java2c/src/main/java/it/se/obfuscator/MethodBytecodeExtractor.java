@@ -3,6 +3,8 @@ package it.se.obfuscator;
 import it.se.obfuscator.support.ExtractedBytecode;
 import it.se.obfuscator.support.JniType;
 import it.se.obfuscator.support.MethodSignature;
+import org.objectweb.asm.Handle;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -32,6 +34,42 @@ public class MethodBytecodeExtractor extends MethodVisitor
     {
         eb.maxStack = maxStack;
         eb.maxLVar = maxLocals;
+    }
+
+    @Override
+    public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs)
+    {
+        throw new IllegalPatternException("Unimplemented opcode: INVOKEDYNAMIC");
+    }
+
+    @Override
+    public void visitJumpInsn(int opcode, Label label)
+    {
+        throw new IllegalPatternException("Unimplemented Jump opcode");
+    }
+
+    @Override
+    public void visitTableSwitchInsn(int min, int max, Label dflt, Label... labels)
+    {
+        throw new IllegalPatternException("Unimplemented opcode: TABLESWITCH");
+    }
+
+    @Override
+    public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels)
+    {
+        throw new IllegalPatternException("Unimplemented opcode: LOOKUPSWITCH");
+    }
+
+    @Override
+    public void visitMultiANewArrayInsn(String desc, int dims)
+    {
+        throw new IllegalPatternException("Unimplemented opcode: MULTINEWARRAY");
+    }
+
+    @Override
+    public void visitIincInsn(int var, int increment)
+    {
+        throw new IllegalPatternException("Unimplemented opcode: IINC");
     }
 
     @Override
@@ -120,7 +158,13 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitLdcInsn(Object cst)
     {
-        throw new IllegalPatternException("Unimplemented opcode: LDC");
+        Class cls = cst.getClass();
+        switch(cls.getName())
+        {
+            case "java.lang.Integer": eb.statements.add("pushi(_stack,&_index,"+(Integer)cst+");");break;
+            default:
+                throw new IllegalPatternException("Unimplemented opcode: LDC");
+        }
     }
 
     @Override
