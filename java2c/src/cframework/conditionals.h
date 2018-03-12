@@ -13,12 +13,12 @@ static inline void fcmpl(generic_t* stack, uint32_t* index)
   jfloat a = pop(stack,index).f;
   jfloat res = a-b;
   generic_t pushvar;
-  if(res!=res || res<0)
-    pushvar.i = -1;
+  if(res==0)
+    pushvar.i = 0;
   else if(res>0)
     pushvar.i = 1;
   else
-    pushvar.i = 0;
+    pushvar.i = -1; //NaN will fall here
   push(stack,index,pushvar);
 }
 
@@ -28,12 +28,12 @@ static inline void fcmpg(generic_t* stack, uint32_t* index)
   jfloat a = pop(stack,index).f;
   jfloat res = a-b;
   generic_t pushvar;
-  if(res!=res || res>0)
-    pushvar.i = 1;
+  if(res==0)
+    pushvar.i = 0;
   else if(res<0)
     pushvar.i = -1;
   else
-    pushvar.i = 0;
+    pushvar.i = 1; //NaN will fall here
   push(stack,index,pushvar);
 }
 
@@ -43,12 +43,12 @@ static inline void dcmpl(generic_t* stack, uint32_t* index)
   jdouble a = pop2(stack,index).d;
   jdouble res = a-b;
   generic_t pushvar;
-  if(res!=res || res<0)
-    pushvar.i = -1;
+  if(res==0)
+    pushvar.i = 0;
   else if(res>0)
     pushvar.i = 1;
   else
-    pushvar.i = 0;
+    pushvar.i = -1; //NaN will fall here
   push(stack,index,pushvar);
 }
 
@@ -58,11 +58,11 @@ static inline void dcmpg(generic_t* stack, uint32_t* index)
   jdouble a = pop2(stack,index).d;
   jdouble res = a-b;
   generic_t pushvar;
-  if(res!=res || res>0)
-    pushvar.i = 1;
+  if(res==0)
+    pushvar.i = 0;
   else if(res<0)
     pushvar.i = -1;
   else
-    pushvar.i = 0;
+    pushvar.i = 1; //NaN will fall here
   push(stack,index,pushvar);
 }

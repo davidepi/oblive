@@ -2,13 +2,13 @@ package it.se.obfuscator.tests.conditionals;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestIflcmp extends AbstractTestMethodTemplate
+public class TestIfdcmp extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.conditionals.Iflcmp.class;
+    private Class<?> className = testclasses.conditionals.Ifdcmp.class;
     private String[] methodTest = {"exec","exec","exec"};
-    private Class[][] methodParam = {new Class[]{long.class},new Class[]{long.class},new Class[]{long.class}};
-    private Object[][] methodArgs = {new Object[]{1000000000L}, new Object[]{10000000000L},new Object[]{20000000000L}};
+    private Class[][] methodParam = {new Class[]{double.class},new Class[]{double.class},new Class[]{double.class}};
+    private Object[][] methodArgs = {new Object[]{2.5}, new Object[]{3.5},new Object[]{4.5}};
 
     @Override
     public String getAnnotatedMethodName(int position)
