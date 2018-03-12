@@ -210,3 +210,114 @@ static inline void _DNeg(generic_t* stack, uint32_t* index)
   res.d = -a;
   push2(stack,index,res);
 }
+
+static inline void _IShl(generic_t* stack, uint32_t* index)
+{
+    jint b = pop(stack,index).i;
+    jint a = pop(stack,index).i;
+    generic_t res;
+    res.i = a<<b;
+    push(stack,index,res);
+}
+
+static inline void _LShl(generic_t* stack, uint32_t* index)
+{
+  jint b = pop(stack,index).j;
+  jlong a = pop2(stack,index).j;
+  generic_t res;
+  res.j = a<<b;
+  push2(stack,index,res);
+}
+
+static inline void _IShr(generic_t* stack, uint32_t* index)
+{
+    jint b = pop(stack,index).i;
+    jint a = pop(stack,index).i;
+    generic_t res;
+    res.i = a>>b;
+    push(stack,index,res);
+}
+
+static inline void _LShr(generic_t* stack, uint32_t* index)
+{
+  jint b = pop(stack,index).j;
+  jlong a = pop2(stack,index).j;
+  generic_t res;
+  res.j = a>>b;
+  push2(stack,index,res);
+}
+
+static inline void _IUShr(generic_t* stack, uint32_t* index)
+{
+    jint b = pop(stack,index).i;
+    //this cast ensures logical shift
+    unsigned int a = (unsigned int)(pop(stack,index).i);
+    generic_t res;
+    res.i = a>>b;
+    push(stack,index,res);
+}
+
+static inline void _LUShr(generic_t* stack, uint32_t* index)
+{
+  jint b = pop(stack,index).j;
+  //this cast ensures logical shift
+  unsigned long int a = (unsigned long int)(pop2(stack,index).j);
+  generic_t res;
+  res.j = a>>b;
+  push2(stack,index,res);
+}
+
+static inline void _IAnd(generic_t* stack, uint32_t* index)
+{
+    jint b = pop(stack,index).i;
+    jint a = pop(stack,index).i;
+    generic_t res;
+    res.i = a&b;
+    push(stack,index,res);
+}
+
+static inline void _LAnd(generic_t* stack, uint32_t* index)
+{
+  jlong b = pop2(stack,index).j;
+  jlong a = pop2(stack,index).j;
+  generic_t res;
+  res.j = a&b;
+  push2(stack,index,res);
+}
+
+static inline void _IOr(generic_t* stack, uint32_t* index)
+{
+    jint b = pop(stack,index).i;
+    jint a = pop(stack,index).i;
+    generic_t res;
+    res.i = a|b;
+    push(stack,index,res);
+}
+
+static inline void _LOr(generic_t* stack, uint32_t* index)
+{
+  jlong b = pop2(stack,index).j;
+  jlong a = pop2(stack,index).j;
+  generic_t res;
+  res.j = a|b;
+  push2(stack,index,res);
+}
+
+static inline void _IXor(generic_t* stack, uint32_t* index)
+{
+    jint b = pop(stack,index).i;
+    jint a = pop(stack,index).i;
+    generic_t res;
+    res.i = a^b;
+    push(stack,index,res);
+}
+
+static inline void _LXor(generic_t* stack, uint32_t* index)
+{
+  jlong b = pop2(stack,index).j;
+  jlong a = pop2(stack,index).j;
+  generic_t res;
+  res.j = a^b;
+  push2(stack,index,res);
+}
+

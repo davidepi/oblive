@@ -150,6 +150,18 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case LNEG: eb.statements.add("_LNeg(_stack,&_index);");break;
             case FNEG: eb.statements.add("_FNeg(_stack,&_index);");break;
             case DNEG: eb.statements.add("_DNeg(_stack,&_index);");break;
+            case ISHL: eb.statements.add("_IShl(_stack,&_index);");break;
+            case LSHL: eb.statements.add("_LShl(_stack,&_index);");break;
+            case ISHR: eb.statements.add("_IShr(_stack,&_index);");break;
+            case LSHR: eb.statements.add("_LShr(_stack,&_index);");break;
+            case IUSHR: eb.statements.add("_IUShr(_stack,&_index);");break;
+            case LUSHR: eb.statements.add("_LUShr(_stack,&_index);");break;
+            case IAND: eb.statements.add("_IAnd(_stack,&_index);");break;
+            case LAND: eb.statements.add("_LAnd(_stack,&_index);");break;
+            case IOR: eb.statements.add("_IOr(_stack,&_index);");break;
+            case LOR: eb.statements.add("_LOr(_stack,&_index);");break;
+            case IXOR: eb.statements.add("_IXor(_stack,&_index);");break;
+            case LXOR: eb.statements.add("_LXor(_stack,&_index);");break;
             case ARETURN: eb.statements.add("ARETURN;");break;
             case IRETURN: eb.statements.add("IRETURN;");break;
             case LRETURN: eb.statements.add("LRETURN;");break;
