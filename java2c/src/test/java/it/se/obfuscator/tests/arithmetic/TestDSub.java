@@ -6,7 +6,7 @@ public class TestDSub extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.arithmetic.DSub.class;
-    private String[] methodTest = {"add"};
+    private String[] methodTest = {"exec"};
     private Class[][] methodParam = {new Class[]{double.class,double.class}};
     private Object[][] methodArgs = {new Object[]{3.5,2.5}};
 

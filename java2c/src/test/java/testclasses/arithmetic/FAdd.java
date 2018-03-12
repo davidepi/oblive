@@ -10,7 +10,7 @@ public class FAdd
     }
 
     @Obfuscate
-    public float add(float a, float b)
+    public float exec(float a, float b)
     {
         return a + b;
     }

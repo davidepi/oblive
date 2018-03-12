@@ -10,7 +10,7 @@ public class DAdd
     }
 
     @Obfuscate
-    public double add(double a, double b)
+    public double exec(double a, double b)
     {
         return a + b;
     }

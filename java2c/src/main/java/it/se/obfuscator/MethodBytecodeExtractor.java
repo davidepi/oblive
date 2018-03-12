@@ -134,6 +134,10 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case LSUB: eb.statements.add("_LSub(_stack,&_index);");break;
             case FSUB: eb.statements.add("_FSub(_stack,&_index);");break;
             case DSUB: eb.statements.add("_DSub(_stack,&_index);");break;
+            case IMUL: eb.statements.add("_IMul(_stack,&_index);");break;
+            case LMUL: eb.statements.add("_LMul(_stack,&_index);");break;
+            case FMUL: eb.statements.add("_FMul(_stack,&_index);");break;
+            case DMUL: eb.statements.add("_DMul(_stack,&_index);");break;
             case ARETURN: eb.statements.add("ARETURN;");break;
             case IRETURN: eb.statements.add("IRETURN;");break;
             case LRETURN: eb.statements.add("LRETURN;");break;

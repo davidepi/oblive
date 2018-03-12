@@ -6,7 +6,7 @@ public class TestFSub extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.arithmetic.FSub.class;
-    private String[] methodTest = {"add"};
+    private String[] methodTest = {"exec"};
     private Class[][] methodParam = {new Class[]{float.class,float.class}};
     private Object[][] methodArgs = {new Object[]{3.5f,0.5f}};
 

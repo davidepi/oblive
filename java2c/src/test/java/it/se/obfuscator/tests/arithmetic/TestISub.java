@@ -6,7 +6,7 @@ public class TestISub extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.arithmetic.ISub.class;
-    private String[] methodTest = {"add"};
+    private String[] methodTest = {"exec"};
     private Class[][] methodParam = {new Class[]{int.class,int.class}};
     private Object[][] methodArgs = {new Object[]{15,21}};
 

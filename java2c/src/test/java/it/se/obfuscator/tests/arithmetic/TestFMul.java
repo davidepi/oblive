@@ -2,13 +2,13 @@ package it.se.obfuscator.tests.arithmetic;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestLSub extends AbstractTestMethodTemplate
+public class TestFMul extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.arithmetic.LSub.class;
+    private Class<?> className = testclasses.arithmetic.FMul.class;
     private String[] methodTest = {"exec"};
-    private Class[][] methodParam = {new Class[]{long.class,long.class}};
-    private Object[][] methodArgs = {new Object[]{15000000000L,21000000000L}};
+    private Class[][] methodParam = {new Class[]{float.class,float.class}};
+    private Object[][] methodArgs = {new Object[]{3.5f,0.5f}};
 
 
     @Override

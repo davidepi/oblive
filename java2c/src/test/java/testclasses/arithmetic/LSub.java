@@ -10,7 +10,7 @@ public class LSub
     }
 
     @Obfuscate
-    public long add(long a, long b)
+    public long exec(long a, long b)
     {
         return a - b;
     }

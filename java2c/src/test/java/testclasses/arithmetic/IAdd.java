@@ -10,7 +10,7 @@ public class IAdd
     }
 
     @Obfuscate
-    public int add(int a, int b)
+    public int exec(int a, int b)
     {
         return a + b;
     }
