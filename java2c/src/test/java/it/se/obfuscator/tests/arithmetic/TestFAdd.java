@@ -1,14 +1,14 @@
-package it.se.obfuscator.tests;
+package it.se.obfuscator.tests.arithmetic;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestAdderSum extends AbstractTestMethodTemplate
+public class TestFAdd extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.Adder.class;
+    private Class<?> className = testclasses.arithmetic.FAdd.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{int.class,int.class}};
-    private Object[][] methodArgs = {new Object[]{15,21}};
+    private Class[][] methodParam = {new Class[]{float.class,float.class}};
+    private Object[][] methodArgs = {new Object[]{3.5f,0.5f}};
 
 
     @Override
