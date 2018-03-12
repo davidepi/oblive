@@ -3,7 +3,10 @@ package it.se.obfuscator;
 import it.se.obfuscator.support.ExtractedBytecode;
 import it.se.obfuscator.support.JniType;
 import it.se.obfuscator.support.MethodSignature;
+import org.objectweb.asm.Handle;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import static org.objectweb.asm.Opcodes.*;
 
@@ -11,10 +14,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
 {
     ExtractedBytecode eb;
     private int count_functions;
+    private boolean processingNew;
 
     public MethodBytecodeExtractor(boolean isStatic)
     {
         super(ASM5);
+        processingNew = false;
         eb = new ExtractedBytecode(isStatic);
         count_functions = 0;
     }
@@ -33,6 +38,42 @@ public class MethodBytecodeExtractor extends MethodVisitor
     }
 
     @Override
+    public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs)
+    {
+        throw new IllegalPatternException("Unimplemented opcode: INVOKEDYNAMIC");
+    }
+
+    @Override
+    public void visitJumpInsn(int opcode, Label label)
+    {
+        throw new IllegalPatternException("Unimplemented Jump opcode");
+    }
+
+    @Override
+    public void visitTableSwitchInsn(int min, int max, Label dflt, Label... labels)
+    {
+        throw new IllegalPatternException("Unimplemented opcode: TABLESWITCH");
+    }
+
+    @Override
+    public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels)
+    {
+        throw new IllegalPatternException("Unimplemented opcode: LOOKUPSWITCH");
+    }
+
+    @Override
+    public void visitMultiANewArrayInsn(String desc, int dims)
+    {
+        throw new IllegalPatternException("Unimplemented opcode: MULTINEWARRAY");
+    }
+
+    @Override
+    public void visitIincInsn(int var, int increment)
+    {
+        throw new IllegalPatternException("Unimplemented opcode: IINC");
+    }
+
+    @Override
     public void visitVarInsn(int opcode, int var)
     {
         switch(opcode)
@@ -40,10 +81,21 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case ILOAD:
             case ALOAD:
             case FLOAD:
-                eb.statements.add("_Load(_stack,_vars,&_index,"+var+");");break;
+                eb.statements.add("_Load(_stack,_vars,&_index,"+var+");");
+                break;
             case LLOAD:
             case DLOAD:
-                eb.statements.add("_Load2(_stack,_vars,&_index,"+var+");");break;
+                eb.statements.add("_Load2(_stack,_vars,&_index,"+var+");");
+                break;
+            case ISTORE:
+            case ASTORE:
+            case FSTORE:
+                eb.statements.add("_Store(_stack,_vars,&_index,"+var+");");
+                break;
+            case LSTORE:
+            case DSTORE:
+                eb.statements.add("_Store2(_stack,_vars,&_index,"+var+");");
+                break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
@@ -54,15 +106,78 @@ public class MethodBytecodeExtractor extends MethodVisitor
     {
         switch(opcode)
         {
+            case ICONST_M1: eb.statements.add("pushi(_stack,&_index,-1);");break;
+            case ICONST_0: eb.statements.add("pushi(_stack,&_index,0);");break;
+            case ICONST_1: eb.statements.add("pushi(_stack,&_index,1);");break;
+            case ICONST_2: eb.statements.add("pushi(_stack,&_index,2);");break;
+            case ICONST_3: eb.statements.add("pushi(_stack,&_index,3);");break;
+            case ICONST_4: eb.statements.add("pushi(_stack,&_index,4);");break;
+            case ICONST_5: eb.statements.add("pushi(_stack,&_index,5);");break;
+            case LCONST_0: eb.statements.add("pushl(_stack,&_index,0);");break;
+            case LCONST_1: eb.statements.add("pushl(_stack,&_index,1);");break;
+            case FCONST_0: eb.statements.add("pushf(_stack,&_index,0.f);");break;
+            case FCONST_1: eb.statements.add("pushf(_stack,&_index,1.f);");break;
+            case FCONST_2: eb.statements.add("pushf(_stack,&_index,2.f);");break;
+            case DCONST_0: eb.statements.add("pushd(_stack,&_index,0.0);");break;
+            case DCONST_1: eb.statements.add("pushd(_stack,&_index,1.0);");break;
             case IADD: eb.statements.add("_IAdd(_stack,&_index);");break;
+            case LADD: eb.statements.add("_LAdd(_stack,&_index);");break;
+            case FADD: eb.statements.add("_FAdd(_stack,&_index);");break;
+            case DADD: eb.statements.add("_DAdd(_stack,&_index);");break;
             case ARETURN: eb.statements.add("ARETURN;");break;
             case IRETURN: eb.statements.add("IRETURN;");break;
             case LRETURN: eb.statements.add("LRETURN;");break;
             case FRETURN: eb.statements.add("FRETURN;");break;
             case DRETURN: eb.statements.add("DRETURN;");break;
             case RETURN: eb.statements.add("VRETURN;");break;
+            case DUP:
+                if(!processingNew)
+                    //TODO: duplicate stack
+                    throw new IllegalPatternException("Unimplemented opcode: "+opcode);
+                else
+                    /* do nothing */;
+                break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
+        }
+   }
+
+    @Override
+    public void visitIntInsn(int opcode, int operand)
+    {
+        switch(opcode)
+        {
+            case BIPUSH:
+            case SIPUSH:
+                eb.statements.add("pushi(_stack,&_index,"+operand+");");break;
+            case NEWARRAY:
+            default:
+                throw new IllegalPatternException("Unimplemented opcode: "+opcode);
+        }
+    }
+
+    @Override
+    public void visitLdcInsn(Object cst)
+    {
+        Class cls = cst.getClass();
+        switch(cls.getName())
+        {
+            case "java.lang.Integer": eb.statements.add("pushi(_stack,&_index,"+(Integer)cst+");");break;
+            case "java.lang.Long": eb.statements.add("pushl(_stack,&_index,"+(Long)cst+");");break;
+            case "java.lang.Float": eb.statements.add("pushf(_stack,&_index,"+(Float)cst+");");break;
+            case "java.lang.Double": eb.statements.add("pushd(_stack,&_index,"+(Double)cst+");");break;
+            case "java.lang.String":
+            {
+                String str = (String)cst;
+                int stringID = System.identityHashCode(str);
+                eb.statements.add("jchar string_"+ stringID+"["+str.length()+"];");
+                for(int i=0;i<str.length();i++)
+                    eb.statements.add("string_"+stringID+"["+i+"]="+(short)str.charAt(i)+";");
+                eb.statements.add("_Ldc(env,_stack,&_index,string_"+stringID+","+str.length() + ");");
+                break;
+            }
+            default:
+                throw new IllegalPatternException("Unimplemented opcode: LDC");
         }
     }
 
@@ -94,8 +209,17 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 eb.statements.add("_InvokeVirtual_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
                                   owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
             case INVOKESPECIAL:
-                eb.statements.add("_InvokeSpecial_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
-                        owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
+                if(!processingNew)
+                    eb.statements.add("_InvokeSpecial_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
+                        owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
+                else
+                {
+                    assert(name.equals("<init>"));
+                    assert(signature.getReturnType().getJniName().equals("void"));
+                    eb.statements.add("_New(env,_stack,&_index,\"" + owner + "\",\"" + desc + "\"," + argumentsName + ");");
+                    processingNew = false;
+                }
+                break;
             case INVOKESTATIC:
                 eb.statements.add("_InvokeStatic_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
                         owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
@@ -121,6 +245,19 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 break;
             case PUTSTATIC:
                 eb.statements.add("_SetStatic_"+type.getJniName()+"(env,_stack,&_index,\""+owner+"\",\""+name+"\",\""+desc+"\");");
+                break;
+            default:
+                throw new IllegalPatternException("Unimplemented opcode: "+opcode);
+        }
+    }
+
+    @Override
+    public void visitTypeInsn(int opcode, String type)
+    {
+        switch(opcode)
+        {
+            case NEW:
+                    processingNew = true;
                 break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);

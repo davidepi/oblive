@@ -1,15 +1,14 @@
-package it.se.obfuscator.tests;
+package it.se.obfuscator.tests.newobj;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestAdderSum extends AbstractTestMethodTemplate
+public class TestNewNoLdc extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.Adder.class;
-    private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{int.class,int.class}};
-    private Object[][] methodArgs = {new Object[]{15,21}};
-
+    private Class<?> className = testclasses.newobj.NewObjectNoLdc.class;
+    private String[] methodTest = {"getObject"};
+    private Class[][] methodParam = {new Class[]{int.class,long.class,double.class,java.lang.String.class}};
+    private Object[][] methodArgs = {new Object[]{1000000,10000000000L,3.5,"hello"}};
 
     @Override
     public Class<?> getTestClass()

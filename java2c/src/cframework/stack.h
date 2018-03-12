@@ -9,6 +9,43 @@ static inline void push2(generic_t* stack, uint32_t* index, generic_t val)
   (*index)++;
 }
 
+static inline void pushi(generic_t* stack, uint32_t* index, jint val)
+{
+  generic_t pushme;
+  pushme.i = val;
+  push(stack,index,pushme);
+}
+
+static inline void pushl(generic_t* stack, uint32_t* index, jlong val)
+{
+  generic_t pushme;
+  pushme.j = val;
+  push2(stack,index,pushme);
+}
+
+static inline void pushf(generic_t* stack, uint32_t* index, jfloat val)
+{
+  generic_t pushme;
+  pushme.f = val;
+  push(stack,index,pushme);
+}
+
+static inline void pushd(generic_t* stack, uint32_t* index, jdouble val)
+{
+  generic_t pushme;
+  pushme.d = val;
+  push2(stack,index,pushme);
+}
+
+static inline void _Ldc(JNIEnv* env, generic_t* stack, uint32_t* index, 
+                        const jchar* str, int len)
+{
+  jstring string = (*env)->NewString(env,str,len);
+  generic_t pushme;
+  pushme.l = string;
+  push(stack,index,pushme);
+}
+
 static inline generic_t pop(generic_t* stack, uint32_t* index)
 {
     return stack[--(*index)];
@@ -29,6 +66,33 @@ static inline void _IAdd(generic_t* stack, uint32_t* index)
     push(stack,index,res);
 }
 
+static inline void _LAdd(generic_t* stack, uint32_t* index)
+{
+  jlong a = pop2(stack,index).j;
+  jlong b = pop2(stack,index).j;
+  generic_t res;
+  res.j = a+b;
+  push2(stack,index,res);
+}
+
+static inline void _FAdd(generic_t* stack, uint32_t* index)
+{
+  jfloat a = pop(stack,index).f;
+  jfloat b = pop(stack,index).f;
+  generic_t res;
+  res.f = a+b;
+  push(stack,index,res);
+}
+
+static inline void _DAdd(generic_t* stack, uint32_t* index)
+{
+  jdouble a = pop2(stack,index).d;
+  jdouble b = pop2(stack,index).d;
+  generic_t res;
+  res.d = a+b;
+  push2(stack,index,res);
+}
+
 static inline void _Load(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
 {
     push(stack,index,arg[valueIndex]);
@@ -37,6 +101,16 @@ static inline void _Load(generic_t* stack, generic_t* arg, uint32_t* index, int 
 static inline void _Load2(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
 {
     push2(stack,index,arg[valueIndex]);
+}
+
+static inline void _Store(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
+{
+  arg[valueIndex] = pop(stack,index);
+}
+
+static inline void _Store2(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
+{
+  arg[valueIndex] = pop2(stack,index);
 }
 
 #define ARETURN {jvalue __areturn_retval__ = pop(_stack,&_index); return __areturn_retval__.l;}

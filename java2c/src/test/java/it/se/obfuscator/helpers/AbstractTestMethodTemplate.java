@@ -88,10 +88,10 @@ public abstract class AbstractTestMethodTemplate extends AbstractTransformationT
             Process child = makefileRun.start();
             child.waitFor();
             if(child.exitValue()!=0)
-                fail("Compilation error");
+                fail("C Compiler error");
         } catch (InterruptedException | IOException e)
         {
-            fail("Compilation failed");
+            fail("C compilation failed");
             e.printStackTrace();
         }
     }
