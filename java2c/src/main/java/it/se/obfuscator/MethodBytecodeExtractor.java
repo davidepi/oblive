@@ -62,6 +62,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case IFLE: eb.statements.add("if(pop(_stack,&_index).i<=0)");break;
             case IFGT: eb.statements.add("if(pop(_stack,&_index).i>0)");break;
             case IFGE: eb.statements.add("if(pop(_stack,&_index).i>=0)");break;
+            case IFNULL: eb.statements.add("if(pop(_stack,&_index).l==0x0)");break;
+            case IFNONNULL: eb.statements.add("if(pop(_stack,&_index).l!=0x0)");break;
             case GOTO: break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
