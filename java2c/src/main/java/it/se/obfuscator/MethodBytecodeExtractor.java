@@ -46,7 +46,19 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitJumpInsn(int opcode, Label label)
     {
-        throw new IllegalPatternException("Unimplemented Jump opcode");
+        switch(opcode)
+        {
+            case IF_ICMPEQ:
+            {
+                eb.statements.add("_ISub(_stack,&_index);");
+                eb.statements.add("if(!pop(_stack,&_index).i)");
+                eb.statements.add("goto LABEL_"+label.toString()+";");
+                eb.usedLabels.add(label.toString());
+                break;
+            }
+            default:
+                throw new IllegalPatternException("Unimplemented opcode: "+opcode);
+        }
     }
 
     @Override
