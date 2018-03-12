@@ -48,57 +48,23 @@ public class MethodBytecodeExtractor extends MethodVisitor
     {
         switch(opcode)
         {
-            case IF_ICMPEQ:
-            {
-                eb.statements.add("_ISub(_stack,&_index);");
-                eb.statements.add("if(!pop(_stack,&_index).i)");
-                eb.statements.add("goto LABEL_"+label.toString()+";");
-                eb.usedLabels.add(label.toString());
-                break;
-            }
-            case IF_ICMPNE:
-            {
-                eb.statements.add("_ISub(_stack,&_index);");
-                eb.statements.add("if(pop(_stack,&_index).i)");
-                eb.statements.add("goto LABEL_"+label.toString()+";");
-                eb.usedLabels.add(label.toString());
-                break;
-            }
-            case IF_ICMPLT:
-            {
-                eb.statements.add("_ISub(_stack,&_index);");
-                eb.statements.add("if(pop(_stack,&_index).i<0)");
-                eb.statements.add("goto LABEL_"+label.toString()+";");
-                eb.usedLabels.add(label.toString());
-                break;
-            }
-            case IF_ICMPLE:
-            {
-                eb.statements.add("_ISub(_stack,&_index);");
-                eb.statements.add("if(pop(_stack,&_index).i<=0)");
-                eb.statements.add("goto LABEL_"+label.toString()+";");
-                eb.usedLabels.add(label.toString());
-                break;
-            }
-            case IF_ICMPGT:
-            {
-                eb.statements.add("_ISub(_stack,&_index);");
-                eb.statements.add("if(pop(_stack,&_index).i>0)");
-                eb.statements.add("goto LABEL_"+label.toString()+";");
-                eb.usedLabels.add(label.toString());
-                break;
-            }
-            case IF_ICMPGE:
-            {
-                eb.statements.add("_ISub(_stack,&_index);");
-                eb.statements.add("if(pop(_stack,&_index).i>=0)");
-                eb.statements.add("goto LABEL_"+label.toString()+";");
-                eb.usedLabels.add(label.toString());
-                break;
-            }
+            case IF_ICMPEQ: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(!pop(_stack,&_index).i)"); break;
+            case IF_ICMPNE: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i)");break;
+            case IF_ICMPLT: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i<0)");break;
+            case IF_ICMPLE: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i<=0)");break;
+            case IF_ICMPGT: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i>0)");break;
+            case IF_ICMPGE: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i>=0)"); break;
+            case IFEQ: eb.statements.add("if(!pop(_stack,&_index).i)");break;
+            case IFNE: eb.statements.add("if(pop(_stack,&_index).i)");break;
+            case IFLT: eb.statements.add("if(pop(_stack,&_index).i<0)");break;
+            case IFLE: eb.statements.add("if(pop(_stack,&_index).i<=0)");break;
+            case IFGT: eb.statements.add("if(pop(_stack,&_index).i>0)");break;
+            case IFGE: eb.statements.add("if(pop(_stack,&_index).i>=0)");break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
+        eb.statements.add("goto LABEL_"+label.toString()+";");
+        eb.usedLabels.add(label.toString());
     }
 
     @Override
@@ -186,6 +152,11 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case LSUB: eb.statements.add("_LSub(_stack,&_index);");break;
             case FSUB: eb.statements.add("_FSub(_stack,&_index);");break;
             case DSUB: eb.statements.add("_DSub(_stack,&_index);");break;
+            case LCMP: eb.statements.add("lcmp(_stack,&_index);");break;
+            case FCMPL: eb.statements.add("fcmpl(_stack,&_index);");break;
+            case FCMPG: eb.statements.add("fcmpg(_stack,&_index);");break;
+            case DCMPL: eb.statements.add("dcmpl(_stack,&_index);");break;
+            case DCMPG: eb.statements.add("dcmpg(_stack,&_index);");break;
             case ARETURN: eb.statements.add("ARETURN;");break;
             case IRETURN: eb.statements.add("IRETURN;");break;
             case LRETURN: eb.statements.add("LRETURN;");break;

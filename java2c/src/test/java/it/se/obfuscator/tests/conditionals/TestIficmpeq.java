@@ -6,9 +6,9 @@ public class TestIficmpeq extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.conditionals.Ificmpeq.class;
-    private String[] methodTest = {"exec","exec"};
-    private Class[][] methodParam = {new Class[]{int.class},new Class[]{int.class}};
-    private Object[][] methodArgs = {new Object[]{1000000000}, new Object[]{0}};
+    private String[] methodTest = {"exec","exec","exec"};
+    private Class[][] methodParam = {new Class[]{int.class},new Class[]{int.class},new Class[]{int.class}};
+    private Object[][] methodArgs = {new Object[]{1000000000}, new Object[]{0},new Object[]{2000000000}};
 
     @Override
     public String getAnnotatedMethodName(int position)
