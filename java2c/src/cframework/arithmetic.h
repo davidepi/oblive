@@ -105,3 +105,39 @@ static inline void _DMul(generic_t* stack, uint32_t* index)
   res.d = a*b;
   push2(stack,index,res);
 }
+
+static inline void _IDiv(generic_t* stack, uint32_t* index)
+{
+    jint b = pop(stack,index).i;
+    jint a = pop(stack,index).i;
+    generic_t res;
+    res.i = a/b;
+    push(stack,index,res);
+}
+
+static inline void _LDiv(generic_t* stack, uint32_t* index)
+{
+  jlong b = pop2(stack,index).j;
+  jlong a = pop2(stack,index).j;
+  generic_t res;
+  res.j = a/b;
+  push2(stack,index,res);
+}
+
+static inline void _FDiv(generic_t* stack, uint32_t* index)
+{
+  jfloat b = pop(stack,index).f;
+  jfloat a = pop(stack,index).f;
+  generic_t res;
+  res.f = a/b;
+  push(stack,index,res);
+}
+
+static inline void _DDiv(generic_t* stack, uint32_t* index)
+{
+  jdouble b = pop2(stack,index).d;
+  jdouble a = pop2(stack,index).d;
+  generic_t res;
+  res.d = a/b;
+  push2(stack,index,res);
+}
