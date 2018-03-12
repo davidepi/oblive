@@ -2,9 +2,9 @@ package testclasses.arithmetic; //when changing this, remember to change also th
 
 import it.se.obfuscator.Obfuscate;
 
-public class LDiv
+public class LRem
 {
-    public LDiv()
+    public LRem()
     {
 
     }
@@ -12,7 +12,7 @@ public class LDiv
     @Obfuscate
     public long exec(long a, long b)
     {
-        return a / b;
+        return a % b;
     }
 
 }

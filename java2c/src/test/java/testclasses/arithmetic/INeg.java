@@ -2,17 +2,17 @@ package testclasses.arithmetic; //when changing this, remember to change also th
 
 import it.se.obfuscator.Obfuscate;
 
-public class DRem
+public class INeg
 {
-    public DRem()
+    public INeg()
     {
 
     }
 
     @Obfuscate
-    public double exec(double a, double b)
+    public int exec(int a)
     {
-        return a % b;
+        return -a;
     }
 
 }

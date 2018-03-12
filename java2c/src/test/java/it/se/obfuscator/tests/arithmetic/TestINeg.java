@@ -2,13 +2,13 @@ package it.se.obfuscator.tests.arithmetic;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestIRem extends AbstractTestMethodTemplate
+public class TestINeg extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.arithmetic.IRem.class;
+    private Class<?> className = testclasses.arithmetic.INeg.class;
     private String[] methodTest = {"exec"};
-    private Class[][] methodParam = {new Class[]{int.class,int.class}};
-    private Object[][] methodArgs = {new Object[]{15,21}};
+    private Class[][] methodParam = {new Class[]{int.class}};
+    private Object[][] methodArgs = {new Object[]{-15}};
 
 
     @Override

@@ -2,9 +2,9 @@ package testclasses.arithmetic; //when changing this, remember to change also th
 
 import it.se.obfuscator.Obfuscate;
 
-public class FDiv
+public class FRem
 {
-    public FDiv()
+    public FRem()
     {
 
     }
@@ -12,7 +12,7 @@ public class FDiv
     @Obfuscate
     public float exec(float a, float b)
     {
-        return a / b;
+        return a % b;
     }
 
 }

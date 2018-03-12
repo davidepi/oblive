@@ -2,10 +2,10 @@ package it.se.obfuscator.tests.arithmetic;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestFDiv extends AbstractTestMethodTemplate
+public class TestFRem extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.arithmetic.FDiv.class;
+    private Class<?> className = testclasses.arithmetic.FRem.class;
     private String[] methodTest = {"exec"};
     private Class[][] methodParam = {new Class[]{float.class,float.class}};
     private Object[][] methodArgs = {new Object[]{3.5f,0.5f}};

@@ -2,9 +2,9 @@ package testclasses.arithmetic; //when changing this, remember to change also th
 
 import it.se.obfuscator.Obfuscate;
 
-public class ISub
+public class IRem
 {
-    public ISub()
+    public IRem()
     {
 
     }
@@ -12,7 +12,7 @@ public class ISub
     @Obfuscate
     public int exec(int a, int b)
     {
-        return a - b;
+        return a % b;
     }
 
 }

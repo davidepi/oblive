@@ -142,6 +142,14 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case LDIV: eb.statements.add("_LDiv(_stack,&_index);");break;
             case FDIV: eb.statements.add("_FDiv(_stack,&_index);");break;
             case DDIV: eb.statements.add("_DDiv(_stack,&_index);");break;
+            case IREM: eb.statements.add("_IRem(_stack,&_index);");break;
+            case LREM: eb.statements.add("_LRem(_stack,&_index);");break;
+            case FREM: eb.statements.add("_FRem(_stack,&_index);");break;
+            case DREM: eb.statements.add("_DRem(_stack,&_index);");break;
+            case INEG: eb.statements.add("_INeg(_stack,&_index);");break;
+            case LNEG: eb.statements.add("_LNeg(_stack,&_index);");break;
+            case FNEG: eb.statements.add("_FNeg(_stack,&_index);");break;
+            case DNEG: eb.statements.add("_DNeg(_stack,&_index);");break;
             case ARETURN: eb.statements.add("ARETURN;");break;
             case IRETURN: eb.statements.add("IRETURN;");break;
             case LRETURN: eb.statements.add("LRETURN;");break;
