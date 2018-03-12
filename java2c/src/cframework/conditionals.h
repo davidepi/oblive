@@ -66,3 +66,12 @@ static inline void dcmpg(generic_t* stack, uint32_t* index)
     pushvar.i = 1; //NaN will fall here
   push(stack,index,pushvar);
 }
+
+static inline void acmp(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+    jobject b = pop(stack,index).l;
+    jobject a = pop(stack,index).l;
+    generic_t res;
+    res.i = (*env)->IsSameObject(env,a,b);
+    push(stack,index,res);
+}
