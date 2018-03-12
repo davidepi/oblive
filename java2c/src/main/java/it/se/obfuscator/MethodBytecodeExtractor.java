@@ -80,6 +80,22 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 eb.usedLabels.add(label.toString());
                 break;
             }
+            case IF_ICMPGT:
+            {
+                eb.statements.add("_ISub(_stack,&_index);");
+                eb.statements.add("if(pop(_stack,&_index).i>0)");
+                eb.statements.add("goto LABEL_"+label.toString()+";");
+                eb.usedLabels.add(label.toString());
+                break;
+            }
+            case IF_ICMPGE:
+            {
+                eb.statements.add("_ISub(_stack,&_index);");
+                eb.statements.add("if(pop(_stack,&_index).i>=0)");
+                eb.statements.add("goto LABEL_"+label.toString()+";");
+                eb.usedLabels.add(label.toString());
+                break;
+            }
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
