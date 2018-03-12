@@ -50,6 +50,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
     }
 
     @Override
+    public void visitLabel(Label label)
+    {
+        eb.statements.add("LABEL_"+label.toString()+":");
+    }
+
+    @Override
     public void visitTableSwitchInsn(int min, int max, Label dflt, Label... labels)
     {
         throw new IllegalPatternException("Unimplemented opcode: TABLESWITCH");

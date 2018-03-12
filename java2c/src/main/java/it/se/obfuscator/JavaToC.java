@@ -61,6 +61,7 @@ public class JavaToC
         {
             className = methodsToProcess.get(j);
             ExtractedBytecode bytecode = extractedBytecodes.get(j);
+            bytecode.stripLabels(); //remove unnecessary labels. Otherwise empty labels could be created and gcc fails
             c.append(CSourceGenerator.generateCode(className.getClassName(),className.getMethodName(),className.getSignature(),bytecode));
         }
         PrintWriter cFileWriter = new PrintWriter(outputPath+libname+".c");
