@@ -122,6 +122,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case DCONST_1: eb.statements.add("pushd(_stack,&_index,1.0);");break;
             case POP: eb.statements.add("pop(_stack,&_index);");break;
             case POP2: eb.statements.add("pop2(_stack,&_index);");break;
+            case DUP_X1: eb.statements.add("dupx1(_stack,&_index);");break;
+            case DUP_X2: eb.statements.add("dupx2(_stack,&_index);");break;
+            case DUP2: eb.statements.add("dup2(_stack,&_index);");break;
+            case DUP2_X1: eb.statements.add("dup2x1(_stack,&_index);");break;
+            case DUP2_X2: eb.statements.add("dup2x2(_stack,&_index);");break;
+            case SWAP: eb.statements.add("swap(_stack,&_index);");break;
             case IADD: eb.statements.add("_IAdd(_stack,&_index);");break;
             case LADD: eb.statements.add("_LAdd(_stack,&_index);");break;
             case FADD: eb.statements.add("_FAdd(_stack,&_index);");break;
@@ -134,8 +140,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case RETURN: eb.statements.add("VRETURN;");break;
             case DUP:
                 if(!processingNew)
-                    //TODO: duplicate stack
-                    throw new IllegalPatternException("Unimplemented opcode: "+opcode);
+                   eb.statements.add("dup(_stack,&_index);");
                 else
                     /* do nothing */;
                 break;

@@ -57,6 +57,73 @@ static inline generic_t pop2(generic_t* stack, uint32_t* index)
   return stack[--(*index)];
 }
 
+static inline void dup(generic_t* stack, uint32_t* index)
+{
+  generic_t val = stack[(*index)-1];
+  push(stack,index,val);
+}
+
+static inline void dup2(generic_t* stack, uint32_t* index)
+{
+  generic_t val0 = stack[(*index)-2];
+  generic_t val1 = stack[(*index)-1];
+  push(stack,index,val0);
+  push(stack,index,val1);
+}
+
+static inline void dupx1(generic_t* stack, uint32_t* index)
+{
+  generic_t duplicateme = pop(stack,index);
+  generic_t middleval = pop(stack,index);
+  push(stack,index,duplicateme);
+  push(stack,index,middleval);
+  push(stack,index,duplicateme);
+}
+
+static inline void dupx2(generic_t* stack, uint32_t* index)
+{
+  generic_t duplicateme = pop(stack,index);
+  generic_t middleval1 = pop(stack,index);
+  generic_t middleval0 = pop(stack,index);
+  push(stack,index,duplicateme);
+  push(stack,index,middleval0);
+  push(stack,index,middleval1);
+  push(stack,index,duplicateme);
+}
+
+static inline void dup2x1(generic_t* stack, uint32_t* index)
+{
+  generic_t duplicateme1 = pop(stack,index);
+  generic_t duplicateme0 = pop(stack,index);
+  generic_t middleval = pop(stack,index);
+  push(stack,index,duplicateme0);
+  push(stack,index,duplicateme1);
+  push(stack,index,middleval);
+  push(stack,index,duplicateme0);
+  push(stack,index,duplicateme1);
+}
+
+static inline void dup2x2(generic_t* stack, uint32_t* index)
+{
+  generic_t duplicateme1 = pop(stack,index);
+  generic_t duplicateme0 = pop(stack,index);
+  generic_t middleval1 = pop(stack,index);
+  generic_t middleval0 = pop(stack,index);
+  push(stack,index,duplicateme0);
+  push(stack,index,duplicateme1);
+  push(stack,index,middleval0);
+  push(stack,index,middleval1);
+  push(stack,index,duplicateme0);
+  push(stack,index,duplicateme1);
+}
+
+static inline void swap(generic_t* stack, uint32_t* index)
+{
+  generic_t tmp = stack[(*index)-2];
+  stack[(*index)-2] = stack[(*index)-1];
+  stack[(*index)-1] = tmp;
+}
+
 static inline void _IAdd(generic_t* stack, uint32_t* index)
 {
     jint a = pop(stack,index).i;
