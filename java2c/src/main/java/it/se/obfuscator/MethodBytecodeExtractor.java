@@ -120,6 +120,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case FCONST_2: eb.statements.add("pushf(_stack,&_index,2.f);");break;
             case DCONST_0: eb.statements.add("pushd(_stack,&_index,0.0);");break;
             case DCONST_1: eb.statements.add("pushd(_stack,&_index,1.0);");break;
+            case POP: eb.statements.add("pop(_stack,&_index);");break;
+            case POP2: eb.statements.add("pop2(_stack,&_index);");break;
             case IADD: eb.statements.add("_IAdd(_stack,&_index);");break;
             case LADD: eb.statements.add("_LAdd(_stack,&_index);");break;
             case FADD: eb.statements.add("_FAdd(_stack,&_index);");break;
