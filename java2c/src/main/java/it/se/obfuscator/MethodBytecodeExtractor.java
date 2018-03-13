@@ -175,6 +175,9 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case I2B: eb.statements.add("_int2byte(_stack,&_index);");break;
             case I2C: eb.statements.add("_int2char(_stack,&_index);");break;
             case I2S: eb.statements.add("_int2short(_stack,&_index);");break;
+            case L2I: eb.statements.add("_long2int(_stack,&_index);");break;
+            case L2F: eb.statements.add("_long2float(_stack,&_index);");break;
+            case L2D: eb.statements.add("_long2double(_stack,&_index);");break;
             case ARETURN: eb.statements.add("ARETURN;");break;
             case IRETURN: eb.statements.add("IRETURN;");break;
             case LRETURN: eb.statements.add("LRETURN;");break;
