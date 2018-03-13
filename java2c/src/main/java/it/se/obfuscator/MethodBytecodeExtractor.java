@@ -95,7 +95,15 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels)
     {
-        throw new IllegalPatternException("Unimplemented opcode: LOOKUPSWITCH");
+        eb.statements.add("switch(pop(_stack,&_index).i){");
+        for(int i=0;i<labels.length;i++)
+        {
+            eb.usedLabels.add(labels[i].toString());
+            eb.statements.add("case "+(keys[i])+": goto LABEL_"+labels[i].toString()+";");
+        }
+        eb.usedLabels.add(dflt.toString());
+        eb.statements.add("default: goto LABEL_"+dflt.toString()+";");
+        eb.statements.add("}");
     }
 
     @Override
