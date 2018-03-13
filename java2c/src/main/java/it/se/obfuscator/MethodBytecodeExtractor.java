@@ -46,7 +46,30 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitJumpInsn(int opcode, Label label)
     {
-        throw new IllegalPatternException("Unimplemented Jump opcode");
+        switch(opcode)
+        {
+            case IF_ICMPEQ: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(!pop(_stack,&_index).i)"); break;
+            case IF_ICMPNE: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i)");break;
+            case IF_ICMPLT: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i<0)");break;
+            case IF_ICMPLE: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i<=0)");break;
+            case IF_ICMPGT: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i>0)");break;
+            case IF_ICMPGE: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i>=0)"); break;
+            case IF_ACMPEQ: eb.statements.add("acmp(env,_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i)"); break;
+            case IF_ACMPNE: eb.statements.add("acmp(env,_stack,&_index);");eb.statements.add("if(!pop(_stack,&_index).i)");break;
+            case IFEQ: eb.statements.add("if(!pop(_stack,&_index).i)");break;
+            case IFNE: eb.statements.add("if(pop(_stack,&_index).i)");break;
+            case IFLT: eb.statements.add("if(pop(_stack,&_index).i<0)");break;
+            case IFLE: eb.statements.add("if(pop(_stack,&_index).i<=0)");break;
+            case IFGT: eb.statements.add("if(pop(_stack,&_index).i>0)");break;
+            case IFGE: eb.statements.add("if(pop(_stack,&_index).i>=0)");break;
+            case IFNULL: eb.statements.add("if(pop(_stack,&_index).l==0x0)");break;
+            case IFNONNULL: eb.statements.add("if(pop(_stack,&_index).l!=0x0)");break;
+            case GOTO: break;
+            default:
+                throw new IllegalPatternException("Unimplemented opcode: "+opcode);
+        }
+        eb.statements.add("goto LABEL_"+label.toString()+";");
+        eb.usedLabels.add(label.toString());
     }
 
     @Override
@@ -172,9 +195,6 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case I2L: eb.statements.add("_int2long(_stack,&_index);");break;
             case I2F: eb.statements.add("_int2float(_stack,&_index);");break;
             case I2D: eb.statements.add("_int2double(_stack,&_index);");break;
-            case I2B: eb.statements.add("_int2byte(_stack,&_index);");break;
-            case I2C: eb.statements.add("_int2char(_stack,&_index);");break;
-            case I2S: eb.statements.add("_int2short(_stack,&_index);");break;
             case L2I: eb.statements.add("_long2int(_stack,&_index);");break;
             case L2F: eb.statements.add("_long2float(_stack,&_index);");break;
             case L2D: eb.statements.add("_long2double(_stack,&_index);");break;
@@ -184,6 +204,14 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case D2I: eb.statements.add("_double2int(_stack,&_index);");break;
             case D2L: eb.statements.add("_double2long(_stack,&_index);");break;
             case D2F: eb.statements.add("_double2float(_stack,&_index);");break;
+            case I2B: eb.statements.add("_int2byte(_stack,&_index);");break;
+            case I2C: eb.statements.add("_int2char(_stack,&_index);");break;
+            case I2S: eb.statements.add("_int2short(_stack,&_index);");break;
+            case LCMP: eb.statements.add("lcmp(_stack,&_index);");break;
+            case FCMPL: eb.statements.add("fcmpl(_stack,&_index);");break;
+            case FCMPG: eb.statements.add("fcmpg(_stack,&_index);");break;
+            case DCMPL: eb.statements.add("dcmpl(_stack,&_index);");break;
+            case DCMPG: eb.statements.add("dcmpg(_stack,&_index);");break;
             case ARETURN: eb.statements.add("ARETURN;");break;
             case IRETURN: eb.statements.add("IRETURN;");break;
             case LRETURN: eb.statements.add("LRETURN;");break;
