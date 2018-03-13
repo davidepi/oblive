@@ -11,5 +11,6 @@ typedef jvalue generic_t;
 #include "invoke.h"
 #include "fields.h"
 #include "new.h"
+#include "casts.h"
 
 #endif
