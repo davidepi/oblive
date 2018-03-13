@@ -76,7 +76,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitIincInsn(int var, int increment)
     {
-        throw new IllegalPatternException("Unimplemented opcode: IINC");
+        if(increment==1)
+            eb.statements.add("(_vars["+var+"].i)++;");
+        else if(increment==-1)
+            eb.statements.add("(_vars["+var+"].i)--;");
+        else
+            eb.statements.add("_Iinc(_vars,"+var+","+increment+");");
     }
 
     @Override
@@ -112,6 +117,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
     {
         switch(opcode)
         {
+            case NOP:break;
+            case ACONST_NULL: eb.statements.add("push0(_stack,&_index);");break;
             case ICONST_M1: eb.statements.add("pushi(_stack,&_index,-1);");break;
             case ICONST_0: eb.statements.add("pushi(_stack,&_index,0);");break;
             case ICONST_1: eb.statements.add("pushi(_stack,&_index,1);");break;

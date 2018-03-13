@@ -9,6 +9,13 @@ static inline void push2(generic_t* stack, uint32_t* index, generic_t val)
   (*index)++;
 }
 
+static inline void push0(generic_t* stack, uint32_t* index)
+{
+  generic_t pushme;
+  pushme.l = NULL;
+  push(stack,index,pushme);
+}
+
 static inline void pushi(generic_t* stack, uint32_t* index, jint val)
 {
   generic_t pushme;

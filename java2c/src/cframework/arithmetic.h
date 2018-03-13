@@ -261,7 +261,7 @@ static inline void _LUShr(generic_t* stack, uint32_t* index)
 {
   jint b = pop(stack,index).j;
   //this cast ensures logical shift
-  unsigned long int a = (unsigned long int)(pop2(stack,index).j);
+  unsigned long long int a = (unsigned long long int)(pop2(stack,index).j);
   generic_t res;
   res.j = a>>b;
   push2(stack,index,res);
@@ -321,3 +321,7 @@ static inline void _LXor(generic_t* stack, uint32_t* index)
   push2(stack,index,res);
 }
 
+static inline void _Iinc(generic_t* vars, int varindex, int increment)
+{
+  (vars[varindex].i)+=increment;
+}
