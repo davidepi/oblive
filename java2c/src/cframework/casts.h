@@ -43,7 +43,7 @@ static inline void _int2short(generic_t* stack, uint32_t* index)
 static inline void _long2int(generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.j = (jint)pop2(stack,index).j;
+  res.i = (jint)pop2(stack,index).j;
   push(stack,index,res);
 }
 
@@ -61,3 +61,44 @@ static inline void _long2double(generic_t* stack, uint32_t* index)
   push2(stack,index,res);
 }
 
+static inline void _float2int(generic_t* stack, uint32_t* index)
+{
+  generic_t res;
+  res.i = (jint)pop(stack,index).f;
+  push(stack,index,res);
+}
+
+static inline void _float2long(generic_t* stack, uint32_t* index)
+{
+  generic_t res;
+  res.j = (jlong)pop(stack,index).f;
+  push2(stack,index,res);
+}
+
+static inline void _float2double(generic_t* stack, uint32_t* index)
+{
+  generic_t res;
+  res.d = (jdouble)pop(stack,index).f;
+  push2(stack,index,res);
+}
+
+static inline void _double2int(generic_t* stack, uint32_t* index)
+{
+  generic_t res;
+  res.i = (jint)pop2(stack,index).d;
+  push(stack,index,res);
+}
+
+static inline void _double2long(generic_t* stack, uint32_t* index)
+{
+  generic_t res;
+  res.j = (jdouble)pop2(stack,index).d;
+  push2(stack,index,res);
+}
+
+static inline void _double2float(generic_t* stack, uint32_t* index)
+{
+  generic_t res;
+  res.f = (jfloat)pop2(stack,index).d;
+  push(stack,index,res);
+}
