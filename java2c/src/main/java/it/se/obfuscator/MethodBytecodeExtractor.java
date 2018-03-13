@@ -218,7 +218,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
         {
             case "java.lang.Integer": eb.statements.add("pushi(_stack,&_index,"+(Integer)cst+");");break;
             case "java.lang.Long": eb.statements.add("pushl(_stack,&_index,"+(Long)cst+");");break;
-            case "java.lang.Float": eb.statements.add("pushf(_stack,&_index,"+(Float)cst+");");break;
+            case "java.lang.Float": eb.statements.add("pushf(_stack,&_index,"+(Float)cst+"f);");break;
             case "java.lang.Double": eb.statements.add("pushd(_stack,&_index,"+(Double)cst+");");break;
             case "java.lang.String":
             {
@@ -239,7 +239,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf)
     {
         MethodSignature signature = new MethodSignature(desc);
-        String argumentsName = "function_vals"+count_functions;
+        String argumentsName = "function_vals"+count_functions++;
         JniType currentType;
         StringBuilder statementBuilder = new StringBuilder();
         eb.statements.add("jvalue "+argumentsName+"["+signature.getInput().size()+"];");
