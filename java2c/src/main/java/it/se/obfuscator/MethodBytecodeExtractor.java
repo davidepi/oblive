@@ -81,7 +81,15 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitTableSwitchInsn(int min, int max, Label dflt, Label... labels)
     {
-        throw new IllegalPatternException("Unimplemented opcode: TABLESWITCH");
+        eb.statements.add("switch(pop(_stack,&_index).i){");
+        for(int i=0;i<labels.length;i++)
+        {
+            eb.usedLabels.add(labels[i].toString());
+            eb.statements.add("case "+(i+min)+": goto LABEL_"+labels[i].toString()+";");
+        }
+        eb.usedLabels.add(dflt.toString());
+        eb.statements.add("default: goto LABEL_"+dflt.toString()+";");
+        eb.statements.add("}");
     }
 
     @Override

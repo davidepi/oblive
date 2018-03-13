@@ -24,7 +24,7 @@ public class ExtractedBytecode
         while(it.hasNext())
         {
             String value = it.next();
-            if(value.substring(0,6).equals("LABEL_"))
+            if(value.length()>6 && value.substring(0,6).equals("LABEL_"))
             {
                 String label = value.substring(6,value.length()-1);
                 if(!usedLabels.contains(label))
