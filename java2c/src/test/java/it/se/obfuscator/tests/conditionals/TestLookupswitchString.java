@@ -4,7 +4,7 @@ import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
 public class TestLookupswitchString extends AbstractTestMethodTemplate
 {
-    private Class<?> className = testclasses.conditionals.Lookupswitch.class;
+    private Class<?> className = testclasses.conditionals.LookupswitchString.class;
     private String[] methodTest = {"exec","exec","exec"};
     private Class[][] methodParam = {new Class[]{String.class},new Class[]{String.class},new Class[]{String.class}};
     private Object[][] methodArgs = {new Object[]{"hello"}, new Object[]{"世界"},new Object[]{"no"}};
