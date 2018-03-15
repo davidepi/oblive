@@ -26,6 +26,7 @@ public class MethodSignature
     public MethodSignature(String bytecodeDesc)
     {
         this.input = new ArrayList<>();
+        boolean parsingObj = false;
         StringBuilder currentType = new StringBuilder();
         char currentLetter;
 
@@ -36,24 +37,24 @@ public class MethodSignature
             throw new IllegalPatternException(bytecodeDesc + "is not a valid method signature");
 
         //parse the signature, input parameters
-        //TODO: array support will change something inside here
         for(int i=1;i<lastParenthesisIndex;i++)
         {
-            currentType.setLength(0);
             currentLetter = bytecodeDesc.charAt(i);
             currentType.append(currentLetter);
-            if(currentLetter=='L') //object, need to parse everything until the ;
+            if(currentLetter==';' && parsingObj)
+                parsingObj = false;
+            if((currentLetter=='[' && !parsingObj) || parsingObj)
+                continue;
+            if(currentLetter=='L' ) //object, need to parse everything until the ;
             {
-                currentLetter = bytecodeDesc.charAt(++i);
-                while (currentLetter != ';')
-                {
-                    currentType.append(currentLetter);
-                    currentLetter = bytecodeDesc.charAt(++i);
-                }
-                currentType.append(currentLetter); //append also the ;
+                parsingObj = true;
+                continue;
             }
             this.input.add(new JniType(currentType.toString()));
+            currentType.setLength(0);
         }
+        if(currentType.length()!=0) //add strings in the form of ([[[) so the JniType class can throw an error
+            this.input.add(new JniType(currentType.toString()));
 
         //parse return type
         this.returnType = new JniType(bytecodeDesc.substring(lastParenthesisIndex+1));
