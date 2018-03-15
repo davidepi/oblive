@@ -246,7 +246,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 if(!processingNew)
                    eb.statements.add("dup(_stack,&_index);");
                 else
-                    /* do nothing */;
+                    this.processingNew = false;
                 break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
@@ -320,16 +320,11 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 eb.statements.add("_InvokeVirtual_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
                                   owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
             case INVOKESPECIAL:
-                if(!processingNew)
+                if(!name.equals("<init>"))
                     eb.statements.add("_InvokeSpecial_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
                         owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
                 else
-                {
-                    assert(name.equals("<init>"));
-                    assert(signature.getReturnType().getJniName().equals("void"));
                     eb.statements.add("_New(env,_stack,&_index,\"" + owner + "\",\"" + desc + "\"," + argumentsName + ");");
-                    processingNew = false;
-                }
                 break;
             case INVOKESTATIC:
                 eb.statements.add("_InvokeStatic_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
