@@ -172,6 +172,14 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case FCONST_2: eb.statements.add("pushf(_stack,&_index,2.f);");break;
             case DCONST_0: eb.statements.add("pushd(_stack,&_index,0.0);");break;
             case DCONST_1: eb.statements.add("pushd(_stack,&_index,1.0);");break;
+            case POP: eb.statements.add("pop(_stack,&_index);");break;
+            case POP2: eb.statements.add("pop2(_stack,&_index);");break;
+            case DUP_X1: eb.statements.add("dupx1(_stack,&_index);");break;
+            case DUP_X2: eb.statements.add("dupx2(_stack,&_index);");break;
+            case DUP2: eb.statements.add("dup2(_stack,&_index);");break;
+            case DUP2_X1: eb.statements.add("dup2x1(_stack,&_index);");break;
+            case DUP2_X2: eb.statements.add("dup2x2(_stack,&_index);");break;
+            case SWAP: eb.statements.add("swap(_stack,&_index);");break;
             case IADD: eb.statements.add("_IAdd(_stack,&_index);");break;
             case LADD: eb.statements.add("_LAdd(_stack,&_index);");break;
             case FADD: eb.statements.add("_FAdd(_stack,&_index);");break;
@@ -236,10 +244,9 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case RETURN: eb.statements.add("VRETURN;");break;
             case DUP:
                 if(!processingNew)
-                    //TODO: duplicate stack
-                    throw new IllegalPatternException("Unimplemented opcode: "+opcode);
+                   eb.statements.add("dup(_stack,&_index);");
                 else
-                    /* do nothing */;
+                    this.processingNew = false;
                 break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
@@ -313,16 +320,11 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 eb.statements.add("_InvokeVirtual_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
                                   owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
             case INVOKESPECIAL:
-                if(!processingNew)
+                if(!name.equals("<init>"))
                     eb.statements.add("_InvokeSpecial_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
                         owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
                 else
-                {
-                    assert(name.equals("<init>"));
-                    assert(signature.getReturnType().getJniName().equals("void"));
                     eb.statements.add("_New(env,_stack,&_index,\"" + owner + "\",\"" + desc + "\"," + argumentsName + ");");
-                    processingNew = false;
-                }
                 break;
             case INVOKESTATIC:
                 eb.statements.add("_InvokeStatic_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
