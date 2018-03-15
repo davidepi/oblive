@@ -13,6 +13,8 @@ public class CSourceGenerator
         StringBuilder sb = new StringBuilder();
         sb.append("JNIEXPORT ");
         sb.append(signature.getReturnType().getJniName());
+        if(signature.getReturnType().getArrayDepth()>0)
+            sb.append("Array");
         sb.append(" JNICALL ");
         sb.append("Java_");
         sb.append(className.replace('/','_'));

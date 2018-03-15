@@ -262,6 +262,15 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case SIPUSH:
                 eb.statements.add("pushi(_stack,&_index,"+operand+");");break;
             case NEWARRAY:
+            {
+                switch(operand)
+                {
+                    case T_INT:
+                        eb.statements.add("_NewIntArray(env,_stack,&_index);");break;
+                    default:
+                        throw new IllegalPatternException("Unimplemented opcode: NEWARRAY with type "+operand);
+                }
+            }break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }

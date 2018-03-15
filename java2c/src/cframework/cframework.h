@@ -13,5 +13,6 @@ typedef jvalue generic_t;
 #include "fields.h"
 #include "new.h"
 #include "casts.h"
+#include "arrays.h"
 
 #endif
