@@ -4,6 +4,10 @@ static inline void lcmp(generic_t* stack, uint32_t* index)
     jlong a = pop2(stack,index).j;
     generic_t res;
     res.j = a-b;
+    if(res.j<0)
+      res.j=(jlong)-1;
+    else if(res.j>0)
+      res.j=(jlong)1;
     push(stack,index,res);
 }
 
