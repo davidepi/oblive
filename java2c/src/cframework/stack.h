@@ -9,6 +9,13 @@ static inline void push2(generic_t* stack, uint32_t* index, generic_t val)
   (*index)++;
 }
 
+static inline void push0(generic_t* stack, uint32_t* index)
+{
+  generic_t pushme;
+  pushme.l = NULL;
+  push(stack,index,pushme);
+}
+
 static inline void pushi(generic_t* stack, uint32_t* index, jint val)
 {
   generic_t pushme;
@@ -122,42 +129,6 @@ static inline void swap(generic_t* stack, uint32_t* index)
   generic_t tmp = stack[(*index)-2];
   stack[(*index)-2] = stack[(*index)-1];
   stack[(*index)-1] = tmp;
-}
-
-static inline void _IAdd(generic_t* stack, uint32_t* index)
-{
-    jint a = pop(stack,index).i;
-    jint b = pop(stack,index).i;
-    generic_t res;
-    res.i = a+b;
-    push(stack,index,res);
-}
-
-static inline void _LAdd(generic_t* stack, uint32_t* index)
-{
-  jlong a = pop2(stack,index).j;
-  jlong b = pop2(stack,index).j;
-  generic_t res;
-  res.j = a+b;
-  push2(stack,index,res);
-}
-
-static inline void _FAdd(generic_t* stack, uint32_t* index)
-{
-  jfloat a = pop(stack,index).f;
-  jfloat b = pop(stack,index).f;
-  generic_t res;
-  res.f = a+b;
-  push(stack,index,res);
-}
-
-static inline void _DAdd(generic_t* stack, uint32_t* index)
-{
-  jdouble a = pop2(stack,index).d;
-  jdouble b = pop2(stack,index).d;
-  generic_t res;
-  res.d = a+b;
-  push2(stack,index,res);
 }
 
 static inline void _Load(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)

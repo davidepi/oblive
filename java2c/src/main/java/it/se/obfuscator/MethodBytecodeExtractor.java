@@ -46,19 +46,64 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitJumpInsn(int opcode, Label label)
     {
-        throw new IllegalPatternException("Unimplemented Jump opcode");
+        switch(opcode)
+        {
+            case IF_ICMPEQ: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(!pop(_stack,&_index).i)"); break;
+            case IF_ICMPNE: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i)");break;
+            case IF_ICMPLT: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i<0)");break;
+            case IF_ICMPLE: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i<=0)");break;
+            case IF_ICMPGT: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i>0)");break;
+            case IF_ICMPGE: eb.statements.add("_ISub(_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i>=0)"); break;
+            case IF_ACMPEQ: eb.statements.add("acmp(env,_stack,&_index);");eb.statements.add("if(pop(_stack,&_index).i)"); break;
+            case IF_ACMPNE: eb.statements.add("acmp(env,_stack,&_index);");eb.statements.add("if(!pop(_stack,&_index).i)");break;
+            case IFEQ: eb.statements.add("if(!pop(_stack,&_index).i)");break;
+            case IFNE: eb.statements.add("if(pop(_stack,&_index).i)");break;
+            case IFLT: eb.statements.add("if(pop(_stack,&_index).i<0)");break;
+            case IFLE: eb.statements.add("if(pop(_stack,&_index).i<=0)");break;
+            case IFGT: eb.statements.add("if(pop(_stack,&_index).i>0)");break;
+            case IFGE: eb.statements.add("if(pop(_stack,&_index).i>=0)");break;
+            case IFNULL: eb.statements.add("if(pop(_stack,&_index).l==0x0)");break;
+            case IFNONNULL: eb.statements.add("if(pop(_stack,&_index).l!=0x0)");break;
+            case GOTO: break;
+            default:
+                throw new IllegalPatternException("Unimplemented opcode: "+opcode);
+        }
+        eb.statements.add("goto LABEL_"+label.toString()+";");
+        eb.usedLabels.add(label.toString());
+    }
+
+    @Override
+    public void visitLabel(Label label)
+    {
+        eb.statements.add("LABEL_"+label.toString()+":");
     }
 
     @Override
     public void visitTableSwitchInsn(int min, int max, Label dflt, Label... labels)
     {
-        throw new IllegalPatternException("Unimplemented opcode: TABLESWITCH");
+        eb.statements.add("switch(pop(_stack,&_index).i){");
+        for(int i=0;i<labels.length;i++)
+        {
+            eb.usedLabels.add(labels[i].toString());
+            eb.statements.add("case "+(i+min)+": goto LABEL_"+labels[i].toString()+";");
+        }
+        eb.usedLabels.add(dflt.toString());
+        eb.statements.add("default: goto LABEL_"+dflt.toString()+";");
+        eb.statements.add("}");
     }
 
     @Override
     public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels)
     {
-        throw new IllegalPatternException("Unimplemented opcode: LOOKUPSWITCH");
+        eb.statements.add("switch(pop(_stack,&_index).i){");
+        for(int i=0;i<labels.length;i++)
+        {
+            eb.usedLabels.add(labels[i].toString());
+            eb.statements.add("case "+(keys[i])+": goto LABEL_"+labels[i].toString()+";");
+        }
+        eb.usedLabels.add(dflt.toString());
+        eb.statements.add("default: goto LABEL_"+dflt.toString()+";");
+        eb.statements.add("}");
     }
 
     @Override
@@ -70,7 +115,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitIincInsn(int var, int increment)
     {
-        throw new IllegalPatternException("Unimplemented opcode: IINC");
+        if(increment==1)
+            eb.statements.add("(_vars["+var+"].i)++;");
+        else if(increment==-1)
+            eb.statements.add("(_vars["+var+"].i)--;");
+        else
+            eb.statements.add("_Iinc(_vars,"+var+","+increment+");");
     }
 
     @Override
@@ -106,6 +156,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
     {
         switch(opcode)
         {
+            case NOP:break;
+            case ACONST_NULL: eb.statements.add("push0(_stack,&_index);");break;
             case ICONST_M1: eb.statements.add("pushi(_stack,&_index,-1);");break;
             case ICONST_0: eb.statements.add("pushi(_stack,&_index,0);");break;
             case ICONST_1: eb.statements.add("pushi(_stack,&_index,1);");break;
@@ -132,6 +184,58 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case LADD: eb.statements.add("_LAdd(_stack,&_index);");break;
             case FADD: eb.statements.add("_FAdd(_stack,&_index);");break;
             case DADD: eb.statements.add("_DAdd(_stack,&_index);");break;
+            case ISUB: eb.statements.add("_ISub(_stack,&_index);");break;
+            case LSUB: eb.statements.add("_LSub(_stack,&_index);");break;
+            case FSUB: eb.statements.add("_FSub(_stack,&_index);");break;
+            case DSUB: eb.statements.add("_DSub(_stack,&_index);");break;
+            case IMUL: eb.statements.add("_IMul(_stack,&_index);");break;
+            case LMUL: eb.statements.add("_LMul(_stack,&_index);");break;
+            case FMUL: eb.statements.add("_FMul(_stack,&_index);");break;
+            case DMUL: eb.statements.add("_DMul(_stack,&_index);");break;
+            case IDIV: eb.statements.add("_IDiv(_stack,&_index);");break;
+            case LDIV: eb.statements.add("_LDiv(_stack,&_index);");break;
+            case FDIV: eb.statements.add("_FDiv(_stack,&_index);");break;
+            case DDIV: eb.statements.add("_DDiv(_stack,&_index);");break;
+            case IREM: eb.statements.add("_IRem(_stack,&_index);");break;
+            case LREM: eb.statements.add("_LRem(_stack,&_index);");break;
+            case FREM: eb.statements.add("_FRem(_stack,&_index);");break;
+            case DREM: eb.statements.add("_DRem(_stack,&_index);");break;
+            case INEG: eb.statements.add("_INeg(_stack,&_index);");break;
+            case LNEG: eb.statements.add("_LNeg(_stack,&_index);");break;
+            case FNEG: eb.statements.add("_FNeg(_stack,&_index);");break;
+            case DNEG: eb.statements.add("_DNeg(_stack,&_index);");break;
+            case ISHL: eb.statements.add("_IShl(_stack,&_index);");break;
+            case LSHL: eb.statements.add("_LShl(_stack,&_index);");break;
+            case ISHR: eb.statements.add("_IShr(_stack,&_index);");break;
+            case LSHR: eb.statements.add("_LShr(_stack,&_index);");break;
+            case IUSHR: eb.statements.add("_IUShr(_stack,&_index);");break;
+            case LUSHR: eb.statements.add("_LUShr(_stack,&_index);");break;
+            case IAND: eb.statements.add("_IAnd(_stack,&_index);");break;
+            case LAND: eb.statements.add("_LAnd(_stack,&_index);");break;
+            case IOR: eb.statements.add("_IOr(_stack,&_index);");break;
+            case LOR: eb.statements.add("_LOr(_stack,&_index);");break;
+            case IXOR: eb.statements.add("_IXor(_stack,&_index);");break;
+            case LXOR: eb.statements.add("_LXor(_stack,&_index);");break;
+            case I2L: eb.statements.add("_int2long(_stack,&_index);");break;
+            case I2F: eb.statements.add("_int2float(_stack,&_index);");break;
+            case I2D: eb.statements.add("_int2double(_stack,&_index);");break;
+            case L2I: eb.statements.add("_long2int(_stack,&_index);");break;
+            case L2F: eb.statements.add("_long2float(_stack,&_index);");break;
+            case L2D: eb.statements.add("_long2double(_stack,&_index);");break;
+            case F2I: eb.statements.add("_float2int(_stack,&_index);");break;
+            case F2L: eb.statements.add("_float2long(_stack,&_index);");break;
+            case F2D: eb.statements.add("_float2double(_stack,&_index);");break;
+            case D2I: eb.statements.add("_double2int(_stack,&_index);");break;
+            case D2L: eb.statements.add("_double2long(_stack,&_index);");break;
+            case D2F: eb.statements.add("_double2float(_stack,&_index);");break;
+            case I2B: eb.statements.add("_int2byte(_stack,&_index);");break;
+            case I2C: eb.statements.add("_int2char(_stack,&_index);");break;
+            case I2S: eb.statements.add("_int2short(_stack,&_index);");break;
+            case LCMP: eb.statements.add("lcmp(_stack,&_index);");break;
+            case FCMPL: eb.statements.add("fcmpl(_stack,&_index);");break;
+            case FCMPG: eb.statements.add("fcmpg(_stack,&_index);");break;
+            case DCMPL: eb.statements.add("dcmpl(_stack,&_index);");break;
+            case DCMPG: eb.statements.add("dcmpg(_stack,&_index);");break;
             case ARETURN: eb.statements.add("ARETURN;");break;
             case IRETURN: eb.statements.add("IRETURN;");break;
             case LRETURN: eb.statements.add("LRETURN;");break;
@@ -171,7 +275,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
         {
             case "java.lang.Integer": eb.statements.add("pushi(_stack,&_index,"+(Integer)cst+");");break;
             case "java.lang.Long": eb.statements.add("pushl(_stack,&_index,"+(Long)cst+");");break;
-            case "java.lang.Float": eb.statements.add("pushf(_stack,&_index,"+(Float)cst+");");break;
+            case "java.lang.Float": eb.statements.add("pushf(_stack,&_index,"+(Float)cst+"f);");break;
             case "java.lang.Double": eb.statements.add("pushd(_stack,&_index,"+(Double)cst+");");break;
             case "java.lang.String":
             {
@@ -192,7 +296,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf)
     {
         MethodSignature signature = new MethodSignature(desc);
-        String argumentsName = "function_vals"+count_functions;
+        String argumentsName = "function_vals"+count_functions++;
         JniType currentType;
         StringBuilder statementBuilder = new StringBuilder();
         eb.statements.add("jvalue "+argumentsName+"["+signature.getInput().size()+"];");

@@ -20,3 +20,11 @@ tasks.withType(Test) {
     systemProperty "java.library.path","$buildDir/libsrc"
     maxParallelForks = 1
 }
+
+jacocoTestReport {
+    reports {
+        html.enabled true
+        csv.enabled false
+        xml.enabled false
+    }
+}

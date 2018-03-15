@@ -1,6 +1,4 @@
 # java2c
-[![Build Status](https://travis-ci.com/davidepi/java2c.svg?token=sF9a3M7z5xWHwvaFrRmr&branch=master)](https://travis-ci.com/davidepi/java2c)
 
-## DEPENDENCIES
-* [libzip](https://libzip.org/) (apkextractor)
-* [dex2jar](https://sourceforge.net/projects/dex2jar/) (apkextractor)
+[![pipeline status](https://gitlab.fbk.eu/ceccato/java_to_c_obfuscator/badges/master/pipeline.svg)](https://gitlab.fbk.eu/ceccato/java_to_c_obfuscator/commits/master)
+[![coverage report](https://gitlab.fbk.eu/ceccato/java_to_c_obfuscator/badges/master/coverage.svg)](https://gitlab.fbk.eu/ceccato/java_to_c_obfuscator/commits/master)
