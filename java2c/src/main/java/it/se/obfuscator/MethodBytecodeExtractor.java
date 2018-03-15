@@ -81,13 +81,29 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitTableSwitchInsn(int min, int max, Label dflt, Label... labels)
     {
-        throw new IllegalPatternException("Unimplemented opcode: TABLESWITCH");
+        eb.statements.add("switch(pop(_stack,&_index).i){");
+        for(int i=0;i<labels.length;i++)
+        {
+            eb.usedLabels.add(labels[i].toString());
+            eb.statements.add("case "+(i+min)+": goto LABEL_"+labels[i].toString()+";");
+        }
+        eb.usedLabels.add(dflt.toString());
+        eb.statements.add("default: goto LABEL_"+dflt.toString()+";");
+        eb.statements.add("}");
     }
 
     @Override
     public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels)
     {
-        throw new IllegalPatternException("Unimplemented opcode: LOOKUPSWITCH");
+        eb.statements.add("switch(pop(_stack,&_index).i){");
+        for(int i=0;i<labels.length;i++)
+        {
+            eb.usedLabels.add(labels[i].toString());
+            eb.statements.add("case "+(keys[i])+": goto LABEL_"+labels[i].toString()+";");
+        }
+        eb.usedLabels.add(dflt.toString());
+        eb.statements.add("default: goto LABEL_"+dflt.toString()+";");
+        eb.statements.add("}");
     }
 
     @Override
@@ -252,7 +268,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
         {
             case "java.lang.Integer": eb.statements.add("pushi(_stack,&_index,"+(Integer)cst+");");break;
             case "java.lang.Long": eb.statements.add("pushl(_stack,&_index,"+(Long)cst+");");break;
-            case "java.lang.Float": eb.statements.add("pushf(_stack,&_index,"+(Float)cst+");");break;
+            case "java.lang.Float": eb.statements.add("pushf(_stack,&_index,"+(Float)cst+"f);");break;
             case "java.lang.Double": eb.statements.add("pushd(_stack,&_index,"+(Double)cst+");");break;
             case "java.lang.String":
             {
@@ -273,7 +289,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf)
     {
         MethodSignature signature = new MethodSignature(desc);
-        String argumentsName = "function_vals"+count_functions;
+        String argumentsName = "function_vals"+count_functions++;
         JniType currentType;
         StringBuilder statementBuilder = new StringBuilder();
         eb.statements.add("jvalue "+argumentsName+"["+signature.getInput().size()+"];");
