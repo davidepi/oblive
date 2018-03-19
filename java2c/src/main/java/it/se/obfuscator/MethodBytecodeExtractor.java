@@ -265,6 +265,14 @@ public class MethodBytecodeExtractor extends MethodVisitor
             {
                 switch(operand)
                 {
+                    case T_BOOLEAN:
+                        eb.statements.add("_NewBooleanArray(env,_stack,&_index);");break;
+                    case T_CHAR:
+                        eb.statements.add("_NewCharArray(env,_stack,&_index);");break;
+                    case T_BYTE:
+                        eb.statements.add("_NewByteArray(env,_stack,&_index);");break;
+                    case T_SHORT:
+                        eb.statements.add("_NewShortArray(env,_stack,&_index);");break;
                     case T_INT:
                         eb.statements.add("_NewIntArray(env,_stack,&_index);");break;
                     default:
