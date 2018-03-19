@@ -174,3 +174,59 @@ static inline void _SALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
   (*env)->GetShortArrayRegion(env,array,array_index,1,&(res.s));
   push(stack,index,res);
 }
+
+static inline void _IAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jint val = pop(stack,index).i;
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  (*env)->SetIntArrayRegion(env,array,array_index,1,&val);
+}
+
+static inline void _LAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jlong val = pop2(stack,index).j;
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  (*env)->SetLongArrayRegion(env,array,array_index,1,&val);
+}
+
+static inline void _FAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jfloat val = pop(stack,index).f;
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  (*env)->SetFloatArrayRegion(env,array,array_index,1,&val);
+}
+
+static inline void _DAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jdouble val = pop2(stack,index).d;
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  (*env)->SetDoubleArrayRegion(env,array,array_index,1,&val);
+}
+
+static inline void _BAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jbyte val = pop(stack,index).b;
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  (*env)->SetByteArrayRegion(env,array,array_index,1,&val);
+}
+
+static inline void _CAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jchar val = pop(stack,index).c;
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  (*env)->SetCharArrayRegion(env,array,array_index,1,&val);
+}
+
+static inline void _SAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jshort val = pop(stack,index).s;
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  (*env)->SetShortArrayRegion(env,array,array_index,1,&val);
+}

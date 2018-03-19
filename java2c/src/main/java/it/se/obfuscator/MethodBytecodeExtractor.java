@@ -179,6 +179,13 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case BALOAD: eb.statements.add("_BALoad(env,_stack,&_index);");break;
             case CALOAD: eb.statements.add("_CALoad(env,_stack,&_index);");break;
             case SALOAD: eb.statements.add("_SALoad(env,_stack,&_index);");break;
+            case IASTORE: eb.statements.add("_IAStore(env,_stack,&_index);");break;
+            case LASTORE: eb.statements.add("_LAStore(env,_stack,&_index);");break;
+            case FASTORE: eb.statements.add("_FAStore(env,_stack,&_index);");break;
+            case DASTORE: eb.statements.add("_DAStore(env,_stack,&_index);");break;
+            case BASTORE: eb.statements.add("_BAStore(env,_stack,&_index);");break;
+            case CASTORE: eb.statements.add("_CAStore(env,_stack,&_index);");break;
+            case SASTORE: eb.statements.add("_SAStore(env,_stack,&_index);");break;
             case POP: eb.statements.add("pop(_stack,&_index);");break;
             case POP2: eb.statements.add("pop2(_stack,&_index);");break;
             case DUP_X1: eb.statements.add("dupx1(_stack,&_index);");break;
