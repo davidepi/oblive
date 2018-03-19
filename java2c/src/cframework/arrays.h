@@ -111,3 +111,66 @@ static inline void _Arraylength(JNIEnv* env, generic_t* stack, uint32_t* index)
   res.i = (*env)->GetArrayLength(env,array);
   push(stack,index,res);
 }
+
+static inline void _IALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  generic_t res;
+  (*env)->GetIntArrayRegion(env,array,array_index,1,&(res.i));
+  push(stack,index,res);
+}
+
+static inline void _LALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  generic_t res;
+  (*env)->GetLongArrayRegion(env,array,array_index,1,&(res.j));
+  push2(stack,index,res);
+}
+
+static inline void _FALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  generic_t res;
+  (*env)->GetFloatArrayRegion(env,array,array_index,1,&(res.f));
+  push(stack,index,res);
+}
+
+static inline void _DALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  generic_t res;
+  (*env)->GetDoubleArrayRegion(env,array,array_index,1,&(res.d));
+  push2(stack,index,res);
+}
+
+static inline void _BALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  generic_t res;
+  (*env)->GetByteArrayRegion(env,array,array_index,1,&(res.b));
+  push(stack,index,res);
+}
+
+static inline void _CALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  generic_t res;
+  (*env)->GetCharArrayRegion(env,array,array_index,1,&(res.c));
+  push(stack,index,res);
+}
+
+static inline void _SALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  generic_t res;
+  (*env)->GetShortArrayRegion(env,array,array_index,1,&(res.s));
+  push(stack,index,res);
+}

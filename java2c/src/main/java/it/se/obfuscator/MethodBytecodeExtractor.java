@@ -172,6 +172,13 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case FCONST_2: eb.statements.add("pushf(_stack,&_index,2.f);");break;
             case DCONST_0: eb.statements.add("pushd(_stack,&_index,0.0);");break;
             case DCONST_1: eb.statements.add("pushd(_stack,&_index,1.0);");break;
+            case IALOAD: eb.statements.add("_IALoad(env,_stack,&_index);");break;
+            case LALOAD: eb.statements.add("_LALoad(env,_stack,&_index);");break;
+            case FALOAD: eb.statements.add("_FALoad(env,_stack,&_index);");break;
+            case DALOAD: eb.statements.add("_DALoad(env,_stack,&_index);");break;
+            case BALOAD: eb.statements.add("_BALoad(env,_stack,&_index);");break;
+            case CALOAD: eb.statements.add("_CALoad(env,_stack,&_index);");break;
+            case SALOAD: eb.statements.add("_SALoad(env,_stack,&_index);");break;
             case POP: eb.statements.add("pop(_stack,&_index);");break;
             case POP2: eb.statements.add("pop2(_stack,&_index);");break;
             case DUP_X1: eb.statements.add("dupx1(_stack,&_index);");break;
