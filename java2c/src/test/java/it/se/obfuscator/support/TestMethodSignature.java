@@ -150,7 +150,7 @@ public class TestMethodSignature
     {
         MethodSignature ms = new MethodSignature("()[I");
         assertEquals(0, ms.getInput().size());
-        assertEquals("jint", ms.getReturnType().getJniName());
+        assertEquals("jobject", ms.getReturnType().getJniName());
         assertEquals(1,ms.getReturnType().getArrayDepth());
     }
 
@@ -159,7 +159,7 @@ public class TestMethodSignature
     {
         MethodSignature ms = new MethodSignature("()[[[[I");
         assertEquals(0, ms.getInput().size());
-        assertEquals("jint", ms.getReturnType().getJniName());
+        assertEquals("jobject", ms.getReturnType().getJniName());
         assertEquals(4,ms.getReturnType().getArrayDepth());
     }
 
@@ -173,12 +173,14 @@ public class TestMethodSignature
         assertEquals("jobject", ms.getInput().get(1).getJniName());
         assertEquals("java/lang/String", ms.getInput().get(1).getName());
         assertEquals(1, ms.getInput().get(1).getArrayDepth());
-        assertEquals("jchar", ms.getInput().get(2).getJniName());
+        assertEquals("jobject", ms.getInput().get(2).getJniName());
+        assertEquals("jchar", ms.getInput().get(2).getName());
         assertEquals(2, ms.getInput().get(2).getArrayDepth());
         assertEquals("jobject", ms.getInput().get(3).getJniName());
         assertEquals("java/util/ArrayList", ms.getInput().get(3).getName());
         assertEquals(0, ms.getInput().get(3).getArrayDepth());
-        assertEquals("jbyte", ms.getInput().get(4).getJniName());
+        assertEquals("jbyte", ms.getInput().get(4).getName());
+        assertEquals("jobject", ms.getInput().get(4).getJniName());
         assertEquals(3, ms.getInput().get(4).getArrayDepth());
         assertEquals("void", ms.getReturnType().getJniName());
     }

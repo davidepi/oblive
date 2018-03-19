@@ -23,7 +23,7 @@ public class JniType
     //name of the jniName in c (jint, jboolean, etc...)
     private String jniName;
     //letter used in the jvalue union
-    private final char jvalueLetter;
+    private char jvalueLetter;
     //if the jniName is an object this is the full name of the ojbect, including L and ; like Ljava/lang/String;
     //or the primitive type if primitive arrays (which are treated as jobject in the jni, so the jniName is jobject)
     private final String name;
@@ -126,7 +126,10 @@ public class JniType
                 throw new IllegalPatternException("Unknown bytecode type "+ bytecodeName);
         }
         if(arrayDepth>0)
+        {
             this.jniName = "jobject";
+            this.jvalueLetter = 'l';
+        }
     }
 
     /**

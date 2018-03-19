@@ -103,3 +103,11 @@ static inline void _NewLongArray(JNIEnv* env, generic_t* stack, uint32_t* index)
   res.l = array;
   push(stack,index,res);
 }
+
+static inline void _Arraylength(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jarray array = pop(stack,index).l;
+  generic_t res;
+  res.i = (*env)->GetArrayLength(env,array);
+  push(stack,index,res);
+}

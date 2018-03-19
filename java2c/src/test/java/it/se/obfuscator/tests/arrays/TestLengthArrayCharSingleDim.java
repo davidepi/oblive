@@ -1,31 +1,13 @@
-package it.se.obfuscator.tests.fields;
+package it.se.obfuscator.tests.arrays;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestSetStaticIntArray extends AbstractTestMethodTemplate
+public class TestLengthArrayCharSingleDim extends AbstractTestMethodTemplate
 {
-    private Class<?> className = testclasses.fields.SetStaticIntArray.class;
-    private String[] methodTest = {"test"};
+    private Class<?> className = testclasses.arrays.LengthArrayCharSingleDim.class;
+    private String[] methodTest = {"getLen"};
     private Class[][] methodParam = {new Class[]{}};
     private Object[][] methodArgs = {new Object[]{}};
-
-    @Override
-    public String getAnnotatedMethodName(int position)
-    {
-        return "setArray";
-    }
-
-    @Override
-    public int getAnnotatedMethodSize()
-    {
-        return 1;
-    }
-
-    @Override
-    public Class<?>[] getAnnotatedMethodParams(int position)
-    {
-        return new Class[]{};
-    }
 
     @Override
     public Class<?> getTestClass()
