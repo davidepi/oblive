@@ -104,6 +104,17 @@ static inline void _NewLongArray(JNIEnv* env, generic_t* stack, uint32_t* index)
   push(stack,index,res);
 }
 
+static inline void _NewObjectArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className)
+{
+  jint size = pop(stack,index).i;
+  jclass caller_class = (*env)->FindClass(env, className);if(caller_class == NULL){fprintf(stderr,"Class %s not found\n",className);exit(EXIT_FAILURE);}
+  jobjectArray array = (*env)->NewObjectArray(env,size,caller_class,0);
+  OUT_OF_MEMORY_CHECK
+  generic_t res;
+  res.l = array;
+  push(stack,index,res);
+}
+
 static inline void _Arraylength(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
   jarray array = pop(stack,index).l;

@@ -403,6 +403,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case NEW:
                     processingNew = true;
                 break;
+            case ANEWARRAY:
+                eb.statements.add("_NewObjectArray(env,_stack,&_index,\""+type+"\");");break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
