@@ -1,20 +1,32 @@
 package it.se.obfuscator.tests.invoke.invokespecial;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
-import org.junit.Test;
-import testclasses.invoke.invokespecial.InvokeSpecialVoid;
-import testclasses.invoke.invokevirtual.InvokeVirtualVoid;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
-public class TestInvokeSpecialVoid extends AbstractTestMethodTemplate
+public class TestInvokeSpecialIntArray extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.invoke.invokespecial.InvokeSpecialVoid.class;
-    private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{int.class,int.class}};
-    private Object[][] methodArgs = {new Object[]{15,21}};
+    private Class<?> className = testclasses.invoke.invokespecial.InvokeSpecialIntArray.class;
+    private String[] methodTest = {"test"};
+    private Class[][] methodParam = {new Class[]{}};
+    private Object[][] methodArgs = {new Object[]{}};
+
+    @Override
+    public String getAnnotatedMethodName(int position)
+    {
+        return "exec";
+    }
+
+    @Override
+    public int getAnnotatedMethodSize()
+    {
+        return 1;
+    }
+
+    @Override
+    public Class<?>[] getAnnotatedMethodParams(int position)
+    {
+        return new Class[]{};
+    }
 
     @Override
     public Class<?> getTestClass()

@@ -154,7 +154,7 @@ public class TestJniType
     {
         JniType type = new JniType("[I");
         assertEquals("jint", type.getName());
-        assertEquals("jint", type.getJniName());
+        assertEquals("jobject", type.getJniName());
         assertEquals('i', type.getJvalueLetter());
         assertEquals(false, type.isDoubleLength());
         assertEquals(false, type.isFloatingPoint());

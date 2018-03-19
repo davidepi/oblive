@@ -28,7 +28,7 @@ public class TestInvokeVirtualBoolean extends AbstractTestMethodTemplate
     @Override
     public int getTestMethodSize()
     {
-        return 4;
+        return methodTest.length;
     }
 
     @Override

@@ -2,14 +2,31 @@ package it.se.obfuscator.tests.invoke.invokestatic;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestInvokeStaticChar extends AbstractTestMethodTemplate
+public class TestInvokeStaticIntArray extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.invoke.invokestatic.InvokeStaticChar.class;
-    private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{char.class,char.class}};
-    private Object[][] methodArgs = {new Object[]{'A','b'}};
+    private Class<?> className = testclasses.invoke.invokestatic.InvokeStaticIntArray.class;
+    private String[] methodTest = {"test"};
+    private Class[][] methodParam = {new Class[]{}};
+    private Object[][] methodArgs = {new Object[]{}};
 
+    @Override
+    public String getAnnotatedMethodName(int position)
+    {
+        return "exec";
+    }
+
+    @Override
+    public int getAnnotatedMethodSize()
+    {
+        return 1;
+    }
+
+    @Override
+    public Class<?>[] getAnnotatedMethodParams(int position)
+    {
+        return new Class[]{};
+    }
 
     @Override
     public Class<?> getTestClass()

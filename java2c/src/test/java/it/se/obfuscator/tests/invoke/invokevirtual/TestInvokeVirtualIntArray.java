@@ -2,14 +2,31 @@ package it.se.obfuscator.tests.invoke.invokevirtual;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestInvokeVirtualFloat extends AbstractTestMethodTemplate
+public class TestInvokeVirtualIntArray extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.invoke.invokevirtual.InvokeVirtualFloat.class;
-    private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{float.class,float.class}};
-    private Object[][] methodArgs = {new Object[]{3.5f,-2.5f}};
+    private Class<?> className = testclasses.invoke.invokevirtual.InvokeVirtualIntArray.class;
+    private String[] methodTest = {"test"};
+    private Class[][] methodParam = {new Class[]{}};
+    private Object[][] methodArgs = {new Object[]{}};
 
+    @Override
+    public String getAnnotatedMethodName(int position)
+    {
+        return "exec";
+    }
+
+    @Override
+    public int getAnnotatedMethodSize()
+    {
+        return 1;
+    }
+
+    @Override
+    public Class<?>[] getAnnotatedMethodParams(int position)
+    {
+        return new Class[]{};
+    }
 
     @Override
     public Class<?> getTestClass()

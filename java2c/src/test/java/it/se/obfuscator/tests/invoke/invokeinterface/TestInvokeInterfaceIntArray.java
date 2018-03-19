@@ -4,14 +4,31 @@ import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 import testclasses.invoke.invokeinterface.AdderInterface;
 import testclasses.invoke.invokeinterface.ImplementedInterface;
 
-public class TestInvokeInterfaceFloat extends AbstractTestMethodTemplate
+public class TestInvokeInterfaceIntArray extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.invoke.invokeinterface.InvokeInterfaceFloat.class;
-    private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{AdderInterface.class,float.class,float.class}};
-    private Object[][] methodArgs = {new Object[]{new ImplementedInterface(), 3.5f,-2.5f}};
+    private Class<?> className = testclasses.invoke.invokeinterface.InvokeInterfaceIntArray.class;
+    private String[] methodTest = {"test"};
+    private Class[][] methodParam = {new Class[]{}};
+    private Object[][] methodArgs = {new Object[]{}};
 
+    @Override
+    public String getAnnotatedMethodName(int position)
+    {
+        return "exec";
+    }
+
+    @Override
+    public int getAnnotatedMethodSize()
+    {
+        return 1;
+    }
+
+    @Override
+    public Class<?>[] getAnnotatedMethodParams(int position)
+    {
+        return new Class[]{AdderInterface.class};
+    }
 
     @Override
     public Class<?> getTestClass()
