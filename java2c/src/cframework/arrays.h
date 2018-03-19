@@ -64,3 +64,42 @@ static inline void _NewShortArray(JNIEnv* env, generic_t* stack, uint32_t* index
   res.l = array;
   push(stack,index,res);
 }
+
+static inline void _NewDoubleArray(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jint size = pop(stack,index).i;
+  jdoubleArray array = (*env)->NewDoubleArray(env,size);
+  OUT_OF_MEMORY_CHECK
+  jdouble values[size];
+  memset(values,0,size*sizeof(jdouble));//zero initialize array
+  (*env)->SetDoubleArrayRegion(env, array, 0, size, values);
+  generic_t res;
+  res.l = array;
+  push(stack,index,res);
+}
+
+static inline void _NewFloatArray(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jint size = pop(stack,index).i;
+  jfloatArray array = (*env)->NewFloatArray(env,size);
+  OUT_OF_MEMORY_CHECK
+  jfloat values[size];
+  memset(values,0,size*sizeof(jfloat));//zero initialize array
+  (*env)->SetFloatArrayRegion(env, array, 0, size, values);
+  generic_t res;
+  res.l = array;
+  push(stack,index,res);
+}
+
+static inline void _NewLongArray(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jint size = pop(stack,index).i;
+  jlongArray array = (*env)->NewLongArray(env,size);
+  OUT_OF_MEMORY_CHECK
+  jlong values[size];
+  memset(values,0,size*sizeof(jlong));//zero initialize array
+  (*env)->SetLongArrayRegion(env, array, 0, size, values);
+  generic_t res;
+  res.l = array;
+  push(stack,index,res);
+}

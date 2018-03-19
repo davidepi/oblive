@@ -269,12 +269,18 @@ public class MethodBytecodeExtractor extends MethodVisitor
                         eb.statements.add("_NewBooleanArray(env,_stack,&_index);");break;
                     case T_CHAR:
                         eb.statements.add("_NewCharArray(env,_stack,&_index);");break;
+                    case T_FLOAT:
+                        eb.statements.add("_NewFloatArray(env,_stack,&_index);");break;
+                    case T_DOUBLE:
+                        eb.statements.add("_NewDoubleArray(env,_stack,&_index);");break;
                     case T_BYTE:
                         eb.statements.add("_NewByteArray(env,_stack,&_index);");break;
                     case T_SHORT:
                         eb.statements.add("_NewShortArray(env,_stack,&_index);");break;
                     case T_INT:
                         eb.statements.add("_NewIntArray(env,_stack,&_index);");break;
+                    case T_LONG:
+                        eb.statements.add("_NewLongArray(env,_stack,&_index);");break;
                     default:
                         throw new IllegalPatternException("Unimplemented opcode: NEWARRAY with type "+operand);
                 }
