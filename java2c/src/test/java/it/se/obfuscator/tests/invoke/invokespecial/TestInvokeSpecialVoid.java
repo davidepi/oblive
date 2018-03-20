@@ -31,7 +31,7 @@ public class TestInvokeSpecialVoid extends AbstractTestMethodTemplate
     @Override
     public int getTestMethodSize()
     {
-        return 1;
+        return methodTest.length;
     }
 
     @Override

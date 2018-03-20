@@ -4,6 +4,8 @@ public interface AdderInterface
 {
     int add(int a, int b);
 
+    int[] array();
+
     short add(short a, short b);
 
     float add(float a, float b);

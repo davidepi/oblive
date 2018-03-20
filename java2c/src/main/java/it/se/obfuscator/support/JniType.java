@@ -21,15 +21,18 @@ import it.se.obfuscator.IllegalPatternException;
 public class JniType
 {
     //name of the jniName in c (jint, jboolean, etc...)
-    private final String jniName;
+    private String jniName;
     //letter used in the jvalue union
-    private final char jvalueLetter;
+    private char jvalueLetter;
     //if the jniName is an object this is the full name of the ojbect, including L and ; like Ljava/lang/String;
+    //or the primitive type if primitive arrays (which are treated as jobject in the jni, so the jniName is jobject)
     private final String name;
     //true if the jniName is 64 bit long
     private final boolean doubleLength;
     //true if the jniName is a float or double
     private final boolean floatingPoint;
+    //multidimensional array
+    private int arrayDepth;
 
     /**
      *  Construct a new JniType by decoding the input string. The input string can be an object in the bytecode notation
@@ -39,7 +42,11 @@ public class JniType
      */
     public JniType(String bytecodeName)
     {
-        switch(bytecodeName.charAt(0))
+        arrayDepth = 0;
+        for(int i=0;i<bytecodeName.length()-1;i++) //-1 ensures to leave at least one character for the switch
+            if(bytecodeName.charAt(i)=='[')
+                arrayDepth++;
+        switch(bytecodeName.charAt(arrayDepth))
         {
             case 'I':
                 this.jniName = "jint";
@@ -108,16 +115,20 @@ public class JniType
                 if(bytecodeName.charAt(bytecodeName.length()-1)!=';') //not in the canonical form
                     throw new IllegalPatternException("Unknown bytecode type " + bytecodeName);
                 this.jniName = "jobject";
-                this.name = bytecodeName.substring(1, bytecodeName.length() - 1);
+                this.name = bytecodeName.substring(arrayDepth+1, bytecodeName.length() - 1);
                 this.doubleLength = false;
                 this.floatingPoint = false;
                 this.jvalueLetter = 'l';
                 if(this.name.length()==0)
                     throw new IllegalPatternException("Empty object name");
                 break;
-            //TODO: array support
             default:
                 throw new IllegalPatternException("Unknown bytecode type "+ bytecodeName);
+        }
+        if(arrayDepth>0)
+        {
+            this.jniName = "jobject";
+            this.jvalueLetter = 'l';
         }
     }
 
@@ -165,6 +176,16 @@ public class JniType
     public boolean isFloatingPoint()
     {
         return floatingPoint;
+    }
+
+
+    /**
+     * Returns the number of dimensions of an array. The output will be 0 if the type is not an array.
+     * @return the number of dimensions of an array. ie. for int[][] aka [[I will return 2
+     */
+    public int getArrayDepth()
+    {
+        return arrayDepth;
     }
 
     @Override

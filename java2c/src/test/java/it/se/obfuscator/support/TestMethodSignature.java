@@ -107,9 +107,15 @@ public class TestMethodSignature
     }
 
     @Test(expected = IllegalPatternException.class)
-    public void testMissingReturnType()
+    public void testMalformedObjectInput()
     {
-        MethodSignature ms = new MethodSignature("(II)");
+        MethodSignature ms = new MethodSignature("(Ljava/lang)V");
+    }
+
+    @Test(expected = IllegalPatternException.class)
+    public void testMalformedObjectReturn()
+    {
+        MethodSignature ms = new MethodSignature("(I)Ljava/lang");
     }
 
     @Test
@@ -131,5 +137,63 @@ public class TestMethodSignature
         assertEquals(false, ms0.equals(ms2));
         //different return type
         assertEquals(false, ms0.equals(ms3));
+    }
+
+    @Test(expected = IllegalPatternException.class)
+    public void testMissingReturnType()
+    {
+        MethodSignature ms = new MethodSignature("(II)");
+    }
+
+    @Test
+    public void testSingleIntArrayReturn()
+    {
+        MethodSignature ms = new MethodSignature("()[I");
+        assertEquals(0, ms.getInput().size());
+        assertEquals("jobject", ms.getReturnType().getJniName());
+        assertEquals(1,ms.getReturnType().getArrayDepth());
+    }
+
+    @Test
+    public void testMultidimensionalIntArrayReturn()
+    {
+        MethodSignature ms = new MethodSignature("()[[[[I");
+        assertEquals(0, ms.getInput().size());
+        assertEquals("jobject", ms.getReturnType().getJniName());
+        assertEquals(4,ms.getReturnType().getArrayDepth());
+    }
+
+    @Test
+    public void testMixedInputsArrays()
+    {
+        MethodSignature ms = new MethodSignature("(I[Ljava/lang/String;[[CLjava/util/ArrayList;[[[B)V");
+        assertEquals(5, ms.getInput().size());
+        assertEquals("jint", ms.getInput().get(0).getJniName());
+        assertEquals(0, ms.getInput().get(0).getArrayDepth());
+        assertEquals("jobject", ms.getInput().get(1).getJniName());
+        assertEquals("java/lang/String", ms.getInput().get(1).getName());
+        assertEquals(1, ms.getInput().get(1).getArrayDepth());
+        assertEquals("jobject", ms.getInput().get(2).getJniName());
+        assertEquals("jchar", ms.getInput().get(2).getName());
+        assertEquals(2, ms.getInput().get(2).getArrayDepth());
+        assertEquals("jobject", ms.getInput().get(3).getJniName());
+        assertEquals("java/util/ArrayList", ms.getInput().get(3).getName());
+        assertEquals(0, ms.getInput().get(3).getArrayDepth());
+        assertEquals("jbyte", ms.getInput().get(4).getName());
+        assertEquals("jobject", ms.getInput().get(4).getJniName());
+        assertEquals(3, ms.getInput().get(4).getArrayDepth());
+        assertEquals("void", ms.getReturnType().getJniName());
+    }
+
+    @Test(expected = IllegalPatternException.class)
+    public void testWrongArrayParamAsInput()
+    {
+        MethodSignature ms = new MethodSignature("([[[)I");
+    }
+
+    @Test(expected = IllegalPatternException.class)
+    public void testReturnWrongArray()
+    {
+        MethodSignature ms = new MethodSignature("(I)[");
     }
 }

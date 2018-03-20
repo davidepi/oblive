@@ -109,7 +109,29 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitMultiANewArrayInsn(String desc, int dims)
     {
-        throw new IllegalPatternException("Unimplemented opcode: MULTINEWARRAY");
+        switch(desc.charAt(desc.length()-1))
+        {
+            case 'I':
+                eb.statements.add("_NewMultidimensionalIntArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case 'Z':
+                eb.statements.add("_NewMultidimensionalBooleanArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case 'B':
+                eb.statements.add("_NewMultidimensionalByteArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case 'C':
+                eb.statements.add("_NewMultidimensionalCharArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case 'S':
+                eb.statements.add("_NewMultidimensionalShortArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case 'J':
+                eb.statements.add("_NewMultidimensionalLongArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case 'F':
+                eb.statements.add("_NewMultidimensionalFloatArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case 'D':
+                eb.statements.add("_NewMultidimensionalDoubleArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case ';':
+                eb.statements.add("_NewMultidimensionalObjectArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            default:
+                throw new IllegalPatternException("Unimplemented MULTIANEWARRAY array for type: "+desc);
+        }
     }
 
     @Override
@@ -172,6 +194,22 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case FCONST_2: eb.statements.add("pushf(_stack,&_index,2.f);");break;
             case DCONST_0: eb.statements.add("pushd(_stack,&_index,0.0);");break;
             case DCONST_1: eb.statements.add("pushd(_stack,&_index,1.0);");break;
+            case IALOAD: eb.statements.add("_IALoad(env,_stack,&_index);");break;
+            case LALOAD: eb.statements.add("_LALoad(env,_stack,&_index);");break;
+            case FALOAD: eb.statements.add("_FALoad(env,_stack,&_index);");break;
+            case DALOAD: eb.statements.add("_DALoad(env,_stack,&_index);");break;
+            case AALOAD: eb.statements.add("_AALoad(env,_stack,&_index);");break;
+            case BALOAD: eb.statements.add("_BALoad(env,_stack,&_index);");break;
+            case CALOAD: eb.statements.add("_CALoad(env,_stack,&_index);");break;
+            case SALOAD: eb.statements.add("_SALoad(env,_stack,&_index);");break;
+            case IASTORE: eb.statements.add("_IAStore(env,_stack,&_index);");break;
+            case LASTORE: eb.statements.add("_LAStore(env,_stack,&_index);");break;
+            case FASTORE: eb.statements.add("_FAStore(env,_stack,&_index);");break;
+            case DASTORE: eb.statements.add("_DAStore(env,_stack,&_index);");break;
+            case AASTORE: eb.statements.add("_AAStore(env,_stack,&_index);");break;
+            case BASTORE: eb.statements.add("_BAStore(env,_stack,&_index);");break;
+            case CASTORE: eb.statements.add("_CAStore(env,_stack,&_index);");break;
+            case SASTORE: eb.statements.add("_SAStore(env,_stack,&_index);");break;
             case POP: eb.statements.add("pop(_stack,&_index);");break;
             case POP2: eb.statements.add("pop2(_stack,&_index);");break;
             case DUP_X1: eb.statements.add("dupx1(_stack,&_index);");break;
@@ -242,6 +280,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case FRETURN: eb.statements.add("FRETURN;");break;
             case DRETURN: eb.statements.add("DRETURN;");break;
             case RETURN: eb.statements.add("VRETURN;");break;
+            case ARRAYLENGTH: eb.statements.add("_Arraylength(env,_stack,&_index);");break;
             case DUP:
                 if(!processingNew)
                    eb.statements.add("dup(_stack,&_index);");
@@ -262,6 +301,29 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case SIPUSH:
                 eb.statements.add("pushi(_stack,&_index,"+operand+");");break;
             case NEWARRAY:
+            {
+                switch(operand)
+                {
+                    case T_BOOLEAN:
+                        eb.statements.add("_NewBooleanArray(env,_stack,&_index);");break;
+                    case T_CHAR:
+                        eb.statements.add("_NewCharArray(env,_stack,&_index);");break;
+                    case T_FLOAT:
+                        eb.statements.add("_NewFloatArray(env,_stack,&_index);");break;
+                    case T_DOUBLE:
+                        eb.statements.add("_NewDoubleArray(env,_stack,&_index);");break;
+                    case T_BYTE:
+                        eb.statements.add("_NewByteArray(env,_stack,&_index);");break;
+                    case T_SHORT:
+                        eb.statements.add("_NewShortArray(env,_stack,&_index);");break;
+                    case T_INT:
+                        eb.statements.add("_NewIntArray(env,_stack,&_index);");break;
+                    case T_LONG:
+                        eb.statements.add("_NewLongArray(env,_stack,&_index);");break;
+                    default:
+                        throw new IllegalPatternException("Unimplemented opcode: NEWARRAY with type "+operand);
+                }
+            }break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
@@ -365,6 +427,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case NEW:
                     processingNew = true;
                 break;
+            case ANEWARRAY:
+                eb.statements.add("_NewObjectArray(env,_stack,&_index,\""+type+"\");");break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
