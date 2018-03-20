@@ -429,6 +429,10 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 break;
             case ANEWARRAY:
                 eb.statements.add("_NewObjectArray(env,_stack,&_index,\""+type+"\");");break;
+            case INSTANCEOF:
+                eb.statements.add("_InstanceOf(env,_stack,&_index,\""+type+"\");");break;
+            case CHECKCAST:
+                eb.statements.add("_CheckCast(env,_stack,&_index,\""+type+"\");");break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }

@@ -325,3 +325,4 @@ static inline void _Iinc(generic_t* vars, int varindex, int increment)
 {
   (vars[varindex].i)+=increment;
 }
+

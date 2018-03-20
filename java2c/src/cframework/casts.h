@@ -102,3 +102,34 @@ static inline void _double2float(generic_t* stack, uint32_t* index)
   res.f = (jfloat)pop2(stack,index).d;
   push(stack,index,res);
 }
+
+static inline void _InstanceOf(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className)
+{
+  jobject obj = pop(stack,index).l;
+  generic_t res;
+  if(obj!=NULL)
+  {
+    jclass caller_class = (*env)->FindClass(env, className);if(caller_class == NULL){fprintf(stderr,"Class %s not found\n",className);exit(EXIT_FAILURE);}
+    res.z = (*env)->IsInstanceOf(env,obj,caller_class);
+  }
+  else
+    res.z = 0;
+  push(stack,index,res);
+}
+
+static inline void _CheckCast(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className)
+{
+  generic_t obj = pop(stack,index);
+  if(obj.l!=NULL)
+  {
+    jclass caller_class = (*env)->FindClass(env, className);if(caller_class == NULL){fprintf(stderr,"Class %s not found\n",className);exit(EXIT_FAILURE);}
+    if((*env)->IsInstanceOf(env,obj.l,caller_class))
+    {
+      push(stack,index,obj);
+    }
+    else
+    /* exception */;
+  }
+  else
+    push(stack,index,obj);
+}
