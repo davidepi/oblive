@@ -176,6 +176,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case LALOAD: eb.statements.add("_LALoad(env,_stack,&_index);");break;
             case FALOAD: eb.statements.add("_FALoad(env,_stack,&_index);");break;
             case DALOAD: eb.statements.add("_DALoad(env,_stack,&_index);");break;
+            case AALOAD: eb.statements.add("_AALoad(env,_stack,&_index);");break;
             case BALOAD: eb.statements.add("_BALoad(env,_stack,&_index);");break;
             case CALOAD: eb.statements.add("_CALoad(env,_stack,&_index);");break;
             case SALOAD: eb.statements.add("_SALoad(env,_stack,&_index);");break;
@@ -183,6 +184,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case LASTORE: eb.statements.add("_LAStore(env,_stack,&_index);");break;
             case FASTORE: eb.statements.add("_FAStore(env,_stack,&_index);");break;
             case DASTORE: eb.statements.add("_DAStore(env,_stack,&_index);");break;
+            case AASTORE: eb.statements.add("_AAStore(env,_stack,&_index);");break;
             case BASTORE: eb.statements.add("_BAStore(env,_stack,&_index);");break;
             case CASTORE: eb.statements.add("_CAStore(env,_stack,&_index);");break;
             case SASTORE: eb.statements.add("_SAStore(env,_stack,&_index);");break;

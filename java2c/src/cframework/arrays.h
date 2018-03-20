@@ -159,6 +159,15 @@ static inline void _DALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
   push2(stack,index,res);
 }
 
+static inline void _AALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  generic_t res;
+  res.l = (*env)->GetObjectArrayElement(env,array,array_index);
+  push(stack,index,res);
+}
+
 static inline void _BALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
   jint array_index = pop(stack,index).i;
@@ -216,6 +225,14 @@ static inline void _DAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
   (*env)->SetDoubleArrayRegion(env,array,array_index,1,&val);
+}
+
+static inline void _AAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  jobject val = pop(stack,index).l;
+  jint array_index = pop(stack,index).i;
+  jarray array = pop(stack,index).l;
+  (*env)->SetObjectArrayElement(env,array,array_index,val);
 }
 
 static inline void _BAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
