@@ -109,7 +109,13 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitMultiANewArrayInsn(String desc, int dims)
     {
-        throw new IllegalPatternException("Unimplemented opcode: MULTINEWARRAY");
+        switch(desc.charAt(desc.length()-1))
+        {
+            case 'I':
+                eb.statements.add("_NewMultidimensionalIntArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            default:
+                throw new IllegalPatternException("Unimplemented MULTIANEWARRAY array for type: "+desc);
+        }
     }
 
     @Override

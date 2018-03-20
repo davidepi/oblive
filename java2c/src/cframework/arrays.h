@@ -115,6 +115,43 @@ static inline void _NewObjectArray(JNIEnv* env, generic_t* stack, uint32_t* inde
   push(stack,index,res);
 }
 
+static inline jobject multidimarray_int_rec(JNIEnv* env, const int* dimslen, int current_dimension, const char* className)
+{
+  jobject array;
+  if(current_dimension>0)
+  {
+    jclass caller_class = (*env)->FindClass(env, className);if(caller_class == NULL){fprintf(stderr,"Class %s not found\n",className);exit(EXIT_FAILURE);}
+    array = (*env)->NewObjectArray(env,dimslen[current_dimension],caller_class,0);
+    OUT_OF_MEMORY_CHECK
+    for(int i=0;i<dimslen[current_dimension];i++)
+      //recursive initialization
+      (*env)->SetObjectArrayElement(env,array,i,multidimarray_int_rec(env,dimslen,current_dimension-1,className+1));
+  }
+  else
+  {
+    //last initialization. Primitive array so it needs to be zeroed out
+    int size = *dimslen;
+    array = (*env)->NewIntArray(env,size);
+    OUT_OF_MEMORY_CHECK
+    jint values[size];
+    memset(values,0,size*sizeof(jint));
+    (*env)->SetIntArrayRegion(env, array, 0, dimslen[current_dimension], values);
+  }
+  return array;
+}
+
+static inline void _NewMultidimensionalIntArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
+{
+  //dimensions is known at compile time
+  int dimslen[dimensions];
+  for(int i=0;i<dimensions;i++) //pushed in reverse order, so I can know when to stop
+    dimslen[i] = pop(stack,index).i;
+  //recursive step
+  generic_t res;
+  res.l = multidimarray_int_rec(env,dimslen,dimensions-1,className+1);
+  push(stack,index,res);
+}
+
 static inline void _Arraylength(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
   jarray array = pop(stack,index).l;
