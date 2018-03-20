@@ -2,9 +2,9 @@ package it.se.obfuscator.tests.arrays.multidimensional;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestStoreArrayIntMultiDim extends AbstractTestMethodTemplate
+public class TestStoreArrayShort extends AbstractTestMethodTemplate
 {
-    private Class<?> className = testclasses.arrays.multidimensional.StoreArrayInt.class;
+    private Class<?> className = testclasses.arrays.multidimensional.StoreArrayShort.class;
     private String[] methodTest = {"test"};
     private Class[][] methodParam = {new Class[]{}};
     private Object[][] methodArgs = {new Object[]{}};
@@ -24,7 +24,7 @@ public class TestStoreArrayIntMultiDim extends AbstractTestMethodTemplate
     @Override
     public Class<?>[] getAnnotatedMethodParams(int position)
     {
-        return new Class[]{int.class,int.class,int.class};
+        return new Class[]{int.class,int.class,short.class};
     }
 
     @Override
