@@ -23,7 +23,7 @@ public class NewArrayInt
         int[][] native_array = this.getArray();
         for(int i=0;i<native_array.length;i++)
         {
-            ArrayList<Integer> current = new ArrayList<Integer>(3);
+            ArrayList<Integer> current = new ArrayList<>(3);
             res.add(current);
 
         }

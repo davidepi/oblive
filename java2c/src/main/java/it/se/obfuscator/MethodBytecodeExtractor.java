@@ -113,6 +113,22 @@ public class MethodBytecodeExtractor extends MethodVisitor
         {
             case 'I':
                 eb.statements.add("_NewMultidimensionalIntArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case 'Z':
+                eb.statements.add("_NewMultidimensionalBooleanArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case 'B':
+                eb.statements.add("_NewMultidimensionalByteArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case 'C':
+                eb.statements.add("_NewMultidimensionalCharArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case 'S':
+                eb.statements.add("_NewMultidimensionalShortArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case 'J':
+                eb.statements.add("_NewMultidimensionalLongArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case 'F':
+                eb.statements.add("_NewMultidimensionalFloatArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case 'D':
+                eb.statements.add("_NewMultidimensionalDoubleArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+            case ';':
+                eb.statements.add("_NewMultidimensionalObjectArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
             default:
                 throw new IllegalPatternException("Unimplemented MULTIANEWARRAY array for type: "+desc);
         }
