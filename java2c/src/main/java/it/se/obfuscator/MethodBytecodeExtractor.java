@@ -206,7 +206,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case LASTORE: eb.statements.add("_LAStore(env,_stack,&_index);");break;
             case FASTORE: eb.statements.add("_FAStore(env,_stack,&_index);");break;
             case DASTORE: eb.statements.add("_DAStore(env,_stack,&_index);");break;
-            case AASTORE: eb.statements.add("_AAStore(env,_stack,&_index);");break;
+            case AASTORE: eb.statements.add("HANDLE_EXCEPTION(_AAStore(env,_stack,&_index),ARRAY_STORE_EXCEPTION);");break;
             case BASTORE: eb.statements.add("_BAStore(env,_stack,&_index);");break;
             case CASTORE: eb.statements.add("_CAStore(env,_stack,&_index);");break;
             case SASTORE: eb.statements.add("_SAStore(env,_stack,&_index);");break;

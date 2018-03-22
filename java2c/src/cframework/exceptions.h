@@ -2,3 +2,4 @@
 #define RAISE_EXCEPTION(NAME) {exception=(*env)->FindClass(env, NAME );(*env)->ThrowNew(env,exception,"");return 0;}
 #define CLASS_CAST_EXCEPTION "java/lang/ClassCastException"
 #define ARITHMETIC_EXCEPTION "java/lang/ArithmeticException"
+#define ARRAY_STORE_EXCEPTION "java/lang/ArrayStoreException"

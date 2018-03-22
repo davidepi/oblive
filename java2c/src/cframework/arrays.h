@@ -227,12 +227,16 @@ static inline void _DAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
   (*env)->SetDoubleArrayRegion(env,array,array_index,1,&val);
 }
 
-static inline void _AAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _AAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
+  char retval = 0;
   jobject val = pop(stack,index).l;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
   (*env)->SetObjectArrayElement(env,array,array_index,val);
+  if((*env)->ExceptionCheck(env))
+    retval = 1;
+  return retval;
 }
 
 static inline void _BAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
