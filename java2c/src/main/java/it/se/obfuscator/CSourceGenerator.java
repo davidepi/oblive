@@ -44,6 +44,7 @@ public class CSourceGenerator
         sb.append("generic_t _vars[");
         sb.append(eb.maxLVar);
         sb.append("];\n");
+        sb.append("jclass exception = NULL;\n");
 
         //push arguments into local vars
         int vars_index = 0; //vars_index, could differ from actual operands index because of static functions or double words;

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import it.se.obfuscator.IllegalPatternException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.objectweb.asm.ClassReader;
@@ -147,7 +148,7 @@ public abstract class AbstractTransformationTest {
 		// check for same semantics
 		for (int i=0; i<getTestMethodSize(); i++){
 			String message = "method: " + getTestMethodName(i) + ", class: " + getTestClass().getName() + " --- Different execution result";
-			Assert.assertEquals(message, result1[i], result2[i]);
+			assertSame(message,result1[i],result2[i]);
 		}
 		
 		// check transformed methods
@@ -213,7 +214,12 @@ public abstract class AbstractTransformationTest {
 		Object[] result1 = new Object[length];
 		for (int i=0; i<length; i++){
 			method1[i] = getTestClass().getMethod(getTestMethodName(i), getTestMethodParams(i) );
-			result1[i] = method1[i].invoke(object1, getTestMethodArgs(i));
+			try {
+				result1[i] = method1[i].invoke(object1, getTestMethodArgs(i));
+			}
+			catch (InvocationTargetException e) {
+				result1[i] = e.getCause();
+			}
 		}
 		return result1;
 	}
@@ -249,7 +255,12 @@ public abstract class AbstractTransformationTest {
 		Object[] result2 = new Object[length];
 		for (int i=0; i<length; i++){
 			method2[i] = testClass2.getMethod(getTestMethodName(i), getTestMethodParams(i) );
-			result2[i] = method2[i].invoke(object2, getTestMethodArgs(i));
+            try {
+                result2[i] = method2[i].invoke(object2, getTestMethodArgs(i));
+            }
+            catch (InvocationTargetException e) {
+                result2[i] = e.getCause();
+            }
 		}
 		return result2;
 	}
@@ -411,4 +422,13 @@ public abstract class AbstractTransformationTest {
 //			}
 //		}
 	}
+
+	private void assertSame(String message, Object result1, Object result2)
+    {
+        if(result1 instanceof Throwable && result2 instanceof Throwable) {
+            Assert.assertEquals(message,result1.getClass(),result2.getClass());
+        }
+        else
+            Assert.assertEquals(message, result1, result2);
+    }
 }
