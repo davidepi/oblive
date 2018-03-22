@@ -1,15 +1,13 @@
-package it.se.obfuscator.tests.arithmetic;
+package it.se.obfuscator.tests.exceptions;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestFRem extends AbstractTestMethodTemplate
+public class TestThrowArithmeticExceptionLDIV extends AbstractTestMethodTemplate
 {
-
-    private Class<?> className = testclasses.arithmetic.FRem.class;
-    private String[] methodTest = {"exec","exec"};
-    private Class[][] methodParam = {new Class[]{float.class,float.class},new Class[]{float.class,float.class}};
-    private Object[][] methodArgs = {new Object[]{3.5f,0.5f},new Object[]{3.5f,0}};
-
+    private Class<?> className = testclasses.exceptions.ThrowArithmeticExceptionLDIV.class;
+    private String[] methodTest = {"divide"};
+    private Class[][] methodParam = {new Class[]{long.class}};
+    private Object[][] methodArgs = {new Object[]{10}};
 
     @Override
     public Class<?> getTestClass()

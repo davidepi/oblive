@@ -107,22 +107,36 @@ static inline void _DMul(generic_t* stack, uint32_t* index)
   push2(stack,index,res);
 }
 
-static inline void _IDiv(generic_t* stack, uint32_t* index)
+static inline char _IDiv(generic_t* stack, uint32_t* index)
 {
+    char retval = 0;
     jint b = pop(stack,index).i;
     jint a = pop(stack,index).i;
-    generic_t res;
-    res.i = a/b;
-    push(stack,index,res);
+    if(b!=0)
+    {
+      generic_t res;
+      res.i = a/b;
+      push(stack,index,res);
+    }
+    else
+      retval = 1;
+    return retval;
 }
 
-static inline void _LDiv(generic_t* stack, uint32_t* index)
+static inline char _LDiv(generic_t* stack, uint32_t* index)
 {
+  char retval = 0;
   jlong b = pop2(stack,index).j;
   jlong a = pop2(stack,index).j;
-  generic_t res;
-  res.j = a/b;
-  push2(stack,index,res);
+  if(b!=0)
+  {
+    generic_t res;
+    res.j = a/b;
+    push2(stack,index,res);
+  }
+  else
+    retval = 1;
+  return retval;
 }
 
 static inline void _FDiv(generic_t* stack, uint32_t* index)
@@ -143,22 +157,36 @@ static inline void _DDiv(generic_t* stack, uint32_t* index)
   push2(stack,index,res);
 }
 
-static inline void _IRem(generic_t* stack, uint32_t* index)
+static inline char _IRem(generic_t* stack, uint32_t* index)
 {
+  char retval = 0;
     jint b = pop(stack,index).i;
     jint a = pop(stack,index).i;
-    generic_t res;
-    res.i = a%b;
-    push(stack,index,res);
+    if(b!=0)
+    {
+      generic_t res;
+      res.i = a%b;
+      push(stack,index,res);
+    }
+    else
+      retval = 1;
+    return retval;
 }
 
-static inline void _LRem(generic_t* stack, uint32_t* index)
+static inline char _LRem(generic_t* stack, uint32_t* index)
 {
+  char retval = 0;
   jlong b = pop2(stack,index).j;
   jlong a = pop2(stack,index).j;
-  generic_t res;
-  res.j = a%b;
-  push2(stack,index,res);
+  if(b!=0)
+  {
+    generic_t res;
+    res.j = a%b;
+    push2(stack,index,res);
+  }
+  else
+    retval = 1;
+  return retval;
 }
 
 static inline void _FRem(generic_t* stack, uint32_t* index)

@@ -2,16 +2,16 @@ package testclasses.exceptions;
 
 import it.se.obfuscator.Obfuscate;
 
-public class ThrowClassCastException
+public class ThrowArithmeticExceptionIDIV
 {
-    public ThrowClassCastException()
+    public ThrowArithmeticExceptionIDIV()
     {
 
     }
 
     @Obfuscate
-    public static String castString(Object a)
+    public static int divide(int a)
     {
-        return (String)a;
+        return a/0;
     }
 }

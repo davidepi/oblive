@@ -230,12 +230,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case LMUL: eb.statements.add("_LMul(_stack,&_index);");break;
             case FMUL: eb.statements.add("_FMul(_stack,&_index);");break;
             case DMUL: eb.statements.add("_DMul(_stack,&_index);");break;
-            case IDIV: eb.statements.add("_IDiv(_stack,&_index);");break;
-            case LDIV: eb.statements.add("_LDiv(_stack,&_index);");break;
+            case IDIV: eb.statements.add("HANDLE_EXCEPTION(_IDiv(_stack,&_index),ARITHMETIC_EXCEPTION);");break;
+            case LDIV: eb.statements.add("HANDLE_EXCEPTION(_LDiv(_stack,&_index),ARITHMETIC_EXCEPTION);");break;
             case FDIV: eb.statements.add("_FDiv(_stack,&_index);");break;
             case DDIV: eb.statements.add("_DDiv(_stack,&_index);");break;
-            case IREM: eb.statements.add("_IRem(_stack,&_index);");break;
-            case LREM: eb.statements.add("_LRem(_stack,&_index);");break;
+            case IREM: eb.statements.add("HANDLE_EXCEPTION(_IRem(_stack,&_index),ARITHMETIC_EXCEPTION);");break;
+            case LREM: eb.statements.add("HANDLE_EXCEPTION(_LRem(_stack,&_index),ARITHMETIC_EXCEPTION)");break;
             case FREM: eb.statements.add("_FRem(_stack,&_index);");break;
             case DREM: eb.statements.add("_DRem(_stack,&_index);");break;
             case INEG: eb.statements.add("_INeg(_stack,&_index);");break;
@@ -432,7 +432,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case INSTANCEOF:
                 eb.statements.add("_InstanceOf(env,_stack,&_index,\""+type+"\");");break;
             case CHECKCAST:
-                eb.statements.add("if(_CheckCast(env,_stack,&_index,\""+type+"\"))RAISE_EXCEPTION(CLASS_CAST_EXCEPTION);");break;
+                eb.statements.add("HANDLE_EXCEPTION(_CheckCast(env,_stack,&_index,\""+type+"\"),CLASS_CAST_EXCEPTION);");break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }

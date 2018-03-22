@@ -427,6 +427,7 @@ public abstract class AbstractTransformationTest {
     {
         if(result1 instanceof Throwable && result2 instanceof Throwable) {
             Assert.assertEquals(message,result1.getClass(),result2.getClass());
+//            Assert.assertEquals(message,((Throwable) result1).getMessage(),((Throwable) result2).getMessage());
         }
         else
             Assert.assertEquals(message, result1, result2);

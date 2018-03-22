@@ -4,12 +4,12 @@ import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
 import java.io.File;
 
-public class TestThrowClassCastException extends AbstractTestMethodTemplate
+public class TestThrowArithmeticExceptionIDIV extends AbstractTestMethodTemplate
 {
-    private Class<?> className = testclasses.exceptions.ThrowClassCastException.class;
-    private String[] methodTest = {"castString"};
-    private Class[][] methodParam = {new Class[]{Object.class}};
-    private Object[][] methodArgs = {new Object[]{new File("aaa")}};
+    private Class<?> className = testclasses.exceptions.ThrowArithmeticExceptionIDIV.class;
+    private String[] methodTest = {"divide"};
+    private Class[][] methodParam = {new Class[]{int.class}};
+    private Object[][] methodArgs = {new Object[]{10}};
 
     @Override
     public Class<?> getTestClass()
