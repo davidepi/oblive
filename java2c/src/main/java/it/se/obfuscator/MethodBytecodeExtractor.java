@@ -69,7 +69,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
         eb.statements.add("goto LABEL_"+label.toString()+";");
-        eb.usedLabels.add(label.toString());
+        eb.usedLabels.add("LABEL_"+label.toString());
     }
 
     @Override
@@ -84,10 +84,10 @@ public class MethodBytecodeExtractor extends MethodVisitor
         eb.statements.add("switch(pop(_stack,&_index).i){");
         for(int i=0;i<labels.length;i++)
         {
-            eb.usedLabels.add(labels[i].toString());
+            eb.usedLabels.add("LABEL_"+labels[i].toString());
             eb.statements.add("case "+(i+min)+": goto LABEL_"+labels[i].toString()+";");
         }
-        eb.usedLabels.add(dflt.toString());
+        eb.usedLabels.add("LABEL_"+dflt.toString());
         eb.statements.add("default: goto LABEL_"+dflt.toString()+";");
         eb.statements.add("}");
     }
@@ -98,10 +98,10 @@ public class MethodBytecodeExtractor extends MethodVisitor
         eb.statements.add("switch(pop(_stack,&_index).i){");
         for(int i=0;i<labels.length;i++)
         {
-            eb.usedLabels.add(labels[i].toString());
+            eb.usedLabels.add("LABEL_"+labels[i].toString());
             eb.statements.add("case "+(keys[i])+": goto LABEL_"+labels[i].toString()+";");
         }
-        eb.usedLabels.add(dflt.toString());
+        eb.usedLabels.add("LABEL_"+dflt.toString());
         eb.statements.add("default: goto LABEL_"+dflt.toString()+";");
         eb.statements.add("}");
     }
@@ -174,6 +174,31 @@ public class MethodBytecodeExtractor extends MethodVisitor
     }
 
     @Override
+    public void visitTryCatchBlock(Label start, Label end, Label handler, String type)
+    {
+        String entryLabel = "LABEL_"+start.toString();
+        String exitLabel = "LABEL_"+end.toString();
+        String handlerLabel = "LABEL_"+handler.toString();
+        String value;
+
+        //process entry point
+        value = eb.tryCatchEntryPoint.get(entryLabel);
+        if(value==null)
+            value = "";
+        value += "#define CATCH_" + type.replaceAll("/","_") + " "+ handlerLabel + "\n";
+        eb.tryCatchEntryPoint.put(entryLabel,value);
+
+        //process exit point
+        value = eb.tryCatchExitPoint.get(exitLabel);
+        if(value==null)
+            value = "";
+        value += "#undef CATCH_"+type.replaceAll("/","_") + "\n";
+        eb.tryCatchExitPoint.put(exitLabel,value);
+
+        eb.usedLabels.add(handlerLabel);
+    }
+
+    @Override
     public void visitInsn(int opcode)
     {
         switch(opcode)
@@ -194,7 +219,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case FCONST_2: eb.statements.add("pushf(_stack,&_index,2.f);");break;
             case DCONST_0: eb.statements.add("pushd(_stack,&_index,0.0);");break;
             case DCONST_1: eb.statements.add("pushd(_stack,&_index,1.0);");break;
-            case IALOAD: eb.statements.add("_IALoad(env,_stack,&_index);");break;
+            case IALOAD: eb.statements.add("HANDLE_EXCEPTION(_IALoad(env,_stack,&_index),INDEX_OUT_OF_BOUNDS_EXCEPTION);");break;
             case LALOAD: eb.statements.add("_LALoad(env,_stack,&_index);");break;
             case FALOAD: eb.statements.add("_FALoad(env,_stack,&_index);");break;
             case DALOAD: eb.statements.add("_DALoad(env,_stack,&_index);");break;
@@ -432,7 +457,16 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case INSTANCEOF:
                 eb.statements.add("_InstanceOf(env,_stack,&_index,\""+type+"\");");break;
             case CHECKCAST:
-                eb.statements.add("HANDLE_EXCEPTION(_CheckCast(env,_stack,&_index,\""+type+"\"),CLASS_CAST_EXCEPTION);");break;
+                eb.statements.add("if(_CheckCast(env,_stack,&_index,\""+type+"\"))\n" +
+                        "#ifdef CATCH_java_lang_ClassCastException\n" +
+                        "{_index = 0;\n" +
+                        "_New(env,_stack,&_index,\"java/lang/ClassCastException\",\"()V\",NULL);\n" +
+                        "goto CATCH_java_lang_ClassCastException;}\n" +
+                        "#else\n" +
+                        "{exception=(*env)->FindClass(env,\"java/lang/ClassCastException\");\n" +
+                        "(*env)->ThrowNew(env,exception,\"\");\n"+
+                        "RETURN_EXCEPTION;}\n" +
+                        "#endif\n");break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }

@@ -11,6 +11,10 @@ public class CSourceGenerator
     public static String generateCode(String className, String methodName, MethodSignature signature, ExtractedBytecode eb)
     {
         StringBuilder sb = new StringBuilder();
+        if(signature.getReturnType().getJniName().equals("void"))
+            sb.append("#define RETURN_EXCEPTION return;\n");
+        else
+            sb.append("#define RETURN_EXCEPTION return 0;\n");
         sb.append("JNIEXPORT ");
         sb.append(signature.getReturnType().getJniName());
         if(signature.getReturnType().getArrayDepth()>0)
