@@ -2,9 +2,9 @@ package it.se.obfuscator.tests.exceptions.outofbounds;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class TestThrowArrayLoadOutOfBoundsInt extends AbstractTestMethodTemplate
+public class TestCatchArrayLoadOutOfBoundsInt extends AbstractTestMethodTemplate
 {
-    private Class<?> className = testclasses.exceptions.outofbounds.ThrowArrayLoadOutOfBoundsInt.class;
+    private Class<?> className = testclasses.exceptions.outofbounds.CatchArrayLoadOutOfBoundsInt.class;
     private String[] methodTest = {"exec"};
     private Class[][] methodParam = {new Class[]{}};
     private Object[][] methodArgs = {new Object[]{}};

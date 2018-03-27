@@ -1,13 +1,13 @@
-package it.se.obfuscator.tests.exceptions;
+package it.se.obfuscator.tests.exceptions.outofbounds;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class CatchThrowArithmeticExceptionIREM extends AbstractTestMethodTemplate
+public class TestCatchArrayLoadOutOfBoundsShort extends AbstractTestMethodTemplate
 {
-    private Class<?> className = testclasses.exceptions.CatchArithmeticExceptionIREM.class;
-    private String[] methodTest = {"divide"};
-    private Class[][] methodParam = {new Class[]{int.class}};
-    private Object[][] methodArgs = {new Object[]{10}};
+    private Class<?> className = testclasses.exceptions.outofbounds.CatchArrayLoadOutOfBoundsShort.class;
+    private String[] methodTest = {"exec"};
+    private Class[][] methodParam = {new Class[]{}};
+    private Object[][] methodArgs = {new Object[]{}};
 
     @Override
     public Class<?> getTestClass()

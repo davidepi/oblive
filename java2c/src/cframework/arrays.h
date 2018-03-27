@@ -86,67 +86,116 @@ static inline char _IALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
   return retval;
 }
 
-static inline void _LALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _LALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
+  char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
-  generic_t res;
-  (*env)->GetLongArrayRegion(env,array,array_index,1,&(res.j));
-  push2(stack,index,res);
+  if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
+  {
+    generic_t res;
+    (*env)->GetLongArrayRegion(env,array,array_index,1,&(res.j));
+    push2(stack,index,res);
+  }
+  else
+    retval = 1;
+  return retval;
 }
 
-static inline void _FALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _FALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
+  char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
-  generic_t res;
-  (*env)->GetFloatArrayRegion(env,array,array_index,1,&(res.f));
-  push(stack,index,res);
+  if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
+  {
+    generic_t res;
+    (*env)->GetFloatArrayRegion(env,array,array_index,1,&(res.f));
+    push(stack,index,res);
+  }
+  else
+    retval = 1;
+  return retval;
 }
 
-static inline void _DALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _DALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
+  char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
-  generic_t res;
-  (*env)->GetDoubleArrayRegion(env,array,array_index,1,&(res.d));
-  push2(stack,index,res);
+  if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
+  {
+    generic_t res;
+    (*env)->GetDoubleArrayRegion(env,array,array_index,1,&(res.d));
+    push2(stack,index,res);
+  }
+  else
+    retval = 1;
+  return retval;
 }
 
-static inline void _AALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _AALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
+  char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
-  generic_t res;
-  res.l = (*env)->GetObjectArrayElement(env,array,array_index);
-  push(stack,index,res);
+  if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
+  {
+    generic_t res;
+    res.l = (*env)->GetObjectArrayElement(env,array,array_index);
+    push(stack,index,res);
+  }
+  else
+    retval = 1;
+  return retval;
 }
 
-static inline void _BALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _BALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
+  char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
-  generic_t res;
-  (*env)->GetByteArrayRegion(env,array,array_index,1,&(res.b));
-  push(stack,index,res);
+  if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
+  {
+    generic_t res;
+    (*env)->GetByteArrayRegion(env,array,array_index,1,&(res.b));
+    push(stack,index,res);
+  }
+  else
+    retval = 1;
+  return retval;
 }
 
-static inline void _CALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _CALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
+  char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
-  generic_t res;
-  (*env)->GetCharArrayRegion(env,array,array_index,1,&(res.c));
-  push(stack,index,res);
+  if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
+  {
+    generic_t res;
+    (*env)->GetCharArrayRegion(env,array,array_index,1,&(res.c));
+    push(stack,index,res);
+  }
+  else
+    retval = 1;
+  return retval;
 }
 
-static inline void _SALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _SALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
+  char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
-  generic_t res;
-  (*env)->GetShortArrayRegion(env,array,array_index,1,&(res.s));
-  push(stack,index,res);
+  if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
+  {
+    generic_t res;
+    (*env)->GetShortArrayRegion(env,array,array_index,1,&(res.s));
+    push(stack,index,res);
+  }
+  else
+    retval = 1;
+  return retval;
 }
 
 static inline void _IAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
