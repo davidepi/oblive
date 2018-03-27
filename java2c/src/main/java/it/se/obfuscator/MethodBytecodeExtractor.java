@@ -256,12 +256,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case LMUL: eb.statements.add("_LMul(_stack,&_index);");break;
             case FMUL: eb.statements.add("_FMul(_stack,&_index);");break;
             case DMUL: eb.statements.add("_DMul(_stack,&_index);");break;
-            case IDIV: eb.statements.add("HANDLE_EXCEPTION(_IDiv(_stack,&_index),ARITHMETIC_EXCEPTION);");break;
-            case LDIV: eb.statements.add("HANDLE_EXCEPTION(_LDiv(_stack,&_index),ARITHMETIC_EXCEPTION);");break;
+            case IDIV: eb.statements.add(handleSystemException("_IDiv(_stack,&_index)",ArithmeticException.class.getName()));break;
+            case LDIV: eb.statements.add(handleSystemException("_LDiv(_stack,&_index)",ArithmeticException.class.getName()));break;
             case FDIV: eb.statements.add("_FDiv(_stack,&_index);");break;
             case DDIV: eb.statements.add("_DDiv(_stack,&_index);");break;
-            case IREM: eb.statements.add("HANDLE_EXCEPTION(_IRem(_stack,&_index),ARITHMETIC_EXCEPTION);");break;
-            case LREM: eb.statements.add("HANDLE_EXCEPTION(_LRem(_stack,&_index),ARITHMETIC_EXCEPTION)");break;
+            case IREM: eb.statements.add(handleSystemException("_IRem(_stack,&_index)",ArithmeticException.class.getName()));break;
+            case LREM: eb.statements.add(handleSystemException("_LRem(_stack,&_index)",ArithmeticException.class.getName()));break;
             case FREM: eb.statements.add("_FRem(_stack,&_index);");break;
             case DREM: eb.statements.add("_DRem(_stack,&_index);");break;
             case INEG: eb.statements.add("_INeg(_stack,&_index);");break;
@@ -458,35 +458,39 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case INSTANCEOF:
                 eb.statements.add("_InstanceOf(env,_stack,&_index,\""+type+"\");");break;
             case CHECKCAST:
-                eb.statements.add("if(_CheckCast(env,_stack,&_index,\""+type+"\"))\n"+checkCastExceptionHandling());break;
+                eb.statements.add(handleSystemException("_CheckCast(env,_stack,&_index,\""+type+"\")",ClassCastException.class.getName()));break;
 
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
     }
 
-    private String checkCastExceptionHandling()
+    private String handleSystemException(String stmt, String excpName)
     {
-        return "#ifdef CATCH_java_lang_ClassCastException\n" +
+        String exception = excpName.replaceAll("\\.","_");
+        String className = excpName.replaceAll("\\.","/");
+        return "if("+stmt+")\n" +
+                "#ifdef CATCH_"+exception+"\n"+
                 "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\"java/lang/ClassCastException\",\"()V\",NULL);\n" +
-                "goto CATCH_java_lang_ClassCastException;}\n" +
+                "_New(env,_stack,&_index,\""+className+"\",\"()V\",NULL);\n" +
+                "goto CATCH_"+exception+";}\n" +
                 "#elif defined(CATCH_java_lang_RuntimeException)\n"+
                 "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\"java/lang/ClassCastException\",\"()V\",NULL);\n" +
+                "_New(env,_stack,&_index,\""+className+"\",\"()V\",NULL);\n" +
                 "goto CATCH_java_lang_RuntimeException;}\n" +
                 "#elif defined(CATCH_java_lang_Exception)\n"+
                 "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\"java/lang/ClassCastException\",\"()V\",NULL);\n" +
+                "_New(env,_stack,&_index,\""+className+"\",\"()V\",NULL);\n" +
                 "goto CATCH_java_lang_Exception;}\n" +
                 "#elif defined(CATCH_java_lang_Throwable)\n"+
                 "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\"java/lang/ClassCastException\",\"()V\",NULL);\n" +
+                "_New(env,_stack,&_index,\""+className+"\",\"()V\",NULL);\n" +
                 "goto CATCH_java_lang_Throwable;}\n" +
                 "#else\n" +
-                "{ exception=(*env)->FindClass(env,\"java/lang/ClassCastException\");\n" +
+                "{ exception=(*env)->FindClass(env,\""+className+"\");\n" +
                 "(*env)->ThrowNew(env,exception,\"\");\n"+
                 "RETURN_EXCEPTION;}\n" +
                 "#endif\n";
+
     }
 }
