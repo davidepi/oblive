@@ -5,6 +5,7 @@ import java.util.*;
 public class ExtractedBytecode
 {
     public List<String> statements;
+    public List<String> labels; //ordered labels
     public Set<String> usedLabels;
     public Map<String,String> tryCatchEntryPoint;
     public Map<String,String> tryCatchExitPoint;
@@ -15,6 +16,7 @@ public class ExtractedBytecode
     public ExtractedBytecode(boolean isStatic)
     {
         statements = new ArrayList<String>();
+        labels = new ArrayList<String>();
         usedLabels = new HashSet<String>();
         tryCatchEntryPoint = new HashMap<>();
         tryCatchExitPoint = new HashMap<>();
@@ -22,7 +24,7 @@ public class ExtractedBytecode
     }
 
     //remove unnecessary labels and add try-catch defines
-    public void stripLabels()
+    public void preprocess()
     {
         ListIterator<String> it = statements.listIterator();
         while(it.hasNext())

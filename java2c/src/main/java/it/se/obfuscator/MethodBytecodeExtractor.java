@@ -76,6 +76,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
     public void visitLabel(Label label)
     {
         eb.statements.add("LABEL_"+label.toString()+":");
+        eb.labels.add("LABEL_"+label.toString());
     }
 
     @Override
@@ -457,18 +458,35 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case INSTANCEOF:
                 eb.statements.add("_InstanceOf(env,_stack,&_index,\""+type+"\");");break;
             case CHECKCAST:
-                eb.statements.add("if(_CheckCast(env,_stack,&_index,\""+type+"\"))\n" +
-                        "#ifdef CATCH_java_lang_ClassCastException\n" +
-                        "{_index = 0;\n" +
-                        "_New(env,_stack,&_index,\"java/lang/ClassCastException\",\"()V\",NULL);\n" +
-                        "goto CATCH_java_lang_ClassCastException;}\n" +
-                        "#else\n" +
-                        "{exception=(*env)->FindClass(env,\"java/lang/ClassCastException\");\n" +
-                        "(*env)->ThrowNew(env,exception,\"\");\n"+
-                        "RETURN_EXCEPTION;}\n" +
-                        "#endif\n");break;
+                eb.statements.add("if(_CheckCast(env,_stack,&_index,\""+type+"\"))\n"+checkCastExceptionHandling());break;
+
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
+    }
+
+    private String checkCastExceptionHandling()
+    {
+        return "#ifdef CATCH_java_lang_ClassCastException\n" +
+                "{ _index = 0;\n" +
+                "_New(env,_stack,&_index,\"java/lang/ClassCastException\",\"()V\",NULL);\n" +
+                "goto CATCH_java_lang_ClassCastException;}\n" +
+                "#elif defined(CATCH_java_lang_RuntimeException)\n"+
+                "{ _index = 0;\n" +
+                "_New(env,_stack,&_index,\"java/lang/ClassCastException\",\"()V\",NULL);\n" +
+                "goto CATCH_java_lang_RuntimeException;}\n" +
+                "#elif defined(CATCH_java_lang_Exception)\n"+
+                "{ _index = 0;\n" +
+                "_New(env,_stack,&_index,\"java/lang/ClassCastException\",\"()V\",NULL);\n" +
+                "goto CATCH_java_lang_Exception;}\n" +
+                "#elif defined(CATCH_java_lang_Throwable)\n"+
+                "{ _index = 0;\n" +
+                "_New(env,_stack,&_index,\"java/lang/ClassCastException\",\"()V\",NULL);\n" +
+                "goto CATCH_java_lang_Throwable;}\n" +
+                "#else\n" +
+                "{ exception=(*env)->FindClass(env,\"java/lang/ClassCastException\");\n" +
+                "(*env)->ThrowNew(env,exception,\"\");\n"+
+                "RETURN_EXCEPTION;}\n" +
+                "#endif\n";
     }
 }

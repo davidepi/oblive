@@ -12,19 +12,43 @@ public class CatchClassCastException
     @Obfuscate
     public static String castString(Object a)
     {
-        String retval;
+        String retval = "";
         try
         {
             retval = (String)a;
         }
         catch(ClassCastException e)
         {
-            retval = "wrong input type";
+            retval += "wrong ";
         }
-        catch(NullPointerException e)
+
+        try
         {
-            retval = "";
+            retval = (String)a;
         }
+        catch(RuntimeException e)
+        {
+            retval += "type ";
+        }
+
+        try
+        {
+            retval = (String)a;
+        }
+        catch(Exception e)
+        {
+            retval += "exception ";
+        }
+
+        try
+        {
+            retval = (String)a;
+        }
+        catch(Throwable e)
+        {
+            retval += "! ";
+        }
+
         return retval;
     }
 }
