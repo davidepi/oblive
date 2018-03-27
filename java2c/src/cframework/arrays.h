@@ -2,6 +2,7 @@
 #define OUT_OF_MEMORY_CHECK if(array==NULL)fprintf(stderr,"Out of memory\n");
 #define ARRAY_BODY(NAMECAPITAL,NAMENOCAPITAL) \
 jint size = pop(stack,index).i; \
+if(size<0) return 1; \
 j ## NAMENOCAPITAL ## Array array = (*env)->New ## NAMECAPITAL ## Array(env,size); \
 OUT_OF_MEMORY_CHECK \
 j ## NAMENOCAPITAL values[size]; \
@@ -10,56 +11,60 @@ memset(values,0,size*sizeof(j ## NAMENOCAPITAL ));\
 generic_t res;\
 res.l = array;\
 push(stack,index,res);\
+return 0;
 
-static inline void _NewIntArray(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _NewIntArray(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
   ARRAY_BODY(Int,int)
 }
 
-static inline void _NewBooleanArray(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _NewBooleanArray(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
   ARRAY_BODY(Boolean,boolean)
 }
 
-static inline void _NewCharArray(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _NewCharArray(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
   ARRAY_BODY(Char,char)
 }
 
-static inline void _NewByteArray(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _NewByteArray(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
   ARRAY_BODY(Byte,byte)
 }
 
-static inline void _NewShortArray(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _NewShortArray(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
   ARRAY_BODY(Short,short)
 }
 
-static inline void _NewDoubleArray(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _NewDoubleArray(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
   ARRAY_BODY(Double,double)
 }
 
-static inline void _NewFloatArray(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _NewFloatArray(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
   ARRAY_BODY(Float,float)
 }
 
-static inline void _NewLongArray(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _NewLongArray(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
   ARRAY_BODY(Long,long)
 }
 
-static inline void _NewObjectArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className)
+static inline char _NewObjectArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className)
 {
   jint size = pop(stack,index).i;
+  if(size<0)
+    return 1;
   jclass caller_class = (*env)->FindClass(env, className);if(caller_class == NULL){fprintf(stderr,"Class %s not found\n",className);exit(EXIT_FAILURE);}
   jobjectArray array = (*env)->NewObjectArray(env,size,caller_class,0);
   OUT_OF_MEMORY_CHECK
   generic_t res;
   res.l = array;
   push(stack,index,res);
+  return 0;
 }
 
 static inline void _Arraylength(JNIEnv* env, generic_t* stack, uint32_t* index)

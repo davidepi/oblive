@@ -60,15 +60,6 @@ public class CatchArrayLoadOutOfBoundsBoolean
             res++;
         }
 
-        try
-        {
-            return this.array[2]?1:0;
-        }
-        catch (NullPointerException e)
-        {
-            res++;
-        }
-
         return res;
     }
 }

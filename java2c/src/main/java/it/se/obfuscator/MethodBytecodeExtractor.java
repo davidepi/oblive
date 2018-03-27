@@ -113,23 +113,23 @@ public class MethodBytecodeExtractor extends MethodVisitor
         switch(desc.charAt(desc.length()-1))
         {
             case 'I':
-                eb.statements.add("_NewMultidimensionalIntArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+                eb.statements.add(handleSystemException("_NewMultidimensionalIntArray(env,_stack,&_index,\""+desc+"\","+dims+")",NegativeArraySizeException.class));break;
             case 'Z':
-                eb.statements.add("_NewMultidimensionalBooleanArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+                eb.statements.add(handleSystemException("_NewMultidimensionalBooleanArray(env,_stack,&_index,\""+desc+"\","+dims+")",NegativeArraySizeException.class));break;
             case 'B':
-                eb.statements.add("_NewMultidimensionalByteArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+                eb.statements.add(handleSystemException("_NewMultidimensionalByteArray(env,_stack,&_index,\""+desc+"\","+dims+")",NegativeArraySizeException.class));break;
             case 'C':
-                eb.statements.add("_NewMultidimensionalCharArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+                eb.statements.add(handleSystemException("_NewMultidimensionalCharArray(env,_stack,&_index,\""+desc+"\","+dims+")",NegativeArraySizeException.class));break;
             case 'S':
-                eb.statements.add("_NewMultidimensionalShortArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+                eb.statements.add(handleSystemException("_NewMultidimensionalShortArray(env,_stack,&_index,\""+desc+"\","+dims+")",NegativeArraySizeException.class));break;
             case 'J':
-                eb.statements.add("_NewMultidimensionalLongArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+                eb.statements.add(handleSystemException("_NewMultidimensionalLongArray(env,_stack,&_index,\""+desc+"\","+dims+")",NegativeArraySizeException.class));break;
             case 'F':
-                eb.statements.add("_NewMultidimensionalFloatArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+                eb.statements.add(handleSystemException("_NewMultidimensionalFloatArray(env,_stack,&_index,\""+desc+"\","+dims+")",NegativeArraySizeException.class));break;
             case 'D':
-                eb.statements.add("_NewMultidimensionalDoubleArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+                eb.statements.add(handleSystemException("_NewMultidimensionalDoubleArray(env,_stack,&_index,\""+desc+"\","+dims+")",NegativeArraySizeException.class));break;
             case ';':
-                eb.statements.add("_NewMultidimensionalObjectArray(env,_stack,&_index,\""+desc+"\","+dims+");");break;
+                eb.statements.add(handleSystemException("_NewMultidimensionalObjectArray(env,_stack,&_index,\""+desc+"\","+dims+")",NegativeArraySizeException.class));break;
             default:
                 throw new IllegalPatternException("Unimplemented MULTIANEWARRAY array for type: "+desc);
         }
@@ -220,19 +220,19 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case FCONST_2: eb.statements.add("pushf(_stack,&_index,2.f);");break;
             case DCONST_0: eb.statements.add("pushd(_stack,&_index,0.0);");break;
             case DCONST_1: eb.statements.add("pushd(_stack,&_index,1.0);");break;
-            case IALOAD: eb.statements.add("HANDLE_EXCEPTION(_IALoad(env,_stack,&_index),INDEX_OUT_OF_BOUNDS_EXCEPTION);");break;
-            case LALOAD: eb.statements.add("_LALoad(env,_stack,&_index);");break;
-            case FALOAD: eb.statements.add("_FALoad(env,_stack,&_index);");break;
-            case DALOAD: eb.statements.add("_DALoad(env,_stack,&_index);");break;
-            case AALOAD: eb.statements.add("_AALoad(env,_stack,&_index);");break;
-            case BALOAD: eb.statements.add("_BALoad(env,_stack,&_index);");break;
-            case CALOAD: eb.statements.add("_CALoad(env,_stack,&_index);");break;
-            case SALOAD: eb.statements.add("_SALoad(env,_stack,&_index);");break;
+            case IALOAD: eb.statements.add(handleArrayIndexException("_IALoad(env,_stack,&_index)"));break;
+            case LALOAD: eb.statements.add(handleArrayIndexException("_LALoad(env,_stack,&_index)"));break;
+            case FALOAD: eb.statements.add(handleArrayIndexException("_FALoad(env,_stack,&_index)"));break;
+            case DALOAD: eb.statements.add(handleArrayIndexException("_DALoad(env,_stack,&_index)"));break;
+            case AALOAD: eb.statements.add(handleArrayIndexException("_AALoad(env,_stack,&_index)"));break;
+            case BALOAD: eb.statements.add(handleArrayIndexException("_BALoad(env,_stack,&_index)"));break;
+            case CALOAD: eb.statements.add(handleArrayIndexException("_CALoad(env,_stack,&_index)"));break;
+            case SALOAD: eb.statements.add(handleArrayIndexException("_SALoad(env,_stack,&_index)"));break;
             case IASTORE: eb.statements.add("_IAStore(env,_stack,&_index);");break;
             case LASTORE: eb.statements.add("_LAStore(env,_stack,&_index);");break;
             case FASTORE: eb.statements.add("_FAStore(env,_stack,&_index);");break;
             case DASTORE: eb.statements.add("_DAStore(env,_stack,&_index);");break;
-            case AASTORE: eb.statements.add("HANDLE_EXCEPTION(_AAStore(env,_stack,&_index),ARRAY_STORE_EXCEPTION);");break;
+            case AASTORE: eb.statements.add(handleSystemException("_AAStore(env,_stack,&_index)",ArrayStoreException.class));break;
             case BASTORE: eb.statements.add("_BAStore(env,_stack,&_index);");break;
             case CASTORE: eb.statements.add("_CAStore(env,_stack,&_index);");break;
             case SASTORE: eb.statements.add("_SAStore(env,_stack,&_index);");break;
@@ -256,12 +256,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case LMUL: eb.statements.add("_LMul(_stack,&_index);");break;
             case FMUL: eb.statements.add("_FMul(_stack,&_index);");break;
             case DMUL: eb.statements.add("_DMul(_stack,&_index);");break;
-            case IDIV: eb.statements.add(handleSystemException("_IDiv(_stack,&_index)",ArithmeticException.class.getName()));break;
-            case LDIV: eb.statements.add(handleSystemException("_LDiv(_stack,&_index)",ArithmeticException.class.getName()));break;
+            case IDIV: eb.statements.add(handleSystemException("_IDiv(_stack,&_index)",ArithmeticException.class));break;
+            case LDIV: eb.statements.add(handleSystemException("_LDiv(_stack,&_index)",ArithmeticException.class));break;
             case FDIV: eb.statements.add("_FDiv(_stack,&_index);");break;
             case DDIV: eb.statements.add("_DDiv(_stack,&_index);");break;
-            case IREM: eb.statements.add(handleSystemException("_IRem(_stack,&_index)",ArithmeticException.class.getName()));break;
-            case LREM: eb.statements.add(handleSystemException("_LRem(_stack,&_index)",ArithmeticException.class.getName()));break;
+            case IREM: eb.statements.add(handleSystemException("_IRem(_stack,&_index)",ArithmeticException.class));break;
+            case LREM: eb.statements.add(handleSystemException("_LRem(_stack,&_index)",ArithmeticException.class));break;
             case FREM: eb.statements.add("_FRem(_stack,&_index);");break;
             case DREM: eb.statements.add("_DRem(_stack,&_index);");break;
             case INEG: eb.statements.add("_INeg(_stack,&_index);");break;
@@ -331,21 +331,21 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 switch(operand)
                 {
                     case T_BOOLEAN:
-                        eb.statements.add("_NewBooleanArray(env,_stack,&_index);");break;
+                        eb.statements.add(handleSystemException("_NewBooleanArray(env,_stack,&_index)",NegativeArraySizeException.class));break;
                     case T_CHAR:
-                        eb.statements.add("_NewCharArray(env,_stack,&_index);");break;
+                        eb.statements.add(handleSystemException("_NewCharArray(env,_stack,&_index)",NegativeArraySizeException.class));break;
                     case T_FLOAT:
-                        eb.statements.add("_NewFloatArray(env,_stack,&_index);");break;
+                        eb.statements.add(handleSystemException("_NewFloatArray(env,_stack,&_index)",NegativeArraySizeException.class));break;
                     case T_DOUBLE:
-                        eb.statements.add("_NewDoubleArray(env,_stack,&_index);");break;
+                        eb.statements.add(handleSystemException("_NewDoubleArray(env,_stack,&_index)",NegativeArraySizeException.class));break;
                     case T_BYTE:
-                        eb.statements.add("_NewByteArray(env,_stack,&_index);");break;
+                        eb.statements.add(handleSystemException("_NewByteArray(env,_stack,&_index)",NegativeArraySizeException.class));break;
                     case T_SHORT:
-                        eb.statements.add("_NewShortArray(env,_stack,&_index);");break;
+                        eb.statements.add(handleSystemException("_NewShortArray(env,_stack,&_index)",NegativeArraySizeException.class));break;
                     case T_INT:
-                        eb.statements.add("_NewIntArray(env,_stack,&_index);");break;
+                        eb.statements.add(handleSystemException("_NewIntArray(env,_stack,&_index)",NegativeArraySizeException.class));break;
                     case T_LONG:
-                        eb.statements.add("_NewLongArray(env,_stack,&_index);");break;
+                        eb.statements.add(handleSystemException("_NewLongArray(env,_stack,&_index)",NegativeArraySizeException.class));break;
                     default:
                         throw new IllegalPatternException("Unimplemented opcode: NEWARRAY with type "+operand);
                 }
@@ -454,21 +454,51 @@ public class MethodBytecodeExtractor extends MethodVisitor
                     processingNew = true;
                 break;
             case ANEWARRAY:
-                eb.statements.add("_NewObjectArray(env,_stack,&_index,\""+type+"\");");break;
+                eb.statements.add(handleSystemException("_NewObjectArray(env,_stack,&_index,\""+type+"\")",NegativeArraySizeException.class));break;
             case INSTANCEOF:
                 eb.statements.add("_InstanceOf(env,_stack,&_index,\""+type+"\");");break;
             case CHECKCAST:
-                eb.statements.add(handleSystemException("_CheckCast(env,_stack,&_index,\""+type+"\")",ClassCastException.class.getName()));break;
+                eb.statements.add(handleSystemException("_CheckCast(env,_stack,&_index,\""+type+"\")",ClassCastException.class));break;
 
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
     }
 
-    private String handleSystemException(String stmt, String excpName)
+    private String handleArrayIndexException(String stmt)
     {
-        String exception = excpName.replaceAll("\\.","_");
-        String className = excpName.replaceAll("\\.","/");
+        return "if("+stmt+")\n" +
+                "#ifdef CATCH_java_lang_ArrayIndexOutOfBoundsException\n"+
+                "{ _index = 0;\n" +
+                "_New(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\",\"()V\",NULL);\n" +
+                "goto CATCH_java_lang_ArrayIndexOutOfBoundsException;}\n" +
+                "#elif defined(CATCH_java_lang_IndexOutOfBounds)\n"+
+                "{ _index = 0;\n" +
+                "_New(env,_stack,&_index,\"java/lang/IndexOutOfBoundsException\",\"()V\",NULL);\n" +
+                "goto CATCH_java_lang_IndexOutOfBoundsException;}\n" +
+                "#elif defined(CATCH_java_lang_RuntimeException)\n"+
+                "{ _index = 0;\n" +
+                "_New(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\",\"()V\",NULL);\n" +
+                "goto CATCH_java_lang_RuntimeException;}\n" +
+                "#elif defined(CATCH_java_lang_Exception)\n"+
+                "{ _index = 0;\n" +
+                "_New(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\",\"()V\",NULL);\n" +
+                "goto CATCH_java_lang_Exception;}\n" +
+                "#elif defined(CATCH_java_lang_Throwable)\n"+
+                "{ _index = 0;\n" +
+                "_New(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\",\"()V\",NULL);\n" +
+                "goto CATCH_java_lang_Throwable;}\n" +
+                "#else\n" +
+                "{ exception=(*env)->FindClass(env,\"java/lang/ArrayIndexOutOfBoundsException\");\n" +
+                "(*env)->ThrowNew(env,exception,\"\");\n"+
+                "RETURN_EXCEPTION;}\n" +
+                "#endif\n";
+    }
+
+    private String handleSystemException(String stmt, Class<?> excpName)
+    {
+        String exception = excpName.getName().replaceAll("\\.","_");
+        String className = excpName.getName().replaceAll("\\.","/");
         return "if("+stmt+")\n" +
                 "#ifdef CATCH_"+exception+"\n"+
                 "{ _index = 0;\n" +

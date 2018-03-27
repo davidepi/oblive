@@ -60,15 +60,6 @@ public class CatchArrayLoadOutOfBoundsLong
             res++;
         }
 
-        try
-        {
-            return this.array[2];
-        }
-        catch (NullPointerException e)
-        {
-            res++;
-        }
-
         return (long)res;
     }
 }

@@ -60,15 +60,6 @@ public class CatchArrayLoadOutOfBoundsByte
             res++;
         }
 
-        try
-        {
-            return this.array[2];
-        }
-        catch (NullPointerException e)
-        {
-            res++;
-        }
-
         return (byte)res;
     }
 }

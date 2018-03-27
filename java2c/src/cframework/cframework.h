@@ -6,7 +6,6 @@
 #include <stdlib.h> //exit
 
 typedef jvalue generic_t;
-#include "exceptions.h"
 #include "stack.h"
 #include "arithmetic.h"
 #include "conditionals.h"

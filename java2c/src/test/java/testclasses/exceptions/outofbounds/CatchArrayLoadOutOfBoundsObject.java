@@ -60,15 +60,6 @@ public class CatchArrayLoadOutOfBoundsObject
             res++;
         }
 
-        try
-        {
-            return this.array[2];
-        }
-        catch (NullPointerException e)
-        {
-            res++;
-        }
-
         return ((Integer)res).toString();
     }
 }
