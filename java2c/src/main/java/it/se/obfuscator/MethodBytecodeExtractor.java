@@ -195,7 +195,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
             value = "";
         value += "#undef CATCH_"+type.replaceAll("/","_") + "\n";
         eb.tryCatchExitPoint.put(exitLabel,value);
-
+        eb.catchedStatements.add(type);
         eb.usedLabels.add(handlerLabel);
     }
 
@@ -472,9 +472,9 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 "{ _index = 0;\n" +
                 "_New(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\",\"()V\",NULL);\n" +
                 "goto CATCH_java_lang_ArrayIndexOutOfBoundsException;}\n" +
-                "#elif defined(CATCH_java_lang_IndexOutOfBounds)\n"+
+                "#elif defined(CATCH_java_lang_IndexOutOfBoundsException)\n"+
                 "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\"java/lang/IndexOutOfBoundsException\",\"()V\",NULL);\n" +
+                "_New(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\",\"()V\",NULL);\n" +
                 "goto CATCH_java_lang_IndexOutOfBoundsException;}\n" +
                 "#elif defined(CATCH_java_lang_RuntimeException)\n"+
                 "{ _index = 0;\n" +

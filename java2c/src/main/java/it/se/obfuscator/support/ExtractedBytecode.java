@@ -9,6 +9,7 @@ public class ExtractedBytecode
     public Set<String> usedLabels;
     public Map<String,String> tryCatchEntryPoint;
     public Map<String,String> tryCatchExitPoint;
+    public Set<String> catchedStatements;
     public int maxStack;
     public int maxLVar;
     public boolean isStatic;
@@ -18,6 +19,7 @@ public class ExtractedBytecode
         statements = new ArrayList<String>();
         labels = new ArrayList<String>();
         usedLabels = new HashSet<String>();
+        catchedStatements = new HashSet<>();
         tryCatchEntryPoint = new HashMap<>();
         tryCatchExitPoint = new HashMap<>();
         this.isStatic = isStatic;
@@ -26,6 +28,14 @@ public class ExtractedBytecode
     //remove unnecessary labels and add try-catch defines
     public void preprocess()
     {
+        //generate the string undefining every catch statements
+        StringBuilder sb = new StringBuilder();
+        for(String s : this.catchedStatements)
+        {
+            sb.append("#undef CATCH_"+s.replaceAll("/","_")+"\n");
+        }
+        String undefAllCatch = sb.toString();
+
         ListIterator<String> it = statements.listIterator();
         while(it.hasNext())
         {
@@ -36,11 +46,7 @@ public class ExtractedBytecode
                 String got;
                 if(!usedLabels.contains(label))
                     it.remove();
-                if(tryCatchExitPoint.containsKey(label))
-                {
-                    got = tryCatchExitPoint.get(label);
-                    it.add(got);
-                }
+                it.add(undefAllCatch);
                 if(tryCatchEntryPoint.containsKey(label))
                 {
                     got = tryCatchEntryPoint.get(label);
