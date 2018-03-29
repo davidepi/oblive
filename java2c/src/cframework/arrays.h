@@ -83,6 +83,8 @@ static inline char _IALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
   char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
+  if(array==NULL)
+    return 2;
   if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
   {
     generic_t res;
@@ -99,6 +101,8 @@ static inline char _LALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
   char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
+  if(array==NULL)
+    return 2;
   if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
   {
     generic_t res;
@@ -115,6 +119,8 @@ static inline char _FALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
   char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
+  if(array==NULL)
+    return 2;
   if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
   {
     generic_t res;
@@ -131,6 +137,8 @@ static inline char _DALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
   char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
+  if(array==NULL)
+    return 2;
   if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
   {
     generic_t res;
@@ -147,6 +155,8 @@ static inline char _AALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
   char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
+  if(array==NULL)
+    return 2;
   if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
   {
     generic_t res;
@@ -163,6 +173,8 @@ static inline char _BALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
   char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
+  if(array==NULL)
+    return 2;
   if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
   {
     generic_t res;
@@ -179,6 +191,8 @@ static inline char _CALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
   char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
+  if(array==NULL)
+    return 2;
   if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
   {
     generic_t res;
@@ -195,6 +209,8 @@ static inline char _SALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
   char retval = 0;
   jint array_index = pop(stack,index).i;
   jarray array = pop(stack,index).l;
+  if(array==NULL)
+    return 2;
   if(array_index>=0 && array_index<(*env)->GetArrayLength(env,array))
   {
     generic_t res;
