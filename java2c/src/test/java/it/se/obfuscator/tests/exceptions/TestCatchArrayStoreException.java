@@ -2,7 +2,7 @@ package it.se.obfuscator.tests.exceptions;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-public class CatchArrayStoreExceptions extends AbstractTestMethodTemplate
+public class TestCatchArrayStoreException extends AbstractTestMethodTemplate
 {
     private Class<?> className = testclasses.exceptions.CatchArrayStoreException.class;
     private String[] methodTest = {"exec"};

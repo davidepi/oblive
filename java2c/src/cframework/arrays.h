@@ -243,7 +243,10 @@ static inline char _AAStore(JNIEnv* env, generic_t* stack, uint32_t* index)
   jarray array = pop(stack,index).l;
   (*env)->SetObjectArrayElement(env,array,array_index,val);
   if((*env)->ExceptionCheck(env))
+  {
+    (*env)->ExceptionClear(env);
     retval = 1;
+  }
   return retval;
 }
 
