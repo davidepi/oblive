@@ -435,7 +435,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 eb.statements.add("_GetStatic_"+type.getJniName()+"(env,_stack,&_index,\""+owner+"\",\""+name+"\",\""+desc+"\");");
                 break;
             case PUTFIELD:
-                eb.statements.add("_SetField_"+type.getJniName()+"(env,_stack,&_index,\""+owner+"\",\""+name+"\",\""+desc+"\");");
+                eb.statements.add(handleSystemException("_SetField_"+type.getJniName()+"(env,_stack,&_index,\""+owner+"\",\""+name+"\",\""+desc+"\")",NullPointerException.class));
                 break;
             case PUTSTATIC:
                 eb.statements.add("_SetStatic_"+type.getJniName()+"(env,_stack,&_index,\""+owner+"\",\""+name+"\",\""+desc+"\");");
