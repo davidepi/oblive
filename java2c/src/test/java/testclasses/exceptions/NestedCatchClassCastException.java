@@ -12,12 +12,12 @@ public class NestedCatchClassCastException
     @Obfuscate
     public static String castString(Object a)
     {
-        String retval;
+        String retval = "";
         try
         {
             try
             {
-                retval = "random";
+                retval = (String)a;
             }
             catch (ClassCastException e)
             {
@@ -27,11 +27,11 @@ public class NestedCatchClassCastException
         }
         catch(ClassCastException e)
         {
-            retval = "wrong input type";
+            retval += "wrong input type";
         }
         catch(Throwable e)
         {
-            retval = "";
+            retval = "ouch";
         }
         return retval;
     }

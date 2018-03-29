@@ -3,6 +3,7 @@ package it.se.obfuscator;
 import it.se.obfuscator.support.ExtractedBytecode;
 import it.se.obfuscator.support.JniType;
 import it.se.obfuscator.support.MethodSignature;
+import it.se.obfuscator.support.TryCatchBlock;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -76,7 +77,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
     public void visitLabel(Label label)
     {
         eb.statements.add("LABEL_"+label.toString()+":");
-        eb.labels.add("LABEL_"+label.toString());
+        eb.labels.add(label.toString());
     }
 
     @Override
@@ -177,24 +178,15 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type)
     {
-        String entryLabel = "LABEL_"+start.toString();
-        String exitLabel = "LABEL_"+end.toString();
         String handlerLabel = "LABEL_"+handler.toString();
-        String value;
 
-        //process entry point
-        value = eb.tryCatchEntryPoint.get(entryLabel);
-        if(value==null)
-            value = "";
-        value += "#define CATCH_" + type.replaceAll("/","_") + " "+ handlerLabel + "\n";
-        eb.tryCatchEntryPoint.put(entryLabel,value);
+        TryCatchBlock current = new TryCatchBlock();
+        current.start = start.toString();
+        current.end = end.toString();
+        current.catched = type;
+        current.handle = handler.toString();
 
-        //process exit point
-        value = eb.tryCatchExitPoint.get(exitLabel);
-        if(value==null)
-            value = "";
-        value += "#undef CATCH_"+type.replaceAll("/","_") + "\n";
-        eb.tryCatchExitPoint.put(exitLabel,value);
+        eb.tryCatchBlocks.add(current);
         eb.catchedStatements.add(type);
         eb.usedLabels.add(handlerLabel);
     }
