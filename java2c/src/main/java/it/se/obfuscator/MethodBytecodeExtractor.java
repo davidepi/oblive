@@ -306,7 +306,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case FRETURN: eb.statements.add("FRETURN;");break;
             case DRETURN: eb.statements.add("DRETURN;");break;
             case RETURN: eb.statements.add("VRETURN;");break;
-            case ARRAYLENGTH: eb.statements.add("_Arraylength(env,_stack,&_index);");break;
+            case ARRAYLENGTH: eb.statements.add(handleSystemException("_Arraylength(env,_stack,&_index)",NullPointerException.class));break;
             case DUP:
                 if(!processingNew)
                    eb.statements.add("dup(_stack,&_index);");

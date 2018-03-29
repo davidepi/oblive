@@ -67,12 +67,15 @@ static inline char _NewObjectArray(JNIEnv* env, generic_t* stack, uint32_t* inde
   return 0;
 }
 
-static inline void _Arraylength(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline char _Arraylength(JNIEnv* env, generic_t* stack, uint32_t* index)
 {
   jarray array = pop(stack,index).l;
+  if(array == NULL)
+    return 1;
   generic_t res;
   res.i = (*env)->GetArrayLength(env,array);
   push(stack,index,res);
+  return 0;
 }
 
 static inline char _IALoad(JNIEnv* env, generic_t* stack, uint32_t* index)
