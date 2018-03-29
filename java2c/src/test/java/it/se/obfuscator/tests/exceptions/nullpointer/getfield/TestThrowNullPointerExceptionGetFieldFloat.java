@@ -1,15 +1,13 @@
-package it.se.obfuscator.tests.exceptions;
+package it.se.obfuscator.tests.exceptions.nullpointer.getfield;
 
 import it.se.obfuscator.helpers.AbstractTestMethodTemplate;
 
-import java.io.File;
-
-public class TestThrowArrayStoreExceptions extends AbstractTestMethodTemplate
+public class TestThrowNullPointerExceptionGetFieldFloat extends AbstractTestMethodTemplate
 {
-    private Class<?> className = testclasses.exceptions.ThrowArrayStoreException.class;
+    private Class<?> className = testclasses.exceptions.nullpointer.getfield.ThrowNullPointerExceptionGetFieldFloat.class;
     private String[] methodTest = {"exec"};
-    private Class[][] methodParam = {new Class[]{}};
-    private Object[][] methodArgs = {new Object[]{}};
+    private Class[][] methodParam = {new Class[]{testclasses.exceptions.nullpointer.SupportClassFloat.class}};
+    private Object[][] methodArgs = {new Object[]{null}};
 
     @Override
     public Class<?> getTestClass()

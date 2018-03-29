@@ -1,13 +1,16 @@
 #define FIELD_ID_RESOLVER jfieldID field_id;jclass caller_class = (*env)->FindClass(env, class_name);if(caller_class == NULL){fprintf(stderr,"Class %s not found\n",class_name);exit(EXIT_FAILURE);}field_id = (*env)->GetFieldID(env, caller_class, field_name, field_signature);if(field_id == NULL){fprintf(stderr,"Field %s not found in class %s\n",field_name,class_name);exit(EXIT_FAILURE);}
 #define STATIC_FIELD_ID_RESOLVER jfieldID field_id;jclass caller_class = (*env)->FindClass(env, class_name);if(caller_class == NULL){fprintf(stderr,"Class %s not found\n",class_name);exit(EXIT_FAILURE);}field_id = (*env)->GetStaticFieldID(env, caller_class, field_name, field_signature);if(field_id == NULL){fprintf(stderr,"Static field %s not found in class %s\n",field_name,class_name);exit(EXIT_FAILURE);}
 
-static inline void _GetField_jint(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _GetField_jint(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     generic_t res;
     res.i = (*env)->GetIntField(env,class_instance,field_id);
     push(stack,index,res);
+    return 0;
 }
 
 static inline void _GetStatic_jint(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -18,12 +21,15 @@ static inline void _GetStatic_jint(JNIEnv* env, generic_t* stack, uint32_t* inde
     push(stack,index,res);
 }
 
-static inline void _SetField_jint(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _SetField_jint(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jint value = pop(stack,index).i;
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     (*env)->SetIntField(env,class_instance,field_id,value);
+    return 0;
 }
 
 static inline void _SetStatic_jint(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -33,13 +39,16 @@ static inline void _SetStatic_jint(JNIEnv* env, generic_t* stack, uint32_t* inde
     (*env)->SetStaticIntField(env,caller_class,field_id,value);
 }
 
-static inline void _GetField_jshort(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _GetField_jshort(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     generic_t res;
     res.s = (*env)->GetShortField(env,class_instance,field_id);
     push(stack,index,res);
+    return 0;
 }
 
 static inline void _GetStatic_jshort(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -50,12 +59,15 @@ static inline void _GetStatic_jshort(JNIEnv* env, generic_t* stack, uint32_t* in
     push(stack,index,res);
 }
 
-static inline void _SetField_jshort(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _SetField_jshort(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jshort value = pop(stack,index).s;
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     (*env)->SetShortField(env,class_instance,field_id,value);
+    return 0;
 }
 
 static inline void _SetStatic_jshort(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -65,13 +77,16 @@ static inline void _SetStatic_jshort(JNIEnv* env, generic_t* stack, uint32_t* in
     (*env)->SetStaticShortField(env,caller_class,field_id,value);
 }
 
-static inline void _GetField_jbyte(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _GetField_jbyte(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     generic_t res;
     res.b = (*env)->GetByteField(env,class_instance,field_id);
     push(stack,index,res);
+    return 0;
 }
 
 static inline void _GetStatic_jbyte(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -82,12 +97,15 @@ static inline void _GetStatic_jbyte(JNIEnv* env, generic_t* stack, uint32_t* ind
     push(stack,index,res);
 }
 
-static inline void _SetField_jbyte(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _SetField_jbyte(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jbyte value = pop(stack,index).b;
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     (*env)->SetByteField(env,class_instance,field_id,value);
+    return 0;
 }
 
 static inline void _SetStatic_jbyte(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -97,13 +115,16 @@ static inline void _SetStatic_jbyte(JNIEnv* env, generic_t* stack, uint32_t* ind
     (*env)->SetStaticByteField(env,caller_class,field_id,value);
 }
 
-static inline void _GetField_jchar(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _GetField_jchar(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     generic_t res;
     res.c = (*env)->GetCharField(env,class_instance,field_id);
     push(stack,index,res);
+    return 0;
 }
 
 static inline void _GetStatic_jchar(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -114,12 +135,15 @@ static inline void _GetStatic_jchar(JNIEnv* env, generic_t* stack, uint32_t* ind
     push(stack,index,res);
 }
 
-static inline void _SetField_jchar(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _SetField_jchar(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jchar value = pop(stack,index).c;
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     (*env)->SetCharField(env,class_instance,field_id,value);
+    return 0;
 }
 
 static inline void _SetStatic_jchar(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -129,13 +153,16 @@ static inline void _SetStatic_jchar(JNIEnv* env, generic_t* stack, uint32_t* ind
     (*env)->SetStaticCharField(env,caller_class,field_id,value);
 }
 
-static inline void _GetField_jboolean(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _GetField_jboolean(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     generic_t res;
     res.z = (*env)->GetBooleanField(env,class_instance,field_id);
     push(stack,index,res);
+    return 0;
 }
 
 static inline void _GetStatic_jboolean(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -146,12 +173,15 @@ static inline void _GetStatic_jboolean(JNIEnv* env, generic_t* stack, uint32_t* 
     push(stack,index,res);
 }
 
-static inline void _SetField_jboolean(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _SetField_jboolean(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jboolean value = pop(stack,index).z;
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     (*env)->SetBooleanField(env,class_instance,field_id,value);
+    return 0;
 }
 
 static inline void _SetStatic_jboolean(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -161,13 +191,16 @@ static inline void _SetStatic_jboolean(JNIEnv* env, generic_t* stack, uint32_t* 
     (*env)->SetStaticBooleanField(env,caller_class,field_id,value);
 }
 
-static inline void _GetField_jfloat(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _GetField_jfloat(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     generic_t res;
     res.f = (*env)->GetFloatField(env,class_instance,field_id);
     push(stack,index,res);
+    return 0;
 }
 
 static inline void _GetStatic_jfloat(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -178,12 +211,15 @@ static inline void _GetStatic_jfloat(JNIEnv* env, generic_t* stack, uint32_t* in
     push(stack,index,res);
 }
 
-static inline void _SetField_jfloat(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _SetField_jfloat(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jfloat value = pop(stack,index).f;
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     (*env)->SetFloatField(env,class_instance,field_id,value);
+    return 0;
 }
 
 static inline void _SetStatic_jfloat(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -193,13 +229,16 @@ static inline void _SetStatic_jfloat(JNIEnv* env, generic_t* stack, uint32_t* in
     (*env)->SetStaticFloatField(env,caller_class,field_id,value);
 }
 
-static inline void _GetField_jdouble(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _GetField_jdouble(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     generic_t res;
     res.d = (*env)->GetDoubleField(env,class_instance,field_id);
     push2(stack,index,res);
+    return 0;
 }
 
 static inline void _GetStatic_jdouble(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -210,12 +249,15 @@ static inline void _GetStatic_jdouble(JNIEnv* env, generic_t* stack, uint32_t* i
     push2(stack,index,res);
 }
 
-static inline void _SetField_jdouble(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _SetField_jdouble(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jdouble value = pop2(stack,index).d;
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     (*env)->SetDoubleField(env,class_instance,field_id,value);
+    return 0;
 }
 
 static inline void _SetStatic_jdouble(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -225,13 +267,16 @@ static inline void _SetStatic_jdouble(JNIEnv* env, generic_t* stack, uint32_t* i
     (*env)->SetStaticDoubleField(env,caller_class,field_id,value);
 }
 
-static inline void _GetField_jlong(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _GetField_jlong(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     generic_t res;
     res.j = (*env)->GetLongField(env,class_instance,field_id);
     push2(stack,index,res);
+    return 0;
 }
 
 static inline void _GetStatic_jlong(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -242,12 +287,15 @@ static inline void _GetStatic_jlong(JNIEnv* env, generic_t* stack, uint32_t* ind
     push2(stack,index,res);
 }
 
-static inline void _SetField_jlong(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _SetField_jlong(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jlong value = pop2(stack,index).j;
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     (*env)->SetLongField(env,class_instance,field_id,value);
+    return 0;
 }
 
 static inline void _SetStatic_jlong(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -257,13 +305,16 @@ static inline void _SetStatic_jlong(JNIEnv* env, generic_t* stack, uint32_t* ind
     (*env)->SetStaticLongField(env,caller_class,field_id,value);
 }
 
-static inline void _GetField_jobject(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _GetField_jobject(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     generic_t res;
     res.l = (*env)->GetObjectField(env,class_instance,field_id);
     push(stack,index,res);
+    return 0;
 }
 
 static inline void _GetStatic_jobject(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
@@ -274,12 +325,15 @@ static inline void _GetStatic_jobject(JNIEnv* env, generic_t* stack, uint32_t* i
     push(stack,index,res);
 }
 
-static inline void _SetField_jobject(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
+static inline char _SetField_jobject(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
     FIELD_ID_RESOLVER
     jobject value = pop(stack,index).l;
     jobject class_instance = pop(stack,index).l;
+    if(class_instance == NULL)
+      return 1;
     (*env)->SetObjectField(env,class_instance,field_id,value);
+    return 0;
 }
 
 static inline void _SetStatic_jobject(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)

@@ -429,7 +429,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
         switch(opcode)
         {
             case GETFIELD:
-                eb.statements.add("_GetField_"+type.getJniName()+"(env,_stack,&_index,\""+owner+"\",\""+name+"\",\""+desc+"\");");
+                eb.statements.add(handleSystemException("_GetField_"+type.getJniName()+"(env,_stack,&_index,\""+owner+"\",\""+name+"\",\""+desc+"\")",NullPointerException.class));
                 break;
             case GETSTATIC:
                 eb.statements.add("_GetStatic_"+type.getJniName()+"(env,_stack,&_index,\""+owner+"\",\""+name+"\",\""+desc+"\");");
