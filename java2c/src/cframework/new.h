@@ -8,3 +8,21 @@ static inline void _New(JNIEnv* env, generic_t* stack, uint32_t* index, const ch
     push(stack,index,res);
 }
 
+static inline char _Throw(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  char retval;
+  generic_t throwable = pop(stack,index);
+  if(throwable.l == NULL)
+  {
+    retval = 1;
+  }
+  else
+  {
+    *index = 0;
+    push(stack,index,throwable);
+    (*env)->Throw(env,throwable.l);
+    retval = 0;
+  }
+  return retval;
+}
+
