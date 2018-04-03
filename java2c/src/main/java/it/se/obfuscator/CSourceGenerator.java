@@ -49,6 +49,7 @@ public class CSourceGenerator
         sb.append(eb.maxLVar);
         sb.append("];\n");
         sb.append("jclass exception = NULL;\n");
+        sb.append("char retcode = 0;\n"); //used by some methods to check if some exceptions were raised
 
         //push arguments into local vars
         int vars_index = 0; //vars_index, could differ from actual operands index because of static functions or double words;

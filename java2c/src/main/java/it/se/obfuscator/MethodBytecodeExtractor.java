@@ -212,22 +212,22 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case FCONST_2: eb.statements.add("pushf(_stack,&_index,2.f);");break;
             case DCONST_0: eb.statements.add("pushd(_stack,&_index,0.0);");break;
             case DCONST_1: eb.statements.add("pushd(_stack,&_index,1.0);");break;
-            case IALOAD: eb.statements.add(handleArrayIndexException("_IALoad(env,_stack,&_index)"));break;
-            case LALOAD: eb.statements.add(handleArrayIndexException("_LALoad(env,_stack,&_index)"));break;
-            case FALOAD: eb.statements.add(handleArrayIndexException("_FALoad(env,_stack,&_index)"));break;
-            case DALOAD: eb.statements.add(handleArrayIndexException("_DALoad(env,_stack,&_index)"));break;
-            case AALOAD: eb.statements.add(handleArrayIndexException("_AALoad(env,_stack,&_index)"));break;
-            case BALOAD: eb.statements.add(handleArrayIndexException("_BALoad(env,_stack,&_index)"));break;
-            case CALOAD: eb.statements.add(handleArrayIndexException("_CALoad(env,_stack,&_index)"));break;
-            case SALOAD: eb.statements.add(handleArrayIndexException("_SALoad(env,_stack,&_index)"));break;
-            case IASTORE: eb.statements.add("_IAStore(env,_stack,&_index);");break;
-            case LASTORE: eb.statements.add("_LAStore(env,_stack,&_index);");break;
-            case FASTORE: eb.statements.add("_FAStore(env,_stack,&_index);");break;
-            case DASTORE: eb.statements.add("_DAStore(env,_stack,&_index);");break;
-            case AASTORE: eb.statements.add(handleSystemException("_AAStore(env,_stack,&_index)",ArrayStoreException.class));break;
-            case BASTORE: eb.statements.add("_BAStore(env,_stack,&_index);");break;
-            case CASTORE: eb.statements.add("_CAStore(env,_stack,&_index);");break;
-            case SASTORE: eb.statements.add("_SAStore(env,_stack,&_index);");break;
+            case IALOAD: eb.statements.add(handleArrayIndexException("_IALoad(env,_stack,&_index)",false));break;
+            case LALOAD: eb.statements.add(handleArrayIndexException("_LALoad(env,_stack,&_index)",false));break;
+            case FALOAD: eb.statements.add(handleArrayIndexException("_FALoad(env,_stack,&_index)",false));break;
+            case DALOAD: eb.statements.add(handleArrayIndexException("_DALoad(env,_stack,&_index)",false));break;
+            case AALOAD: eb.statements.add(handleArrayIndexException("_AALoad(env,_stack,&_index)",false));break;
+            case BALOAD: eb.statements.add(handleArrayIndexException("_BALoad(env,_stack,&_index)",false));break;
+            case CALOAD: eb.statements.add(handleArrayIndexException("_CALoad(env,_stack,&_index)",false));break;
+            case SALOAD: eb.statements.add(handleArrayIndexException("_SALoad(env,_stack,&_index)",false));break;
+            case IASTORE: eb.statements.add(handleArrayIndexException("_IAStore(env,_stack,&_index);",false));break;
+            case LASTORE: eb.statements.add(handleArrayIndexException("_LAStore(env,_stack,&_index);",false));break;
+            case FASTORE: eb.statements.add(handleArrayIndexException("_FAStore(env,_stack,&_index);",false));break;
+            case DASTORE: eb.statements.add(handleArrayIndexException("_DAStore(env,_stack,&_index);",false));break;
+            case AASTORE: eb.statements.add(handleArrayIndexException("_AAStore(env,_stack,&_index)",true));break;
+            case BASTORE: eb.statements.add(handleArrayIndexException("_BAStore(env,_stack,&_index);",false));break;
+            case CASTORE: eb.statements.add(handleArrayIndexException("_CAStore(env,_stack,&_index);",false));break;
+            case SASTORE: eb.statements.add(handleArrayIndexException("_SAStore(env,_stack,&_index);",false));break;
             case POP: eb.statements.add("pop(_stack,&_index);");break;
             case POP2: eb.statements.add("pop2(_stack,&_index);");break;
             case DUP_X1: eb.statements.add("dupx1(_stack,&_index);");break;
@@ -457,9 +457,12 @@ public class MethodBytecodeExtractor extends MethodVisitor
         }
     }
 
-    private String handleArrayIndexException(String stmt)
+    private String handleArrayIndexException(String stmt, boolean isAASTORE)
     {
-        return "if("+stmt+")\n" +
+
+        String retval =
+                "retcode=" +stmt+";\n"+
+                "if(retcode==1)\n" + //handle ArrayIndexOutOfBoundsException
                 "#ifdef CATCH_java_lang_ArrayIndexOutOfBoundsException\n"+
                 "{ _index = 0;\n" +
                 "_New(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\",\"()V\",NULL);\n" +
@@ -484,7 +487,53 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 "{ exception=(*env)->FindClass(env,\"java/lang/ArrayIndexOutOfBoundsException\");\n" +
                 "(*env)->ThrowNew(env,exception,\"\");\n"+
                 "RETURN_EXCEPTION;}\n" +
+                "#endif\n" +
+                "else if(retcode==2)\n" + //handle NullPointerException
+                "#ifdef CATCH_java_lang_NullPointerException\n"+
+                "{ _index = 0;\n" +
+                "_New(env,_stack,&_index,\"java/lang/NullPointerException\",\"()V\",NULL);\n" +
+                "goto CATCH_java_lang_NullPointerException;}\n" +
+                "#elif defined(CATCH_java_lang_RuntimeException)\n"+
+                "{ _index = 0;\n" +
+                "_New(env,_stack,&_index,\"java/lang/NullPointerException\",\"()V\",NULL);\n" +
+                "goto CATCH_java_lang_RuntimeException;}\n" +
+                "#elif defined(CATCH_java_lang_Exception)\n"+
+                "{ _index = 0;\n" +
+                "_New(env,_stack,&_index,\"java/lang/NullPointerException\",\"()V\",NULL);\n" +
+                "goto CATCH_java_lang_Exception;}\n" +
+                "#elif defined(CATCH_java_lang_Throwable)\n"+
+                "{ _index = 0;\n" +
+                "_New(env,_stack,&_index,\"java/lang/NullPointerException\",\"()V\",NULL);\n" +
+                "goto CATCH_java_lang_Throwable;}\n" +
+                "#else\n" +
+                "{ exception=(*env)->FindClass(env,\"java/lang/NullPointerException\");\n" +
+                "(*env)->ThrowNew(env,exception,\"\");\n"+
+                "RETURN_EXCEPTION;}\n" +
                 "#endif\n";
+        if(isAASTORE)
+            retval += "else if(retcode==3)\n" + //handle ArrayStoreException
+                    "#ifdef CATCH_java_lang_ArrayStoreException\n"+
+                    "{ _index = 0;\n" +
+                    "_New(env,_stack,&_index,\"java/lang/ArrayStoreException\",\"()V\",NULL);\n" +
+                    "goto CATCH_java_lang_ArrayStoreException;}\n" +
+                    "#elif defined(CATCH_java_lang_RuntimeException)\n"+
+                    "{ _index = 0;\n" +
+                    "_New(env,_stack,&_index,\"java/lang/ArrayStoreException\",\"()V\",NULL);\n" +
+                    "goto CATCH_java_lang_RuntimeException;}\n" +
+                    "#elif defined(CATCH_java_lang_Exception)\n"+
+                    "{ _index = 0;\n" +
+                    "_New(env,_stack,&_index,\"java/lang/ArrayStoreException\",\"()V\",NULL);\n" +
+                    "goto CATCH_java_lang_Exception;}\n" +
+                    "#elif defined(CATCH_java_lang_Throwable)\n"+
+                    "{ _index = 0;\n" +
+                    "_New(env,_stack,&_index,\"java/lang/ArrayStoreException\",\"()V\",NULL);\n" +
+                    "goto CATCH_java_lang_Throwable;}\n" +
+                    "#else\n" +
+                    "{ exception=(*env)->FindClass(env,\"java/lang/ArrayStoreException\");\n" +
+                    "(*env)->ThrowNew(env,exception,\"\");\n"+
+                    "RETURN_EXCEPTION;}\n" +
+                    "#endif\n";
+        return retval;
     }
 
     private String handleSystemException(String stmt, Class<?> excpName)
