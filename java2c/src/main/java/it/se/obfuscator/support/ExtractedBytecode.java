@@ -15,6 +15,7 @@ public class ExtractedBytecode
     public int maxStack;
     public int maxLVar;
     public boolean isStatic;
+    public final static String postprocessIsCatched = "$$_EXCEPTION_CHECK";
 
     public ExtractedBytecode(boolean isStatic)
     {
@@ -39,16 +40,21 @@ public class ExtractedBytecode
         }
     }
 
-    //remove unnecessary labels and add try-catch defines
-    public void preprocess()
+    private String generateExitCatchs()
     {
         //generate the string undefining every catch statements
         StringBuilder sb = new StringBuilder();
         for(String s : this.catchedStatements)
         {
-            sb.append("#undef CATCH_"+s.replaceAll("/","_")+"\n");
+            sb.append("#undef CATCH_");
+            sb.append(s.replaceAll("/","_"));
+            sb.append("\n");
         }
-        String undefAllCatch = sb.toString();
+        return sb.toString();
+    }
+
+    private HashMap<String,String> reorganizeTryCatchs()
+    {
 
         //calculate the length of every try-catch block
         this.computeTryCatchLength();
@@ -89,7 +95,7 @@ public class ExtractedBytecode
         }
 
         //now flatten the <Label<Catch stmt, TryCatchBlock>> into a <Label,Catch_stmt> by appending the TryCatchBlock handle
-        HashMap<String,String> definesProcessed = new HashMap<>();
+        HashMap<String,String> retval = new HashMap<>();
         Iterator it0 = defines.entrySet().iterator();
         while(it0.hasNext())
         {
@@ -99,15 +105,22 @@ public class ExtractedBytecode
             while(it1.hasNext())
             {
                 Map.Entry inner = (Map.Entry)it1.next();
-                 catchstring.append("#define CATCH_");
-                 catchstring.append(((String)inner.getKey()).replaceAll("/","_"));
-                 catchstring.append(" LABEL_");
-                 catchstring.append(((TryCatchBlock)inner.getValue()).handle);
-                 catchstring.append("\n");
+                catchstring.append("#define CATCH_");
+                catchstring.append(((String)inner.getKey()).replaceAll("/","_"));
+                catchstring.append(" LABEL_");
+                catchstring.append(((TryCatchBlock)inner.getValue()).handle);
+                catchstring.append("\n");
             }
-            definesProcessed.put(((String)pair.getKey()),catchstring.toString());
+            retval.put(((String)pair.getKey()),catchstring.toString());
         }
+        return retval;
+    }
 
+    //remove unnecessary labels and add try-catchs in C
+    public void postprocess()
+    {
+        String exitCatchBlock = generateExitCatchs();
+        Map<String,String> enterCatchBlock = reorganizeTryCatchs();
         ListIterator<String> it = statements.listIterator();
         while(it.hasNext())
         {
@@ -119,12 +132,17 @@ public class ExtractedBytecode
                 String catchme;
                 if(!usedLabels.contains(label))
                     it.remove();
-                it.add(undefAllCatch);
-                if(definesProcessed.containsKey(labelpure))
+                it.add(exitCatchBlock);
+                if(enterCatchBlock.containsKey(labelpure))
                 {
-                    catchme = definesProcessed.get(labelpure);
+                    catchme = enterCatchBlock.get(labelpure);
                     it.add(catchme);
                 }
+            }
+            else if(value.equals(postprocessIsCatched)) //need to add a dynamic type checking for the exception
+            {
+                it.remove();
+                //TODO:
             }
         }
     }

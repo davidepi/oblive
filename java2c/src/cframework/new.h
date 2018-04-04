@@ -18,3 +18,16 @@ static inline void _ThrowUnchecked(JNIEnv* env, generic_t* stack, uint32_t* inde
   push(stack,index,res);
 }
 
+static inline char _ThrowATHROW(JNIEnv* nev, generic_t* stack, uint32_t* index)
+{
+  char retval = 0;
+  generic_t res = pop(stack,index);
+  if(res.l!=NULL)
+  {
+    *index = 0;
+    push(stack,index,res);
+  }
+  else
+    retval = 1;
+  return retval;
+}

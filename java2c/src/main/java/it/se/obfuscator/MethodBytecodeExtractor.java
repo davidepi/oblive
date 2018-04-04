@@ -16,6 +16,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
     ExtractedBytecode eb;
     private int count_functions;
     private boolean processingNew;
+    //label used to tell at postprocess time: here you should add the checks to know if the exception was catched
 
     public MethodBytecodeExtractor(boolean isStatic)
     {
@@ -299,7 +300,10 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case DRETURN: eb.statements.add("DRETURN;");break;
             case RETURN: eb.statements.add("VRETURN;");break;
             case ARRAYLENGTH: eb.statements.add(handleSystemException("_Arraylength(env,_stack,&_index)",NullPointerException.class));break;
-            case ATHROW: eb.statements.add("_Throw(env,_stack,&_index);");break;
+            case ATHROW:
+                eb.statements.add(handleSystemException("_ThrowATHROW(env,_stack,&_index)",NullPointerException.class));
+                eb.statements.add(eb.postprocessIsCatched);
+                break;
             case MONITORENTER: eb.statements.add("_MonitorEnter(env,_stack,&_index);");break;
             case MONITOREXIT: eb.statements.add("_MonitorExit(env,_stack,&_index);");break;
 
