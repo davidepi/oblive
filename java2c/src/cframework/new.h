@@ -8,21 +8,13 @@ static inline void _New(JNIEnv* env, generic_t* stack, uint32_t* index, const ch
     push(stack,index,res);
 }
 
-static inline char _Throw(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline void _ThrowUnchecked(JNIEnv* env, generic_t* stack, uint32_t* index, const char* exception_name)
 {
-  char retval;
-  generic_t throwable = pop(stack,index);
-  if(throwable.l == NULL)
-  {
-    retval = 1;
-  }
-  else
-  {
-    *index = 0;
-    push(stack,index,throwable);
-    (*env)->Throw(env,throwable.l);
-    retval = 0;
-  }
-  return retval;
+  *index = 0;
+  jclass constructed_class = (*env)->FindClass(env,exception_name);
+  jmethodID method_id = (*env)->GetMethodID(env,constructed_class,"<init>","()V");
+  generic_t res;
+  res.l = (*env)->NewObject(env,constructed_class,method_id,NULL);
+  push(stack,index,res);
 }
 

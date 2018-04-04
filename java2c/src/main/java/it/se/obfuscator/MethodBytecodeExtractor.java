@@ -299,6 +299,10 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case DRETURN: eb.statements.add("DRETURN;");break;
             case RETURN: eb.statements.add("VRETURN;");break;
             case ARRAYLENGTH: eb.statements.add(handleSystemException("_Arraylength(env,_stack,&_index)",NullPointerException.class));break;
+            case ATHROW: eb.statements.add("_Throw(env,_stack,&_index);");break;
+            case MONITORENTER: eb.statements.add("_MonitorEnter(env,_stack,&_index);");break;
+            case MONITOREXIT: eb.statements.add("_MonitorExit(env,_stack,&_index);");break;
+
             case DUP:
                 if(!processingNew)
                    eb.statements.add("dup(_stack,&_index);");
@@ -459,80 +463,55 @@ public class MethodBytecodeExtractor extends MethodVisitor
 
     private String handleArrayIndexException(String stmt, boolean isAASTORE)
     {
-
-        String retval =
-                "retcode=" +stmt+";\n"+
-                "if(retcode==1)\n" + //handle ArrayIndexOutOfBoundsException
+        String retval = "retcode=" +stmt+";\n"+
+                "if(retcode==1){\n" + //handle ArrayIndexOutOfBoundsException
+                "_ThrowUnchecked(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\");\n"+
                 "#ifdef CATCH_java_lang_ArrayIndexOutOfBoundsException\n"+
-                "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\",\"()V\",NULL);\n" +
-                "goto CATCH_java_lang_ArrayIndexOutOfBoundsException;}\n" +
+                "goto CATCH_java_lang_ArrayIndexOutOfBoundsException;\n" +
                 "#elif defined(CATCH_java_lang_IndexOutOfBoundsException)\n"+
-                "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\",\"()V\",NULL);\n" +
-                "goto CATCH_java_lang_IndexOutOfBoundsException;}\n" +
+                "goto CATCH_java_lang_IndexOutOfBoundsException;\n" +
                 "#elif defined(CATCH_java_lang_RuntimeException)\n"+
-                "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\",\"()V\",NULL);\n" +
-                "goto CATCH_java_lang_RuntimeException;}\n" +
+                "goto CATCH_java_lang_RuntimeException;\n" +
                 "#elif defined(CATCH_java_lang_Exception)\n"+
-                "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\",\"()V\",NULL);\n" +
-                "goto CATCH_java_lang_Exception;}\n" +
+                "goto CATCH_java_lang_Exception;\n" +
                 "#elif defined(CATCH_java_lang_Throwable)\n"+
-                "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\",\"()V\",NULL);\n" +
-                "goto CATCH_java_lang_Throwable;}\n" +
-                "#else\n" +
-                "{ exception=(*env)->FindClass(env,\"java/lang/ArrayIndexOutOfBoundsException\");\n" +
-                "(*env)->ThrowNew(env,exception,\"\");\n"+
-                "RETURN_EXCEPTION;}\n" +
+                "goto CATCH_java_lang_Throwable;\n" +
+                "#else\n"+
+                "(*env)->Throw(env,_stack[0].l);\n"+
+                "RETURN_EXCEPTION;\n" +
                 "#endif\n" +
-                "else if(retcode==2)\n" + //handle NullPointerException
+                "}\n" +
+                "else if(retcode==2){\n" + //handle NullPointerException
+                "_ThrowUnchecked(env,_stack,&_index,\"java/lang/NullPointerException\");\n"+
                 "#ifdef CATCH_java_lang_NullPointerException\n"+
-                "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\"java/lang/NullPointerException\",\"()V\",NULL);\n" +
-                "goto CATCH_java_lang_NullPointerException;}\n" +
+                "goto CATCH_java_lang_NullPointerException;\n" +
                 "#elif defined(CATCH_java_lang_RuntimeException)\n"+
-                "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\"java/lang/NullPointerException\",\"()V\",NULL);\n" +
-                "goto CATCH_java_lang_RuntimeException;}\n" +
+                "goto CATCH_java_lang_RuntimeException;\n" +
                 "#elif defined(CATCH_java_lang_Exception)\n"+
-                "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\"java/lang/NullPointerException\",\"()V\",NULL);\n" +
-                "goto CATCH_java_lang_Exception;}\n" +
+                "goto CATCH_java_lang_Exception;\n" +
                 "#elif defined(CATCH_java_lang_Throwable)\n"+
-                "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\"java/lang/NullPointerException\",\"()V\",NULL);\n" +
-                "goto CATCH_java_lang_Throwable;}\n" +
+                "goto CATCH_java_lang_Throwable;\n" +
                 "#else\n" +
-                "{ exception=(*env)->FindClass(env,\"java/lang/NullPointerException\");\n" +
-                "(*env)->ThrowNew(env,exception,\"\");\n"+
-                "RETURN_EXCEPTION;}\n" +
-                "#endif\n";
+                "(*env)->Throw(env,_stack[0].l);\n"+
+                "RETURN_EXCEPTION;\n" +
+                "#endif\n" +
+                "}\n";
         if(isAASTORE)
-            retval += "else if(retcode==3)\n" + //handle ArrayStoreException
+            retval += "else if(retcode==3){\n" + //handle ArrayStoreException
+                    "_ThrowUnchecked(env,_stack,&_index,\"java/lang/ArrayStoreException\");\n"+
                     "#ifdef CATCH_java_lang_ArrayStoreException\n"+
-                    "{ _index = 0;\n" +
-                    "_New(env,_stack,&_index,\"java/lang/ArrayStoreException\",\"()V\",NULL);\n" +
-                    "goto CATCH_java_lang_ArrayStoreException;}\n" +
+                    "goto CATCH_java_lang_ArrayStoreException;\n" +
                     "#elif defined(CATCH_java_lang_RuntimeException)\n"+
-                    "{ _index = 0;\n" +
-                    "_New(env,_stack,&_index,\"java/lang/ArrayStoreException\",\"()V\",NULL);\n" +
-                    "goto CATCH_java_lang_RuntimeException;}\n" +
+                    "goto CATCH_java_lang_RuntimeException;\n" +
                     "#elif defined(CATCH_java_lang_Exception)\n"+
-                    "{ _index = 0;\n" +
-                    "_New(env,_stack,&_index,\"java/lang/ArrayStoreException\",\"()V\",NULL);\n" +
-                    "goto CATCH_java_lang_Exception;}\n" +
+                    "goto CATCH_java_lang_Exception;\n" +
                     "#elif defined(CATCH_java_lang_Throwable)\n"+
-                    "{ _index = 0;\n" +
-                    "_New(env,_stack,&_index,\"java/lang/ArrayStoreException\",\"()V\",NULL);\n" +
-                    "goto CATCH_java_lang_Throwable;}\n" +
+                    "goto CATCH_java_lang_Throwable;\n" +
                     "#else\n" +
-                    "{ exception=(*env)->FindClass(env,\"java/lang/ArrayStoreException\");\n" +
-                    "(*env)->ThrowNew(env,exception,\"\");\n"+
-                    "RETURN_EXCEPTION;}\n" +
-                    "#endif\n";
+                    "(*env)->Throw(env,_stack[0].l);\n"+
+                    "RETURN_EXCEPTION;\n" +
+                    "#endif\n"+
+                    "}\n";
         return retval;
     }
 
@@ -540,28 +519,21 @@ public class MethodBytecodeExtractor extends MethodVisitor
     {
         String exception = excpName.getName().replaceAll("\\.","_");
         String className = excpName.getName().replaceAll("\\.","/");
-        return "if("+stmt+")\n" +
+        return "if("+stmt+"){\n" +
+                "_ThrowUnchecked(env,_stack,&_index,\""+className+"\");\n"+
                 "#ifdef CATCH_"+exception+"\n"+
-                "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\""+className+"\",\"()V\",NULL);\n" +
-                "goto CATCH_"+exception+";}\n" +
+                "goto CATCH_"+exception+";\n" +
                 "#elif defined(CATCH_java_lang_RuntimeException)\n"+
-                "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\""+className+"\",\"()V\",NULL);\n" +
-                "goto CATCH_java_lang_RuntimeException;}\n" +
+                "goto CATCH_java_lang_RuntimeException;\n" +
                 "#elif defined(CATCH_java_lang_Exception)\n"+
-                "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\""+className+"\",\"()V\",NULL);\n" +
-                "goto CATCH_java_lang_Exception;}\n" +
+                "goto CATCH_java_lang_Exception;\n" +
                 "#elif defined(CATCH_java_lang_Throwable)\n"+
-                "{ _index = 0;\n" +
-                "_New(env,_stack,&_index,\""+className+"\",\"()V\",NULL);\n" +
-                "goto CATCH_java_lang_Throwable;}\n" +
+                "goto CATCH_java_lang_Throwable;\n" +
                 "#else\n" +
-                "{ exception=(*env)->FindClass(env,\""+className+"\");\n" +
-                "(*env)->ThrowNew(env,exception,\"\");\n"+
-                "RETURN_EXCEPTION;}\n" +
-                "#endif\n";
+                "(*env)->Throw(env,_stack[0].l);\n"+
+                "RETURN_EXCEPTION;\n" +
+                "#endif\n"+
+                "}\n";
 
     }
 }
