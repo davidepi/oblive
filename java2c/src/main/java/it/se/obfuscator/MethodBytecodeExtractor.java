@@ -16,6 +16,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
     ExtractedBytecode eb;
     private int count_functions;
     private boolean processingNew;
+    private int count_trycatch;
+
     //label used to tell at postprocess time: here you should add the checks to know if the exception was catched
 
     public MethodBytecodeExtractor(boolean isStatic)
@@ -24,6 +26,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
         processingNew = false;
         eb = new ExtractedBytecode(isStatic);
         count_functions = 0;
+        count_trycatch = 0;
     }
 
     public ExtractedBytecode getBytecode()
@@ -187,6 +190,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
         current.end = end.toString();
         current.catched = type;
         current.handle = handler.toString();
+        current.order = count_trycatch++;
 
         eb.tryCatchBlocks.add(current);
         eb.catchedStatements.add(type);
@@ -302,7 +306,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case RETURN: eb.statements.add("VRETURN;");break;
             case ARRAYLENGTH: eb.statements.add(handleSystemException("_Arraylength(env,_stack,&_index)",NullPointerException.class));break;
             case ATHROW:
-                eb.statements.add(handleSystemException("_ThrowATHROW(env,_stack,&_index)",NullPointerException.class));
+                eb.statements.add(handleSystemException("_ThrowFromUser(env,_stack,&_index)",NullPointerException.class));
                 eb.statements.add(eb.postprocessIsCatched);
                 break;
             case MONITORENTER: eb.statements.add("_MonitorEnter(env,_stack,&_index);");break;
@@ -407,17 +411,30 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case INVOKEINTERFACE:
             case INVOKEVIRTUAL:
                 eb.statements.add("_InvokeVirtual_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
-                                  owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
+                                  owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
+                eb.statements.add("if((*env)->ExceptionCheck(env)){\n_ThrowFromJVM(env,_stack,&_index);");
+                eb.statements.add(ExtractedBytecode.postprocessExceptionClear);
+                eb.statements.add("}");
+
             case INVOKESPECIAL:
                 if(!name.equals("<init>"))
-                    eb.statements.add("_InvokeSpecial_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
-                        owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
+                {
+                    eb.statements.add("_InvokeSpecial_" + signature.getReturnType().getJniName() + "(env,_stack,&_index,\"" +
+                            owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
+                    eb.statements.add("if((*env)->ExceptionCheck(env)){\n_ThrowFromJVM(env,_stack,&_index);");
+                    eb.statements.add(ExtractedBytecode.postprocessExceptionClear);
+                    eb.statements.add("}");
+                }
                 else
                     eb.statements.add("_New(env,_stack,&_index,\"" + owner + "\",\"" + desc + "\"," + argumentsName + ");");
                 break;
             case INVOKESTATIC:
                 eb.statements.add("_InvokeStatic_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
-                        owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");break;
+                        owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
+                eb.statements.add("if((*env)->ExceptionCheck(env)){\n_ThrowFromJVM(env,_stack,&_index);");
+                eb.statements.add(ExtractedBytecode.postprocessExceptionClear);
+                eb.statements.add("}");
+                break;
             default:
                 throw new IllegalPatternException("Unimplemented opcode: "+opcode);
         }
@@ -470,7 +487,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
     {
         String retval = "retcode=" +stmt+";\n"+
                 "if(retcode==1){\n" + //handle ArrayIndexOutOfBoundsException
-                "_ThrowUnchecked(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\");\n"+
+                "_ThrowFromJNI(env,_stack,&_index,\"java/lang/ArrayIndexOutOfBoundsException\");\n"+
                 "#ifdef CATCH_java_lang_ArrayIndexOutOfBoundsException\n"+
                 "goto CATCH_java_lang_ArrayIndexOutOfBoundsException;\n" +
                 "#elif defined(CATCH_java_lang_IndexOutOfBoundsException)\n"+
@@ -487,7 +504,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 "#endif\n" +
                 "}\n" +
                 "else if(retcode==2){\n" + //handle NullPointerException
-                "_ThrowUnchecked(env,_stack,&_index,\"java/lang/NullPointerException\");\n"+
+                "_ThrowFromJNI(env,_stack,&_index,\"java/lang/NullPointerException\");\n"+
                 "#ifdef CATCH_java_lang_NullPointerException\n"+
                 "goto CATCH_java_lang_NullPointerException;\n" +
                 "#elif defined(CATCH_java_lang_RuntimeException)\n"+
@@ -503,7 +520,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 "}\n";
         if(isAASTORE)
             retval += "else if(retcode==3){\n" + //handle ArrayStoreException
-                    "_ThrowUnchecked(env,_stack,&_index,\"java/lang/ArrayStoreException\");\n"+
+                    "_ThrowFromJNI(env,_stack,&_index,\"java/lang/ArrayStoreException\");\n"+
                     "#ifdef CATCH_java_lang_ArrayStoreException\n"+
                     "goto CATCH_java_lang_ArrayStoreException;\n" +
                     "#elif defined(CATCH_java_lang_RuntimeException)\n"+
@@ -525,7 +542,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
         String exception = excpName.getName().replaceAll("\\.","_");
         String className = excpName.getName().replaceAll("\\.","/");
         return "if("+stmt+"){\n" +
-                "_ThrowUnchecked(env,_stack,&_index,\""+className+"\");\n"+
+                "_ThrowFromJNI(env,_stack,&_index,\""+className+"\");\n"+
                 "#ifdef CATCH_"+exception+"\n"+
                 "goto CATCH_"+exception+";\n" +
                 "#elif defined(CATCH_java_lang_RuntimeException)\n"+

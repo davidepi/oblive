@@ -9,4 +9,5 @@ public class TryCatchBlock
     public String catched;
     public int length;
     public String handle;
+    public int order;
 }

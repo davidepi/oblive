@@ -15,6 +15,7 @@ public class ExtractedBytecode
     public int maxLVar;
     public boolean isStatic;
     public final static String postprocessIsCatched = "$$_EXCEPTION_CHECK";
+    public final static String postprocessExceptionClear = "$$_EXCEPTION_CLEAR";
 
     public ExtractedBytecode(boolean isStatic)
     {
@@ -158,8 +159,12 @@ public class ExtractedBytecode
                     it.add(catchme);
                 }
             }
-            else if(value.equals(postprocessIsCatched)) //need to add a dynamic type checking for the user-defined exceptions
+            //need to add a dynamic type checking for the user-defined exceptions
+            else if(value.equals(postprocessIsCatched) || value.equals(postprocessExceptionClear))
             {
+                //add also the ExceptionClear() block. For exceptions generated in the JVM and catched in the JNI
+                boolean clear = value.equals(postprocessExceptionClear);
+
                 it.remove();
                 // last label used, since I'm not right after a label ----------v
                 Map<String,TryCatchBlock> currentLabelCatch = tryCatches.get(labelpure);
@@ -169,13 +174,18 @@ public class ExtractedBytecode
                 }
                 else //inside a catchblock, so if(raised exception instance of catched exception) goto catch, else throw
                 {
-                    //iterate trycatchs for current label and add dynamic exception checks
-                    Iterator<Map.Entry<String, TryCatchBlock>> it0 = currentLabelCatch.entrySet().iterator();
-                    while (it0.hasNext())
+                    //flatten into array
+                    List<TryCatchBlock> list = new ArrayList<TryCatchBlock>(currentLabelCatch.values());
+                    //reorder array otherwise I could break inheritance (catching in the wrong block)
+
+                    list.sort(Comparator.comparingInt(block -> (block.order)));
+                    for(TryCatchBlock catched : list)
                     {
-                        Map.Entry<String, TryCatchBlock> catched = it0.next();
                         //no need to if-elif-else since every if is broken by a goto
-                        it.add("if(_ExceptionInstanceOf(env,_stack,\"" + catched.getKey() + "\"))goto LABEL_" + catched.getValue().handle + ";\n");
+                        it.add("if(_ExceptionInstanceOf(env,_stack,\"" + catched.catched + "\")){\n");
+                        if(clear)
+                            it.add("(*env)->ExceptionClear(env);\n");
+                        it.add("goto LABEL_" + catched.handle + ";\n}\n");
                     }
                     it.add("(*env)->Throw(env,_stack[0].l);\nRETURN_EXCEPTION;\n");
                 }

@@ -8,7 +8,8 @@ static inline void _New(JNIEnv* env, generic_t* stack, uint32_t* index, const ch
     push(stack,index,res);
 }
 
-static inline void _ThrowUnchecked(JNIEnv* env, generic_t* stack, uint32_t* index, const char* exception_name)
+//exception is created from the JNI layer
+static inline void _ThrowFromJNI(JNIEnv* env, generic_t* stack, uint32_t* index, const char* exception_name)
 {
   *index = 0;
   jclass constructed_class = (*env)->FindClass(env,exception_name);
@@ -18,7 +19,8 @@ static inline void _ThrowUnchecked(JNIEnv* env, generic_t* stack, uint32_t* inde
   push(stack,index,res);
 }
 
-static inline char _ThrowATHROW(JNIEnv* nev, generic_t* stack, uint32_t* index)
+//exception is created from the user
+static inline char _ThrowFromUser(JNIEnv* nev, generic_t* stack, uint32_t* index)
 {
   char retval = 0;
   generic_t res = pop(stack,index);
@@ -30,4 +32,13 @@ static inline char _ThrowATHROW(JNIEnv* nev, generic_t* stack, uint32_t* index)
   else
     retval = 1;
   return retval;
+}
+
+//exception is created from the JVM
+static inline void _ThrowFromJVM(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  *index = 0;
+  generic_t res;
+  res.l = (*env)->ExceptionOccurred(env);
+  push(stack,index,res);
 }
