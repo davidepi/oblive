@@ -2,7 +2,6 @@ package it.se.obfuscator.support;
 
 import it.se.obfuscator.IllegalPatternException;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class ExtractedBytecode
@@ -53,20 +52,28 @@ public class ExtractedBytecode
         return sb.toString();
     }
 
-    private HashMap<String,String> reorganizeTryCatchs()
+
+
+    /**
+     * Given a list of TryCatchBlock and a list of labels, return the map (Label,(CatchStmt,TryCatchBlock)) where for
+     * each label pairs (catched exception, trycatch block) are recorded. Only the innermost trycatch for each label is
+     * saved
+     * @return
+     */
+    private Map<String,Map<String,TryCatchBlock>> reorganizeTryCatchs()
     {
 
         //calculate the length of every try-catch block
         this.computeTryCatchLength();
 
         //<Label<Catch stmt,TryCatchBlock>>
-        Map<String,HashMap<String,TryCatchBlock>> defines = new HashMap<>();
+        Map<String,Map<String,TryCatchBlock>> defines = new HashMap<>();
         //add try-catchs to every basic block
         for(TryCatchBlock current : tryCatchBlocks) //for every try-catch
         {
             for(int i=current.startIndex;i<current.endIndex;i++) //for every label affected by the try-catch
             {
-                HashMap<String,TryCatchBlock> map = defines.get(labels.get(i));
+                Map<String,TryCatchBlock> map = defines.get(labels.get(i));
                 if(map == null) //this is the first try catch of that label
                 {
                     map = new HashMap<>();
@@ -82,7 +89,7 @@ public class ExtractedBytecode
                     }
                     else //nested catch, need to keep the shortest one
                     {
-                        if(mapped.length>current.length) //mine is the shorted, the other one is removed
+                        if(mapped.length>current.length) //mine is the shortest, the other one is removed
                         {
                             map.remove(current.catched);
                             map.put(current.catched,current);
@@ -93,25 +100,35 @@ public class ExtractedBytecode
                 }
             }
         }
+        return defines;
+    }
 
+    /**
+     * flatten the result of a reorganizeTryCatch() in order to get a pair (Label,String) where for each string the prepared
+     * #ifdef catchedexception goto handle are used
+     * @param reorganizeTryCatchRes The result of a reorganizeTryCatch() call
+     * @return
+     */
+    private Map<String,String> flattenTryCatchs(Map<String,Map<String,TryCatchBlock>> reorganizeTryCatchRes)
+    {
         //now flatten the <Label<Catch stmt, TryCatchBlock>> into a <Label,Catch_stmt> by appending the TryCatchBlock handle
         HashMap<String,String> retval = new HashMap<>();
-        Iterator it0 = defines.entrySet().iterator();
+        Iterator<Map.Entry<String, Map<String, TryCatchBlock>>> it0 = reorganizeTryCatchRes.entrySet().iterator();
         while(it0.hasNext())
         {
-            Map.Entry pair = (Map.Entry)it0.next();
+            Map.Entry<String, Map<String, TryCatchBlock>> pair = it0.next();
             StringBuilder catchstring = new StringBuilder();
-            Iterator it1 = ((HashMap<String,TryCatchBlock>)pair.getValue()).entrySet().iterator();
+            Iterator<Map.Entry<String, TryCatchBlock>> it1 = (pair.getValue()).entrySet().iterator();
             while(it1.hasNext())
             {
-                Map.Entry inner = (Map.Entry)it1.next();
+                Map.Entry<String, TryCatchBlock> inner = it1.next();
                 catchstring.append("#define CATCH_");
-                catchstring.append(((String)inner.getKey()).replaceAll("/","_"));
+                catchstring.append(inner.getKey().replaceAll("/","_"));
                 catchstring.append(" LABEL_");
-                catchstring.append(((TryCatchBlock)inner.getValue()).handle);
+                catchstring.append(inner.getValue().handle);
                 catchstring.append("\n");
             }
-            retval.put(((String)pair.getKey()),catchstring.toString());
+            retval.put((pair.getKey()),catchstring.toString());
         }
         return retval;
     }
@@ -120,15 +137,17 @@ public class ExtractedBytecode
     public void postprocess()
     {
         String exitCatchBlock = generateExitCatchs();
-        Map<String,String> enterCatchBlock = reorganizeTryCatchs();
+        Map<String,Map<String,TryCatchBlock>> tryCatches = reorganizeTryCatchs(); //<label,catched stmt, trycatchblock>
+        Map<String,String> enterCatchBlock = flattenTryCatchs(tryCatches); //<label,#define1...#define2...>
         ListIterator<String> it = statements.listIterator();
+        String labelpure = "";
         while(it.hasNext())
         {
             String value = it.next();
             if(value.length()>6 && value.substring(0,6).equals("LABEL_"))
             {
                 String label = value.substring(0,value.length()-1);
-                String labelpure = value.substring(6,value.length()-1);
+                labelpure = value.substring(6,value.length()-1);
                 String catchme;
                 if(!usedLabels.contains(label))
                     it.remove();
@@ -139,10 +158,30 @@ public class ExtractedBytecode
                     it.add(catchme);
                 }
             }
-            else if(value.equals(postprocessIsCatched)) //need to add a dynamic type checking for the exception
+            else if(value.equals(postprocessIsCatched)) //need to add a dynamic type checking for the user-defined exceptions
             {
                 it.remove();
-                //TODO:
+                // last label used, since I'm not right after a label ----------v
+                Map<String,TryCatchBlock> currentLabelCatch = tryCatches.get(labelpure);
+                if(currentLabelCatch == null) //no catchblock
+                {
+                    it.add("(*env)->Throw(env,_stack[0].l);\nRETURN_EXCEPTION;\n");
+                }
+                else //inside a catchblock
+                {
+                    //iterate trycatchs for current label and add dynamic exception checks
+                    Iterator<Map.Entry<String, TryCatchBlock>> it0 = currentLabelCatch.entrySet().iterator();
+                    int iteration = 0;
+                    while (it0.hasNext())
+                    {
+                        Map.Entry<String, TryCatchBlock> catched = it0.next();
+                        if (iteration++ == 0)
+                            it.add("if(_ExceptionInstanceOf(env,_stack,\"" + catched.getKey() + "\"))goto LABEL_" + catched.getValue().handle + ";\n");
+                        else
+                            it.add("else if(_ExceptionInstanceOf(env,_stack,\"" + catched.getKey() + "\"))goto LABEL_" + catched.getValue().handle + ";\n");
+                    }
+                    it.add("(*env)->Throw(env,_stack[0].l);\nRETURN_EXCEPTION;\n");
+                }
             }
         }
     }

@@ -42,6 +42,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs)
     {
+
         throw new IllegalPatternException("Unimplemented opcode: INVOKEDYNAMIC");
     }
 
