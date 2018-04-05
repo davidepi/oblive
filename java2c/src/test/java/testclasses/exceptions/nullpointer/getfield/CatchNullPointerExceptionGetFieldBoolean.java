@@ -17,7 +17,8 @@ public class CatchNullPointerExceptionGetFieldBoolean
         int res = 0;
         try
         {
-            return obj.a?1:0;
+          res+=obj.a?1:0;
+          res+=1000;
         }
         catch (NullPointerException e)
         {
@@ -26,7 +27,8 @@ public class CatchNullPointerExceptionGetFieldBoolean
 
         try
         {
-            return obj.a?1:0;
+          res+=obj.a?1:0;
+          res+=1000;
         }
         catch (RuntimeException e)
         {
@@ -35,7 +37,8 @@ public class CatchNullPointerExceptionGetFieldBoolean
 
         try
         {
-            return obj.a?1:0;
+          res+=obj.a?1:0;
+          res+=1000;
         }
         catch (Exception e)
         {
@@ -44,7 +47,8 @@ public class CatchNullPointerExceptionGetFieldBoolean
 
         try
         {
-            return obj.a?1:0;
+          res+=obj.a?1:0;
+          res+=1000;
         }
         catch (Throwable e)
         {

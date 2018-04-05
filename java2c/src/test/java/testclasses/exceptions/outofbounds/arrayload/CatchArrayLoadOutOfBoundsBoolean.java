@@ -17,7 +17,8 @@ public class CatchArrayLoadOutOfBoundsBoolean
 
         try
         {
-            return this.array[2]?1:0;
+          res+=this.array[2]?1:0;
+          res+=1000;
         }
         catch (ArrayIndexOutOfBoundsException e)
         {
@@ -26,7 +27,8 @@ public class CatchArrayLoadOutOfBoundsBoolean
 
         try
         {
-            return this.array[2]?1:0;
+          res+=this.array[2]?1:0;
+          res+=1000;
         }
         catch (IndexOutOfBoundsException e)
         {
@@ -35,7 +37,8 @@ public class CatchArrayLoadOutOfBoundsBoolean
 
         try
         {
-            return this.array[2]?1:0;
+          res+=this.array[2]?1:0;
+          res+=1000;
         }
         catch (RuntimeException e)
         {
@@ -44,7 +47,8 @@ public class CatchArrayLoadOutOfBoundsBoolean
 
         try
         {
-            return this.array[2]?1:0;
+          res+=this.array[2]?1:0;
+          res+=1000;
         }
         catch (Exception e)
         {
@@ -53,7 +57,8 @@ public class CatchArrayLoadOutOfBoundsBoolean
 
         try
         {
-            return this.array[2]?1:0;
+          res+=this.array[2]?1:0;
+          res+=1000;
         }
         catch (Throwable e)
         {

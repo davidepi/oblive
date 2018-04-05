@@ -18,6 +18,7 @@ public class NestedCatchClassCastException
             try
             {
                 retval = (String)a;
+                retval+="a";
             }
             catch (ClassCastException e)
             {

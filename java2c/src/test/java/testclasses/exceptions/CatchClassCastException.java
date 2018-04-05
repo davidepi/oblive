@@ -16,6 +16,7 @@ public class CatchClassCastException
         try
         {
             retval = (String)a;
+            retval+="a";
         }
         catch(ClassCastException e)
         {
@@ -25,6 +26,7 @@ public class CatchClassCastException
         try
         {
             retval = (String)a;
+            retval+="b";
         }
         catch(RuntimeException e)
         {
@@ -34,6 +36,7 @@ public class CatchClassCastException
         try
         {
             retval = (String)a;
+            retval+="c";
         }
         catch(Exception e)
         {
@@ -43,6 +46,7 @@ public class CatchClassCastException
         try
         {
             retval = (String)a;
+            retval+="d";
         }
         catch(Throwable e)
         {

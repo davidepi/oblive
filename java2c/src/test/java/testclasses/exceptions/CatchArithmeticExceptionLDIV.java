@@ -16,6 +16,7 @@ public class CatchArithmeticExceptionLDIV
         try
         {
             res += a / 0;
+            res+=1000;
         }
         catch(ArithmeticException e)
         {
@@ -25,6 +26,7 @@ public class CatchArithmeticExceptionLDIV
         try
         {
             res += a/0;
+            res+=1000;
         }
         catch(RuntimeException e)
         {
@@ -34,6 +36,7 @@ public class CatchArithmeticExceptionLDIV
         try
         {
             res += a/0;
+            res+=1000;
         }
         catch(Exception e)
         {
@@ -43,6 +46,7 @@ public class CatchArithmeticExceptionLDIV
         try
         {
             res += a/0;
+            res+=1000;
         }
         catch(Throwable e)
         {

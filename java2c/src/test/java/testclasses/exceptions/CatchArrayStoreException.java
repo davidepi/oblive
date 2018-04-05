@@ -19,6 +19,7 @@ public class CatchArrayStoreException
         try
         {
             this.array[1] = 1;
+            res+=1000;
         }
         catch (ArrayStoreException e)
         {
@@ -28,6 +29,7 @@ public class CatchArrayStoreException
         try
         {
             this.array[1] = 1;
+            res+=1000;
         }
         catch (RuntimeException e)
         {
@@ -37,6 +39,7 @@ public class CatchArrayStoreException
         try
         {
             this.array[1] = 1;
+            res+=1000;
         }
         catch (Exception e)
         {
@@ -46,6 +49,7 @@ public class CatchArrayStoreException
         try
         {
             this.array[1] = 1;
+            res+=1000;
         }
         catch (Throwable e)
         {

@@ -18,7 +18,8 @@ public class CatchNullPointerExceptionArrayLengthChar
         int res = 0;
         try
         {
-            return obj.b.length;
+            res = obj.b.length;
+            res+=1000;
         }
         catch (NullPointerException e)
         {
@@ -27,7 +28,8 @@ public class CatchNullPointerExceptionArrayLengthChar
 
         try
         {
-            return obj.b.length;
+            res = obj.b.length;
+            res+=1000;
         }
         catch (RuntimeException e)
         {
@@ -36,7 +38,8 @@ public class CatchNullPointerExceptionArrayLengthChar
 
         try
         {
-            return obj.b.length;
+            res = obj.b.length;
+            res+=1000;
         }
         catch (Exception e)
         {
@@ -45,7 +48,8 @@ public class CatchNullPointerExceptionArrayLengthChar
 
         try
         {
-            return obj.b.length;
+            res = obj.b.length;
+            res+=1000;
         }
         catch (Throwable e)
         {

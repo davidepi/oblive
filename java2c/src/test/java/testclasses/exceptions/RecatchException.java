@@ -21,7 +21,7 @@ public class RecatchException
         {
             try
             {
-                throw new NullPointerException();
+                throw null;
             }
             catch(NullPointerException e1)
             {

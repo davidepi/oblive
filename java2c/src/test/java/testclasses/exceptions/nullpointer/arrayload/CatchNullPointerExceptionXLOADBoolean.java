@@ -17,7 +17,8 @@ public class CatchNullPointerExceptionXLOADBoolean
         int res = 0;
         try
         {
-            return obj.b[1]?1:0;
+          res+=obj.b[1]?1:0;
+          res+=1000;
         }
         catch (NullPointerException e)
         {
@@ -26,7 +27,8 @@ public class CatchNullPointerExceptionXLOADBoolean
 
         try
         {
-            return obj.b[1]?1:0;
+          res+=obj.b[1]?1:0;
+          res+=1000;
         }
         catch (RuntimeException e)
         {
@@ -35,7 +37,8 @@ public class CatchNullPointerExceptionXLOADBoolean
 
         try
         {
-            return obj.b[1]?1:0;
+          res+=obj.b[1]?1:0;
+          res+=1000;
         }
         catch (Exception e)
         {
@@ -44,7 +47,8 @@ public class CatchNullPointerExceptionXLOADBoolean
 
         try
         {
-            return obj.b[1]?1:0;
+          res+=obj.b[1]?1:0;
+          res+=1000;
         }
         catch (Throwable e)
         {

@@ -17,6 +17,7 @@ public class CatchNegativeArraySizeFloat
         try
         {
             this.array = new float[-1];
+            res+=1000;
         }
         catch (NegativeArraySizeException e)
         {
@@ -26,6 +27,7 @@ public class CatchNegativeArraySizeFloat
         try
         {
             this.array = new float[-1];
+            res+=1000;
         }
         catch(RuntimeException e)
         {
@@ -35,6 +37,7 @@ public class CatchNegativeArraySizeFloat
         try
         {
             this.array = new float[-1];
+            res+=1000;
         }
         catch (Exception e)
         {
@@ -44,6 +47,7 @@ public class CatchNegativeArraySizeFloat
         try
         {
             this.array = new float[-1];
+            res+=1000;
         }
         catch (Throwable e)
         {

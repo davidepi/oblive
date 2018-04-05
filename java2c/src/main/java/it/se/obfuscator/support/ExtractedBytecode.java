@@ -163,22 +163,19 @@ public class ExtractedBytecode
                 it.remove();
                 // last label used, since I'm not right after a label ----------v
                 Map<String,TryCatchBlock> currentLabelCatch = tryCatches.get(labelpure);
-                if(currentLabelCatch == null) //no catchblock
+                if(currentLabelCatch == null) //no catchblock for the current basic block, so throw the exception
                 {
                     it.add("(*env)->Throw(env,_stack[0].l);\nRETURN_EXCEPTION;\n");
                 }
-                else //inside a catchblock
+                else //inside a catchblock, so if(raised exception instance of catched exception) goto catch, else throw
                 {
                     //iterate trycatchs for current label and add dynamic exception checks
                     Iterator<Map.Entry<String, TryCatchBlock>> it0 = currentLabelCatch.entrySet().iterator();
-                    int iteration = 0;
                     while (it0.hasNext())
                     {
                         Map.Entry<String, TryCatchBlock> catched = it0.next();
-                        if (iteration++ == 0)
-                            it.add("if(_ExceptionInstanceOf(env,_stack,\"" + catched.getKey() + "\"))goto LABEL_" + catched.getValue().handle + ";\n");
-                        else
-                            it.add("else if(_ExceptionInstanceOf(env,_stack,\"" + catched.getKey() + "\"))goto LABEL_" + catched.getValue().handle + ";\n");
+                        //no need to if-elif-else since every if is broken by a goto
+                        it.add("if(_ExceptionInstanceOf(env,_stack,\"" + catched.getKey() + "\"))goto LABEL_" + catched.getValue().handle + ";\n");
                     }
                     it.add("(*env)->Throw(env,_stack[0].l);\nRETURN_EXCEPTION;\n");
                 }

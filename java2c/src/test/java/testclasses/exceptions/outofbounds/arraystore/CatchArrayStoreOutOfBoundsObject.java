@@ -18,6 +18,7 @@ public class CatchArrayStoreOutOfBoundsObject
         try
         {
             this.array[2] = "str0";
+            res+=1000;
         }
         catch (ArrayIndexOutOfBoundsException e)
         {
@@ -27,6 +28,7 @@ public class CatchArrayStoreOutOfBoundsObject
         try
         {
             this.array[2] = "str1";
+            res+=1000;
         }
         catch (IndexOutOfBoundsException e)
         {
@@ -36,6 +38,7 @@ public class CatchArrayStoreOutOfBoundsObject
         try
         {
             this.array[2] = "str2";
+            res+=1000;
         }
         catch (RuntimeException e)
         {
@@ -45,6 +48,7 @@ public class CatchArrayStoreOutOfBoundsObject
         try
         {
             this.array[2] = "str3";
+            res+=1000;
         }
         catch (Exception e)
         {
@@ -53,7 +57,8 @@ public class CatchArrayStoreOutOfBoundsObject
 
         try
         {
-            this.array[2] = "str4";
+          this.array[2] = "str4";
+          res+=1000;
         }
         catch (Throwable e)
         {

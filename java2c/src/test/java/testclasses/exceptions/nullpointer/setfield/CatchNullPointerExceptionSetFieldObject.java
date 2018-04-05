@@ -18,6 +18,7 @@ public class CatchNullPointerExceptionSetFieldObject
         try
         {
             obj.a="a";
+            res+=1000;
         }
         catch (NullPointerException e)
         {
@@ -27,6 +28,7 @@ public class CatchNullPointerExceptionSetFieldObject
         try
         {
             obj.a="b";
+            res+=1000;
         }
         catch (RuntimeException e)
         {
@@ -36,6 +38,7 @@ public class CatchNullPointerExceptionSetFieldObject
         try
         {
             obj.a="c";
+            res+=1000;
         }
         catch (Exception e)
         {
@@ -45,6 +48,7 @@ public class CatchNullPointerExceptionSetFieldObject
         try
         {
             obj.a="d";
+            res+=1000;
         }
         catch (Throwable e)
         {

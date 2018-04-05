@@ -17,7 +17,8 @@ public class CatchNullPointerExceptionGetFieldObject
         int res = 0;
         try
         {
-            return obj.a.length();
+          res+=(int)obj.a.length();
+          res+=1000;
         }
         catch (NullPointerException e)
         {
@@ -26,7 +27,8 @@ public class CatchNullPointerExceptionGetFieldObject
 
         try
         {
-            return obj.a.length();
+          res+=(int)obj.a.length();
+          res+=1000;
         }
         catch (RuntimeException e)
         {
@@ -35,7 +37,8 @@ public class CatchNullPointerExceptionGetFieldObject
 
         try
         {
-            return obj.a.length();
+          res+=(int)obj.a.length();
+          res+=1000;
         }
         catch (Exception e)
         {
@@ -44,7 +47,8 @@ public class CatchNullPointerExceptionGetFieldObject
 
         try
         {
-            return obj.a.length();
+          res+=(int)obj.a.length();
+          res+=1000;
         }
         catch (Throwable e)
         {
