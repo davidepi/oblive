@@ -6,9 +6,9 @@ public class TestFDiv extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.arithmetic.FDiv.class;
-    private String[] methodTest = {"exec"};
-    private Class[][] methodParam = {new Class[]{float.class,float.class}};
-    private Object[][] methodArgs = {new Object[]{3.5f,0.5f}};
+    private String[] methodTest = {"exec","exec"};
+    private Class[][] methodParam = {new Class[]{float.class,float.class},new Class[]{float.class,float.class}};
+    private Object[][] methodArgs = {new Object[]{3.5f,0.5f},new Object[]{3.5f,0}};
 
 
     @Override

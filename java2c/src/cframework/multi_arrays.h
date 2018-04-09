@@ -16,11 +16,13 @@
   return array;
 
 #define MULTIDIMENSIONAL_MAIN_BODY(TYPE) int dimslen[dimensions]; /*dimensions is known at compile time*/\
-  for(int i=0;i<dimensions;i++) /*pushed in reverse order, so I can know when to stop*/\
+  for(int i=0;i<dimensions;i++) /*pushed in reverse order, so I can know when to stop*/{\
     dimslen[i] = pop(stack,index).i;\
+    if(dimslen[i]<0)return 1;}\
   generic_t res;\
   res.l = multidimarray_ ## TYPE ## _rec(env,dimslen,dimensions-1,className+1); /* Recursive step */\
   push(stack,index,res);\
+  return 0;
 
 static inline jobject multidimarray_object_rec(JNIEnv* env, const int* dimslen, int current_dimension, const char* className) //the only different one
 {
@@ -82,47 +84,47 @@ static inline jobject multidimarray_short_rec(JNIEnv* env, const int* dimslen, i
   MULTIDIMENSIONAL_RECURSION_BODY(Short,short)
 }
 
-static inline void _NewMultidimensionalIntArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
+static inline char _NewMultidimensionalIntArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
 {
   MULTIDIMENSIONAL_MAIN_BODY(int)
 }
 
-static inline void _NewMultidimensionalFloatArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
+static inline char _NewMultidimensionalFloatArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
 {
   MULTIDIMENSIONAL_MAIN_BODY(float)
 }
 
-static inline void _NewMultidimensionalByteArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
+static inline char _NewMultidimensionalByteArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
 {
   MULTIDIMENSIONAL_MAIN_BODY(byte)
 }
 
-static inline void _NewMultidimensionalBooleanArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
+static inline char _NewMultidimensionalBooleanArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
 {
   MULTIDIMENSIONAL_MAIN_BODY(boolean)
 }
 
-static inline void _NewMultidimensionalCharArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
+static inline char _NewMultidimensionalCharArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
 {
   MULTIDIMENSIONAL_MAIN_BODY(char)
 }
 
-static inline void _NewMultidimensionalShortArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
+static inline char _NewMultidimensionalShortArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
 {
   MULTIDIMENSIONAL_MAIN_BODY(short)
 }
 
-static inline void _NewMultidimensionalLongArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
+static inline char _NewMultidimensionalLongArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
 {
   MULTIDIMENSIONAL_MAIN_BODY(long)
 }
 
-static inline void _NewMultidimensionalDoubleArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
+static inline char _NewMultidimensionalDoubleArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
 {
   MULTIDIMENSIONAL_MAIN_BODY(double)
 }
 
-static inline void _NewMultidimensionalObjectArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
+static inline char _NewMultidimensionalObjectArray(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className, int dimensions)
 {
   MULTIDIMENSIONAL_MAIN_BODY(object)
 }

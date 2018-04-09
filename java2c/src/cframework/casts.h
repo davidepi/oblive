@@ -117,7 +117,15 @@ static inline void _InstanceOf(JNIEnv* env, generic_t* stack, uint32_t* index, c
   push(stack,index,res);
 }
 
-static inline void _CheckCast(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className)
+static inline char _ExceptionInstanceOf(JNIEnv* env, generic_t* stack, const char* exceptionName)
+{
+  jthrowable obj = stack[0].l;
+  //guaranteed that obj is NEVER null, by a previous check
+  jclass caller_class = (*env)->FindClass(env, exceptionName);
+  return (*env)->IsInstanceOf(env,obj,caller_class);
+}
+
+static inline int _CheckCast(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className)
 {
   generic_t obj = pop(stack,index);
   if(obj.l!=NULL)
@@ -128,8 +136,9 @@ static inline void _CheckCast(JNIEnv* env, generic_t* stack, uint32_t* index, co
       push(stack,index,obj);
     }
     else
-    /* exception */;
+      return 1;
   }
   else
     push(stack,index,obj);
+  return 0;
 }

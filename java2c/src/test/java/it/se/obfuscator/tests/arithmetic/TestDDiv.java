@@ -6,9 +6,9 @@ public class TestDDiv extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.arithmetic.DDiv.class;
-    private String[] methodTest = {"exec"};
-    private Class[][] methodParam = {new Class[]{double.class,double.class}};
-    private Object[][] methodArgs = {new Object[]{3.5,2.5}};
+    private String[] methodTest = {"exec","exec"};
+    private Class[][] methodParam = {new Class[]{double.class,double.class},new Class[]{double.class,double.class}};
+    private Object[][] methodArgs = {new Object[]{3.5,2.5},new Object[]{3.5,0}};
 
 
     @Override
