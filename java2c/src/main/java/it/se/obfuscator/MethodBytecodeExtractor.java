@@ -415,18 +415,16 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 eb.statements.add("if((*env)->ExceptionCheck(env)){\n_ThrowFromJVM(env,_stack,&_index);");
                 eb.statements.add(ExtractedBytecode.postprocessExceptionClear);
                 eb.statements.add("}");
-
+                break;
             case INVOKESPECIAL:
                 if(!name.equals("<init>"))
-                {
                     eb.statements.add("_InvokeSpecial_" + signature.getReturnType().getJniName() + "(env,_stack,&_index,\"" +
                             owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
-                    eb.statements.add("if((*env)->ExceptionCheck(env)){\n_ThrowFromJVM(env,_stack,&_index);");
-                    eb.statements.add(ExtractedBytecode.postprocessExceptionClear);
-                    eb.statements.add("}");
-                }
                 else
                     eb.statements.add("_New(env,_stack,&_index,\"" + owner + "\",\"" + desc + "\"," + argumentsName + ");");
+                eb.statements.add("if((*env)->ExceptionCheck(env)){\n_ThrowFromJVM(env,_stack,&_index);");
+                eb.statements.add(ExtractedBytecode.postprocessExceptionClear);
+                eb.statements.add("}");
                 break;
             case INVOKESTATIC:
                 eb.statements.add("_InvokeStatic_"+signature.getReturnType().getJniName()+"(env,_stack,&_index,\"" +
