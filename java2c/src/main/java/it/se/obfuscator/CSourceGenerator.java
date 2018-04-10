@@ -78,10 +78,16 @@ public class CSourceGenerator
         //push statements
         for(int i=0;i<eb.statements.size();i++)
         {
-            sb.append(eb.statements.get(i));
-            sb.append('\n');
+            String str = eb.statements.get(i);
+            if(str.length()>0)
+            {
+                sb.append(str);
+                if (str.charAt(str.length()-1)!='\n')
+                    sb.append('\n');
+            }
         }
-        sb.append("}\n\n");
+        sb.append("}\n");
+        sb.append("#undef RETURN_EXCEPTION\n\n");
         return sb.toString();
     }
 }
