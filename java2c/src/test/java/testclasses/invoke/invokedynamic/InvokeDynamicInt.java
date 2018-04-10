@@ -1,0 +1,24 @@
+package testclasses.invoke.invokedynamic;
+
+import it.se.obfuscator.Obfuscate;
+
+public class InvokeDynamicInt
+{
+    public InvokeDynamicInt()
+    {
+
+    }
+
+    @Obfuscate
+    public int add(int a, int b)
+    {
+
+        AdderInterface<Integer> adder = (Integer c, Integer d) -> (c + d);
+        return adder.add(a,b);
+    }
+
+    public int normalAdd(int a, int b)
+    {
+        return a + b;
+    }
+}

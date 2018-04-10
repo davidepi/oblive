@@ -312,6 +312,8 @@ public abstract class AbstractTransformationTest {
 	private void checkCodeInPreservedMethods() {
 		int length2 = sourceNotAnnotatedMethodNodes3.length;
 		for (int i=0; i<length2; i++){
+			if(sourceNotAnnotatedMethodNodes3[i].name.equals("<clinit>")) //TODO: dirty hack because I need to modify <clinit>
+				continue;
 			int size1 = TestUtils.sizeofCode(sourceNotAnnotatedMethodNodes3[i]);
 			int size2 = TestUtils.sizeofCode(destdNotAnnotatedMethodNodes4[i]);
 			String message = "method " + sourceNotAnnotatedMethodNodes3[i].name + ", class " + getTestClass().getName() + 

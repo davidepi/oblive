@@ -188,10 +188,11 @@ public class MethodBytecodeExtractor extends MethodVisitor
         TryCatchBlock current = new TryCatchBlock();
         current.start = start.toString();
         current.end = end.toString();
+        if(type==null)//generated inside monitor's implicit try-catch
+            type="java/lang/Object";
         current.catched = type;
         current.handle = handler.toString();
         current.order = count_trycatch++;
-
         eb.tryCatchBlocks.add(current);
         eb.catchedStatements.add(type);
         eb.usedLabels.add(handlerLabel);
@@ -496,6 +497,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 "goto CATCH_java_lang_Exception;\n" +
                 "#elif defined(CATCH_java_lang_Throwable)\n"+
                 "goto CATCH_java_lang_Throwable;\n" +
+                "#elif defined(CATCH_java_lang_Object)\n"+
+                "goto CATCH_java_lang_Object;\n" +
                 "#else\n"+
                 "(*env)->Throw(env,_stack[0].l);\n"+
                 "RETURN_EXCEPTION;\n" +
@@ -511,6 +514,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 "goto CATCH_java_lang_Exception;\n" +
                 "#elif defined(CATCH_java_lang_Throwable)\n"+
                 "goto CATCH_java_lang_Throwable;\n" +
+                "#elif defined(CATCH_java_lang_Object)\n"+
+                "goto CATCH_java_lang_Object;\n" +
                 "#else\n" +
                 "(*env)->Throw(env,_stack[0].l);\n"+
                 "RETURN_EXCEPTION;\n" +
@@ -527,6 +532,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
                     "goto CATCH_java_lang_Exception;\n" +
                     "#elif defined(CATCH_java_lang_Throwable)\n"+
                     "goto CATCH_java_lang_Throwable;\n" +
+                    "#elif defined(CATCH_java_lang_Object)\n"+
+                    "goto CATCH_java_lang_Object;\n" +
                     "#else\n" +
                     "(*env)->Throw(env,_stack[0].l);\n"+
                     "RETURN_EXCEPTION;\n" +
@@ -549,6 +556,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
                 "goto CATCH_java_lang_Exception;\n" +
                 "#elif defined(CATCH_java_lang_Throwable)\n"+
                 "goto CATCH_java_lang_Throwable;\n" +
+                "#elif defined(CATCH_java_lang_Object)\n"+
+                "goto CATCH_java_lang_Object;\n" +
                 "#else\n" +
                 "(*env)->Throw(env,_stack[0].l);\n"+
                 "RETURN_EXCEPTION;\n" +

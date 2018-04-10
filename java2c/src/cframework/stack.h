@@ -151,6 +151,18 @@ static inline void _Store2(generic_t* stack, generic_t* arg, uint32_t* index, in
   arg[valueIndex] = pop2(stack,index);
 }
 
+static inline void _MonitorEnter(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  generic_t lock = pop(stack,index);
+  (*env)->MonitorEnter(env, lock.l);
+}
+
+static inline void _MonitorExit(JNIEnv* env, generic_t* stack, uint32_t* index)
+{
+  generic_t lock = pop(stack,index);
+  (*env)->MonitorExit(env,lock.l);
+}
+
 #define ARETURN {jvalue __areturn_retval__ = pop(_stack,&_index); return __areturn_retval__.l;}
 #define IRETURN {jvalue __ireturn_retval__ = pop(_stack,&_index); return __ireturn_retval__.i;}
 #define LRETURN {jvalue __lreturn_retval__ = pop2(_stack,&_index); return __lreturn_retval__.j;}
