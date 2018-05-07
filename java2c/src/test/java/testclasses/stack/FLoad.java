@@ -1,6 +1,6 @@
 package testclasses.stack;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class FLoad
 {
@@ -9,7 +9,7 @@ public class FLoad
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public float exec(float a)
     {
         return a;

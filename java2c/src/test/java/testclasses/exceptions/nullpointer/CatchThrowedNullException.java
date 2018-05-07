@@ -1,7 +1,6 @@
 package testclasses.exceptions.nullpointer;
 
-import it.se.obfuscator.Obfuscate;
-import testclasses.exceptions.UserDefinedException;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CatchThrowedNullException
 {
@@ -10,7 +9,7 @@ public class CatchThrowedNullException
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec()
     {
         int res = 0;

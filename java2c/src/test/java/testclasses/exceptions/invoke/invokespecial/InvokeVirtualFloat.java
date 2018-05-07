@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokespecial;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeVirtualFloat
 {
@@ -9,7 +9,7 @@ public class InvokeVirtualFloat
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public float add(float a, float b)
     {
         return normalAdd(a,b);

@@ -1,6 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LengthArrayInt
 {
@@ -11,7 +11,7 @@ public class LengthArrayInt
         this.array = new int[3][2];
     }
 
-    @Obfuscate
+    @Obfuscation
     public int getLen()
     {
         return this.array.length;

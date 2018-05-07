@@ -1,6 +1,6 @@
 package testclasses.invoke.invokevirtual;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public class InvokeVirtualIntArray
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int[] exec()
     {
         return returnArray();

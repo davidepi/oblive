@@ -1,6 +1,6 @@
 package testclasses.exceptions.outofbounds.arrayload;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowArrayLoadOutOfBoundsObject
 {
@@ -10,7 +10,7 @@ public class ThrowArrayLoadOutOfBoundsObject
         this.array = new String[2];
     }
 
-    @Obfuscate
+    @Obfuscation
     public String exec()
     {
         return this.array[2];

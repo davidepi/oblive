@@ -1,6 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LoadArrayInt
 {
@@ -13,7 +13,7 @@ public class LoadArrayInt
         this.array[1] = new int[]{1300000000,1400000000,1500000000};
     }
 
-    @Obfuscate
+    @Obfuscation
     public int getVal()
     {
         return this.array[1][2];

@@ -1,6 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public class InvokeStaticIntArray
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int[] exec()
     {
         return testclasses.invoke.invokestatic.InvokeStaticIntArray.returnArray();

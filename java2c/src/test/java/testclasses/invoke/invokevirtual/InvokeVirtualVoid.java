@@ -1,6 +1,6 @@
 package testclasses.invoke.invokevirtual;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeVirtualVoid
 {
@@ -9,7 +9,7 @@ public class InvokeVirtualVoid
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public void add(int a, int b)
     {
         print(a,b);

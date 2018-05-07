@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokespecial;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 
 public class ThrowInvokeSpecialBoolean extends InvokeVirtualBoolean
@@ -10,7 +10,7 @@ public class ThrowInvokeSpecialBoolean extends InvokeVirtualBoolean
 
     }
 
-    @Obfuscate
+    @Obfuscation
     @Override
     public boolean and(boolean a, boolean b)
     {

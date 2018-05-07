@@ -1,7 +1,7 @@
 package testclasses.stack;
 
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 //ICONST_M1, ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4, ICONST_5
 public class IConst
@@ -11,7 +11,7 @@ public class IConst
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec()
     {
         int a = 0;

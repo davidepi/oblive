@@ -1,6 +1,6 @@
 package testclasses.invoke.invokeinterface;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeInterfaceInt
 {
@@ -9,7 +9,7 @@ public class InvokeInterfaceInt
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int add(AdderInterface interf, int a, int b)
     {
         return interf.add(a,b);

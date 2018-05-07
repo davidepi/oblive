@@ -1,6 +1,6 @@
 package testclasses.fields;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class SetFieldShort
 {
@@ -17,6 +17,6 @@ public class SetFieldShort
         return this.fieldS;
     }
 
-    @Obfuscate
+    @Obfuscation
     public void setField(short value){this.fieldS = value;}
 }

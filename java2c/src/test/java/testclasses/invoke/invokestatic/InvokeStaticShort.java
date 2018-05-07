@@ -1,6 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeStaticShort
 {
@@ -9,7 +9,7 @@ public class InvokeStaticShort
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public short add(short a, short b)
     {
         return normalAdd(a,b);

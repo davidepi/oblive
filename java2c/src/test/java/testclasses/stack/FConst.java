@@ -1,7 +1,7 @@
 package testclasses.stack;
 
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 //FCONST_0, FCONST_1, FCONST_2, FADD, FSTORE, FLOAD
 public class FConst
@@ -11,7 +11,7 @@ public class FConst
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public float exec()
     {
         float a = 0.f;

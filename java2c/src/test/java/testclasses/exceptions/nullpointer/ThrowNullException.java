@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowNullException
 {
@@ -9,7 +9,7 @@ public class ThrowNullException
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec()
     {
         throw null;

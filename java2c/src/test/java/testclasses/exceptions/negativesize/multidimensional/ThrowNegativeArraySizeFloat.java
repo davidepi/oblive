@@ -1,6 +1,6 @@
 package testclasses.exceptions.negativesize.multidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowNegativeArraySizeFloat
 {
@@ -10,7 +10,7 @@ public class ThrowNegativeArraySizeFloat
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec()
     {
         this.array = new float[-1][1][1];

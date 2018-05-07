@@ -1,6 +1,6 @@
 package testclasses.exceptions.outofbounds.arrayload;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CatchArrayLoadOutOfBoundsFloat
 {
@@ -10,7 +10,7 @@ public class CatchArrayLoadOutOfBoundsFloat
         this.array = new float[2];
     }
 
-    @Obfuscate
+    @Obfuscation
     public float exec()
     {
         int res=0;

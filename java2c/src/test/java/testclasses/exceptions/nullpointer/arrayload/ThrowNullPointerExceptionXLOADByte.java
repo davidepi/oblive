@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.arrayload;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.nullpointer.SupportClassByte;
 
 public class ThrowNullPointerExceptionXLOADByte
@@ -10,7 +10,7 @@ public class ThrowNullPointerExceptionXLOADByte
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(SupportClassByte obj)
     {
         return obj.b[1];

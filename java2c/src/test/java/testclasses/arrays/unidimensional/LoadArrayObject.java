@@ -1,6 +1,6 @@
 package testclasses.arrays.unidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LoadArrayObject
 {
@@ -11,7 +11,7 @@ public class LoadArrayObject
         this.array = new String[]{"hello","world"};
     }
 
-    @Obfuscate
+    @Obfuscation
     public String getVal()
     {
         return this.array[1];

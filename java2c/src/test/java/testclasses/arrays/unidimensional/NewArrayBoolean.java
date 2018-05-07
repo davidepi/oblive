@@ -1,6 +1,6 @@
 package testclasses.arrays.unidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public class NewArrayBoolean
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public boolean[] getArray()
     {
         return new boolean[10];

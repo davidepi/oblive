@@ -1,6 +1,6 @@
 package testclasses.invoke.invokespecial;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import static org.junit.Assert.fail;
 
@@ -11,7 +11,7 @@ public class InvokeSpecialVoid extends InvokeVirtualVoid
 
     }
 
-    @Obfuscate
+    @Obfuscation
     @Override
     public void add(int a, int b)
     {

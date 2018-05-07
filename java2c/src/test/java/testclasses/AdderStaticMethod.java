@@ -1,6 +1,6 @@
 package testclasses;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class AdderStaticMethod
 {
@@ -9,7 +9,7 @@ public class AdderStaticMethod
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public static int add(int a, int b)
     {
         return a + b;

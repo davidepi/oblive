@@ -1,6 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LoadArrayLong
 {
@@ -13,7 +13,7 @@ public class LoadArrayLong
         this.array[1] = new long[]{10000000004L,10000000005L,10000000006L};
     }
 
-    @Obfuscate
+    @Obfuscation
     public long getVal()
     {
         return this.array[1][1];

@@ -1,6 +1,6 @@
 package testclasses.fields;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class GetStaticByte
 {
@@ -11,7 +11,7 @@ public class GetStaticByte
         GetStaticByte.fieldB = 100;
     }
 
-    @Obfuscate
+    @Obfuscation
     public byte getStatic()
     {
         return GetStaticByte.fieldB;

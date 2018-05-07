@@ -1,6 +1,6 @@
 package testclasses.exceptions.negativesize.multidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CatchNegativeArraySizeLong
 {
@@ -10,7 +10,7 @@ public class CatchNegativeArraySizeLong
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec()
     {
         int res = 0;

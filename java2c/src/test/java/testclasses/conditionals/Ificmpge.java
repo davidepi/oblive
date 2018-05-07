@@ -1,6 +1,6 @@
 package testclasses.conditionals;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class Ificmpge
 {
@@ -9,7 +9,7 @@ public class Ificmpge
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public boolean exec(int value)
     {
         if(value < 1000000000)

@@ -1,6 +1,6 @@
 package testclasses.conditionals;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class Ifacmpeq
 {
@@ -9,7 +9,7 @@ public class Ifacmpeq
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public boolean exec(Object value0, Object value1)
     {
         if(value0!=value1)

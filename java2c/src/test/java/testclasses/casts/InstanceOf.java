@@ -1,6 +1,6 @@
 package testclasses.casts;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InstanceOf
 {
@@ -9,7 +9,7 @@ public class InstanceOf
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public static boolean instanceofString(Object a)
     {
         return a instanceof String;

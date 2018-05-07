@@ -1,6 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ public class StoreArrayBoolean
         this.array[1] = new boolean[]{true,true,true,true,true,true,true,true,true,true};
     }
 
-    @Obfuscate
+    @Obfuscation
     public void setVal(int i, int j, boolean val)
     {
         this.array[i][j] = val;

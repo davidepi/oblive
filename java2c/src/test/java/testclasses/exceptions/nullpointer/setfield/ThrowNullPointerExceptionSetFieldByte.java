@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.setfield;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.nullpointer.SupportClassByte;
 
 public class ThrowNullPointerExceptionSetFieldByte
@@ -10,7 +10,7 @@ public class ThrowNullPointerExceptionSetFieldByte
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public byte exec(SupportClassByte obj)
     {
         obj.a = 0;

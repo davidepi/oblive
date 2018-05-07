@@ -1,6 +1,6 @@
 package testclasses.stack;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class Pop
 {
@@ -11,7 +11,7 @@ public class Pop
         this.val = false;
     }
 
-    @Obfuscate
+    @Obfuscation
     public boolean exec()
     {
         this.setVal();

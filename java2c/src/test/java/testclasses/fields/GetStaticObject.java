@@ -1,6 +1,6 @@
 package testclasses.fields;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class GetStaticObject
 {
@@ -11,7 +11,7 @@ public class GetStaticObject
         GetStaticObject.fieldL = "hello world";
     }
 
-    @Obfuscate
+    @Obfuscation
     public String getStatic()
     {
         return GetStaticObject.fieldL;

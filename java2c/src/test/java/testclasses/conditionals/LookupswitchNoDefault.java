@@ -1,6 +1,6 @@
 package testclasses.conditionals;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LookupswitchNoDefault
 {
@@ -9,7 +9,7 @@ public class LookupswitchNoDefault
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(int a)
     {
         int retval = 500000000;

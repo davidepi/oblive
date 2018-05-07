@@ -1,6 +1,6 @@
 package testclasses.invoke.invokevirtual;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeVirtualByte
 {
@@ -9,7 +9,7 @@ public class InvokeVirtualByte
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public byte add(byte a, byte b)
     {
         return normalAdd(a,b);

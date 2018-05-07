@@ -1,6 +1,6 @@
 package testclasses.conditionals;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LookupswitchString
 {
@@ -9,7 +9,7 @@ public class LookupswitchString
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(String a)
     {
         int retval;

@@ -1,6 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ public class StoreArrayShort
         this.array[1] = new short[]{1000,1000,1000,1000,1000,1000,1000,1000,1000,1000};
     }
 
-    @Obfuscate
+    @Obfuscation
     public void setVal(int i, int j, short val)
     {
         this.array[i][j] = val;

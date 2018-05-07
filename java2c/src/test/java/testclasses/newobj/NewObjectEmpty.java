@@ -1,6 +1,6 @@
 package testclasses.newobj;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class NewObjectEmpty
 {
@@ -9,7 +9,7 @@ public class NewObjectEmpty
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public String getObject()
     {
         return new String();

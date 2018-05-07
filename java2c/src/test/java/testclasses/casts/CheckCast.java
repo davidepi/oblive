@@ -1,6 +1,6 @@
 package testclasses.casts;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CheckCast
 {
@@ -9,7 +9,7 @@ public class CheckCast
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public static String castString(Object a)
     {
         return (String)a;

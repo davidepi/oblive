@@ -1,6 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ public class StoreArrayFloat
         this.array[1] = new float[]{-1.f,-1.f,-1.f,-1.f,-1.f,-1.f,-1.f,-1.f,-1.f,-1.f};
     }
 
-    @Obfuscate
+    @Obfuscation
     public void setVal(int i, int j, float val)
     {
         this.array[i][j] = val;

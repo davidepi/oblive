@@ -1,6 +1,6 @@
 package testclasses.exceptions;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowExceptionInNew
 {
@@ -9,7 +9,7 @@ public class ThrowExceptionInNew
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec()
     {
         new ClassExceptionInInit();

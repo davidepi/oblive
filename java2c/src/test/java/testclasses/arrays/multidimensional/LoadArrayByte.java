@@ -1,6 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LoadArrayByte
 {
@@ -13,7 +13,7 @@ public class LoadArrayByte
         this.array[1] = new byte[]{103,104,105};
     }
 
-    @Obfuscate
+    @Obfuscation
     public byte getVal()
     {
         return this.array[1][2];

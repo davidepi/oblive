@@ -1,6 +1,6 @@
 package testclasses.arrays.unidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ public class StoreArrayChar
         this.array = new char[]{'a','b','c','d','e','f','g','h','i','j'};
     }
 
-    @Obfuscate
+    @Obfuscation
     public void setVal(int i, char val)
     {
         this.array[i] = val;

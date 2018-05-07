@@ -1,6 +1,6 @@
 package testclasses.exceptions;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CatchArithmeticExceptionLREM
 {
@@ -9,7 +9,7 @@ public class CatchArithmeticExceptionLREM
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public static long divide(long a)
     {
         long res = 0;

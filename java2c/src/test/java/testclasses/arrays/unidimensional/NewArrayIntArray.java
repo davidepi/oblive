@@ -1,6 +1,6 @@
 package testclasses.arrays.unidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public class NewArrayIntArray
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int[][] getArray()
     {
         return new int[2][];

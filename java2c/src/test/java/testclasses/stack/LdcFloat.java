@@ -1,7 +1,7 @@
 package testclasses.stack;
 
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LdcFloat
 {
@@ -10,7 +10,7 @@ public class LdcFloat
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public float exec()
     {
         float a = 3.5f;

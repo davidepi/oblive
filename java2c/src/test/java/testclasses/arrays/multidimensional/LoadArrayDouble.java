@@ -1,6 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LoadArrayDouble
 {
@@ -13,7 +13,7 @@ public class LoadArrayDouble
         this.array[1] = new double[]{.4,.5,.6};
     }
 
-    @Obfuscate
+    @Obfuscation
     public double getVal()
     {
         return this.array[1][0];

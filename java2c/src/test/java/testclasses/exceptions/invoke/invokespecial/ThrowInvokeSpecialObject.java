@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokespecial;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowInvokeSpecialObject extends InvokeVirtualObject
 {
@@ -9,7 +9,7 @@ public class ThrowInvokeSpecialObject extends InvokeVirtualObject
 
     }
 
-    @Obfuscate
+    @Obfuscation
     @Override
     public String concatenate(String a, char b)
     {

@@ -1,7 +1,7 @@
 package testclasses.stack;
 
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 //BIPUSH
 public class NullConst
@@ -11,7 +11,7 @@ public class NullConst
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public Object exec()
     {
         return null;

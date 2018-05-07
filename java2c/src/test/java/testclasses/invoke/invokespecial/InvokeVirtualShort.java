@@ -1,6 +1,6 @@
 package testclasses.invoke.invokespecial;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeVirtualShort
 {
@@ -9,7 +9,7 @@ public class InvokeVirtualShort
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public short add(short a, short b)
     {
         return normalAdd(a,b);

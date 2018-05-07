@@ -1,6 +1,6 @@
 package testclasses.invoke.invokespecial;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeSpecialDouble extends InvokeVirtualDouble
 {
@@ -9,7 +9,7 @@ public class InvokeSpecialDouble extends InvokeVirtualDouble
 
     }
 
-    @Obfuscate
+    @Obfuscation
     @Override
     public double add(double a, double b)
     {

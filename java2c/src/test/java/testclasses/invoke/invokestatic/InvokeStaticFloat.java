@@ -1,6 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeStaticFloat
 {
@@ -9,7 +9,7 @@ public class InvokeStaticFloat
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public float add(float a, float b)
     {
         return normalAdd(a,b);

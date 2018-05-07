@@ -1,7 +1,7 @@
 package testclasses.stack;
 
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 //LCONST_0, LCONST_1, LADD, LSTORE, LLOAD
 public class LConst
@@ -11,7 +11,7 @@ public class LConst
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public long exec()
     {
         long a = 0;

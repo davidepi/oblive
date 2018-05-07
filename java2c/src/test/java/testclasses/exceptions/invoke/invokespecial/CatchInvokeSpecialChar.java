@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokespecial;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CatchInvokeSpecialChar extends InvokeVirtualChar
 {
@@ -9,7 +9,7 @@ public class CatchInvokeSpecialChar extends InvokeVirtualChar
 
     }
 
-    @Obfuscate
+    @Obfuscation
     @Override
     public char add(char a, char b)
     {

@@ -1,6 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LoadArrayBoolean
 {
@@ -13,7 +13,7 @@ public class LoadArrayBoolean
         this.array[1] = new boolean[]{false,true,false};
     }
 
-    @Obfuscate
+    @Obfuscation
     public boolean getVal()
     {
         return this.array[1][1];

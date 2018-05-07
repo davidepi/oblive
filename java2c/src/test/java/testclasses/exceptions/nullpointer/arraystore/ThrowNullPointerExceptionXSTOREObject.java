@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.arraystore;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.nullpointer.SupportClassObject;
 
 public class ThrowNullPointerExceptionXSTOREObject
@@ -10,7 +10,7 @@ public class ThrowNullPointerExceptionXSTOREObject
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(SupportClassObject obj)
     {
         obj.b[1] = "str0";

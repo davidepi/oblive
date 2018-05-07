@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokestatic;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowInvokeStaticInt
 {
@@ -9,7 +9,7 @@ public class ThrowInvokeStaticInt
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int div(int a)
     {
         return normalDiv(a,0);

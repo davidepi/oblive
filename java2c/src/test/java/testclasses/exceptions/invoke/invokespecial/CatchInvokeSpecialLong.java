@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokespecial;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CatchInvokeSpecialLong extends InvokeVirtualLong
 {
@@ -9,7 +9,7 @@ public class CatchInvokeSpecialLong extends InvokeVirtualLong
 
     }
 
-    @Obfuscate
+    @Obfuscation
     @Override
     public long add(long a, long b)
     {

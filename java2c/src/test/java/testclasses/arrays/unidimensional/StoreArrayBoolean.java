@@ -1,6 +1,6 @@
 package testclasses.arrays.unidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ public class StoreArrayBoolean
         this.array = new boolean[]{false,false,false,true,false,true,false,false,false,false};
     }
 
-    @Obfuscate
+    @Obfuscation
     public void setVal(int i, boolean val)
     {
         this.array[i] = val;

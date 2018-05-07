@@ -1,6 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeStaticLong
 {
@@ -9,7 +9,7 @@ public class InvokeStaticLong
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public long add(long a, long b)
     {
         return normalAdd(a,b);

@@ -1,6 +1,6 @@
 package testclasses.exceptions.negativesize.unidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CatchNegativeArraySizeFloat
 {
@@ -10,7 +10,7 @@ public class CatchNegativeArraySizeFloat
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec()
     {
         int res = 0;

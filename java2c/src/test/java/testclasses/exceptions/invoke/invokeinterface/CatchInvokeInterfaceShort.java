@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokeinterface;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CatchInvokeInterfaceShort
 {
@@ -9,7 +9,7 @@ public class CatchInvokeInterfaceShort
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int div(DivisionInterface interf, short a)
     {
       int res = 0;

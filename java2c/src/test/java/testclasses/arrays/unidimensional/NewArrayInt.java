@@ -1,9 +1,8 @@
 package testclasses.arrays.unidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class NewArrayInt
 {
@@ -12,7 +11,7 @@ public class NewArrayInt
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int[] getArray()
     {
         return new int[10];

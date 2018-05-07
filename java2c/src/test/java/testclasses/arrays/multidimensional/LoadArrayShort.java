@@ -1,6 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LoadArrayShort
 {
@@ -13,7 +13,7 @@ public class LoadArrayShort
         this.array[1] = new short[]{10000,10001,10002};
     }
 
-    @Obfuscate
+    @Obfuscation
     public short getVal()
     {
         return this.array[1][2];

@@ -1,6 +1,6 @@
 package testclasses.stack;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class DupX1
 {
@@ -10,7 +10,7 @@ public class DupX1
         this.obj = new TestingObjectDup();
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec()
     {
         obj.setValue(obj.a=2);

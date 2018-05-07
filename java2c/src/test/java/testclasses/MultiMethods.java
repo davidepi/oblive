@@ -1,6 +1,6 @@
 package testclasses;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class MultiMethods
 {
@@ -9,25 +9,25 @@ public class MultiMethods
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int add(int a, int b)
     {
         return a + b;
     }
 
-    @Obfuscate
+    @Obfuscation
     public int sub(int a, int b)
     {
         return a - b;
     }
 
-    @Obfuscate
+    @Obfuscation
     public int mul(int a, int b)
     {
         return a * b;
     }
 
-    @Obfuscate
+    @Obfuscation
     public int div(int a, int b)
     {
         return a / b;

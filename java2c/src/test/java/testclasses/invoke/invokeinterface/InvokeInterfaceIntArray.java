@@ -1,6 +1,6 @@
 package testclasses.invoke.invokeinterface;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public class InvokeInterfaceIntArray
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int[] exec(AdderInterface interf)
     {
         return interf.array();

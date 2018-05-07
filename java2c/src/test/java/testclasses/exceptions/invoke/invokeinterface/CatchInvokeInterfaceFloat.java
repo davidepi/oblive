@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokeinterface;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CatchInvokeInterfaceFloat
 {
@@ -9,7 +9,7 @@ public class CatchInvokeInterfaceFloat
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public float div(DivisionInterface interf, float a)
     {
       int res = 0;

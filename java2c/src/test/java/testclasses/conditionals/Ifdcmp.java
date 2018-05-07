@@ -1,6 +1,6 @@
 package testclasses.conditionals;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class Ifdcmp
 {
@@ -9,7 +9,7 @@ public class Ifdcmp
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(double value)
     {
         int a=0, b=0, c=0, d=0, e=0, f=0;

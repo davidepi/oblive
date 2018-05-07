@@ -1,6 +1,6 @@
 package testclasses.arrays.unidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LengthArrayDouble
 {
@@ -11,7 +11,7 @@ public class LengthArrayDouble
         this.array = new double[79];
     }
 
-    @Obfuscate
+    @Obfuscation
     public int getLen()
     {
         return this.array.length;

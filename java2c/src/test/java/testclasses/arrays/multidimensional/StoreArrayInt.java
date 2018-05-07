@@ -1,8 +1,7 @@
 package testclasses.arrays.multidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class StoreArrayInt
@@ -16,7 +15,7 @@ public class StoreArrayInt
         this.array[1] = new int[]{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
     }
 
-    @Obfuscate
+    @Obfuscation
     public void setVal(int i, int j, int val)
     {
         this.array[i][j] = val;

@@ -1,6 +1,6 @@
 package testclasses.newobj;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class NewObjectNoLdc
 {
@@ -9,7 +9,7 @@ public class NewObjectNoLdc
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public TestingObjectNoLdc getObject(int a, long b, double c, String d)
     {
         return new TestingObjectNoLdc(a,b,System.out,c,d);

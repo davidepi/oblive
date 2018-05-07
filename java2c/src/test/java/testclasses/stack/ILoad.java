@@ -1,6 +1,6 @@
 package testclasses.stack;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ILoad
 {
@@ -9,7 +9,7 @@ public class ILoad
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(int a)
     {
         return a;

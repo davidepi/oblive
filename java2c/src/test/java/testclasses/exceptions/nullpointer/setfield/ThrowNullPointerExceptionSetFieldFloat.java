@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.setfield;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.nullpointer.SupportClassFloat;
 
 public class ThrowNullPointerExceptionSetFieldFloat
@@ -10,7 +10,7 @@ public class ThrowNullPointerExceptionSetFieldFloat
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public float exec(SupportClassFloat obj)
     {
         obj.a = 0;

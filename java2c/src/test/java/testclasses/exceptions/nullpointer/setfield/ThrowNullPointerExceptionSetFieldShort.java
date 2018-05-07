@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.setfield;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.nullpointer.SupportClassShort;
 
 public class ThrowNullPointerExceptionSetFieldShort
@@ -10,7 +10,7 @@ public class ThrowNullPointerExceptionSetFieldShort
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public short exec(SupportClassShort obj)
     {
         obj.a = 0;

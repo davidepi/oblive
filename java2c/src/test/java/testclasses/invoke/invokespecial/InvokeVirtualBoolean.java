@@ -1,6 +1,6 @@
 package testclasses.invoke.invokespecial;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeVirtualBoolean
 {
@@ -9,7 +9,7 @@ public class InvokeVirtualBoolean
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public boolean and(boolean a, boolean b)
     {
         return normalAnd(a,b);

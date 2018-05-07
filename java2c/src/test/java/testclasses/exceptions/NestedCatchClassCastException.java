@@ -1,6 +1,6 @@
 package testclasses.exceptions;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class NestedCatchClassCastException
 {
@@ -9,7 +9,7 @@ public class NestedCatchClassCastException
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public static String castString(Object a)
     {
         String retval = "";

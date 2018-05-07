@@ -1,6 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeStaticInt
 {
@@ -9,7 +9,7 @@ public class InvokeStaticInt
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int add(int a, int b)
     {
         return testclasses.invoke.invokestatic.InvokeStaticInt.normalAdd(a,b);

@@ -1,6 +1,6 @@
 package testclasses.fields;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class GetFieldDouble
 {
@@ -11,7 +11,7 @@ public class GetFieldDouble
         this.fieldD = 3.14159265359;
     }
 
-    @Obfuscate
+    @Obfuscation
     public double getField()
     {
         return this.fieldD;

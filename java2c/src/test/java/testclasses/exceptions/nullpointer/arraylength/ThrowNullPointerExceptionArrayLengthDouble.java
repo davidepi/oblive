@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.arraylength;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.nullpointer.SupportClassDouble;
 
 public class ThrowNullPointerExceptionArrayLengthDouble
@@ -10,7 +10,7 @@ public class ThrowNullPointerExceptionArrayLengthDouble
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(SupportClassDouble obj)
     {
         return obj.b.length;

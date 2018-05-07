@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokestatic;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowInvokeStaticDouble
 {
@@ -9,7 +9,7 @@ public class ThrowInvokeStaticDouble
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int div(int a)
     {
         return (int)normalDiv(a,0);

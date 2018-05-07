@@ -1,6 +1,6 @@
 package testclasses.conditionals;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class Goto
 {
@@ -9,7 +9,7 @@ public class Goto
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(int value)
     {
         int retval = 0;

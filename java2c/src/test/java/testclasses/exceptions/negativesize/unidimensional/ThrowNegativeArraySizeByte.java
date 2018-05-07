@@ -1,6 +1,6 @@
 package testclasses.exceptions.negativesize.unidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowNegativeArraySizeByte
 {
@@ -10,7 +10,7 @@ public class ThrowNegativeArraySizeByte
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec()
     {
         this.array = new byte[-1];

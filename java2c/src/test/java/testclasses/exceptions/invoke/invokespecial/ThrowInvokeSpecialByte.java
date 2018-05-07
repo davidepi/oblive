@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokespecial;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowInvokeSpecialByte extends InvokeVirtualByte
 {
@@ -9,7 +9,7 @@ public class ThrowInvokeSpecialByte extends InvokeVirtualByte
 
     }
 
-    @Obfuscate
+    @Obfuscation
     @Override
     public byte add(byte a, byte b)
     {

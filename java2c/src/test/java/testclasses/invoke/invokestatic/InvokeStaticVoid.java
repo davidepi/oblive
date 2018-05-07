@@ -1,6 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeStaticVoid
 {
@@ -9,7 +9,7 @@ public class InvokeStaticVoid
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public void add(int a, int b)
     {
         print(a,b);

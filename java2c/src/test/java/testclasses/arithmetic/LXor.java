@@ -1,6 +1,6 @@
-package testclasses.arithmetic; //when changing this, remember to change also the variable in it.se.obfuscator.helpers
+package testclasses.arithmetic; //when changing this, remember to change also the variable in eu.fbk.hardening.helpers
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LXor
 {
@@ -9,7 +9,7 @@ public class LXor
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public long exec(long a, long b)
     {
         return a ^ b;

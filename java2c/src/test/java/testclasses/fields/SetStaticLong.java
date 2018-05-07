@@ -1,6 +1,6 @@
 package testclasses.fields;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class SetStaticLong
 {
@@ -17,7 +17,7 @@ public class SetStaticLong
         return SetStaticLong.fieldJ;
     }
 
-    @Obfuscate
+    @Obfuscation
     public void setStatic(long value)
     {
         SetStaticLong.fieldJ = value;

@@ -1,7 +1,7 @@
 package testclasses.stack;
 
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 //SIPUSH
 public class SConst
@@ -11,7 +11,7 @@ public class SConst
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec()
     {
         short a = -3000;

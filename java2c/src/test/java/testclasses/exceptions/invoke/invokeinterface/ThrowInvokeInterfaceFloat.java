@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokeinterface;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowInvokeInterfaceFloat
 {
@@ -9,7 +9,7 @@ public class ThrowInvokeInterfaceFloat
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public float div(DivisionInterface interf, float a)
     {
         return interf.div(a);

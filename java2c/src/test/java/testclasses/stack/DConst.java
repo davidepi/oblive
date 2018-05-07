@@ -1,7 +1,7 @@
 package testclasses.stack;
 
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 //DCONST_0, DCONST_1, DADD, DSTORE, DLOAD
 public class DConst
@@ -11,7 +11,7 @@ public class DConst
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public double exec()
     {
         double a = 0.0;

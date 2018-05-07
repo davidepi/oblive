@@ -1,6 +1,6 @@
 package testclasses.exceptions;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowArrayStoreException
 {
@@ -12,7 +12,7 @@ public class ThrowArrayStoreException
         this.array[1] = "world";
     }
 
-    @Obfuscate
+    @Obfuscation
     public Object exec()
     {
         this.array[1] = 1;

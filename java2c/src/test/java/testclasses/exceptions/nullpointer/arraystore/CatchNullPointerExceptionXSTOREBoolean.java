@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.arraystore;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.nullpointer.SupportClassBoolean;
 
 public class CatchNullPointerExceptionXSTOREBoolean
@@ -11,7 +11,7 @@ public class CatchNullPointerExceptionXSTOREBoolean
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(SupportClassBoolean obj)
     {
         int res = 0;

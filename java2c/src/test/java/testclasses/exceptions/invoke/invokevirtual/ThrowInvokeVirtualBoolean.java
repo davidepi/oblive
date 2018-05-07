@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokevirtual;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowInvokeVirtualBoolean
 {
@@ -9,7 +9,7 @@ public class ThrowInvokeVirtualBoolean
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int div(int a)
     {
         return normalDiv(a,0)?0:-1;

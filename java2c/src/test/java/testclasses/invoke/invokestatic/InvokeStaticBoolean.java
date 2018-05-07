@@ -1,6 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeStaticBoolean
 {
@@ -9,7 +9,7 @@ public class InvokeStaticBoolean
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public boolean and(boolean a, boolean b)
     {
         return normalAnd(a,b);

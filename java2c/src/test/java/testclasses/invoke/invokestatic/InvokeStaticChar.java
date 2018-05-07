@@ -1,6 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeStaticChar
 {
@@ -9,7 +9,7 @@ public class InvokeStaticChar
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public char add(char a, char b)
     {
         return normalAdd(a,b);

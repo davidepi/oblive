@@ -1,7 +1,7 @@
 package testclasses.stack;
 
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LdcStringUnicode
 {
@@ -10,7 +10,7 @@ public class LdcStringUnicode
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public String exec()
     {
         return "( ͡° ͜ʖ ͡°)━☆ﾟ.*･｡ﾟ";

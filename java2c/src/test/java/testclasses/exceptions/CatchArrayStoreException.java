@@ -1,6 +1,6 @@
 package testclasses.exceptions;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CatchArrayStoreException
 {
@@ -12,7 +12,7 @@ public class CatchArrayStoreException
         this.array[1] = "world";
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec()
     {
         int res = 0;

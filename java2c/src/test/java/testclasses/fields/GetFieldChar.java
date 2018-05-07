@@ -1,6 +1,6 @@
 package testclasses.fields;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class GetFieldChar
 {
@@ -11,7 +11,7 @@ public class GetFieldChar
         this.fieldC = 'c';
     }
 
-    @Obfuscate
+    @Obfuscation
     public char getField()
     {
         return this.fieldC;

@@ -1,8 +1,6 @@
 package testclasses.arrays.unidimensional;
 
-import it.se.obfuscator.Obfuscate;
-
-import java.util.ArrayList;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LengthArrayInt
 {
@@ -13,7 +11,7 @@ public class LengthArrayInt
         this.array = new int[87];
     }
 
-    @Obfuscate
+    @Obfuscation
     public int getLen()
     {
         return this.array.length;

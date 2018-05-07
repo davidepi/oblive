@@ -1,6 +1,6 @@
-package testclasses.casts; //when changing this, remember to change also the variable in it.se.obfuscator.helpers
+package testclasses.casts; //when changing this, remember to change also the variable in eu.fbk.hardening.helpers
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CastInt2Long
 {
@@ -9,7 +9,7 @@ public class CastInt2Long
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public long exec(int a)
     {
         return (long)(a+a);

@@ -1,6 +1,6 @@
 package testclasses.stack;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class DLoad
 {
@@ -9,7 +9,7 @@ public class DLoad
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public double exec(double a)
     {
         return a;

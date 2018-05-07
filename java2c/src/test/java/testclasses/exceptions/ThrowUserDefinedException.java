@@ -1,6 +1,6 @@
 package testclasses.exceptions;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowUserDefinedException
 {
@@ -9,7 +9,7 @@ public class ThrowUserDefinedException
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec() throws UserDefinedException
     {
         throw new UserDefinedException();

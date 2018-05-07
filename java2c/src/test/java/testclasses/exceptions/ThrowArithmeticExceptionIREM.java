@@ -1,6 +1,6 @@
 package testclasses.exceptions;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowArithmeticExceptionIREM
 {
@@ -9,7 +9,7 @@ public class ThrowArithmeticExceptionIREM
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public static int mod(int a)
     {
         return a%0;

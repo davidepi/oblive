@@ -1,6 +1,6 @@
 package testclasses.exceptions.outofbounds.arraystore;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowArrayStoreOutOfBoundsDouble
 {
@@ -10,7 +10,7 @@ public class ThrowArrayStoreOutOfBoundsDouble
         this.array = new double[2];
     }
 
-    @Obfuscate
+    @Obfuscation
     public double exec()
     {
         this.array[2] = 1;

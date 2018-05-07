@@ -1,6 +1,6 @@
 package testclasses.invoke.invokespecial;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeSpecialLong extends InvokeVirtualLong
 {
@@ -9,7 +9,7 @@ public class InvokeSpecialLong extends InvokeVirtualLong
 
     }
 
-    @Obfuscate
+    @Obfuscation
     @Override
     public long add(long a, long b)
     {

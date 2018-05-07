@@ -1,6 +1,6 @@
 package testclasses.invoke.invokedynamic;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeDynamicInt
 {
@@ -9,7 +9,7 @@ public class InvokeDynamicInt
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int add(int a, int b)
     {
 

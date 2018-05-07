@@ -1,6 +1,6 @@
 package testclasses.invoke.invokespecial;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeSpecialInt extends InvokeVirtualInt
 {
@@ -9,7 +9,7 @@ public class InvokeSpecialInt extends InvokeVirtualInt
 
     }
 
-    @Obfuscate
+    @Obfuscation
     @Override
     public int add(int a, int b)
     {

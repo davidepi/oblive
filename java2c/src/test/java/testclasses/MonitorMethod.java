@@ -1,9 +1,6 @@
 package testclasses;
 
-import it.se.obfuscator.Obfuscate;
-import org.junit.Test;
-
-import java.util.concurrent.*;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import static java.lang.Thread.sleep;
 
@@ -15,7 +12,7 @@ public class MonitorMethod
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public void exec() throws InterruptedException
     {
         synchronized(this)

@@ -1,6 +1,6 @@
 package testclasses.fields;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ public class SetStaticIntArray
         this.array2 = new int[]{9,6,5,4,3,2,1,8,7};
     }
 
-    @Obfuscate
+    @Obfuscation
     public void setArray(){this.array = array2;};
 
     public ArrayList<Integer> test()

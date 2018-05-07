@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.getfield;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.nullpointer.SupportClassChar;
 
 public class CatchNullPointerExceptionGetFieldChar
@@ -11,7 +11,7 @@ public class CatchNullPointerExceptionGetFieldChar
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(SupportClassChar obj)
     {
         int res = 0;

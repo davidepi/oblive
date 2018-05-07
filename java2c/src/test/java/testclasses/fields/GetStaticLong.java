@@ -1,6 +1,6 @@
 package testclasses.fields;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class GetStaticLong
 {
@@ -11,7 +11,7 @@ public class GetStaticLong
         GetStaticLong.fieldJ = 10000000000L;
     }
 
-    @Obfuscate
+    @Obfuscation
     public long getStatic()
     {
         return GetStaticLong.fieldJ;

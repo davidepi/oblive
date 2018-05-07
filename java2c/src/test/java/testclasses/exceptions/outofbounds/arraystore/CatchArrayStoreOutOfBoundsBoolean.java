@@ -1,6 +1,6 @@
 package testclasses.exceptions.outofbounds.arraystore;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CatchArrayStoreOutOfBoundsBoolean
 {
@@ -10,7 +10,7 @@ public class CatchArrayStoreOutOfBoundsBoolean
         this.array = new boolean[2];
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec()
     {
         int res=0;

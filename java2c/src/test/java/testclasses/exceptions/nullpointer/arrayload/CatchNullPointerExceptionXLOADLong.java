@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.arrayload;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.nullpointer.SupportClassLong;
 
 public class CatchNullPointerExceptionXLOADLong
@@ -11,7 +11,7 @@ public class CatchNullPointerExceptionXLOADLong
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(SupportClassLong obj)
     {
         int res = 0;

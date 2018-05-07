@@ -1,6 +1,6 @@
 package testclasses.conditionals;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class Tableswitch
 {
@@ -9,7 +9,7 @@ public class Tableswitch
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(char a)
     {
         int retval;

@@ -1,10 +1,10 @@
 package testclasses.invoke.invokespecial;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeVirtualObject
 {
-    @Obfuscate
+    @Obfuscation
     public String concatenate(String a, char b)
     {
         return normalcat(a,b);

@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokestatic;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.UserDefinedException;
 
 public class CatchInvokeStaticBoolean
@@ -10,7 +10,7 @@ public class CatchInvokeStaticBoolean
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int div(int a)
     {
         int res = 0;

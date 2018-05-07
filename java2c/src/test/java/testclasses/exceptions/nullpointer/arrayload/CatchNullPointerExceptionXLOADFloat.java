@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.arrayload;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.nullpointer.SupportClassFloat;
 
 public class CatchNullPointerExceptionXLOADFloat
@@ -11,7 +11,7 @@ public class CatchNullPointerExceptionXLOADFloat
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(SupportClassFloat obj)
     {
         int res = 0;

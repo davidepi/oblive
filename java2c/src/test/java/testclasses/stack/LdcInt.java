@@ -1,7 +1,7 @@
 package testclasses.stack;
 
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LdcInt
 {
@@ -10,7 +10,7 @@ public class LdcInt
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec()
     {
         int a = 1000000000;

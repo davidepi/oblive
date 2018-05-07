@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.setfield;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.nullpointer.SupportClassDouble;
 
 public class ThrowNullPointerExceptionSetFieldDouble
@@ -10,7 +10,7 @@ public class ThrowNullPointerExceptionSetFieldDouble
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public double exec(SupportClassDouble obj)
     {
         obj.a = 0;

@@ -1,6 +1,6 @@
 package testclasses.exceptions;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CatchArithmeticExceptionIREM
 {
@@ -9,7 +9,7 @@ public class CatchArithmeticExceptionIREM
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public static int divide(int a)
     {
         int res = 0;

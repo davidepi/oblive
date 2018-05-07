@@ -1,7 +1,7 @@
 package testclasses.stack;
 
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 //BIPUSH
 public class BConst
@@ -11,7 +11,7 @@ public class BConst
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec()
     {
         byte a = -30;

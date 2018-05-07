@@ -1,6 +1,6 @@
 package testclasses.fields;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class SetStaticFloat
 {
@@ -17,7 +17,7 @@ public class SetStaticFloat
         return SetStaticFloat.fieldF;
     }
 
-    @Obfuscate
+    @Obfuscation
     public void setStatic(float value)
     {
         SetStaticFloat.fieldF = value;

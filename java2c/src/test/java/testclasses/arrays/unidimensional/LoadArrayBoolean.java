@@ -1,6 +1,6 @@
 package testclasses.arrays.unidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LoadArrayBoolean
 {
@@ -11,7 +11,7 @@ public class LoadArrayBoolean
         this.array = new boolean[]{false,false,false,false,true,false,false,false,false,false};
     }
 
-    @Obfuscate
+    @Obfuscation
     public boolean getVal()
     {
         return this.array[9];

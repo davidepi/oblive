@@ -1,6 +1,6 @@
 package testclasses.arrays.unidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class LoadArrayByte
 {
@@ -11,7 +11,7 @@ public class LoadArrayByte
         this.array = new byte[]{0,1,2,3,4,5,6,7,8,9,0};
     }
 
-    @Obfuscate
+    @Obfuscation
     public byte getVal()
     {
         return this.array[4];

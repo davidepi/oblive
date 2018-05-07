@@ -1,6 +1,6 @@
 package testclasses.conditionals;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class Ifnull
 {
@@ -9,7 +9,7 @@ public class Ifnull
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public boolean exec(Object value)
     {
         if(value != null)

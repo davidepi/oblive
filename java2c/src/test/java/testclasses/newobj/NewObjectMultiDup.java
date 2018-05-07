@@ -1,7 +1,6 @@
 package testclasses.newobj;
 
-import it.se.obfuscator.Obfuscate;
-import testclasses.stack.TestingObjectDup;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class NewObjectMultiDup
 {
@@ -10,7 +9,7 @@ public class NewObjectMultiDup
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public TestingObjectMultiDup getObject()
     {
         int a = 1;

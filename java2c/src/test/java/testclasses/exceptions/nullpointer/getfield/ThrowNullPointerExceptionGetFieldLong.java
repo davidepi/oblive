@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.getfield;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.nullpointer.SupportClassLong;
 
 public class ThrowNullPointerExceptionGetFieldLong
@@ -10,7 +10,7 @@ public class ThrowNullPointerExceptionGetFieldLong
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public long exec(SupportClassLong obj)
     {
         return obj.a;

@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.arraylength;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.nullpointer.SupportClassByte;
 
 public class CatchNullPointerExceptionArrayLengthByte
@@ -11,7 +11,7 @@ public class CatchNullPointerExceptionArrayLengthByte
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(SupportClassByte obj)
     {
 

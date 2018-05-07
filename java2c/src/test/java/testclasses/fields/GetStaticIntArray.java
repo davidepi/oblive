@@ -1,6 +1,6 @@
 package testclasses.fields;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ public class GetStaticIntArray
         array = new int[10];
     }
 
-    @Obfuscate
+    @Obfuscation
     public int[] getArray()
     {
         return this.array;

@@ -1,6 +1,6 @@
-package testclasses.casts; //when changing this, remember to change also the variable in it.se.obfuscator.helpers
+package testclasses.casts; //when changing this, remember to change also the variable in eu.fbk.hardening.helpers
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class CastFloat2Int
 {
@@ -9,7 +9,7 @@ public class CastFloat2Int
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int exec(float a)
     {
         return (int)(a+a);

@@ -1,6 +1,6 @@
 package testclasses.exceptions;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowClassCastException
 {
@@ -9,7 +9,7 @@ public class ThrowClassCastException
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public static String castString(Object a)
     {
         return (String)a;

@@ -1,10 +1,10 @@
 package testclasses.invoke.invokestatic;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeStaticObject
 {
-    @Obfuscate
+    @Obfuscation
     public String concatenate(String a, char b)
     {
         return normalcat(a,b);

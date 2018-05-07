@@ -1,6 +1,6 @@
-package testclasses.arithmetic; //when changing this, remember to change also the variable in it.se.obfuscator.helpers
+package testclasses.arithmetic; //when changing this, remember to change also the variable in eu.fbk.hardening.helpers
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class DRem
 {
@@ -9,7 +9,7 @@ public class DRem
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public double exec(double a, double b)
     {
         return a % b;

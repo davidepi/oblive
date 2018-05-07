@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokeinterface;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class ThrowInvokeInterfaceLong
 {
@@ -9,7 +9,7 @@ public class ThrowInvokeInterfaceLong
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public long div(DivisionInterface interf, long a)
     {
         return interf.div(a);

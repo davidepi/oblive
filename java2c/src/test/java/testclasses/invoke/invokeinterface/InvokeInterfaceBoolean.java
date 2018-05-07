@@ -1,6 +1,6 @@
 package testclasses.invoke.invokeinterface;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 public class InvokeInterfaceBoolean
 {
@@ -9,7 +9,7 @@ public class InvokeInterfaceBoolean
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public boolean and(AdderInterface interf, boolean a, boolean b)
     {
         return interf.and(a,b);

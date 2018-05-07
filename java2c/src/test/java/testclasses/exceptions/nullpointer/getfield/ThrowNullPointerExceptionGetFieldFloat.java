@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.getfield;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.nullpointer.SupportClassFloat;
 
 public class ThrowNullPointerExceptionGetFieldFloat
@@ -10,7 +10,7 @@ public class ThrowNullPointerExceptionGetFieldFloat
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public float exec(SupportClassFloat obj)
     {
         return obj.a;

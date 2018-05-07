@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokevirtual;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 import testclasses.exceptions.UserDefinedException;
 
 public class CatchInvokeVirtualDouble
@@ -10,7 +10,7 @@ public class CatchInvokeVirtualDouble
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int div(int a)
     {
         int res = 0;

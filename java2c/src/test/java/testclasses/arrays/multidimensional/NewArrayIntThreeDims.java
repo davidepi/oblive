@@ -1,6 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import it.se.obfuscator.Obfuscate;
+import eu.fbk.hardening.annotation.Obfuscation;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public class NewArrayIntThreeDims
 
     }
 
-    @Obfuscate
+    @Obfuscation
     public int[][][] getArray()
     {
         return new int[2][3][4];
