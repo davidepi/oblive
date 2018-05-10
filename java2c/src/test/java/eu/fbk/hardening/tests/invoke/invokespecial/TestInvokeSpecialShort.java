@@ -13,8 +13,8 @@ public class TestInvokeSpecialShort extends AbstractTestMethodTemplate
 
     private Class<?> className = testclasses.invoke.invokespecial.InvokeSpecialShort.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{short.class,short.class}};
-    private Object[][] methodArgs = {new Object[]{(short)15000,(short)21000}};
+    private Class[][] methodParam = {new Class[]{short.class, short.class}};
+    private Object[][] methodArgs = {new Object[]{(short) 15000, (short) 21000}};
 
     @Test
     public void testSuperMethodIsCalled()
@@ -22,8 +22,8 @@ public class TestInvokeSpecialShort extends AbstractTestMethodTemplate
         InvokeSpecialShort testme = new InvokeSpecialShort();
         InvokeVirtualShort check = new InvokeVirtualShort();
         //the normalAdd method of the testme class is wrong on purpose, the class should call the superclass one
-        assertEquals(check.normalAdd((short)15,(short)18),testme.add((short)15,(short)18));
-        assertNotEquals(check.normalAdd((short)15,(short)18),testme.normalAdd((short)15,(short)18));
+        assertEquals(check.normalAdd((short) 15, (short) 18), testme.add((short) 15, (short) 18));
+        assertNotEquals(check.normalAdd((short) 15, (short) 18), testme.normalAdd((short) 15, (short) 18));
     }
 
     @Override

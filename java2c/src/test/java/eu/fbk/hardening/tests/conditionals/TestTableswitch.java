@@ -1,14 +1,13 @@
 package eu.fbk.hardening.tests.conditionals;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestTableswitch extends AbstractTestMethodTemplate
 {
     private Class<?> className = testclasses.conditionals.Tableswitch.class;
-    private String[] methodTest = {"exec","exec","exec"};
-    private Class[][] methodParam = {new Class[]{char.class},new Class[]{char.class},new Class[]{char.class}};
-    private Object[][] methodArgs = {new Object[]{(char)0}, new Object[]{(char)2},new Object[]{(char)-1}};
+    private String[] methodTest = {"exec", "exec", "exec"};
+    private Class[][] methodParam = {new Class[]{char.class}, new Class[]{char.class}, new Class[]{char.class}};
+    private Object[][] methodArgs = {new Object[]{(char) 0}, new Object[]{(char) 2}, new Object[]{(char) -1}};
 
     @Override
     public String getAnnotatedMethodName(int position)

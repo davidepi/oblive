@@ -5,8 +5,8 @@ import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 public class TestGoto extends AbstractTestMethodTemplate
 {
     private Class<?> className = testclasses.conditionals.Goto.class;
-    private String[] methodTest = {"exec","exec"};
-    private Class[][] methodParam = {new Class[]{int.class},new Class[]{int.class}};
+    private String[] methodTest = {"exec", "exec"};
+    private Class[][] methodParam = {new Class[]{int.class}, new Class[]{int.class}};
     private Object[][] methodArgs = {new Object[]{10}, new Object[]{0}};
 
     @Override

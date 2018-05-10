@@ -1,7 +1,6 @@
 package eu.fbk.hardening.tests.exceptions.invoke.invokestatic;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestCatchInvokeStaticLong extends AbstractTestMethodTemplate
 {

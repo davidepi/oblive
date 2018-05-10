@@ -7,8 +7,8 @@ public class TestInvokeVirtualChar extends AbstractTestMethodTemplate
 
     private Class<?> className = testclasses.invoke.invokevirtual.InvokeVirtualChar.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{char.class,char.class}};
-    private Object[][] methodArgs = {new Object[]{'A','b'}};
+    private Class[][] methodParam = {new Class[]{char.class, char.class}};
+    private Object[][] methodArgs = {new Object[]{'A', 'b'}};
 
 
     @Override

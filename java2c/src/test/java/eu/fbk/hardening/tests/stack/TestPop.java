@@ -1,7 +1,6 @@
 package eu.fbk.hardening.tests.stack;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestPop extends AbstractTestMethodTemplate
 {

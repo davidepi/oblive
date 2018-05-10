@@ -24,7 +24,7 @@ public class TestStoreArrayFloat extends AbstractTestMethodTemplate
     @Override
     public Class<?>[] getAnnotatedMethodParams(int position)
     {
-        return new Class[]{int.class,float.class};
+        return new Class[]{int.class, float.class};
     }
 
     @Override

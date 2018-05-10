@@ -1,7 +1,6 @@
 package eu.fbk.hardening.support;
 
 import eu.fbk.hardening.IllegalPatternException;
-import eu.fbk.hardening.IllegalPatternException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -73,10 +72,10 @@ public class TestMethodSignature
     {
         MethodSignature ms = new MethodSignature("(Ljava/lang/String;Ljava/util/ArrayList;)V");
         assertEquals(2, ms.getInput().size());
-        assertEquals("jobject",ms.getInput().get(0).getJniName());
+        assertEquals("jobject", ms.getInput().get(0).getJniName());
         assertEquals("java/lang/String", ms.getInput().get(0).getName());
-        assertEquals("jobject",ms.getInput().get(1).getJniName());
-        assertEquals("java/util/ArrayList",ms.getInput().get(1).getName());
+        assertEquals("jobject", ms.getInput().get(1).getJniName());
+        assertEquals("java/util/ArrayList", ms.getInput().get(1).getName());
         assertEquals("void", ms.getReturnType().getJniName());
     }
 
@@ -152,7 +151,7 @@ public class TestMethodSignature
         MethodSignature ms = new MethodSignature("()[I");
         assertEquals(0, ms.getInput().size());
         assertEquals("jobject", ms.getReturnType().getJniName());
-        assertEquals(1,ms.getReturnType().getArrayDepth());
+        assertEquals(1, ms.getReturnType().getArrayDepth());
     }
 
     @Test
@@ -161,7 +160,7 @@ public class TestMethodSignature
         MethodSignature ms = new MethodSignature("()[[[[I");
         assertEquals(0, ms.getInput().size());
         assertEquals("jobject", ms.getReturnType().getJniName());
-        assertEquals(4,ms.getReturnType().getArrayDepth());
+        assertEquals(4, ms.getReturnType().getArrayDepth());
     }
 
     @Test

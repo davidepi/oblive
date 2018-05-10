@@ -1,15 +1,14 @@
 package eu.fbk.hardening.tests.exceptions.invoke.invokespecial;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestCatchInvokeSpecialDouble extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.exceptions.invoke.invokespecial.CatchInvokeSpecialDouble.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{double.class,double.class}};
-    private Object[][] methodArgs = {new Object[]{3.14159265359,2.7182818284}};
+    private Class[][] methodParam = {new Class[]{double.class, double.class}};
+    private Object[][] methodArgs = {new Object[]{3.14159265359, 2.7182818284}};
 
     @Override
     public Class<?> getTestClass()

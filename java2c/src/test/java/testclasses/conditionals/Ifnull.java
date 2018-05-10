@@ -1,6 +1,7 @@
 package testclasses.conditionals;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class Ifnull
 {
@@ -9,10 +10,10 @@ public class Ifnull
 
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public boolean exec(Object value)
     {
-        if(value != null)
+        if (value != null)
             return true;
         return false;
     }

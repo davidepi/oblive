@@ -1,6 +1,7 @@
 package testclasses.arrays.unidimensional;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 import java.util.ArrayList;
 
@@ -10,10 +11,10 @@ public class StoreArrayByte
 
     public StoreArrayByte()
     {
-        this.array = new byte[]{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+        this.array = new byte[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public void setVal(int i, byte val)
     {
         this.array[i] = val;
@@ -23,9 +24,9 @@ public class StoreArrayByte
     {
         ArrayList<Byte> retval = new ArrayList<>();
         int i = 4;
-        this.setVal(i,(byte)100);
+        this.setVal(i, (byte) 100);
         //assert that also the rest of the array is unchanged
-        for(int j=0;j<this.array.length;j++)
+        for (int j = 0; j < this.array.length; j++)
             retval.add(array[j]);
         return retval;
     }

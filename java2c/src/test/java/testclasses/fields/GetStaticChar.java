@@ -1,6 +1,7 @@
 package testclasses.fields;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class GetStaticChar
 {
@@ -11,7 +12,7 @@ public class GetStaticChar
         GetStaticChar.fieldC = 'c';
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public char getStatic()
     {
         return GetStaticChar.fieldC;

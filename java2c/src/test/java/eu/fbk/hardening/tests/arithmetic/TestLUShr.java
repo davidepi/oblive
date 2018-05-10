@@ -1,15 +1,14 @@
 package eu.fbk.hardening.tests.arithmetic;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestLUShr extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.arithmetic.LUShr.class;
-    private String[] methodTest = {"exec","exec"};
-    private Class[][] methodParam = {new Class[]{long.class,int.class},new Class[]{long.class,int.class}};
-    private Object[][] methodArgs = {new Object[]{1L,33},new Object[]{-1L,33}};
+    private String[] methodTest = {"exec", "exec"};
+    private Class[][] methodParam = {new Class[]{long.class, int.class}, new Class[]{long.class, int.class}};
+    private Object[][] methodArgs = {new Object[]{1L, 33}, new Object[]{-1L, 33}};
 
     @Override
     public String getAnnotatedMethodName(int position)

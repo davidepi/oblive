@@ -1,15 +1,14 @@
 package eu.fbk.hardening.tests.exceptions.invoke.invokespecial;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestThrowInvokeSpecialLong extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.exceptions.invoke.invokespecial.ThrowInvokeSpecialLong.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{long.class,long.class}};
-    private Object[][] methodArgs = {new Object[]{0x200000001L,0x400000002L}};
+    private Class[][] methodParam = {new Class[]{long.class, long.class}};
+    private Object[][] methodArgs = {new Object[]{0x200000001L, 0x400000002L}};
 
     @Override
     public Class<?> getTestClass()

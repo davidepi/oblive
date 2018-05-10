@@ -1,15 +1,14 @@
 package eu.fbk.hardening.tests.arithmetic;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestIXor extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.arithmetic.IXor.class;
     private String[] methodTest = {"exec"};
-    private Class[][] methodParam = {new Class[]{int.class,int.class}};
-    private Object[][] methodArgs = {new Object[]{11234567,2478945}};
+    private Class[][] methodParam = {new Class[]{int.class, int.class}};
+    private Object[][] methodArgs = {new Object[]{11234567, 2478945}};
 
     @Override
     public Class<?> getTestClass()

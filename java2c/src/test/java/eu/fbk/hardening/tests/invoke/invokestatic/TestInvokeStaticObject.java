@@ -7,8 +7,8 @@ public class TestInvokeStaticObject extends AbstractTestMethodTemplate
 
     private Class<?> className = testclasses.invoke.invokestatic.InvokeStaticObject.class;
     private String[] methodTest = {"concatenate"};
-    private Class[][] methodParam = {new Class[]{String.class,char.class}};
-    private Object[][] methodArgs = {new Object[]{"hello world",'!'}};
+    private Class[][] methodParam = {new Class[]{String.class, char.class}};
+    private Object[][] methodArgs = {new Object[]{"hello world", '!'}};
 
 
     @Override

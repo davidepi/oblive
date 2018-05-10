@@ -1,6 +1,7 @@
 package testclasses.exceptions.invoke.invokestatic;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class ThrowInvokeStaticObject
 {
@@ -9,10 +10,10 @@ public class ThrowInvokeStaticObject
 
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public int div(int a)
     {
-        return ((Integer)normalDiv(a,0));
+        return ((Integer) normalDiv(a, 0));
     }
 
     public static Object normalDiv(int a, int b)

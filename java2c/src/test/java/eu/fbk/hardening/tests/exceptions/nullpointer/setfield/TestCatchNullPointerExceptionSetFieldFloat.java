@@ -1,8 +1,6 @@
 package eu.fbk.hardening.tests.exceptions.nullpointer.setfield;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import testclasses.exceptions.nullpointer.getfield.CatchNullPointerExceptionGetFieldFloat;
 import testclasses.exceptions.nullpointer.setfield.CatchNullPointerExceptionSetFieldFloat;
 
 public class TestCatchNullPointerExceptionSetFieldFloat extends AbstractTestMethodTemplate

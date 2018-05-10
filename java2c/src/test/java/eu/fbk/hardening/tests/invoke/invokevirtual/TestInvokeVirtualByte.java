@@ -7,8 +7,8 @@ public class TestInvokeVirtualByte extends AbstractTestMethodTemplate
 
     private Class<?> className = testclasses.invoke.invokevirtual.InvokeVirtualByte.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{byte.class,byte.class}};
-    private Object[][] methodArgs = {new Object[]{(byte)15,(byte)18}};
+    private Class[][] methodParam = {new Class[]{byte.class, byte.class}};
+    private Object[][] methodArgs = {new Object[]{(byte) 15, (byte) 18}};
 
 
     @Override

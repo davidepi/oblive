@@ -1,6 +1,7 @@
 package testclasses.arrays.unidimensional;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class LoadArrayBoolean
 {
@@ -8,10 +9,10 @@ public class LoadArrayBoolean
 
     public LoadArrayBoolean()
     {
-        this.array = new boolean[]{false,false,false,false,true,false,false,false,false,false};
+        this.array = new boolean[]{false, false, false, false, true, false, false, false, false, false};
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public boolean getVal()
     {
         return this.array[9];

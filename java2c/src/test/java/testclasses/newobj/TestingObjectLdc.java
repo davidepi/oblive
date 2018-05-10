@@ -36,13 +36,13 @@ public class TestingObjectLdc
     @Override
     public boolean equals(Object object)
     {
-        if(object==null || (!TestingObjectLdc.class.isAssignableFrom(object.getClass())))
+        if (object == null || (!TestingObjectLdc.class.isAssignableFrom(object.getClass())))
             return false;
         else
         {
-            final TestingObjectLdc other = (TestingObjectLdc)object;
-            return this.a==other.a && this.b==other.b && this.c==other.c && this.d.equals(other.d) && this.f == other.f
-                    && this.g == other.g &&  this.h == other.h &&  this.j == other.j &&  this.k == other.k;
+            final TestingObjectLdc other = (TestingObjectLdc) object;
+            return this.a == other.a && this.b == other.b && this.c == other.c && this.d.equals(other.d) && this.f == other.f
+                    && this.g == other.g && this.h == other.h && this.j == other.j && this.k == other.k;
         }
     }
 }

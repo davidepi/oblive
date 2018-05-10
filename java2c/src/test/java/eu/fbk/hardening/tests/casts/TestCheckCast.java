@@ -2,13 +2,11 @@ package eu.fbk.hardening.tests.casts;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
-import java.io.File;
-
 public class TestCheckCast extends AbstractTestMethodTemplate
 {
     private Class<?> className = testclasses.casts.CheckCast.class;
-    private String[] methodTest = {"castString","castString"};
-    private Class[][] methodParam = {new Class[]{Object.class},new Class[]{Object.class}};
+    private String[] methodTest = {"castString", "castString"};
+    private Class[][] methodParam = {new Class[]{Object.class}, new Class[]{Object.class}};
     private Object[][] methodArgs = {new Object[]{"hello"}, new Object[]{null}};
 
     @Override

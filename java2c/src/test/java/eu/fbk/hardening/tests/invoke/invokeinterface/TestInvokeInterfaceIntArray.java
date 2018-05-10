@@ -2,7 +2,6 @@ package eu.fbk.hardening.tests.invoke.invokeinterface;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 import testclasses.invoke.invokeinterface.AdderInterface;
-import testclasses.invoke.invokeinterface.ImplementedInterface;
 
 public class TestInvokeInterfaceIntArray extends AbstractTestMethodTemplate
 {

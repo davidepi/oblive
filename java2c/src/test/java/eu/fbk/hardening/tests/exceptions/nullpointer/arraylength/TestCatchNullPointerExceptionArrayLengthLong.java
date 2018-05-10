@@ -1,7 +1,6 @@
 package eu.fbk.hardening.tests.exceptions.nullpointer.arraylength;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 import testclasses.exceptions.nullpointer.SupportClassLong;
 
 public class TestCatchNullPointerExceptionArrayLengthLong extends AbstractTestMethodTemplate

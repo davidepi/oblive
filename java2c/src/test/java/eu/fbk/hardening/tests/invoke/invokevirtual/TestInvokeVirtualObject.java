@@ -7,8 +7,8 @@ public class TestInvokeVirtualObject extends AbstractTestMethodTemplate
 
     private Class<?> className = testclasses.invoke.invokevirtual.InvokeVirtualObject.class;
     private String[] methodTest = {"concatenate"};
-    private Class[][] methodParam = {new Class[]{java.lang.String.class,char.class}};
-    private Object[][] methodArgs = {new Object[]{"hello world",'!'}};
+    private Class[][] methodParam = {new Class[]{java.lang.String.class, char.class}};
+    private Object[][] methodArgs = {new Object[]{"hello world", '!'}};
 
 
     @Override

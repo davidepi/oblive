@@ -1,9 +1,6 @@
 package eu.fbk.hardening.tests.exceptions.nullpointer;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-
-import java.io.File;
 
 public class TestThrowNullException extends AbstractTestMethodTemplate
 {

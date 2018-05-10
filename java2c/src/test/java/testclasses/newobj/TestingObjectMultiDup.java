@@ -5,8 +5,6 @@ package testclasses.newobj;
 //  Used in the NewObjectLdc  //
 ////////////////////////////////
 
-import java.io.PrintStream;
-
 public class TestingObjectMultiDup
 {
     int a;
@@ -25,12 +23,12 @@ public class TestingObjectMultiDup
     @Override
     public boolean equals(Object object)
     {
-        if(object==null || (!TestingObjectMultiDup.class.isAssignableFrom(object.getClass())))
+        if (object == null || (!TestingObjectMultiDup.class.isAssignableFrom(object.getClass())))
             return false;
         else
         {
-            final TestingObjectMultiDup other = (TestingObjectMultiDup)object;
-            return this.a==other.a && this.b==other.b && this.c==other.c && this.d==other.d;
+            final TestingObjectMultiDup other = (TestingObjectMultiDup) object;
+            return this.a == other.a && this.b == other.b && this.c == other.c && this.d == other.d;
         }
     }
 }

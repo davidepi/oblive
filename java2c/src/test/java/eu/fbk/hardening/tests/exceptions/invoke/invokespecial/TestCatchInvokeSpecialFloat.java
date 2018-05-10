@@ -1,15 +1,14 @@
 package eu.fbk.hardening.tests.exceptions.invoke.invokespecial;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestCatchInvokeSpecialFloat extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.exceptions.invoke.invokespecial.CatchInvokeSpecialFloat.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{float.class,float.class}};
-    private Object[][] methodArgs = {new Object[]{3.5f,-2.5f}};
+    private Class[][] methodParam = {new Class[]{float.class, float.class}};
+    private Object[][] methodArgs = {new Object[]{3.5f, -2.5f}};
 
     @Override
     public Class<?> getTestClass()

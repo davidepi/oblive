@@ -1,13 +1,12 @@
 package eu.fbk.hardening.tests.conditionals;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestIfnull extends AbstractTestMethodTemplate
 {
     private Class<?> className = testclasses.conditionals.Ifnull.class;
-    private String[] methodTest = {"exec","exec"};
-    private Class[][] methodParam = {new Class[]{Object.class},new Class[]{Object.class}};
+    private String[] methodTest = {"exec", "exec"};
+    private Class[][] methodParam = {new Class[]{Object.class}, new Class[]{Object.class}};
     private Object[][] methodArgs = {new Object[]{null}, new Object[]{"hello"}};
 
     @Override

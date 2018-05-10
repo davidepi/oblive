@@ -7,8 +7,8 @@ public class TestInvokeStaticChar extends AbstractTestMethodTemplate
 
     private Class<?> className = testclasses.invoke.invokestatic.InvokeStaticChar.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{char.class,char.class}};
-    private Object[][] methodArgs = {new Object[]{'A','b'}};
+    private Class[][] methodParam = {new Class[]{char.class, char.class}};
+    private Object[][] methodArgs = {new Object[]{'A', 'b'}};
 
 
     @Override

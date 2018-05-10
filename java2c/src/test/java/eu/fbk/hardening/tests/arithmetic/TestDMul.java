@@ -1,15 +1,14 @@
 package eu.fbk.hardening.tests.arithmetic;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestDMul extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.arithmetic.DMul.class;
     private String[] methodTest = {"exec"};
-    private Class[][] methodParam = {new Class[]{double.class,double.class}};
-    private Object[][] methodArgs = {new Object[]{3.5,2.5}};
+    private Class[][] methodParam = {new Class[]{double.class, double.class}};
+    private Object[][] methodArgs = {new Object[]{3.5, 2.5}};
 
 
     @Override

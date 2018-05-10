@@ -1,15 +1,14 @@
 package eu.fbk.hardening.tests.exceptions.invoke.invokespecial;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestThrowInvokeSpecialByte extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.exceptions.invoke.invokespecial.ThrowInvokeSpecialByte.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{byte.class,byte.class}};
-    private Object[][] methodArgs = {new Object[]{(byte)15,(byte)18}};
+    private Class[][] methodParam = {new Class[]{byte.class, byte.class}};
+    private Object[][] methodArgs = {new Object[]{(byte) 15, (byte) 18}};
 
     @Override
     public Class<?> getTestClass()

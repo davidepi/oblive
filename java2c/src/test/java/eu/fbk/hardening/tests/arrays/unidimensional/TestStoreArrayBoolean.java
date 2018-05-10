@@ -24,7 +24,7 @@ public class TestStoreArrayBoolean extends AbstractTestMethodTemplate
     @Override
     public Class<?>[] getAnnotatedMethodParams(int position)
     {
-        return new Class[]{int.class,boolean.class};
+        return new Class[]{int.class, boolean.class};
     }
 
     @Override

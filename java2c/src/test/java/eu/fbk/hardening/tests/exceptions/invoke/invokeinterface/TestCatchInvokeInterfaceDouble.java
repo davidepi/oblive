@@ -1,7 +1,6 @@
 package eu.fbk.hardening.tests.exceptions.invoke.invokeinterface;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 import testclasses.exceptions.invoke.invokeinterface.DivisionInterface;
 import testclasses.exceptions.invoke.invokeinterface.ImplementedInterface;
 
@@ -10,8 +9,8 @@ public class TestCatchInvokeInterfaceDouble extends AbstractTestMethodTemplate
 
     private Class<?> className = testclasses.exceptions.invoke.invokeinterface.CatchInvokeInterfaceDouble.class;
     private String[] methodTest = {"div"};
-    private Class[][] methodParam = {new Class[]{DivisionInterface.class,double.class}};
-    private Object[][] methodArgs = {new Object[]{new ImplementedInterface(),(double)10}};
+    private Class[][] methodParam = {new Class[]{DivisionInterface.class, double.class}};
+    private Object[][] methodArgs = {new Object[]{new ImplementedInterface(), (double) 10}};
 
 
     @Override

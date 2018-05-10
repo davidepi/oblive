@@ -1,15 +1,14 @@
 package eu.fbk.hardening.tests.arithmetic;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestLNeg extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.arithmetic.LRem.class;
     private String[] methodTest = {"exec"};
-    private Class[][] methodParam = {new Class[]{long.class,long.class}};
-    private Object[][] methodArgs = {new Object[]{15000000000L,21000000000L}};
+    private Class[][] methodParam = {new Class[]{long.class, long.class}};
+    private Object[][] methodArgs = {new Object[]{15000000000L, 21000000000L}};
 
 
     @Override

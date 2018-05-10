@@ -1,14 +1,13 @@
 package eu.fbk.hardening.tests.exceptions;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 import java.io.File;
 
 public class TestCatchClassCastException extends AbstractTestMethodTemplate
 {
     private Class<?> className = testclasses.exceptions.CatchClassCastException.class;
-    private String[] methodTest = {"castString","castString"};
+    private String[] methodTest = {"castString", "castString"};
     private Class[][] methodParam = {new Class[]{Object.class}, new Class[]{Object.class}};
     private Object[][] methodArgs = {new Object[]{new File("aaa")}, new Object[]{"aaa"}};
 

@@ -7,8 +7,8 @@ public class TestInvokeStaticInt extends AbstractTestMethodTemplate
 
     private Class<?> className = testclasses.invoke.invokestatic.InvokeStaticInt.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{int.class,int.class}};
-    private Object[][] methodArgs = {new Object[]{1000000,-2000000}};
+    private Class[][] methodParam = {new Class[]{int.class, int.class}};
+    private Object[][] methodArgs = {new Object[]{1000000, -2000000}};
 
 
     @Override

@@ -12,11 +12,11 @@ public class TestInvokeSpecialBoolean extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.invoke.invokespecial.InvokeSpecialBoolean.class;
-    private String[] methodTest = {"and","and","and","and"};
-    private Class[][] methodParam = {new Class[]{boolean.class,boolean.class},new Class[]{boolean.class,boolean.class},
-                                     new Class[]{boolean.class,boolean.class},new Class[]{boolean.class,boolean.class}};
-    private Object[][] methodArgs = {new Object[]{false,false},new Object[]{true,false},
-                                     new Object[]{false,true},new Object[]{true,true}};
+    private String[] methodTest = {"and", "and", "and", "and"};
+    private Class[][] methodParam = {new Class[]{boolean.class, boolean.class}, new Class[]{boolean.class, boolean.class},
+            new Class[]{boolean.class, boolean.class}, new Class[]{boolean.class, boolean.class}};
+    private Object[][] methodArgs = {new Object[]{false, false}, new Object[]{true, false},
+            new Object[]{false, true}, new Object[]{true, true}};
 
     @Test
     public void testSuperMethodIsCalled()
@@ -24,8 +24,8 @@ public class TestInvokeSpecialBoolean extends AbstractTestMethodTemplate
         InvokeSpecialBoolean testme = new InvokeSpecialBoolean();
         InvokeVirtualBoolean check = new InvokeVirtualBoolean();
         //the normalAdd method of the testme class is wrong on purpose, the class should call the superclass one
-        assertEquals(check.normalAnd(true,true),testme.and(true,true));
-        assertNotEquals(check.normalAnd(true,true),testme.normalAnd(true,true));
+        assertEquals(check.normalAnd(true, true), testme.and(true, true));
+        assertNotEquals(check.normalAnd(true, true), testme.normalAnd(true, true));
     }
 
     @Override

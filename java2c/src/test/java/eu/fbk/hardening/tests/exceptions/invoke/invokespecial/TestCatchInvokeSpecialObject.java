@@ -1,15 +1,14 @@
 package eu.fbk.hardening.tests.exceptions.invoke.invokespecial;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestCatchInvokeSpecialObject extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.exceptions.invoke.invokespecial.CatchInvokeSpecialObject.class;
     private String[] methodTest = {"concatenate"};
-    private Class[][] methodParam = {new Class[]{String.class,char.class}};
-    private Object[][] methodArgs = {new Object[]{"hello world",'!'}};
+    private Class[][] methodParam = {new Class[]{String.class, char.class}};
+    private Object[][] methodArgs = {new Object[]{"hello world", '!'}};
 
     @Override
     public Class<?> getTestClass()

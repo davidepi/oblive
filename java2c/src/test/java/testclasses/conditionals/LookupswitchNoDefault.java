@@ -1,6 +1,7 @@
 package testclasses.conditionals;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class LookupswitchNoDefault
 {
@@ -9,18 +10,26 @@ public class LookupswitchNoDefault
 
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public int exec(int a)
     {
         int retval = 500000000;
-        switch(a)
+        switch (a)
         {
-            case -5000: retval=-1;break;
-            case 17: retval=2;break;
-            case 1: retval=3;break;
+            case -5000:
+                retval = -1;
+                break;
+            case 17:
+                retval = 2;
+                break;
+            case 1:
+                retval = 3;
+                break;
             case 1000000:
             case 3:
-            case -200:retval = 4;break;
+            case -200:
+                retval = 4;
+                break;
         }
         return retval;
     }

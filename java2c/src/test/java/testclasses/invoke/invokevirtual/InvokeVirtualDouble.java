@@ -1,6 +1,7 @@
 package testclasses.invoke.invokevirtual;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class InvokeVirtualDouble
 {
@@ -9,10 +10,10 @@ public class InvokeVirtualDouble
 
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public double add(double a, double b)
     {
-        return normalAdd(a,b);
+        return normalAdd(a, b);
     }
 
     public double normalAdd(double a, double b)

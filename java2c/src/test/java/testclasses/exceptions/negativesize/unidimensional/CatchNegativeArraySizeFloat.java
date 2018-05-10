@@ -1,25 +1,26 @@
 package testclasses.exceptions.negativesize.unidimensional;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class CatchNegativeArraySizeFloat
 {
     private float array[];
+
     public CatchNegativeArraySizeFloat()
     {
 
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public int exec()
     {
         int res = 0;
         try
         {
             this.array = new float[-1];
-            res+=1000;
-        }
-        catch (NegativeArraySizeException e)
+            res += 1000;
+        } catch (NegativeArraySizeException e)
         {
             res++;
         }
@@ -27,9 +28,8 @@ public class CatchNegativeArraySizeFloat
         try
         {
             this.array = new float[-1];
-            res+=1000;
-        }
-        catch(RuntimeException e)
+            res += 1000;
+        } catch (RuntimeException e)
         {
             res++;
         }
@@ -37,9 +37,8 @@ public class CatchNegativeArraySizeFloat
         try
         {
             this.array = new float[-1];
-            res+=1000;
-        }
-        catch (Exception e)
+            res += 1000;
+        } catch (Exception e)
         {
             res++;
         }
@@ -47,9 +46,8 @@ public class CatchNegativeArraySizeFloat
         try
         {
             this.array = new float[-1];
-            res+=1000;
-        }
-        catch (Throwable e)
+            res += 1000;
+        } catch (Throwable e)
         {
             res++;
         }

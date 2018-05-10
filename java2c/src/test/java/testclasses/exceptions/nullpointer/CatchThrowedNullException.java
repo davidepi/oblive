@@ -1,6 +1,7 @@
 package testclasses.exceptions.nullpointer;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class CatchThrowedNullException
 {
@@ -9,15 +10,14 @@ public class CatchThrowedNullException
 
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public int exec()
     {
         int res = 0;
         try
         {
             throw null;
-        }
-        catch (NullPointerException e)
+        } catch (NullPointerException e)
         {
             res++;
         }
@@ -25,8 +25,7 @@ public class CatchThrowedNullException
         try
         {
             throw null;
-        }
-        catch (RuntimeException e)
+        } catch (RuntimeException e)
         {
             res++;
         }
@@ -34,8 +33,7 @@ public class CatchThrowedNullException
         try
         {
             throw null;
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             res++;
         }
@@ -43,8 +41,7 @@ public class CatchThrowedNullException
         try
         {
             throw null;
-        }
-        catch (Throwable e)
+        } catch (Throwable e)
         {
             res++;
         }

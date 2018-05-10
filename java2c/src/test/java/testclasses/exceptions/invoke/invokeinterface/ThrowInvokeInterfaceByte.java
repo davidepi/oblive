@@ -1,6 +1,7 @@
 package testclasses.exceptions.invoke.invokeinterface;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class ThrowInvokeInterfaceByte
 {
@@ -9,7 +10,7 @@ public class ThrowInvokeInterfaceByte
 
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public byte div(DivisionInterface interf, byte a)
     {
         return interf.div(a);

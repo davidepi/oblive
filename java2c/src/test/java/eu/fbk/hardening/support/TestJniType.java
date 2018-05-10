@@ -1,9 +1,9 @@
 package eu.fbk.hardening.support;
 
 import eu.fbk.hardening.IllegalPatternException;
-import eu.fbk.hardening.IllegalPatternException;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 public class TestJniType
 {
@@ -199,8 +199,8 @@ public class TestJniType
         JniType objectt1 = new JniType("Ljava/lang/String;");
         JniType objectt2 = new JniType("Ljava/lang/StringBuilder;");
 
-        assertEquals(false,voidt0.equals(null));
-        assertEquals(false,voidt0.equals(new MethodSignature("()V")));
+        assertEquals(false, voidt0.equals(null));
+        assertEquals(false, voidt0.equals(new MethodSignature("()V")));
 
         assertEquals(true, voidt0.equals(voidt1));
         assertEquals(false, voidt0.equals(objectt2));

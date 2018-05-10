@@ -13,8 +13,8 @@ public class TestInvokeSpecialChar extends AbstractTestMethodTemplate
 
     private Class<?> className = testclasses.invoke.invokespecial.InvokeSpecialChar.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{char.class,char.class}};
-    private Object[][] methodArgs = {new Object[]{'A','b'}};
+    private Class[][] methodParam = {new Class[]{char.class, char.class}};
+    private Object[][] methodArgs = {new Object[]{'A', 'b'}};
 
     @Test
     public void testSuperMethodIsCalled()
@@ -22,8 +22,8 @@ public class TestInvokeSpecialChar extends AbstractTestMethodTemplate
         InvokeSpecialChar testme = new InvokeSpecialChar();
         InvokeVirtualChar check = new InvokeVirtualChar();
         //the normalAdd method of the testme class is wrong on purpose, the class should call the superclass one
-        assertEquals(check.normalAdd((char)15,(char)18),testme.add((char)15,(char)18));
-        assertNotEquals(check.normalAdd((char)15,(char)18),testme.normalAdd((char)15,(char)18));
+        assertEquals(check.normalAdd((char) 15, (char) 18), testme.add((char) 15, (char) 18));
+        assertNotEquals(check.normalAdd((char) 15, (char) 18), testme.normalAdd((char) 15, (char) 18));
     }
 
     @Override

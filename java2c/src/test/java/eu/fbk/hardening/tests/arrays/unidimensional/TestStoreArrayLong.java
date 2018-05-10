@@ -24,7 +24,7 @@ public class TestStoreArrayLong extends AbstractTestMethodTemplate
     @Override
     public Class<?>[] getAnnotatedMethodParams(int position)
     {
-        return new Class[]{int.class,long.class};
+        return new Class[]{int.class, long.class};
     }
 
     @Override

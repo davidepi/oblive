@@ -1,9 +1,6 @@
 package eu.fbk.hardening.tests.exceptions;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-
-import java.io.File;
 
 /**
  * Tests that the handleSystemException method of MethodBytecodeExtractor.java is able to support statements such as

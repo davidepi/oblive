@@ -1,6 +1,7 @@
 package testclasses.invoke.invokespecial;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ public class InvokeSpecialIntArray extends InvokeVirtualIntArray
 
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     @Override
     public int[] exec()
     {
@@ -20,14 +21,14 @@ public class InvokeSpecialIntArray extends InvokeVirtualIntArray
 
     public int[] returnArray()
     {
-        return new int[]{9,8,7,6,5,4,3,2,1,0};
+        return new int[]{9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
     }
 
     public ArrayList<Integer> test()
     {
         ArrayList<Integer> res = new ArrayList<Integer>(10);
         int[] native_array = this.exec();
-        for(int i=0;i<native_array.length;i++)
+        for (int i = 0; i < native_array.length; i++)
             res.add(native_array[i]);
         return res;
     }

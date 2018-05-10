@@ -13,8 +13,8 @@ public class TestInvokeSpecialLong extends AbstractTestMethodTemplate
 
     private Class<?> className = testclasses.invoke.invokespecial.InvokeSpecialLong.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{long.class,long.class}};
-    private Object[][] methodArgs = {new Object[]{0x200000001L,0x400000002L}};
+    private Class[][] methodParam = {new Class[]{long.class, long.class}};
+    private Object[][] methodArgs = {new Object[]{0x200000001L, 0x400000002L}};
 
     @Test
     public void testSuperMethodIsCalled()
@@ -22,8 +22,8 @@ public class TestInvokeSpecialLong extends AbstractTestMethodTemplate
         InvokeSpecialLong testme = new InvokeSpecialLong();
         InvokeVirtualLong check = new InvokeVirtualLong();
         //the normalAdd method of the testme class is wrong on purpose, the class should call the superclass one
-        assertEquals(check.normalAdd(15L,18L),testme.add(15L,18L));
-        assertNotEquals(check.normalAdd(15L,18L),testme.normalAdd(15L,18L));
+        assertEquals(check.normalAdd(15L, 18L), testme.add(15L, 18L));
+        assertNotEquals(check.normalAdd(15L, 18L), testme.normalAdd(15L, 18L));
     }
 
     @Override

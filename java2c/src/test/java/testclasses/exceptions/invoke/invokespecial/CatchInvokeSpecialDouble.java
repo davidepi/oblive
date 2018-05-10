@@ -1,6 +1,7 @@
 package testclasses.exceptions.invoke.invokespecial;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class CatchInvokeSpecialDouble extends InvokeVirtualDouble
 {
@@ -9,21 +10,20 @@ public class CatchInvokeSpecialDouble extends InvokeVirtualDouble
 
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     @Override
     public double add(double a, double b)
     {
-      int res = 0;
-      try
-      {
-        super.normalAdd(a,b);
-        res+=1000;
-      }
-      catch(Exception e)
-      {
-        res++;
-      }
-      return (double)res;
+        int res = 0;
+        try
+        {
+            super.normalAdd(a, b);
+            res += 1000;
+        } catch (Exception e)
+        {
+            res++;
+        }
+        return (double) res;
     }
 
     //wrong method, I want the one of the superclass to be called -> invokespecial

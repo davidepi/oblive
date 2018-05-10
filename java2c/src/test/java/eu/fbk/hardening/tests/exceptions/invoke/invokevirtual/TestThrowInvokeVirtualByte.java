@@ -1,7 +1,6 @@
 package eu.fbk.hardening.tests.exceptions.invoke.invokevirtual;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestThrowInvokeVirtualByte extends AbstractTestMethodTemplate
 {

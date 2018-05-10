@@ -1,10 +1,12 @@
 package testclasses.exceptions;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class CatchArrayStoreException
 {
     private Object array[];
+
     public CatchArrayStoreException()
     {
         this.array = new String[2];
@@ -12,16 +14,15 @@ public class CatchArrayStoreException
         this.array[1] = "world";
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public int exec()
     {
         int res = 0;
         try
         {
             this.array[1] = 1;
-            res+=1000;
-        }
-        catch (ArrayStoreException e)
+            res += 1000;
+        } catch (ArrayStoreException e)
         {
             res++;
         }
@@ -29,9 +30,8 @@ public class CatchArrayStoreException
         try
         {
             this.array[1] = 1;
-            res+=1000;
-        }
-        catch (RuntimeException e)
+            res += 1000;
+        } catch (RuntimeException e)
         {
             res++;
         }
@@ -39,9 +39,8 @@ public class CatchArrayStoreException
         try
         {
             this.array[1] = 1;
-            res+=1000;
-        }
-        catch (Exception e)
+            res += 1000;
+        } catch (Exception e)
         {
             res++;
         }
@@ -49,9 +48,8 @@ public class CatchArrayStoreException
         try
         {
             this.array[1] = 1;
-            res+=1000;
-        }
-        catch (Throwable e)
+            res += 1000;
+        } catch (Throwable e)
         {
             res++;
         }

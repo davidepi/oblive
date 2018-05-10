@@ -1,6 +1,7 @@
 package testclasses.arrays.unidimensional;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class LoadArrayChar
 {
@@ -8,10 +9,10 @@ public class LoadArrayChar
 
     public LoadArrayChar()
     {
-        this.array = new char[]{'a','b','c','d','光','e','f','g'};
+        this.array = new char[]{'a', 'b', 'c', 'd', '光', 'e', 'f', 'g'};
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public char getVal()
     {
         return this.array[4];

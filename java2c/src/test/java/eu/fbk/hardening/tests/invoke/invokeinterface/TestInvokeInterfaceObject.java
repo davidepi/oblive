@@ -9,8 +9,8 @@ public class TestInvokeInterfaceObject extends AbstractTestMethodTemplate
 
     private Class<?> className = testclasses.invoke.invokeinterface.InvokeInterfaceObject.class;
     private String[] methodTest = {"concatenate"};
-    private Class[][] methodParam = {new Class[]{AdderInterface.class,String.class,char.class}};
-    private Object[][] methodArgs = {new Object[]{new ImplementedInterface(), "hello world",'!'}};
+    private Class[][] methodParam = {new Class[]{AdderInterface.class, String.class, char.class}};
+    private Object[][] methodArgs = {new Object[]{new ImplementedInterface(), "hello world", '!'}};
 
 
     @Override

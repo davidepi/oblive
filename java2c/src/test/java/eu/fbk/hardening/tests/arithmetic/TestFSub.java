@@ -1,15 +1,14 @@
 package eu.fbk.hardening.tests.arithmetic;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestFSub extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.arithmetic.FSub.class;
     private String[] methodTest = {"exec"};
-    private Class[][] methodParam = {new Class[]{float.class,float.class}};
-    private Object[][] methodArgs = {new Object[]{3.5f,0.5f}};
+    private Class[][] methodParam = {new Class[]{float.class, float.class}};
+    private Object[][] methodArgs = {new Object[]{3.5f, 0.5f}};
 
 
     @Override

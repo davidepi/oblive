@@ -1,6 +1,7 @@
 package testclasses.invoke.invokespecial;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 import static org.junit.Assert.fail;
 
@@ -11,11 +12,11 @@ public class InvokeSpecialVoid extends InvokeVirtualVoid
 
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     @Override
     public void add(int a, int b)
     {
-        super.print(a,b);
+        super.print(a, b);
     }
 
     //wrong method, I want the one of the superclass to be called -> invokespecial

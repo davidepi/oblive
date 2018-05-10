@@ -5,11 +5,11 @@ import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 public class TestMultipleMethods extends AbstractTestMethodTemplate
 {
     private Class<?> className = testclasses.MultiMethods.class;
-    private String[] methodTest = {"add","sub","mul","div"};
-    private Class[][] methodParam = {new Class[]{int.class, int.class},new Class[]{int.class, int.class},
-                                     new Class[]{int.class, int.class},new Class[]{int.class, int.class}};
-    private Object[][] methodArgs = {new Object[]{15, 21},new Object[]{15, 21},
-                                     new Object[]{15, 21},new Object[]{15, 21}};
+    private String[] methodTest = {"add", "sub", "mul", "div"};
+    private Class[][] methodParam = {new Class[]{int.class, int.class}, new Class[]{int.class, int.class},
+            new Class[]{int.class, int.class}, new Class[]{int.class, int.class}};
+    private Object[][] methodArgs = {new Object[]{15, 21}, new Object[]{15, 21},
+            new Object[]{15, 21}, new Object[]{15, 21}};
 
     @Override
     public Class<?> getTestClass()

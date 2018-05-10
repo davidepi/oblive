@@ -1,6 +1,7 @@
 package testclasses.exceptions;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class ThrowArithmeticExceptionIDIV
 {
@@ -9,9 +10,9 @@ public class ThrowArithmeticExceptionIDIV
 
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public static int divide(int a)
     {
-        return a/0;
+        return a / 0;
     }
 }

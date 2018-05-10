@@ -1,6 +1,7 @@
 package testclasses.arrays.multidimensional;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ public class NewArrayBoolean
 
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public boolean[][] getArray()
     {
         return new boolean[2][3];
@@ -21,7 +22,7 @@ public class NewArrayBoolean
     {
         ArrayList<ArrayList<Boolean>> res = new ArrayList<>(2);
         boolean[][] native_array = this.getArray();
-        for(int i=0;i<native_array.length;i++)
+        for (int i = 0; i < native_array.length; i++)
         {
             ArrayList<Boolean> current = new ArrayList<>(3);
             res.add(current);

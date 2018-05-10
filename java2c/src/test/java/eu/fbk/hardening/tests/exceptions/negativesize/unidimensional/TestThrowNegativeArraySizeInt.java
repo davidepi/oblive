@@ -1,7 +1,6 @@
 package eu.fbk.hardening.tests.exceptions.negativesize.unidimensional;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 import testclasses.exceptions.negativesize.unidimensional.ThrowNegativeArraySizeInt;
 
 public class TestThrowNegativeArraySizeInt extends AbstractTestMethodTemplate

@@ -5,6 +5,6 @@ public class ClassExceptionInInit
     public ClassExceptionInInit()
     {
         super();
-        int a = 1/0;
+        int a = 1 / 0;
     }
 }

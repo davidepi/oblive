@@ -28,3 +28,10 @@ jacocoTestReport {
         xml.enabled false
     }
 }
+
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'eu.fbk.hardening.AppStart'
+    }
+}

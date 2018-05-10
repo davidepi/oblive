@@ -1,6 +1,7 @@
 package testclasses.fields;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class GetStaticBoolean
 {
@@ -11,7 +12,7 @@ public class GetStaticBoolean
         GetStaticBoolean.fieldZ = true;
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public boolean getStatic()
     {
         return GetStaticBoolean.fieldZ;

@@ -1,8 +1,6 @@
 package eu.fbk.hardening.helpers;
 
 import eu.fbk.hardening.JavaToC;
-import eu.fbk.hardening.JavaToC;
-import org.objectweb.asm.Opcodes;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,11 +66,11 @@ public abstract class AbstractTestMethodTemplate extends AbstractTransformationT
     @Override
     public void transformClass()
     {
-        String libname = this.getTestClass().toString().replaceFirst("class\\s","");
-        String className = libname.replaceAll("\\.","/")+".class";
+        String libname = this.getTestClass().toString().replaceFirst("class\\s", "");
+        String className = libname.replaceAll("\\.", "/") + ".class";
         try //tranformation
         {
-            JavaToC.parseClass(this.getDestDir()+"/"+className,this.outputLibDir,libname);
+            JavaToC.parseClass(this.getDestDir() + "/" + className, this.outputLibDir, libname);
         } catch (IOException e)
         {
             fail("Transformation failed");
@@ -82,13 +80,13 @@ public abstract class AbstractTestMethodTemplate extends AbstractTransformationT
         try //building
         {
             ProcessBuilder makefileRun;
-            makefileRun = new ProcessBuilder("make","SRCDIR="+this.outputLibDir,"OUTDIR="+this.outputLibDir,
-                    "SRCNAME="+libname,"LIBNAME="+libname);
+            makefileRun = new ProcessBuilder("make", "SRCDIR=" + this.outputLibDir, "OUTDIR=" + this.outputLibDir,
+                    "SRCNAME=" + libname, "LIBNAME=" + libname);
             makefileRun.inheritIO();
             makefileRun.directory(new File(Paths.get(".").toAbsolutePath().toString()));
             Process child = makefileRun.start();
             child.waitFor();
-            if(child.exitValue()!=0)
+            if (child.exitValue() != 0)
                 fail("C Compiler error");
         } catch (InterruptedException | IOException e)
         {

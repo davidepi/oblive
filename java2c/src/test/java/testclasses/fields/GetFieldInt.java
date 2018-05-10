@@ -1,6 +1,7 @@
 package testclasses.fields;
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 
 public class GetFieldInt
 {
@@ -11,7 +12,7 @@ public class GetFieldInt
         this.fieldI = 1000000;
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public int getField()
     {
         return this.fieldI;

@@ -7,8 +7,8 @@ public class TestInvokeStaticShort extends AbstractTestMethodTemplate
 
     private Class<?> className = testclasses.invoke.invokestatic.InvokeStaticShort.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{short.class,short.class}};
-    private Object[][] methodArgs = {new Object[]{(short)15000,(short)21000}};
+    private Class[][] methodParam = {new Class[]{short.class, short.class}};
+    private Object[][] methodArgs = {new Object[]{(short) 15000, (short) 21000}};
 
 
     @Override

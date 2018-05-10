@@ -1,14 +1,13 @@
 package eu.fbk.hardening.tests.conditionals;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestLookupswitchString extends AbstractTestMethodTemplate
 {
     private Class<?> className = testclasses.conditionals.LookupswitchString.class;
-    private String[] methodTest = {"exec","exec","exec"};
-    private Class[][] methodParam = {new Class[]{String.class},new Class[]{String.class},new Class[]{String.class}};
-    private Object[][] methodArgs = {new Object[]{"hello"}, new Object[]{"世界"},new Object[]{"no"}};
+    private String[] methodTest = {"exec", "exec", "exec"};
+    private Class[][] methodParam = {new Class[]{String.class}, new Class[]{String.class}, new Class[]{String.class}};
+    private Object[][] methodArgs = {new Object[]{"hello"}, new Object[]{"世界"}, new Object[]{"no"}};
 
     @Override
     public String getAnnotatedMethodName(int position)

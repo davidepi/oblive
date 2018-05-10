@@ -13,8 +13,8 @@ public class TestInvokeSpecialInt extends AbstractTestMethodTemplate
 
     private Class<?> className = testclasses.invoke.invokespecial.InvokeSpecialInt.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{int.class,int.class}};
-    private Object[][] methodArgs = {new Object[]{1000000,-2000000}};
+    private Class[][] methodParam = {new Class[]{int.class, int.class}};
+    private Object[][] methodArgs = {new Object[]{1000000, -2000000}};
 
     @Test
     public void testSuperMethodIsCalled()
@@ -22,8 +22,8 @@ public class TestInvokeSpecialInt extends AbstractTestMethodTemplate
         InvokeSpecialInt testme = new InvokeSpecialInt();
         InvokeVirtualInt check = new InvokeVirtualInt();
         //the normalAdd method of the testme class is wrong on purpose, the class should call the superclass one
-        assertEquals(check.normalAdd(15,18),testme.add(15,18));
-        assertNotEquals(check.normalAdd(15,18),testme.normalAdd(15,18));
+        assertEquals(check.normalAdd(15, 18), testme.add(15, 18));
+        assertNotEquals(check.normalAdd(15, 18), testme.normalAdd(15, 18));
     }
 
     @Override

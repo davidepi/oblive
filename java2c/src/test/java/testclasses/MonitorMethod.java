@@ -1,21 +1,21 @@
 package testclasses;
 
 import eu.fbk.hardening.annotation.Obfuscation;
-
-import static java.lang.Thread.sleep;
+import eu.fbk.hardening.annotation.Protections;
 
 public class MonitorMethod
 {
     static Integer a = 0;
+
     public MonitorMethod()
     {
 
     }
 
-    @Obfuscation
+    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public void exec() throws InterruptedException
     {
-        synchronized(this)
+        synchronized (this)
         {
             MonitorMethod.a++;
         }
@@ -59,8 +59,10 @@ public class MonitorMethod
         try
         {
             exec();
+        } catch (InterruptedException ignored)
+        {
         }
-        catch(InterruptedException ignored){};
+        ;
         return MonitorMethod.a;
     }
 }

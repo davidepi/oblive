@@ -1,15 +1,14 @@
 package eu.fbk.hardening.tests.conditionals;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestIffcmp extends AbstractTestMethodTemplate
 {
 
     private Class<?> className = testclasses.conditionals.Iffcmp.class;
-    private String[] methodTest = {"exec","exec","exec"};
-    private Class[][] methodParam = {new Class[]{float.class},new Class[]{float.class},new Class[]{float.class}};
-    private Object[][] methodArgs = {new Object[]{2.5f}, new Object[]{3.5f},new Object[]{4.5f}};
+    private String[] methodTest = {"exec", "exec", "exec"};
+    private Class[][] methodParam = {new Class[]{float.class}, new Class[]{float.class}, new Class[]{float.class}};
+    private Object[][] methodArgs = {new Object[]{2.5f}, new Object[]{3.5f}, new Object[]{4.5f}};
 
     @Override
     public String getAnnotatedMethodName(int position)

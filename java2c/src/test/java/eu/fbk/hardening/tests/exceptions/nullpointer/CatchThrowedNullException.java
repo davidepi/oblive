@@ -1,7 +1,6 @@
 package eu.fbk.hardening.tests.exceptions.nullpointer;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class CatchThrowedNullException extends AbstractTestMethodTemplate
 {

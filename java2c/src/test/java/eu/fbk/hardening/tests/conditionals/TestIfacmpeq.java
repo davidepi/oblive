@@ -1,7 +1,6 @@
 package eu.fbk.hardening.tests.conditionals;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
 public class TestIfacmpeq extends AbstractTestMethodTemplate
 {
@@ -9,9 +8,9 @@ public class TestIfacmpeq extends AbstractTestMethodTemplate
     private String arg1 = "arg1";
     private String arg2 = "arg2";
     private Class<?> className = testclasses.conditionals.Ifacmpeq.class;
-    private String[] methodTest = {"exec","exec"};
-    private Class[][] methodParam = {new Class[]{Object.class,Object.class},new Class[]{Object.class,Object.class}};
-    private Object[][] methodArgs = {new Object[]{arg1,arg2}, new Object[]{arg1,arg1}};
+    private String[] methodTest = {"exec", "exec"};
+    private Class[][] methodParam = {new Class[]{Object.class, Object.class}, new Class[]{Object.class, Object.class}};
+    private Object[][] methodArgs = {new Object[]{arg1, arg2}, new Object[]{arg1, arg1}};
 
     @Override
     public String getAnnotatedMethodName(int position)
