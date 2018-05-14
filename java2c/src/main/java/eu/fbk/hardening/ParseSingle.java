@@ -16,7 +16,7 @@ public class ParseSingle
         }
         try
         {
-            JavaToC.parseClass(args[0],args[1],args[2]);
+            JavaToC.parseClass(args[0],args[1],args[2],true);
         }
         catch (IOException e)
         {

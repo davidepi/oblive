@@ -21,6 +21,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
     private int count_functions;
     private boolean processingNew;
     private int count_trycatch;
+    private int count_strings;
 
     //label used to tell at postprocess time: here you should add the checks to know if the exception was catched
 
@@ -31,6 +32,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
         eb = new ExtractedBytecode(isStatic);
         count_functions = 0;
         count_trycatch = 0;
+        count_strings = 0;
     }
 
     public ExtractedBytecode getBytecode()
@@ -378,7 +380,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
             case "java.lang.String":
             {
                 String str = (String)cst;
-                int stringID = System.identityHashCode(str);
+                int stringID = this.count_strings++;
                 eb.statements.add("jchar string_"+ stringID+"["+str.length()+"];");
                 for(int i=0;i<str.length();i++)
                     eb.statements.add("string_"+stringID+"["+i+"]="+(short)str.charAt(i)+";");

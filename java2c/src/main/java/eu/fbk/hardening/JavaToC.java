@@ -14,7 +14,7 @@ public class JavaToC
 {
     public JavaToC(){}
 
-    public static void parseClass(final String input, final String output, final String libname) throws IOException
+    public static void parseClass(final String input, final String output, final String libname, boolean overwrite) throws IOException
     {
         String outputPath = output;
         if(outputPath.charAt(outputPath.length()-1)!= File.separatorChar)
@@ -68,16 +68,16 @@ public class JavaToC
         }
         File libout = new File(outputPath+libname+".c");
         PrintWriter cFileWriter;
-        if(libout.exists())
-        {
-            //already existing file, no need for includes
-            cFileWriter = new PrintWriter(new FileOutputStream(libout,true));
-        }
-        else
+        if(overwrite || !libout.exists())
         {
             //newly created file, add includes
             cFileWriter = new PrintWriter(new FileOutputStream(libout,false));
             cFileWriter.write("#include <jni.h>\n#include \"cframework.h\"\n\n");
+        }
+        else
+        {
+            //already existing file, no need for includes
+            cFileWriter = new PrintWriter(new FileOutputStream(libout,true));
         }
         cFileWriter.write(c.toString());
         cFileWriter.close();

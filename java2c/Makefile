@@ -24,5 +24,5 @@ $(OUTDIR)/lib$(LIBNAME)$(LIBEXT): $(OUTDIR)/$(SRCNAME).o
 
 $(OUTDIR)/$(SRCNAME).o: $(SRCDIR)/$(SRCNAME).c
 		mkdir -p $(OUTDIR)
-		$(CC) -I$(USER_INCLUDES) -c $(CFLAGS) $(FRAMEWORK) $(INCLUDE) $^ -o $@
+		$(CC) $(USER_INCLUDES) -c $(CFLAGS) $(FRAMEWORK) $(INCLUDE) $^ -o $@
 

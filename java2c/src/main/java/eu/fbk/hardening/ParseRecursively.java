@@ -23,7 +23,7 @@ public class ParseRecursively
                     {
                         try
                         {
-                            JavaToC.parseClass(a.toString(),args[1],args[2]);
+                            JavaToC.parseClass(a.toString(),args[1],args[2],false);
                         } catch (IOException e)
                         {
                             e.printStackTrace();

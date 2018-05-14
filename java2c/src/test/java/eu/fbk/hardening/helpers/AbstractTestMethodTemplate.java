@@ -70,7 +70,7 @@ public abstract class AbstractTestMethodTemplate extends AbstractTransformationT
         String className = libname.replaceAll("\\.", "/") + ".class";
         try //tranformation
         {
-            JavaToC.parseClass(this.getDestDir() + "/" + className, this.outputLibDir, libname);
+            JavaToC.parseClass(this.getDestDir() + "/" + className, this.outputLibDir, libname,true);
         } catch (IOException e)
         {
             fail("Transformation failed");
