@@ -38,7 +38,7 @@ public class ClassAnnotationExplorer extends ClassVisitor
 
     public ArrayList<ClassMethodPair> obfuscateThese()
     {
-        //when the visit is finished, check for every method if it has the @Obfuscation annotation
+        //when the visit is finished, check for every method if it has the @Obfuscation(protections = Protections.TO_NATIVE_CODE) annotation
         ArrayList<ClassMethodPair> annotated = new ArrayList<ClassMethodPair>();
         for(int i=0;i<obfuscateMethods.size();i++)
             if(obfuscateMethods.get(i).shouldObfuscate())

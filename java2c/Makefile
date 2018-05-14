@@ -5,6 +5,7 @@ SRCDIR=
 OUTDIR=
 SRCNAME=
 LIBNAME=
+USER_INCLUDES=
 LIB=lib
 INCLUDE= -I${JAVA_HOME}/include
 FRAMEWORK= -Isrc/cframework
@@ -23,5 +24,5 @@ $(OUTDIR)/lib$(LIBNAME)$(LIBEXT): $(OUTDIR)/$(SRCNAME).o
 
 $(OUTDIR)/$(SRCNAME).o: $(SRCDIR)/$(SRCNAME).c
 		mkdir -p $(OUTDIR)
-		$(CC) -c $(CFLAGS) $(FRAMEWORK) $(INCLUDE) $^ -o $@
+		$(CC) -I$(USER_INCLUDES) -c $(CFLAGS) $(FRAMEWORK) $(INCLUDE) $^ -o $@
 

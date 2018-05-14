@@ -55,7 +55,7 @@ public class JavaToC
         classReader.accept(codeEliminator,0);
 
         //next step: convert the ExtractedBytecode to actual c code
-        StringBuilder c = new StringBuilder("#include <jni.h>\n#include \"cframework.h\"\n\n");
+        StringBuilder c = new StringBuilder();
 
         //this cannot change since only 1 file is processed as input
         ClassMethodPair className;
@@ -66,7 +66,19 @@ public class JavaToC
             bytecode.postprocess(); //remove unnecessary labels. Otherwise empty labels could be created and gcc fails
             c.append(CSourceGenerator.generateCode(className.getClassName(),className.getMethodName(),className.getSignature(),bytecode));
         }
-        PrintWriter cFileWriter = new PrintWriter(outputPath+libname+".c");
+        File libout = new File(outputPath+libname+".c");
+        PrintWriter cFileWriter;
+        if(libout.exists())
+        {
+            //already existing file, no need for includes
+            cFileWriter = new PrintWriter(new FileOutputStream(libout,true));
+        }
+        else
+        {
+            //newly created file, add includes
+            cFileWriter = new PrintWriter(new FileOutputStream(libout,false));
+            cFileWriter.write("#include <jni.h>\n#include \"cframework.h\"\n\n");
+        }
         cFileWriter.write(c.toString());
         cFileWriter.close();
 

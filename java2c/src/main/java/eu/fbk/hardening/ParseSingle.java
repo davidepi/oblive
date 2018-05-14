@@ -1,10 +1,10 @@
 package eu.fbk.hardening;
 import java.io.*;
 
-public class AppStart
+public class ParseSingle
 {
 
-    public AppStart()
+    public ParseSingle()
     { }
 
     public static void main(String[] args)

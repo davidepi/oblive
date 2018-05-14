@@ -29,9 +29,11 @@ jacocoTestReport {
     }
 }
 
-
 jar {
     manifest {
-        attributes 'Main-Class': 'eu.fbk.hardening.AppStart'
+        attributes 'Main-Class': 'eu.fbk.hardening.ParseRecursively'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }

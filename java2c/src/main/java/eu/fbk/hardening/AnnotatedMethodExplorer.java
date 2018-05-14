@@ -1,6 +1,6 @@
 package eu.fbk.hardening;
 
-import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Obfuscation;import eu.fbk.hardening.annotation.Protections;
 import eu.fbk.hardening.support.ClassMethodPair;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.MethodVisitor;
