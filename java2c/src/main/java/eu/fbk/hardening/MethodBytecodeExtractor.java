@@ -87,7 +87,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
     @Override
     public void visitLabel(Label label)
     {
-        eb.statements.add("LABEL_"+label.toString()+":");
+        eb.statements.add("LABEL_"+label.toString()+": ;");
         eb.labels.add(label.toString());
     }
 

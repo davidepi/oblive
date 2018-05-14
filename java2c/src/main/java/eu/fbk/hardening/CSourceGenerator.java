@@ -24,7 +24,7 @@ public class CSourceGenerator
             sb.append("Array");
         sb.append(" JNICALL ");
         sb.append("Java_");
-        sb.append(className.replace('/','_'));
+        sb.append(className.replace('/','_').replace("$","_00024"));
         sb.append('_');
         sb.append(methodName);
         sb.append("(JNIEnv* env, ");

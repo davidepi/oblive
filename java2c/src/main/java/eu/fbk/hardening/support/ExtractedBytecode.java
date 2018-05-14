@@ -147,8 +147,8 @@ public class ExtractedBytecode
             String value = it.next();
             if(value.length()>6 && value.substring(0,6).equals("LABEL_"))
             {
-                String label = value.substring(0,value.length()-1);
-                labelpure = value.substring(6,value.length()-1);
+                String label = value.substring(0,value.length()-3);
+                labelpure = value.substring(6,value.length()-3);
                 String catchme;
                 if(!usedLabels.contains(label))
                     it.remove();

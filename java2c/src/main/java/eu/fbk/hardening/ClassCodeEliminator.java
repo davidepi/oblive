@@ -42,7 +42,7 @@ public class ClassCodeEliminator extends ClassVisitor
             hasStaticInit = true;
             //add the library import while visiting static init
             MethodVisitor mv = super.visitMethod(access,name,desc,signature,exceptions);
-            return new StaticInitExplorer(mv,className);
+            return new StaticInitExplorer(mv,libname);
         }
 
         //check if obfuscated

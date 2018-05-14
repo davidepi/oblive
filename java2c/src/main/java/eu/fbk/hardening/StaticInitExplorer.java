@@ -6,12 +6,12 @@ import static org.objectweb.asm.Opcodes.*;
 
 public class StaticInitExplorer extends MethodVisitor
 {
-    private String className;
+    private String libname;
 
-    public StaticInitExplorer(MethodVisitor mv,String className)
+    public StaticInitExplorer(MethodVisitor mv,String libname)
     {
         super(ASM5,mv);
-        this.className = className.replace('/','.');
+        this.libname = libname.replace('/','.');
     }
 
     @Override
@@ -21,7 +21,7 @@ public class StaticInitExplorer extends MethodVisitor
         //end of the static block
         if(opcode == RETURN)
         {
-            super.visitLdcInsn(className);
+            super.visitLdcInsn(libname);
             super.visitMethodInsn(INVOKESTATIC,"java/lang/System","loadLibrary","(Ljava/lang/String;)V",false);
         }
         super.visitInsn(opcode);
