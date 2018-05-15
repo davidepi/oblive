@@ -110,7 +110,7 @@ public class JavaToC
                 if(i != j)
                 {
                     if(list.get(i).getClassName().equals(list.get(j).getClassName()) &&
-                            list.get(j).getMethodName().equals(list.get(j).getMethodName()))
+                            list.get(i).getMethodName().equals(list.get(j).getMethodName()))
                         return true;
                 }
             }
