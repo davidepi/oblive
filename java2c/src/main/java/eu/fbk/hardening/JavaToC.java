@@ -9,6 +9,7 @@ import org.objectweb.asm.ClassWriter;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class JavaToC
 {
@@ -42,6 +43,10 @@ public class JavaToC
         {
             inputClass.close();
             return;
+        }
+        if(hasOverloading(methodsToProcess))
+        {
+            throw new IllegalPatternException("Overloaded methods are not supported");
         }
 
         //second pass, extract instructions from methods
@@ -86,5 +91,30 @@ public class JavaToC
         outputClass = new FileOutputStream(input);
         outputClass.write(classWriter.toByteArray());
         outputClass.close();
+    }
+
+    private static boolean hasOverloading(List<ClassMethodPair> list)
+    {
+        /*
+        TODO: REMOVE THIS THING!
+        -> implies generating the stub with javah instead of guessing it, so the c compiler does not complains about
+            conflicting file names. Not as easy as it seems, because it requires parsing a .h file from java to know
+            which method has which stub
+        */
+
+        //O(n^2)... but hopefully this will be a tmp solution
+        for(int i = 0; i < list.size(); i++)
+        {
+            for(int j = 0; j < list.size(); j++)
+            {
+                if(i != j)
+                {
+                    if(list.get(i).getClassName().equals(list.get(j).getClassName()) &&
+                            list.get(j).getMethodName().equals(list.get(j).getMethodName()))
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 }
