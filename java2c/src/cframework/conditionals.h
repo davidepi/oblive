@@ -1,3 +1,16 @@
+static inline void icmp(generic_t* stack, uint32_t* index)
+{
+  jint b = pop(stack,index).i;
+  jint a = pop(stack,index).i;
+  generic_t res;
+  res.i = a-b;
+  if(res.i<0)
+    res.i = (jint)-1;
+  else if(res.i>0)
+    res.i = 1;
+  push(stack,index,res);
+}
+
 static inline void lcmp(generic_t* stack, uint32_t* index)
 {
     jlong b = pop2(stack,index).j;
