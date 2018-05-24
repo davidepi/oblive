@@ -6,6 +6,8 @@
 #include <stdlib.h> //exit
 
 typedef jvalue generic_t;
+#define ZERO_OUT_UNION(res) res.j=0
+
 #include "stack.h"
 #include "arithmetic.h"
 #include "conditionals.h"

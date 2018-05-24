@@ -18,16 +18,6 @@ public class TestInvokeSpecialCastBoolean extends AbstractTestMethodTemplate
     private Object[][] methodArgs = {new Object[]{false, false}, new Object[]{true, false},
             new Object[]{false, true}, new Object[]{true, true}};
 
-    @Test
-    public void testSuperMethodIsCalled()
-    {
-        InvokeSpecialCastBoolean testme = new InvokeSpecialCastBoolean();
-        InvokeVirtualCastBoolean check = new InvokeVirtualCastBoolean();
-        //the normalAdd method of the testme class is wrong on purpose, the class should call the superclass one
-        assertEquals(check.normalAnd(true, true), testme.and(true, true));
-        assertNotEquals(check.normalAnd(true, true), testme.normalAnd(true, true));
-    }
-
     @Override
     public Class<?> getTestClass()
     {

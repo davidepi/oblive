@@ -8,7 +8,7 @@ public class TestInvokeVirtualShort extends AbstractTestMethodTemplate
     private Class<?> className = testclasses.invoke.invokevirtual.InvokeVirtualShort.class;
     private String[] methodTest = {"add"};
     private Class[][] methodParam = {new Class[]{short.class, short.class}};
-    private Object[][] methodArgs = {new Object[]{(short) 15000, (short) 21000}};
+    private Object[][] methodArgs = {new Object[]{(short) 15000, (short) 1000}};
 
 
     @Override

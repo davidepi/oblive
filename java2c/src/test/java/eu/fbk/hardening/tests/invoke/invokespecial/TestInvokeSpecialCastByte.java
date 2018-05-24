@@ -22,7 +22,7 @@ public class TestInvokeSpecialCastByte extends AbstractTestMethodTemplate
         InvokeSpecialCastByte testme = new InvokeSpecialCastByte();
         InvokeVirtualCastByte check = new InvokeVirtualCastByte();
         //the normalAdd method of the testme class is wrong on purpose, the class should call the superclass one
-        assertEquals(check.normalAdd((byte) 15, (byte) 18), testme.add((byte) 15, (byte) 18));
+        assertEquals(true, testme.add((byte) 15, (byte) 18));
         assertNotEquals(check.normalAdd((byte) 15, (byte) 18), testme.normalAdd((byte) 15, (byte) 18));
     }
 

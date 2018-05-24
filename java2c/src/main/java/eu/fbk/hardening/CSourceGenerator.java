@@ -51,6 +51,8 @@ public class CSourceGenerator
         sb.append("generic_t _vars[");
         sb.append(eb.maxLVar);
         sb.append("];\n");
+        //avoid having garbage values if bytes/shorts/booleans/chars are passed, since int will be returned
+        sb.append("memset(_vars,0,sizeof(_vars));\n");
         sb.append("jclass exception = NULL;\n");
         sb.append("char retcode = 0;\n"); //used by some methods to check if some exceptions were raised
 

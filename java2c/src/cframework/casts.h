@@ -110,10 +110,11 @@ static inline void _InstanceOf(JNIEnv* env, generic_t* stack, uint32_t* index, c
   if(obj!=NULL)
   {
     jclass caller_class = (*env)->FindClass(env, className);if(caller_class == NULL){fprintf(stderr,"Class %s not found\n",className);exit(EXIT_FAILURE);}
+    res.j ^= res.j; //init to 0
     res.z = (*env)->IsInstanceOf(env,obj,caller_class);
   }
   else
-    res.z = 0;
+    res.j ^= res.j;
   push(stack,index,res);
 }
 

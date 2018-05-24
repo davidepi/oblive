@@ -22,7 +22,7 @@ public class TestInvokeSpecialCastChar extends AbstractTestMethodTemplate
         InvokeSpecialCastChar testme = new InvokeSpecialCastChar();
         InvokeVirtualCastChar check = new InvokeVirtualCastChar();
         //the normalAdd method of the testme class is wrong on purpose, the class should call the superclass one
-        assertEquals(check.normalAdd((char) 15, (char) 18), testme.add((char) 15, (char) 18));
+        assertEquals(true, testme.add((char) 15, (char) 18));
         assertNotEquals(check.normalAdd((char) 15, (char) 18), testme.normalAdd((char) 15, (char) 18));
     }
 

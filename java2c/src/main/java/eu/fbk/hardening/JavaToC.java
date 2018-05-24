@@ -77,7 +77,7 @@ public class JavaToC
         {
             //newly created file, add includes
             cFileWriter = new PrintWriter(new FileOutputStream(libout,false));
-            cFileWriter.write("#include <jni.h>\n#include \"cframework.h\"\n\n");
+            cFileWriter.write("#include <jni.h>\n#include <string.h>//memset\n#include \"cframework.h\"\n\n");
         }
         else
         {

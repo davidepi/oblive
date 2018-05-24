@@ -13,7 +13,10 @@ public class InvokeVirtualCastShort
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public boolean add(short a, short b)
     {
-        return normalAdd(a, b)==(short)(a+b);
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(a+b);
+        return false;
     }
 
     public short normalAdd(short a, short b)

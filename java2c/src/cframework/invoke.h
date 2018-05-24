@@ -34,6 +34,7 @@ static inline void _InvokeVirtual_jboolean(JNIEnv* env, generic_t* stack, uint32
     VIRTUAL_METHOD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
     generic_t res;
+    ZERO_OUT_UNION(res);
     res.z = (*env)->CallBooleanMethodA(env,class_instance,method_id,values);
     push(stack,index,res);
 }
@@ -42,6 +43,7 @@ static inline void _InvokeStatic_jboolean(JNIEnv* env, generic_t* stack, uint32_
 {
     STATIC_METHOD_ID_RESOLVER
     generic_t res;
+    ZERO_OUT_UNION(res);
     res.z = (*env)->CallStaticBooleanMethodA(env,caller_class,method_id,values);
     push(stack,index,res);
 }
@@ -51,6 +53,7 @@ static inline void _InvokeSpecial_jboolean(JNIEnv* env, generic_t* stack, uint32
     VIRTUAL_METHOD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
     generic_t res;
+    ZERO_OUT_UNION(res);
     //Nonvirtual because invokespecial is used to call super.method(). 
     //If CallIntMethodA is used, if there is an ovveride of the method in a subclass that will be called instead, and it is wrong
     res.z = (*env)->CallNonvirtualBooleanMethodA(env,class_instance,caller_class,method_id,values);
@@ -62,6 +65,7 @@ static inline void _InvokeVirtual_jbyte(JNIEnv* env, generic_t* stack, uint32_t*
     VIRTUAL_METHOD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
     generic_t res;
+    ZERO_OUT_UNION(res);
     res.b = (*env)->CallByteMethodA(env,class_instance,method_id,values);
     push(stack,index,res);
 }
@@ -70,6 +74,7 @@ static inline void _InvokeStatic_jbyte(JNIEnv* env, generic_t* stack, uint32_t* 
 {
     STATIC_METHOD_ID_RESOLVER
     generic_t res;
+    ZERO_OUT_UNION(res);
     res.b = (*env)->CallStaticByteMethodA(env,caller_class,method_id,values);
     push(stack,index,res);
 }
@@ -79,6 +84,7 @@ static inline void _InvokeSpecial_jbyte(JNIEnv* env, generic_t* stack, uint32_t*
     VIRTUAL_METHOD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
     generic_t res;
+    ZERO_OUT_UNION(res);
     //Nonvirtual because invokespecial is used to call super.method(). 
     //If CallIntMethodA is used, if there is an ovveride of the method in a subclass that will be called instead, and it is wrong
     res.b = (*env)->CallNonvirtualByteMethodA(env,class_instance,caller_class,method_id,values);
@@ -90,7 +96,7 @@ static inline void _InvokeVirtual_jchar(JNIEnv* env, generic_t* stack, uint32_t*
     VIRTUAL_METHOD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
     generic_t res;
-    //res.c automagically casts the number
+    ZERO_OUT_UNION(res);
     res.c = (*env)->CallCharMethodA(env,class_instance,method_id,values);
     push(stack,index,res);
 }
@@ -99,7 +105,7 @@ static inline void _InvokeStatic_jchar(JNIEnv* env, generic_t* stack, uint32_t* 
 {
     STATIC_METHOD_ID_RESOLVER
     generic_t res;
-    //res.c automagically casts the number
+    ZERO_OUT_UNION(res);
     res.c = (*env)->CallStaticCharMethodA(env,caller_class,method_id,values);
     push(stack,index,res);
 }
@@ -111,7 +117,7 @@ static inline void _InvokeSpecial_jchar(JNIEnv* env, generic_t* stack, uint32_t*
     generic_t res;
     //Nonvirtual because invokespecial is used to call super.method(). 
     //If CallIntMethodA is used, if there is an ovveride of the method in a subclass that will be called instead, and it is wrong
-    //res.c automagically casts the number
+    ZERO_OUT_UNION(res);
     res.c = (*env)->CallNonvirtualCharMethodA(env,class_instance,caller_class,method_id,values);
     push(stack,index,res);
 }
@@ -121,6 +127,7 @@ static inline void _InvokeVirtual_jshort(JNIEnv* env, generic_t* stack, uint32_t
     VIRTUAL_METHOD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
     generic_t res;
+    ZERO_OUT_UNION(res);
     res.s = (*env)->CallShortMethodA(env,class_instance,method_id,values);
     push(stack,index,res);
 }
@@ -129,6 +136,7 @@ static inline void _InvokeStatic_jshort(JNIEnv* env, generic_t* stack, uint32_t*
 {
     STATIC_METHOD_ID_RESOLVER
     generic_t res;
+    ZERO_OUT_UNION(res);
     res.s = (*env)->CallStaticShortMethodA(env,caller_class,method_id,values);
     push(stack,index,res);
 }
@@ -138,6 +146,7 @@ static inline void _InvokeSpecial_jshort(JNIEnv* env, generic_t* stack, uint32_t
     VIRTUAL_METHOD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
     generic_t res;
+    ZERO_OUT_UNION(res);
     //Nonvirtual because invokespecial is used to call super.method(). 
     //If CallIntMethodA is used, if there is an ovveride of the method in a subclass that will be called instead, and it is wrong
     res.s = (*env)->CallNonvirtualShortMethodA(env,class_instance,caller_class,method_id,values);
