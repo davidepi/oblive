@@ -18,12 +18,18 @@ public class ParseRecursively
         }
         try
         {
+            int[] analyzed = {0};
+            long[] ttime = {0};
             Files.walk(Paths.get(args[0])).forEach(a -> {
                     if(a.toString().endsWith(".class"))
                     {
                         try
                         {
+                            analyzed[0]++;
+                            long t0 =System.currentTimeMillis();
                             JavaToC.parseClass(a.toString(),args[1],args[2],false);
+                            long t1 = System.currentTimeMillis();
+                            ttime[0]+=t1-t0;
                         } catch (IOException e)
                         {
                             e.printStackTrace();
@@ -31,6 +37,8 @@ public class ParseRecursively
 
                     }
             });
+            System.out.println("Analyzed "+analyzed[0]+" files");
+            System.err.print((double)ttime[0]*1.f/1000.f+",");
         } catch (IOException e)
         {
             e.printStackTrace();

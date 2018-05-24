@@ -88,9 +88,7 @@ static inline char _GetField_jbyte(JNIEnv* env, generic_t* stack, uint32_t* inde
   if(class_instance == NULL)
     return 1;
   generic_t res;
-  ZERO_OUT_UNION(res);
-  res.b = (*env)->GetByteField(env,class_instance,field_id);
-  OVERFLOW_CHECK(res,0xFF);
+  res.i = (int)(*env)->GetByteField(env,class_instance,field_id);
   push(stack,index,res);
   return 0;
 }
@@ -99,16 +97,14 @@ static inline void _GetStatic_jbyte(JNIEnv* env, generic_t* stack, uint32_t* ind
 {
   STATIC_FIELD_ID_RESOLVER
     generic_t res;
-  ZERO_OUT_UNION(res);
-  res.b = (*env)->GetStaticByteField(env,caller_class,field_id);
-  OVERFLOW_CHECK(res,0xFF);
+  res.i = (int)(*env)->GetStaticByteField(env,caller_class,field_id);
   push(stack,index,res);
 }
 
 static inline char _SetField_jbyte(JNIEnv* env, generic_t* stack, uint32_t* index, const char* class_name, const char* field_name, const char* field_signature)
 {
   FIELD_ID_RESOLVER
-    jbyte value = pop(stack,index).b;
+  jbyte value = pop(stack,index).b;
   jobject class_instance = pop(stack,index).l;
   if(class_instance == NULL)
     return 1;

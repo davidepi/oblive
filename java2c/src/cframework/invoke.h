@@ -67,10 +67,9 @@ static inline void _InvokeVirtual_jbyte(JNIEnv* env, generic_t* stack, uint32_t*
 {
     VIRTUAL_METHOD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
+    //treat jbyte as jint to cope with overflows
     generic_t res;
-    ZERO_OUT_UNION(res);
-    res.b = (*env)->CallByteMethodA(env,class_instance,method_id,values);
-    OVERFLOW_CHECK(res,0xFF);
+    res.i = (int)(*env)->CallByteMethodA(env,class_instance,method_id,values);
     push(stack,index,res);
 }
 
@@ -78,9 +77,7 @@ static inline void _InvokeStatic_jbyte(JNIEnv* env, generic_t* stack, uint32_t* 
 {
     STATIC_METHOD_ID_RESOLVER
     generic_t res;
-    ZERO_OUT_UNION(res);
-    res.b = (*env)->CallStaticByteMethodA(env,caller_class,method_id,values);
-    OVERFLOW_CHECK(res,0xFF);
+    res.i = (int)(*env)->CallStaticByteMethodA(env,caller_class,method_id,values);
     push(stack,index,res);
 }
 
@@ -89,11 +86,9 @@ static inline void _InvokeSpecial_jbyte(JNIEnv* env, generic_t* stack, uint32_t*
     VIRTUAL_METHOD_ID_RESOLVER
     jobject class_instance = pop(stack,index).l;
     generic_t res;
-    ZERO_OUT_UNION(res);
     //Nonvirtual because invokespecial is used to call super.method(). 
     //If CallIntMethodA is used, if there is an ovveride of the method in a subclass that will be called instead, and it is wrong
-    res.b = (*env)->CallNonvirtualByteMethodA(env,class_instance,caller_class,method_id,values);
-    OVERFLOW_CHECK(res,0xFF);
+    res.i = (int)(*env)->CallNonvirtualByteMethodA(env,class_instance,caller_class,method_id,values);
     push(stack,index,res);
 }
 
