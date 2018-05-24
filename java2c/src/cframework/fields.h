@@ -48,6 +48,7 @@ static inline char _GetField_jshort(JNIEnv* env, generic_t* stack, uint32_t* ind
   generic_t res;
   ZERO_OUT_UNION(res);
   res.s = (*env)->GetShortField(env,class_instance,field_id);
+  OVERFLOW_CHECK(res,0xFFFF);
   push(stack,index,res);
   return 0;
 }
@@ -58,6 +59,7 @@ static inline void _GetStatic_jshort(JNIEnv* env, generic_t* stack, uint32_t* in
     generic_t res;
   ZERO_OUT_UNION(res);
   res.s = (*env)->GetStaticShortField(env,caller_class,field_id);
+  OVERFLOW_CHECK(res,0xFFFF);
   push(stack,index,res);
 }
 
@@ -88,6 +90,7 @@ static inline char _GetField_jbyte(JNIEnv* env, generic_t* stack, uint32_t* inde
   generic_t res;
   ZERO_OUT_UNION(res);
   res.b = (*env)->GetByteField(env,class_instance,field_id);
+  OVERFLOW_CHECK(res,0xFF);
   push(stack,index,res);
   return 0;
 }
@@ -98,6 +101,7 @@ static inline void _GetStatic_jbyte(JNIEnv* env, generic_t* stack, uint32_t* ind
     generic_t res;
   ZERO_OUT_UNION(res);
   res.b = (*env)->GetStaticByteField(env,caller_class,field_id);
+  OVERFLOW_CHECK(res,0xFF);
   push(stack,index,res);
 }
 
@@ -128,6 +132,7 @@ static inline char _GetField_jchar(JNIEnv* env, generic_t* stack, uint32_t* inde
   generic_t res;
   ZERO_OUT_UNION(res);
   res.c = (*env)->GetCharField(env,class_instance,field_id);
+  OVERFLOW_CHECK(res,0xFFFF);
   push(stack,index,res);
   return 0;
 }
@@ -138,6 +143,7 @@ static inline void _GetStatic_jchar(JNIEnv* env, generic_t* stack, uint32_t* ind
     generic_t res;
   ZERO_OUT_UNION(res);
   res.c = (*env)->GetStaticCharField(env,caller_class,field_id);
+  OVERFLOW_CHECK(res,0xFFFF);
   push(stack,index,res);
 }
 
@@ -168,6 +174,7 @@ static inline char _GetField_jboolean(JNIEnv* env, generic_t* stack, uint32_t* i
   generic_t res;
   ZERO_OUT_UNION(res);
   res.z = (*env)->GetBooleanField(env,class_instance,field_id);
+  OVERFLOW_CHECK(res,0xFF);
   push(stack,index,res);
   return 0;
 }
@@ -178,6 +185,7 @@ static inline void _GetStatic_jboolean(JNIEnv* env, generic_t* stack, uint32_t* 
     generic_t res;
   ZERO_OUT_UNION(res);
   res.z = (*env)->GetStaticBooleanField(env,caller_class,field_id);
+  OVERFLOW_CHECK(res,0xFF);
   push(stack,index,res);
 }
 

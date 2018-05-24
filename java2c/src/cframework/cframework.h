@@ -7,6 +7,7 @@
 
 typedef jvalue generic_t;
 #define ZERO_OUT_UNION(res) res.j=0
+#define OVERFLOW_CHECK(res,check) res.j&=check
 
 #include "stack.h"
 #include "arithmetic.h"

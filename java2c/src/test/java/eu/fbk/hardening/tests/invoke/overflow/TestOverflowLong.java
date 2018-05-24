@@ -1,16 +1,15 @@
-package eu.fbk.hardening.tests.invoke.invokeinterface;
+package eu.fbk.hardening.tests.invoke.overflow;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import testclasses.invoke.invokeinterface.AdderInterface;
-import testclasses.invoke.invokeinterface.ImplementedInterface;
 
-public class TestInvokeInterfaceCastShort extends AbstractTestMethodTemplate
+public class TestOverflowLong extends AbstractTestMethodTemplate
 {
 
-    private Class<?> className = testclasses.invoke.invokeinterface.InvokeInterfaceCastShort.class;
+    private Class<?> className = testclasses.invoke.overflow.OverflowLong.class;
     private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{AdderInterface.class, short.class, short.class}};
-    private Object[][] methodArgs = {new Object[]{new ImplementedInterface(), (short) 3000, (short) -2000}};
+    private Class[][] methodParam = {new Class[]{long.class, long.class}};
+    private Object[][] methodArgs = {new Object[]{Long.MAX_VALUE, 1L}};
+
 
     @Override
     public Class<?> getTestClass()
