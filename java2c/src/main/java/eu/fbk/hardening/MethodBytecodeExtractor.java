@@ -374,7 +374,7 @@ public class MethodBytecodeExtractor extends MethodVisitor
         switch(cls.getName())
         {
             case "java.lang.Integer": eb.statements.add("pushi(_stack,&_index,"+(Integer)cst+");");break;
-            case "java.lang.Long": eb.statements.add("pushl(_stack,&_index,"+(Long)cst+");");break;
+            case "java.lang.Long": eb.statements.add("pushl(_stack,&_index,"+(Long)cst+"LL);");break;
             case "java.lang.Float": eb.statements.add("pushf(_stack,&_index,"+(Float)cst+"f);");break;
             case "java.lang.Double": eb.statements.add("pushd(_stack,&_index,"+(Double)cst+");");break;
             case "java.lang.String":
@@ -407,7 +407,8 @@ public class MethodBytecodeExtractor extends MethodVisitor
             statementBuilder.setLength(0);
             currentType = signature.getInput().get(i);
             statementBuilder.append(argumentsName).append("[").append(i).append("]=");
-            if(currentType.isDoubleLength())
+            //pop2 only if double length AND NOT AN ARRAY!!!
+            if(currentType.isDoubleLength() && !currentType.getJniName().equals("jobject"))
                 statementBuilder.append("pop2(_stack,&_index);");
             else
                 statementBuilder.append("pop(_stack,&_index);");
