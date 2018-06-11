@@ -110,11 +110,11 @@ static inline void _InstanceOf(JNIEnv* env, generic_t* stack, uint32_t* index, c
   if(obj!=NULL)
   {
     jclass caller_class = (*env)->FindClass(env, className);if(caller_class == NULL){fprintf(stderr,"Class %s not found\n",className);exit(EXIT_FAILURE);}
-    res.j ^= res.j; //init to 0
+    ZERO_OUT_UNION(res);
     res.z = (*env)->IsInstanceOf(env,obj,caller_class);
   }
   else
-    res.j ^= res.j;
+    ZERO_OUT_UNION(res);
   push(stack,index,res);
 }
 
@@ -126,18 +126,33 @@ static inline char _ExceptionInstanceOf(JNIEnv* env, generic_t* stack, const cha
   return (*env)->IsInstanceOf(env,obj,caller_class);
 }
 
-static inline int _CheckCast(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className)
+static inline char _CheckCast(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className)
 {
   generic_t obj = pop(stack,index);
   if(obj.l!=NULL)
   {
     jclass caller_class = (*env)->FindClass(env, className);if(caller_class == NULL){fprintf(stderr,"Class %s not found\n",className);exit(EXIT_FAILURE);}
+     
+    //jclass cls = (*env)->GetObjectClass(env,obj.l);
+    //jmethodID mid = (*env)->GetMethodID(env,cls, "getClass", "()Ljava/lang/Class;");
+    //jobject clsObj = (*env)->CallObjectMethod(env,obj.l, mid);
+    //cls = (*env)->GetObjectClass(env,clsObj);
+    //mid = (*env)->GetMethodID(env,cls, "getName", "()Ljava/lang/String;");
+    //jstring strObj = (jstring)(*env)->CallObjectMethod(env,clsObj, mid);
+    //const char* str = (*env)->GetStringUTFChars(env,strObj, NULL);
+    //printf("Is %s an instance of %s?\n", str, className);
+     
+    //if((*env)->IsInstanceOf(env,clsObj,cls))
     if((*env)->IsInstanceOf(env,obj.l,caller_class))
     {
+      //printf("Yes\n");
       push(stack,index,obj);
     }
     else
+    {
+      //printf("No\n");
       return 1;
+    }
   }
   else
     push(stack,index,obj);

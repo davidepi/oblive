@@ -375,8 +375,32 @@ public class MethodBytecodeExtractor extends MethodVisitor
         {
             case "java.lang.Integer": eb.statements.add("pushi(_stack,&_index,"+(Integer)cst+");");break;
             case "java.lang.Long": eb.statements.add("pushl(_stack,&_index,"+(Long)cst+"LL);");break;
-            case "java.lang.Float": eb.statements.add("pushf(_stack,&_index,"+(Float)cst+"f);");break;
-            case "java.lang.Double": eb.statements.add("pushd(_stack,&_index,"+(Double)cst+");");break;
+            case "java.lang.Float":
+            {
+                Float value = (Float) cst;
+                if (value.isNaN())
+                    eb.statements.add("pushf(_stack,&_index,(float)NAN);");
+                else if (value.equals(Float.POSITIVE_INFINITY))
+                    eb.statements.add("pushf(_stack,&_index,(float)INFINITY);");
+                else if (value.equals(Float.NEGATIVE_INFINITY))
+                    eb.statements.add("pushf(_stack,&_index,(float)-INFINITY);");
+                else
+                    eb.statements.add("pushf(_stack,&_index," + (Float) cst + "f);");
+                break;
+            }
+            case "java.lang.Double":
+            {
+                Double value = (Double) cst;
+                if (value.isNaN())
+                    eb.statements.add("pushd(_stack,&_index,NAN);");
+                else if (value.equals(Double.POSITIVE_INFINITY))
+                    eb.statements.add("pushd(_stack,&_index,INFINITY);");
+                else if (value.equals(Double.NEGATIVE_INFINITY))
+                    eb.statements.add("pushd(_stack,&_index,-INFINITY);");
+                else
+                    eb.statements.add("pushd(_stack,&_index," + (Double) cst + ");");
+                break;
+            }
             case "java.lang.String":
             {
                 String str = (String)cst;
