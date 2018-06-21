@@ -1,5 +1,5 @@
 .PHONY: clean
-CC=gcc-8
+CC=gcc
 CFLAGS=-fpic -Wall -Wno-unused-variable -O3
 SRCDIR=
 OUTDIR=
@@ -8,7 +8,6 @@ LIBNAME=
 USER_INCLUDES=
 LIB=lib
 INCLUDE= -I${JAVA_HOME}/include
-FRAMEWORK= -Isrc/cframework
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 INCLUDE += -I${JAVA_HOME}/include/darwin/
@@ -24,5 +23,5 @@ $(OUTDIR)/lib$(LIBNAME)$(LIBEXT): $(OUTDIR)/$(SRCNAME).o
 
 $(OUTDIR)/$(SRCNAME).o: $(SRCDIR)/$(SRCNAME).c
 		mkdir -p $(OUTDIR)
-		$(CC) $(USER_INCLUDES) -c $(CFLAGS) $(FRAMEWORK) $(INCLUDE) $^ -o $@
+		$(CC) $(USER_INCLUDES) -c $(CFLAGS) $(INCLUDE) $^ -o $@
 
