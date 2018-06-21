@@ -7,7 +7,6 @@ stages:
 x86_build:
   stage: build_main
   script:
-  - cd java2c/
   - ./gradlew assemble
   tags:
   - x86_64_linux
@@ -15,25 +14,8 @@ x86_build:
 x86_test:
   stage: test_main
   script:
-  - cd java2c/
   - ./gradlew test jacocoTestReport
   - cat build/reports/jacoco/test/html/index.html
   coverage: '/Total.*?([0-9]{1,3})%/'
   tags:
   - x86_64_linux
-
-arm_build:
-  stage: build_others
-  script:
-  - cd java2c/
-  - ./gradlew assemble
-  tags:
-  - armv6
-
-arm_test:
-  stage: test_others
-  script:
-  - cd java2c/
-  - ./gradlew test jacocoTestReport
-  tags:
-  - armv6

@@ -1,51 +1,7 @@
-matrix:
-    include:
-        - os: linux
-          dist: trusty
-          sudo: true
-          before_install: 
-            - sudo apt-get update -q
-            - sudo apt-get install libzip-dev -y
-          compiler: gcc
-          language: c
-          script:
-              - cd apkextractor/
-              - mkdir -p build
-              - cd build/
-              - cmake -DCMAKE_BUILD_TYPE=Debug ..
-              - cmake --build .
-        - os: linux
-          dist: trusty
-          sudo: true
-          before_install:
-              - sudo apt-get update -q
-              - sudo apt-get install libzip-dev -y
-          compiler: clang
-          language: c
-          script:
-              - cd apkextractor/
-              - mkdir -p build
-              - cd build/
-              - cmake -DCMAKE_BUILD_TYPE=Debug ..
-              - cmake --build .
-        - os: osx
-          before_install:
-              - brew update
-              - brew install libzip
-          compiler: clang
-          language: c
-          script:
-              - cd apkextractor/
-              - mkdir -p build
-              - cd build/
-              - cmake -DCMAKE_BUILD_TYPE=Debug ..
-              - cmake --build .
-        - os: linux
-          dist: trusty
-          sudo: false
-          language: java
-          jdk: oraclejdk8
-          script:
-            - cd java2c/
-            - mkdir -p build/libsrc
-            - ./gradlew build
+os: linux
+dist: trusty
+sudo: false
+language: java
+jdk: oraclejdk8
+script:
+  - ./gradlew build
