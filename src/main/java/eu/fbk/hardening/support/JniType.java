@@ -187,7 +187,7 @@ public class JniType {
      *
      * @return true if the type is a float or a double, false otherwise
      */
-    public boolean isFloatingPoint() {
+    boolean isFloatingPoint() {
         return floatingPoint;
     }
 
