@@ -7,6 +7,13 @@ public class ParseSingle
     public ParseSingle()
     { }
 
+    /**
+     * Parse a single Class file to apply the Java2c obfuscation.
+     * The file is overwritten with its obfuscated counterpart
+     * @param args 0 - The file to overwrite
+     *             1 - Output folder for the output C source file
+     *             2 - Name of the library that will be linked against this Class file (without `lib` and `.so`)
+     */
     public static void main(String[] args)
     {
         if(args.length < 3)

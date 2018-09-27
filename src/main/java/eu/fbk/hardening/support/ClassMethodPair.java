@@ -6,6 +6,7 @@ public class ClassMethodPair
     private String methodName;
     private String desc;
     private MethodSignature signature;
+    public boolean overloaded;
 
     public ClassMethodPair(String sclass, String smethod, String ssignature)
     {
@@ -13,6 +14,8 @@ public class ClassMethodPair
         this.methodName = smethod;
         this.desc = ssignature;
         this.signature = new MethodSignature(ssignature);
+        //cannot set this variable until every method has been processed
+        overloaded = false;
     }
 
     public String getClassName()

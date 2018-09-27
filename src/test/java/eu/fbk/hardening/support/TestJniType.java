@@ -5,11 +5,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class TestJniType
-{
+public class TestJniType {
     @Test
-    public void testInteger()
-    {
+    public void testInteger() {
         JniType type = new JniType("I");
         assertEquals("jint", type.getName());
         assertEquals("jint", type.getJniName());
@@ -17,11 +15,11 @@ public class TestJniType
         assertEquals(false, type.isDoubleLength());
         assertEquals(false, type.isFloatingPoint());
         assertEquals(0, type.getArrayDepth());
+        assertEquals("I", type.getOverloadName());
     }
 
     @Test
-    public void testObject()
-    {
+    public void testObject() {
         JniType type = new JniType("Ljava/util/String;");
         assertEquals("java/util/String", type.getName());
         assertEquals("jobject", type.getJniName());
@@ -29,46 +27,42 @@ public class TestJniType
         assertEquals(false, type.isDoubleLength());
         assertEquals(false, type.isFloatingPoint());
         assertEquals(0, type.getArrayDepth());
+        assertEquals("Ljava_util_String_2", type.getOverloadName());
     }
 
     @Test(expected = IllegalPatternException.class)
-    public void testUnknownTypeWrongLetter()
-    {
+    public void testUnknownTypeWrongLetter() {
         JniType type = new JniType("K");
     }
 
     @Test(expected = IllegalPatternException.class)
-    public void testUnknownTypeMissingObjectSemicolon()
-    {
+    public void testUnknownTypeMissingObjectSemicolon() {
         JniType type = new JniType("Ljava/util/String");
     }
 
     @Test(expected = IllegalPatternException.class)
-    public void testEmptyObjectName()
-    {
+    public void testEmptyObjectName() {
         JniType type = new JniType("L;");
     }
 
     @Test(expected = IllegalPatternException.class)
-    public void testUntypedArray()
-    {
+    public void testUntypedArray() {
         JniType type = new JniType("[");
     }
 
     @Test
-    public void testVoid()
-    {
+    public void testVoid() {
         JniType type = new JniType("V");
         assertEquals("void", type.getName());
         assertEquals("void", type.getJniName());
         assertEquals(false, type.isDoubleLength());
         assertEquals(false, type.isFloatingPoint());
         assertEquals(0, type.getArrayDepth());
+        assertEquals("", type.getOverloadName());
     }
 
     @Test
-    public void testShort()
-    {
+    public void testShort() {
         JniType type = new JniType("S");
         assertEquals("jshort", type.getName());
         assertEquals("jshort", type.getJniName());
@@ -76,11 +70,11 @@ public class TestJniType
         assertEquals(false, type.isDoubleLength());
         assertEquals(false, type.isFloatingPoint());
         assertEquals(0, type.getArrayDepth());
+        assertEquals("S", type.getOverloadName());
     }
 
     @Test
-    public void testChar()
-    {
+    public void testChar() {
         JniType type = new JniType("C");
         assertEquals("jchar", type.getName());
         assertEquals("jchar", type.getJniName());
@@ -88,11 +82,11 @@ public class TestJniType
         assertEquals(false, type.isDoubleLength());
         assertEquals(false, type.isFloatingPoint());
         assertEquals(0, type.getArrayDepth());
+        assertEquals("C", type.getOverloadName());
     }
 
     @Test
-    public void testBoolean()
-    {
+    public void testBoolean() {
         JniType type = new JniType("Z");
         assertEquals("jboolean", type.getName());
         assertEquals("jboolean", type.getJniName());
@@ -100,11 +94,11 @@ public class TestJniType
         assertEquals(false, type.isDoubleLength());
         assertEquals(false, type.isFloatingPoint());
         assertEquals(0, type.getArrayDepth());
+        assertEquals("Z", type.getOverloadName());
     }
 
     @Test
-    public void testByte()
-    {
+    public void testByte() {
         JniType type = new JniType("B");
         assertEquals("jbyte", type.getName());
         assertEquals("jbyte", type.getJniName());
@@ -112,11 +106,11 @@ public class TestJniType
         assertEquals(false, type.isDoubleLength());
         assertEquals(false, type.isFloatingPoint());
         assertEquals(0, type.getArrayDepth());
+        assertEquals("B", type.getOverloadName());
     }
 
     @Test
-    public void testLong()
-    {
+    public void testLong() {
         JniType type = new JniType("J");
         assertEquals("jlong", type.getName());
         assertEquals("jlong", type.getJniName());
@@ -124,11 +118,11 @@ public class TestJniType
         assertEquals(true, type.isDoubleLength());
         assertEquals(false, type.isFloatingPoint());
         assertEquals(0, type.getArrayDepth());
+        assertEquals("J", type.getOverloadName());
     }
 
     @Test
-    public void testFloat()
-    {
+    public void testFloat() {
         JniType type = new JniType("F");
         assertEquals("jfloat", type.getName());
         assertEquals("jfloat", type.getJniName());
@@ -136,11 +130,11 @@ public class TestJniType
         assertEquals(false, type.isDoubleLength());
         assertEquals(true, type.isFloatingPoint());
         assertEquals(0, type.getArrayDepth());
+        assertEquals("F", type.getOverloadName());
     }
 
     @Test
-    public void testDouble()
-    {
+    public void testDouble() {
         JniType type = new JniType("D");
         assertEquals("jdouble", type.getName());
         assertEquals("jdouble", type.getJniName());
@@ -148,11 +142,11 @@ public class TestJniType
         assertEquals(true, type.isDoubleLength());
         assertEquals(true, type.isFloatingPoint());
         assertEquals(0, type.getArrayDepth());
+        assertEquals("D", type.getOverloadName());
     }
 
     @Test
-    public void testArraySingleDim()
-    {
+    public void testArraySingleDim() {
         JniType type = new JniType("[I");
         assertEquals("jint", type.getName());
         assertEquals("jobject", type.getJniName());
@@ -160,11 +154,11 @@ public class TestJniType
         assertEquals(false, type.isDoubleLength());
         assertEquals(false, type.isFloatingPoint());
         assertEquals(1, type.getArrayDepth());
+        assertEquals("_3I", type.getOverloadName());
     }
 
     @Test
-    public void testMultidimensionalArray()
-    {
+    public void testMultidimensionalArray() {
         JniType type = new JniType("[[[Ljava/util/String;");
         assertEquals("java/util/String", type.getName());
         assertEquals("jobject", type.getJniName());
@@ -172,11 +166,11 @@ public class TestJniType
         assertEquals(false, type.isDoubleLength());
         assertEquals(false, type.isFloatingPoint());
         assertEquals(3, type.getArrayDepth());
+        assertEquals("_3_3_3Ljava_util_String_2", type.getOverloadName());
     }
 
     @Test
-    public void testEquals()
-    {
+    public void testEquals() {
         JniType voidt0 = new JniType("V");
         JniType voidt1 = new JniType("V");
         JniType intt0 = new JniType("I");

@@ -84,10 +84,10 @@ public class JavaToC
             inputClass.close();
             return;
         }
-        if(hasOverloading(methodsToProcess))
-        {
-            throw new IllegalPatternException("Overloaded methods are not supported");
-        }
+//        if(hasOverloading(methodsToProcess))
+//        {
+//            throw new IllegalPatternException("Overloaded methods are not supported");
+//        }
 
         //second pass, extract instructions from methods
         bytecodeExtractor = new ClassBytecodeExtractor(methodsToProcess);
@@ -109,7 +109,7 @@ public class JavaToC
             className = methodsToProcess.get(j);
             ExtractedBytecode bytecode = extractedBytecodes.get(j);
             bytecode.postprocess(); //remove unnecessary labels. Otherwise empty labels could be created and gcc fails
-            c.append(CSourceGenerator.generateCode(className.getClassName(),className.getMethodName(),className.getSignature(),bytecode));
+            c.append(CSourceGenerator.generateCode(className.getClassName(),className.getMethodName(), className.getSignature(),bytecode,className.overloaded));
         }
         this.output.write(c.toString());
 

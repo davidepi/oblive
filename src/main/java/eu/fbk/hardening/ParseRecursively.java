@@ -9,6 +9,13 @@ public class ParseRecursively
     public ParseRecursively()
     { }
 
+    /**
+     * Parse every Class file inside a folder to apply the Java2c obfuscation.
+     * Each file is overwritten with its obfuscated counterpart
+     * @param args 0 - The folder containing the Class files
+     *             1 - Output folder for the output C source file
+     *             2 - Name of the library that will be linked against every Class file (without `lib` and `.so`)
+     */
     public static void main(String[] args)
     {
         if(args.length < 3)

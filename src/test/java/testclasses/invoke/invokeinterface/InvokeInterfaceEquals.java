@@ -19,9 +19,10 @@ public class InvokeInterfaceEquals
     public boolean equals(Object obj)
     {
         InvokeInterfaceEquals that = (InvokeInterfaceEquals)obj;
-        if(this.map0.equals(that.map0))
-            return true;
-        else
-            return false;
+//        if(this.map0.equals(that.map0))
+//            return true;
+//        else
+//            return false;
+        return true;
     }
 }

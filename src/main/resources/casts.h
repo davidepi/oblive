@@ -133,24 +133,24 @@ static inline char _CheckCast(JNIEnv* env, generic_t* stack, uint32_t* index, co
   {
     jclass caller_class = (*env)->FindClass(env, className);if(caller_class == NULL){fprintf(stderr,"Class %s not found\n",className);exit(EXIT_FAILURE);}
      
-    //jclass cls = (*env)->GetObjectClass(env,obj.l);
-    //jmethodID mid = (*env)->GetMethodID(env,cls, "getClass", "()Ljava/lang/Class;");
-    //jobject clsObj = (*env)->CallObjectMethod(env,obj.l, mid);
-    //cls = (*env)->GetObjectClass(env,clsObj);
-    //mid = (*env)->GetMethodID(env,cls, "getName", "()Ljava/lang/String;");
-    //jstring strObj = (jstring)(*env)->CallObjectMethod(env,clsObj, mid);
-    //const char* str = (*env)->GetStringUTFChars(env,strObj, NULL);
-    //printf("Is %s an instance of %s?\n", str, className);
+    jclass cls = (*env)->GetObjectClass(env,obj.l);
+    jmethodID mid = (*env)->GetMethodID(env,cls, "getClass", "()Ljava/lang/Class;");
+    jobject clsObj = (*env)->CallObjectMethod(env,obj.l, mid);
+    cls = (*env)->GetObjectClass(env,clsObj);
+    mid = (*env)->GetMethodID(env,cls, "getName", "()Ljava/lang/String;");
+    jstring strObj = (jstring)(*env)->CallObjectMethod(env,clsObj, mid);
+    const char* str = (*env)->GetStringUTFChars(env,strObj, NULL);
+    printf("Is %s an instance of %s?\n", str, className);
      
     //if((*env)->IsInstanceOf(env,clsObj,cls))
     if((*env)->IsInstanceOf(env,obj.l,caller_class))
     {
-      //printf("Yes\n");
+      printf("Yes\n");
       push(stack,index,obj);
     }
     else
     {
-      //printf("No\n");
+      printf("No\n");
       return 1;
     }
   }

@@ -10,6 +10,8 @@ public class CollidingString
 
     }
 
+    //test strings with the same content, that in Java are mapped onto LDC commands (used to ensure that I do not create
+    // variables with same name)
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public static String exec()
     {

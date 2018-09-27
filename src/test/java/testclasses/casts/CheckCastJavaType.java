@@ -3,9 +3,9 @@ package testclasses.casts;
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class CheckCast
+public class CheckCastJavaType
 {
-    public CheckCast()
+    public CheckCastJavaType()
     {
 
     }

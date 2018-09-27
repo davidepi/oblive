@@ -11,7 +11,8 @@ import java.util.ArrayList;
 
 public class CSourceGenerator
 {
-    public static String generateCode(String className, String methodName, MethodSignature signature, ExtractedBytecode eb)
+    public static String generateCode(String className, String methodName, MethodSignature signature,
+                                      ExtractedBytecode eb, boolean overloaded)
     {
         StringBuilder sb = new StringBuilder();
         if(signature.getReturnType().getJniName().equals("void"))
@@ -27,6 +28,12 @@ public class CSourceGenerator
         sb.append(className.replace('/','_').replace("$","_00024"));
         sb.append('_');
         sb.append(methodName);
+        if(overloaded) //add special signature for overloaded methods
+        {
+            sb.append("__");
+            for(int i=0;i<signature.getInput().size();i++)
+                sb.append(signature.getInput().get(i).getOverloadName());
+        }
         sb.append("(JNIEnv* env, ");
         if(!eb.isStatic)
             sb.append("jobject this");

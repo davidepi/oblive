@@ -6,6 +6,7 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.objectweb.asm.Opcodes.ASM5;
 
@@ -40,12 +41,25 @@ public class ClassAnnotationExplorer extends ClassVisitor
     {
         //when the visit is finished, check for every method if it has the @Obfuscation(protections = Protections.TO_NATIVE_CODE) annotation
         ArrayList<ClassMethodPair> annotated = new ArrayList<ClassMethodPair>();
+        //used to count the number of instances of a method, if this is > 1 (accounting only for native methods) then
+        // the syntax for overloaded methods must be used
+        HashMap<String,Integer> overloadCount = new HashMap<String, Integer>();
         for(int i=0;i<obfuscateMethods.size();i++)
             if(obfuscateMethods.get(i).shouldObfuscate())
             {
                 ClassMethodPair cmp = obfuscateMethods.get(i).getMethod();
                 cmp.setClassName(this.name);
                 annotated.add(cmp);
+                if(overloadCount.containsKey(cmp.getMethodName()))
+                    overloadCount.put(cmp.getMethodName(),overloadCount.get(cmp.getMethodName())+1); //put oldVal+1
+                else
+                    overloadCount.put(cmp.getMethodName(),1);
+            }
+            //record overloaded methods
+            for(ClassMethodPair current : annotated)
+            {
+                if(overloadCount.get(current.getMethodName())>1)
+                    current.overloaded = true;
             }
         return annotated;
     }

@@ -1,13 +1,13 @@
-package eu.fbk.hardening.tests.casts;
+package eu.fbk.hardening.tests.overload;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
 
-public class TestCheckCast extends AbstractTestMethodTemplate
+public class TestOverloadedMethodsFloat extends AbstractTestMethodTemplate
 {
-    private Class<?> className = testclasses.casts.CheckCast.class;
-    private String[] methodTest = {"castString", "castString"};
-    private Class[][] methodParam = {new Class[]{Object.class}, new Class[]{Object.class}};
-    private Object[][] methodArgs = {new Object[]{"hello"}, new Object[]{null}};
+    private Class<?> className = testclasses.overload.OverloadedMethodsFloat.class;
+    private String[] methodTest = {"add", "add"};
+    private Class[][] methodParam = {new Class[]{int.class, int.class}, new Class[]{float.class, float.class}};
+    private Object[][] methodArgs = {new Object[]{15, 21}, new Object[]{15, 18}};
 
     @Override
     public Class<?> getTestClass()
