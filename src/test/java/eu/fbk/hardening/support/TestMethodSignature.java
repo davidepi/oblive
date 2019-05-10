@@ -1,9 +1,8 @@
 package eu.fbk.hardening.support;
 
-import eu.fbk.hardening.IllegalPatternException;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class TestMethodSignature
 {
@@ -128,15 +127,15 @@ public class TestMethodSignature
         MethodSignature ms4 = new MethodSignature("(ISLjava/lang/String;F)V");
         MethodSignature ms5 = new MethodSignature("(ISLjava/lang/String;F)V");
 
-        assertEquals(false, ms0.equals(null));
-        assertEquals(false, ms0.equals(new JniType("V")));
+        assertNotEquals(null, ms0);
+        assertNotEquals(ms0, new JniType("V"));
 
-        assertEquals(true, ms4.equals(ms5));
+        assertEquals(ms4, ms5);
         //different inputs
-        assertEquals(false, ms0.equals(ms1));
-        assertEquals(false, ms0.equals(ms2));
+        assertNotEquals(ms0, ms1);
+        assertNotEquals(ms0, ms2);
         //different return type
-        assertEquals(false, ms0.equals(ms3));
+        assertNotEquals(ms0, ms3);
     }
 
     @Test(expected = IllegalPatternException.class)

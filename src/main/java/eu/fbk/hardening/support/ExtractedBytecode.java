@@ -1,14 +1,21 @@
 package eu.fbk.hardening.support;
 
-import eu.fbk.hardening.IllegalPatternException;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Class holding every statement extracted from the original bytecode and some method useful to process and rearrange
- * them
+ * them. Can be seen as a single method represented by a collection of statements.
  *
- * @author davide
+ * @author D.Pizzolotto
  */
 public class ExtractedBytecode {
     /**
@@ -54,27 +61,27 @@ public class ExtractedBytecode {
     public boolean isStatic;
 
     /**
-     * Flag used to indicate where the code checking if an exception has been caught should be put
+     * Flag used to indicate where should be put the code checking indicating if an exception has been caught
      */
-    public final static String postprocessIsCatched = "$$_EXCEPTION_CHECK";
+    public static final String POSTPROCESS_IS_CATCHED = "$$_EXCEPTION_CHECK";
 
     /**
-     * Flag used to indicate where the exception clear code should be inserted
+     * Flag used to indicate where should be inserted the 'exception cleanup' code
      */
-    public final static String postprocessExceptionClear = "$$_EXCEPTION_CLEAR";
+    public static final String POSTPROCESS_EXCEPTION_CLEAR = "$$_EXCEPTION_CLEAR";
 
     /**
      * Initialize this class
      *
-     * @param isStatic true if the method is flagged as static
+     * @param staticMethod true if the method is flagged as static
      */
-    public ExtractedBytecode(boolean isStatic) {
+    public ExtractedBytecode(boolean staticMethod) {
         statements = new ArrayList<>();
         tryCatchBlocks = new ArrayList<>();
         labels = new ArrayList<>();
         usedLabels = new HashSet<>();
         catchedStatements = new HashSet<>();
-        this.isStatic = isStatic;
+        this.isStatic = staticMethod;
     }
 
     /**
@@ -86,10 +93,11 @@ public class ExtractedBytecode {
         for (TryCatchBlock current : tryCatchBlocks) {
             current.startIndex = labels.indexOf(current.start);
             current.endIndex = labels.indexOf(current.end);
-            if (current.startIndex < 0 || current.endIndex < 0)
+            if (current.startIndex < 0 || current.endIndex < 0) {
                 throw new IllegalPatternException("Inconsistents try-catch blocks");
-            else
+            } else {
                 current.length = current.endIndex - current.startIndex;
+            }
         }
     }
 
@@ -100,6 +108,7 @@ public class ExtractedBytecode {
      *
      * @return The string representing a list of statements undefining every catch block preprocessor directive
      */
+    @NotNull
     private String generateExitCatchs() {
         //generate the string undefining every catch statements
         StringBuilder sb = new StringBuilder();
@@ -127,26 +136,19 @@ public class ExtractedBytecode {
         //<Label<Catch stmt,TryCatchBlock>>
         Map<String, Map<String, TryCatchBlock>> defines = new HashMap<>();
         //add try-catchs to every basic block
-        for (TryCatchBlock current : tryCatchBlocks) //for every try-catch
-        {
-            for (int i = current.startIndex; i < current.endIndex; i++) //for every label affected by the try-catch
-            {
+        for (TryCatchBlock current : tryCatchBlocks) { //for every try-catch
+            for (int i = current.startIndex; i < current.endIndex; i++) { //for every label affected by the try-catch
                 Map<String, TryCatchBlock> map = defines.get(labels.get(i));
-                if (map == null) //this is the first try catch of that label
-                {
+                if (map == null) { //this is the first try catch of that label
                     map = new HashMap<>();
                     map.put(current.catched, current);
                     defines.put(labels.get(i), map);
-                } else //another try-catch already exists
-                {
+                } else { //another try-catch already exists
                     TryCatchBlock mapped = map.get(current.catched);
-                    if (mapped == null) //the try-catch was catching another exception
-                    {
+                    if (mapped == null) { //the try-catch was catching another exception
                         map.put(current.catched, current); //add the current catch
-                    } else //nested catch, need to keep the shortest one
-                    {
-                        if (mapped.length > current.length) //mine is the shortest, the other one is removed
-                        {
+                    } else { //nested catch, need to keep the shortest one
+                        if (mapped.length > current.length) { //mine is the shortest, the other one is removed
                             map.remove(current.catched);
                             map.put(current.catched, current);
                         }
@@ -164,14 +166,14 @@ public class ExtractedBytecode {
      * Flatten the result of a reorganizeTryCatch() in order to get a pair (Label,String) where for each string the
      * prepared `#ifdef catchedexception goto handle are used`
      *
-     * @param reorganizeTryCatchRes The result of a reorganizeTryCatch() call
+     * @param reorgTryCatchRes The result of a reorganizeTryCatch() call
      * @return The Map<Label,String> defined in the method description
      */
-    private Map<String, String> flattenTryCatchs(Map<String, Map<String, TryCatchBlock>> reorganizeTryCatchRes) {
+    private Map<String, String> flattenTryCatchs(@NotNull Map<String, Map<String, TryCatchBlock>> reorgTryCatchRes) {
         //now flatten the <Label<Catch stmt, TryCatchBlock>> into a <Label,Catch_stmt> by appending the TryCatchBlock
         // handle
         HashMap<String, String> retval = new HashMap<>();
-        for (Map.Entry<String, Map<String, TryCatchBlock>> pair : reorganizeTryCatchRes.entrySet()) {
+        for (Map.Entry<String, Map<String, TryCatchBlock>> pair : reorgTryCatchRes.entrySet()) {
             StringBuilder catchstring = new StringBuilder();
             for (Map.Entry<String, TryCatchBlock> inner : (pair.getValue()).entrySet()) {
                 catchstring.append("#define CATCH_");
@@ -184,8 +186,6 @@ public class ExtractedBytecode {
         }
         return retval;
     }
-
-    //remove unnecessary labels and add try-catchs in C
 
     /**
      * Removes every unnecessary label, add and reorganize try-catch blocks for the method of this class. This MUST
@@ -204,28 +204,27 @@ public class ExtractedBytecode {
                 String label = value.substring(0, value.length() - 3);
                 labelpure = value.substring(6, value.length() - 3);
                 String catchme;
-                if (!usedLabels.contains(label))
+                if (!usedLabels.contains(label)) {
                     it.remove();
+                }
                 it.add(exitCatchBlock);
                 if (enterCatchBlock.containsKey(labelpure)) {
                     catchme = enterCatchBlock.get(labelpure);
                     it.add(catchme);
                 }
-            }
-            //need to add a dynamic type checking for the user-defined exceptions
-            else if (value.equals(postprocessIsCatched) || value.equals(postprocessExceptionClear)) {
+            } else if (value.equals(POSTPROCESS_IS_CATCHED) || value.equals(POSTPROCESS_EXCEPTION_CLEAR)) {
+                //need to add a dynamic type checking for the user-defined exceptions
+
                 //add also the ExceptionClear() block. For exceptions generated in the JVM and catched in the JNI
-                boolean clear = value.equals(postprocessExceptionClear);
+                boolean clear = value.equals(POSTPROCESS_EXCEPTION_CLEAR);
 
                 it.remove();
                 // last label used, since I'm not right after a label ----------v
                 Map<String, TryCatchBlock> currentLabelCatch = tryCatches.get(labelpure);
-                if (currentLabelCatch == null) //no catchblock for the current basic block, so throw the exception
-                {
+                if (currentLabelCatch == null) { //no catchblock for the current basic block, so throw the exception
                     it.add("(*env)->Throw(env,_stack[0].l);\nRETURN_EXCEPTION;\n");
-                } else //inside a catchblock, so if(raised exception instance of catched exception) goto catch, else
-                // throw
-                {
+                } else { //inside a catchblock, so if(raised exception instance of catched exception) goto catch, else
+                    // throw
                     //flatten into array
                     List<TryCatchBlock> list = new ArrayList<TryCatchBlock>(currentLabelCatch.values());
                     //reorder array otherwise I could break inheritance (catching in the wrong block)
@@ -234,8 +233,9 @@ public class ExtractedBytecode {
                     for (TryCatchBlock catched : list) {
                         //no need to if-elif-else since every if is broken by a goto
                         it.add("if(_ExceptionInstanceOf(env,_stack,\"" + catched.catched + "\")){\n");
-                        if (clear)
+                        if (clear) {
                             it.add("(*env)->ExceptionClear(env);\n");
+                        }
                         it.add("goto LABEL_" + catched.handle + ";\n}\n");
                     }
                     it.add("(*env)->Throw(env,_stack[0].l);\nRETURN_EXCEPTION;\n");

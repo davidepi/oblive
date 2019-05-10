@@ -3,7 +3,7 @@ package eu.fbk.hardening.support;
 /**
  * Class used to wrap together several parameters describing a method being visited.
  *
- * @author davidepi
+ * @author D.Pizzolotto
  */
 public class ClassMethodPair {
     //name of the class containing the method
@@ -45,10 +45,10 @@ public class ClassMethodPair {
     /**
      * Setter: sets the class name param
      *
-     * @param className The name of the class of this ClassMethodPair
+     * @param name The name of the class of this ClassMethodPair
      */
-    public void setClassName(String className) {
-        this.className = className;
+    public void setClassName(String name) {
+        this.className = name;
     }
 
     /**
@@ -72,12 +72,12 @@ public class ClassMethodPair {
     /**
      * Setter: sets the signature of this method
      *
-     * @param signature A string representing the Java Bytecode signature of the method symbolized by this
-     *                  ClassMethodPair
+     * @param sign A string representing the Java Bytecode signature of the method symbolized by this
+     *             ClassMethodPair
      */
-    public void setSignature(String signature) {
-        this.desc = signature;
-        this.signature = new MethodSignature(signature);
+    public void setSignature(String sign) {
+        this.desc = sign;
+        this.signature = new MethodSignature(sign);
     }
 
     /**

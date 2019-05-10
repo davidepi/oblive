@@ -1,6 +1,7 @@
 package eu.fbk.hardening.support;
 
-import eu.fbk.hardening.IllegalPatternException;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class used to parse string representing types in the bytecode notation and extract features.
@@ -16,7 +17,7 @@ import eu.fbk.hardening.IllegalPatternException;
  * D - double
  * Lpackage/name; - object
  *
- * @author davidepi &lt;dpizzolotto@fbk.eu&gt;
+ * @author D.Pizzolotto
  */
 public class JniType {
     //name of the jniName in c (jint, jboolean, etc...)
@@ -42,14 +43,15 @@ public class JniType {
      *
      * @param bytecodeName The input in bytecode notation
      */
-    public JniType(String bytecodeName) {
+    public JniType(@NotNull String bytecodeName) {
         arrayDepth = 0;
         StringBuilder overload = new StringBuilder();
-        for (int i = 0; i < bytecodeName.length() - 1; i++) //-1 ensures to leave at least one character for the switch
+        for (int i = 0; i < bytecodeName.length() - 1; i++) { //-1 ensures at least one character for the switch
             if (bytecodeName.charAt(i) == '[') {
                 arrayDepth++;
                 overload.append("_3");
             }
+        }
         switch (bytecodeName.charAt(arrayDepth)) {
             case 'I':
                 this.jniName = "jint";
@@ -122,8 +124,9 @@ public class JniType {
                 overload.append('D');
                 break;
             case 'L':
-                if (bytecodeName.charAt(bytecodeName.length() - 1) != ';') //not in the canonical form
+                if (bytecodeName.charAt(bytecodeName.length() - 1) != ';') { //not in the canonical form
                     throw new IllegalPatternException("Unknown bytecode type " + bytecodeName);
+                }
                 this.jniName = "jobject";
                 this.name = bytecodeName.substring(arrayDepth + 1, bytecodeName.length() - 1);
                 this.doubleLength = false;
@@ -132,8 +135,9 @@ public class JniType {
                 overload.append("L");
                 overload.append(this.name.replaceAll("/", "_"));
                 overload.append("_2");
-                if (this.name.length() == 0)
+                if (this.name.length() == 0) {
                     throw new IllegalPatternException("Empty object name");
+                }
                 break;
             default:
                 throw new IllegalPatternException("Unknown bytecode type " + bytecodeName);
@@ -201,16 +205,40 @@ public class JniType {
         return arrayDepth;
     }
 
+    /**
+     * Checks if the two objects are equals
+     *
+     * @param object The object against which the check will be performed
+     * @return true if the two objects are equals, false otherwise
+     */
+    @Contract(value = "null -> false", pure = true)
     @Override
     public boolean equals(Object object) {
-        if (object == null || (!JniType.class.isAssignableFrom(object.getClass())))
+        if (object == null || (!JniType.class.isAssignableFrom(object.getClass()))) {
             return false;
-        else {
+        } else {
             final JniType other = (JniType) object;
             return this.name.equals(other.getName());
         }
     }
 
+    /**
+     * Calculates an hash code for this type.
+     *
+     * @return The hash code for this class instance
+     */
+    @Override
+    public int hashCode() {
+        return jvalueLetter + 10 * arrayDepth + name.hashCode();
+    }
+
+    /**
+     * Returns the overloaded name for this type.
+     * When a function is overloaded, its parameters type are appended in the jni function header as mangled names.
+     * This function returns the mangled names of the types.
+     *
+     * @return The mangled name of a type, as it would appear in a jni header
+     */
     public String getOverloadName() {
         return overloadName;
     }

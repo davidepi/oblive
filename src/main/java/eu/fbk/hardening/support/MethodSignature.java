@@ -1,6 +1,7 @@
 package eu.fbk.hardening.support;
 
-import eu.fbk.hardening.IllegalPatternException;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  * Parses a signature in bytecode format and returns the various input types and the return type as JniType classes
  * An input example is the following (II)I
  *
- * @author davidepi &lt;dpizzolotto@fbk.eu&gt;
+ * @author D.Pizzolotto
  */
 public class MethodSignature {
     //array list containing the input types
@@ -23,7 +24,7 @@ public class MethodSignature {
      *
      * @param bytecodeDesc A string representing the signature of the method. For example (Ljava/lang/String;I)V
      */
-    public MethodSignature(String bytecodeDesc) {
+    public MethodSignature(@NotNull String bytecodeDesc) {
         this.input = new ArrayList<>();
         boolean parsingObj = false;
         StringBuilder currentType = new StringBuilder();
@@ -32,27 +33,31 @@ public class MethodSignature {
         //check if ( and ) are present in the method signature and there is a return type
         //then every other problem belongs to the JniType class
         int lastParenthesisIndex = bytecodeDesc.indexOf(')');
-        if (bytecodeDesc.charAt(0) != '(' || lastParenthesisIndex < 0 || lastParenthesisIndex + 1 == bytecodeDesc.length())
+        if (bytecodeDesc.charAt(0) != '(' || lastParenthesisIndex < 0
+                || lastParenthesisIndex + 1 == bytecodeDesc.length()) {
             throw new IllegalPatternException(bytecodeDesc + "is not a valid method signature");
+        }
 
         //parse the signature, input parameters
         for (int i = 1; i < lastParenthesisIndex; i++) {
             currentLetter = bytecodeDesc.charAt(i);
             currentType.append(currentLetter);
-            if (currentLetter == ';' && parsingObj)
+            if (currentLetter == ';' && parsingObj) {
                 parsingObj = false;
-            if (currentLetter == '[' || parsingObj)
+            }
+            if (currentLetter == '[' || parsingObj) {
                 continue;
-            if (currentLetter == 'L') //object, need to parse everything until the ;
-            {
+            }
+            if (currentLetter == 'L') { //object, need to parse everything until the ;
                 parsingObj = true;
                 continue;
             }
             this.input.add(new JniType(currentType.toString()));
             currentType.setLength(0);
         }
-        if (currentType.length() != 0) //add strings in the form of ([[[) so the JniType class can throw an error
+        if (currentType.length() != 0) { //add strings in the form of ([[[) so the JniType class can throw an error
             this.input.add(new JniType(currentType.toString()));
+        }
 
         //parse return type
         this.returnType = new JniType(bytecodeDesc.substring(lastParenthesisIndex + 1));
@@ -76,13 +81,31 @@ public class MethodSignature {
         return returnType;
     }
 
+    /**
+     * Checks if his objects is identical to another one
+     *
+     * @param object The object used for the comparison
+     * @return true if the two objects are equals, false otherwise
+     */
+    @Contract(value = "null -> false", pure = true)
     @Override
     public boolean equals(Object object) {
-        if (object == null || (!MethodSignature.class.isAssignableFrom(object.getClass())))
+        if (object == null || (!MethodSignature.class.isAssignableFrom(object.getClass()))) {
             return false;
-        else {
+        } else {
             final MethodSignature other = (MethodSignature) object;
             return this.input.equals(other.getInput()) && this.returnType.equals(other.getReturnType());
         }
+    }
+
+    /**
+     * Generates an hash code for this object. Note that a same hash code is necessary to assert object equality but
+     * does not guarantee it
+     *
+     * @return An hash code for this object
+     */
+    @Override
+    public int hashCode() {
+        return input.hashCode() + 10 * returnType.hashCode();
     }
 }

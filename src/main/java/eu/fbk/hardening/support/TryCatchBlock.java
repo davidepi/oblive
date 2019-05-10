@@ -2,6 +2,8 @@ package eu.fbk.hardening.support;
 
 /**
  * Class containing data useful to define a try-catch block
+ *
+ * @author D.Pizzolotto
  */
 public class TryCatchBlock {
     /**
