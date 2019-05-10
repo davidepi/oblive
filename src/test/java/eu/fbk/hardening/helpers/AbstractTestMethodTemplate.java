@@ -8,64 +8,54 @@ import java.nio.file.Paths;
 
 import static org.junit.Assert.fail;
 
-public abstract class AbstractTestMethodTemplate extends AbstractTransformationTest
-{
+public abstract class AbstractTestMethodTemplate extends AbstractTransformationTest {
 
     private final String inputClassDir = "build/classes/java/test";
     private final String copiedClassDir = "build/transformedclasses";
     private final String outputLibDir = "build/libsrc";
 
     @Override
-    public String getAnnotatedFieldName(int position)
-    {
+    public String getAnnotatedFieldName(int position) {
         return "";
     }
 
     @Override
-    public int getAnnotatedFieldSize()
-    {
+    public int getAnnotatedFieldSize() {
         return 0;
     }
 
     @Override
-    public boolean changesBeyondAnnotatedMethods()
-    {
+    public boolean changesBeyondAnnotatedMethods() {
         return false;
     }
 
     @Override
-    public String getAnnotatedMethodName(int position)
-    {
+    public String getAnnotatedMethodName(int position) {
         return this.getTestMethodName(position);
     }
 
     @Override
-    public int getAnnotatedMethodSize()
-    {
+    public int getAnnotatedMethodSize() {
         return this.getTestMethodSize();
     }
 
     @Override
-    public Class<?>[] getAnnotatedMethodParams(int position)
-    {
+    public Class<?>[] getAnnotatedMethodParams(int position) {
         return this.getTestMethodParams(position);
     }
 
     @Override
-    public String getSourceDir()
-    {
+    public String getSourceDir() {
         return this.inputClassDir;
     }
 
     @Override
-    public String getDestDir()
-    {
+    public String getDestDir() {
         return this.copiedClassDir;
     }
 
     @Override
-    public void transformClass()
-    {
+    public void transformClass() {
         String libname = this.getTestClass().toString().replaceFirst("class\\s", "");
         String className = libname.replaceAll("\\.", "/") + ".class";
         JavaToC j2c = new JavaToC();
@@ -74,8 +64,7 @@ public abstract class AbstractTestMethodTemplate extends AbstractTransformationT
             j2c.startParsing(this.outputLibDir, libname);
             j2c.parseClass(this.getDestDir() + "/" + className);
             j2c.endParsing();
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             fail("Transformation failed");
             e.printStackTrace();
         }
@@ -91,8 +80,7 @@ public abstract class AbstractTestMethodTemplate extends AbstractTransformationT
             child.waitFor();
             if (child.exitValue() != 0)
                 fail("C Compiler error");
-        } catch (InterruptedException | IOException e)
-        {
+        } catch (InterruptedException | IOException e) {
             fail("C compilation failed");
             e.printStackTrace();
         }

@@ -28,8 +28,7 @@ import java.util.List;
  * @author mariano
  */
 
-public abstract class AbstractTransformationTest
-{
+public abstract class AbstractTransformationTest {
 
     /**
      * The class to transform
@@ -145,8 +144,7 @@ public abstract class AbstractTransformationTest
 
 
     @Test
-    public void test() throws IOException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException
-    {
+    public void test() throws IOException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException {
         copyInput();
         transformClass();
 
@@ -157,8 +155,7 @@ public abstract class AbstractTransformationTest
         Object[] result2 = runTransformedCode();
 
         // check for same semantics
-        for (int i = 0; i < getTestMethodSize(); i++)
-        {
+        for (int i = 0; i < getTestMethodSize(); i++) {
             String message = "method: " + getTestMethodName(i) + ", class: " + getTestClass().getName() + " --- Different execution result";
             assertSame(message, result1[i], result2[i]);
         }
@@ -200,8 +197,7 @@ public abstract class AbstractTransformationTest
      * @throws IOException
      */
 
-    protected void copyInput() throws IOException
-    {
+    protected void copyInput() throws IOException {
         File sourceFile = TestUtils.fileFor(getSourceDir(), getTestClass());
         File destFile = TestUtils.fileFor(getDestDir(), getTestClass());
         TestUtils.crateDirsFor(getDestDir(), getTestClass());
@@ -220,21 +216,17 @@ public abstract class AbstractTransformationTest
      */
 
     private Object[] runOriginalCode()
-            throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
-    {
+            throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         // run original class
         int length = getTestMethodSize();
         Object object1 = getTestClass().newInstance();
         Method[] method1 = new Method[length];
         Object[] result1 = new Object[length];
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             method1[i] = getTestClass().getMethod(getTestMethodName(i), getTestMethodParams(i));
-            try
-            {
+            try {
                 result1[i] = method1[i].invoke(object1, getTestMethodArgs(i));
-            } catch (InvocationTargetException e)
-            {
+            } catch (InvocationTargetException e) {
                 result1[i] = e.getCause();
             }
         }
@@ -256,8 +248,7 @@ public abstract class AbstractTransformationTest
      */
 
     private Object[] runTransformedCode() throws MalformedURLException, ClassNotFoundException, IOException,
-            InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
-    {
+            InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         int length = getTestMethodSize();
         URL transformed = new URL("file://" + (new File(getDestDir())).getAbsolutePath() + "/");
         URL[] urls = {transformed};
@@ -271,14 +262,11 @@ public abstract class AbstractTransformationTest
         Object object2 = testClass2.newInstance();
         Method[] method2 = new Method[length];
         Object[] result2 = new Object[length];
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             method2[i] = testClass2.getMethod(getTestMethodName(i), getTestMethodParams(i));
-            try
-            {
+            try {
                 result2[i] = method2[i].invoke(object2, getTestMethodArgs(i));
-            } catch (InvocationTargetException e)
-            {
+            } catch (InvocationTargetException e) {
                 result2[i] = e.getCause();
             }
         }
@@ -290,12 +278,10 @@ public abstract class AbstractTransformationTest
      * Code of transformed methods should look different between original and transformed classes
      */
 
-    private void checkCodeInTransformedMethods()
-    {
+    private void checkCodeInTransformedMethods() {
         //check for transformed code
         int length = getAnnotatedMethodSize();
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             int size1 = TestUtils.sizeofCode(sourceAnnotatedMethodNodes1[i]);
             int size2 = TestUtils.sizeofCode(destAnnotatedMethodNodes2[i]);
             String message = "method " + getAnnotatedMethodName(i) + ", class " + getTestClass().getName() +
@@ -310,12 +296,10 @@ public abstract class AbstractTransformationTest
      * Annotations of transformed methods should look different between original and transformed classes
      */
 
-    private void checkAnnotationsInTransformedMethods()
-    {
+    private void checkAnnotationsInTransformedMethods() {
         // check for changed annotations
         int length = getAnnotatedMethodSize();
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             int size1 = TestUtils.sizeofAnnotations(sourceAnnotatedMethodNodes1[i]);
             int size2 = TestUtils.sizeofAnnotations(destAnnotatedMethodNodes2[i]);
             String message = "method " + getAnnotatedMethodName(i) + ", class " + getTestClass().getName() +
@@ -330,11 +314,9 @@ public abstract class AbstractTransformationTest
      * Code of methods that are not transformed should look the same between original and transformed classes
      */
 
-    private void checkCodeInPreservedMethods()
-    {
+    private void checkCodeInPreservedMethods() {
         int length2 = sourceNotAnnotatedMethodNodes3.length;
-        for (int i = 0; i < length2; i++)
-        {
+        for (int i = 0; i < length2; i++) {
             if (sourceNotAnnotatedMethodNodes3[i].name.equals("<clinit>")) //TODO: dirty hack because I need to modify <clinit>
                 continue;
             int size1 = TestUtils.sizeofCode(sourceNotAnnotatedMethodNodes3[i]);
@@ -351,12 +333,10 @@ public abstract class AbstractTransformationTest
      * Annotation of methods that are not transformed should look the same between original and transformed classes
      */
 
-    private void checkAnnotationsInPreservedMethods()
-    {
+    private void checkAnnotationsInPreservedMethods() {
         // other methods should not change annotations
         int length2 = sourceNotAnnotatedMethodNodes3.length;
-        for (int i = 0; i < length2; i++)
-        {
+        for (int i = 0; i < length2; i++) {
             int size1 = TestUtils.sizeofAnnotations(sourceNotAnnotatedMethodNodes3[i]);
             int size2 = TestUtils.sizeofAnnotations(destdNotAnnotatedMethodNodes4[i]);
             String message = "method " + sourceNotAnnotatedMethodNodes3[i].name + ", class " + getTestClass().getName() +
@@ -377,8 +357,7 @@ public abstract class AbstractTransformationTest
      * @throws IOException
      */
 
-    protected MethodNode[] getMethodNodesForAnnotatedMethods(String dir, Class<?> testClass) throws FileNotFoundException, IOException
-    {
+    protected MethodNode[] getMethodNodesForAnnotatedMethods(String dir, Class<?> testClass) throws FileNotFoundException, IOException {
         ClassReader cr = new ClassReader(new FileInputStream(TestUtils.fileFor(dir, testClass)));
         ClassNode cn = new ClassNode();
         cr.accept(cn, ClassReader.SKIP_DEBUG);
@@ -386,11 +365,9 @@ public abstract class AbstractTransformationTest
         int length = getAnnotatedMethodSize();
         MethodNode[] result = new MethodNode[length];
 
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             String expectedName = getAnnotatedMethodName(i);
-            for (MethodNode candidate : cn.methods)
-            {
+            for (MethodNode candidate : cn.methods) {
                 if (expectedName.equals(candidate.name) && TestUtils.sameParameters(candidate.desc, getAnnotatedMethodParams(i)))
                     result[i] = candidate;
             }
@@ -410,15 +387,13 @@ public abstract class AbstractTransformationTest
      * @throws IOException
      */
 
-    protected MethodNode[] getOtherMethodNodes(String dir, Class<?> clazz, MethodNode[] toExclude) throws FileNotFoundException, IOException
-    {
+    protected MethodNode[] getOtherMethodNodes(String dir, Class<?> clazz, MethodNode[] toExclude) throws FileNotFoundException, IOException {
         ClassReader cr = new ClassReader(new FileInputStream(TestUtils.fileFor(dir, getTestClass())));
         ClassNode cn = new ClassNode();
         cr.accept(cn, ClassReader.SKIP_DEBUG);
 
         List<MethodNode> result = new ArrayList<MethodNode>();
-        for (MethodNode candidate : cn.methods)
-        {
+        for (MethodNode candidate : cn.methods) {
             if (TestUtils.notIn(candidate, toExclude))
                 result.add(candidate);
         }
@@ -433,8 +408,7 @@ public abstract class AbstractTransformationTest
      * @throws IOException
      */
 
-    private void checkAnnotationInAnnotatedFields() throws FileNotFoundException, IOException
-    {
+    private void checkAnnotationInAnnotatedFields() throws FileNotFoundException, IOException {
         ClassReader cr = new ClassReader(new FileInputStream(TestUtils.fileFor(getDestDir(), getTestClass())));
         ClassNode cn = new ClassNode();
         cr.accept(cn, ClassReader.SKIP_DEBUG);
@@ -454,10 +428,8 @@ public abstract class AbstractTransformationTest
 //		}
     }
 
-    private void assertSame(String message, Object result1, Object result2)
-    {
-        if (result1 instanceof Throwable && result2 instanceof Throwable)
-        {
+    private void assertSame(String message, Object result1, Object result2) {
+        if (result1 instanceof Throwable && result2 instanceof Throwable) {
             Assert.assertEquals(message, result1.getClass(), result2.getClass());
 //            Assert.assertEquals(message,((Throwable) result1).getMessage(),((Throwable) result2).getMessage());
         } else

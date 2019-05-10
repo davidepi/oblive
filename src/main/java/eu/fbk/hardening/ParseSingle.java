@@ -1,5 +1,6 @@
 package eu.fbk.hardening;
 
+import eu.fbk.hardening.support.SystemInfo;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -20,6 +21,10 @@ public class ParseSingle {
      *             2 - Name of the library that will be linked against this Class file (without `lib` and `.so`)
      */
     public static void main(@NotNull String[] args) {
+        //TODO: ADD WINDOWS TO THE ASSERT WHEN IMPLEMENTED
+        //assert that the OS is correct (no solaris or some other strange os)
+        assert SystemInfo.isLinux() || SystemInfo.isMacOS();
+
         if (args.length < 3) {
             System.err.println("Missing arguments");
             System.exit(1);

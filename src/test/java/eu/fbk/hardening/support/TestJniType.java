@@ -29,22 +29,22 @@ public class TestJniType {
         assertEquals("Ljava_util_String_2", type.getOverloadName());
     }
 
-    @Test(expected = IllegalPatternException.class)
+    @Test(expected = IllegalPatternError.class)
     public void testUnknownTypeWrongLetter() {
         JniType type = new JniType("K");
     }
 
-    @Test(expected = IllegalPatternException.class)
+    @Test(expected = IllegalPatternError.class)
     public void testUnknownTypeMissingObjectSemicolon() {
         JniType type = new JniType("Ljava/util/String");
     }
 
-    @Test(expected = IllegalPatternException.class)
+    @Test(expected = IllegalPatternError.class)
     public void testEmptyObjectName() {
         JniType type = new JniType("L;");
     }
 
-    @Test(expected = IllegalPatternException.class)
+    @Test(expected = IllegalPatternError.class)
     public void testUntypedArray() {
         JniType type = new JniType("[");
     }

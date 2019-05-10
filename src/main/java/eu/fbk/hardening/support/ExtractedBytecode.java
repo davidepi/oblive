@@ -94,7 +94,7 @@ public class ExtractedBytecode {
             current.startIndex = labels.indexOf(current.start);
             current.endIndex = labels.indexOf(current.end);
             if (current.startIndex < 0 || current.endIndex < 0) {
-                throw new IllegalPatternException("Inconsistents try-catch blocks");
+                throw new IllegalPatternError("Inconsistents try-catch blocks");
             } else {
                 current.length = current.endIndex - current.startIndex;
             }

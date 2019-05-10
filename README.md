@@ -5,5 +5,5 @@ TODO
 ## Authors
 
 - [Davide Pizzolotto](https://github.com/davidepi)
-- Luca Gasparetto - Motivator
+- Luca Gasparetto - Moral supporter
 - Mariano Ceccato - Supervisor

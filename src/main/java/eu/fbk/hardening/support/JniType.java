@@ -125,7 +125,7 @@ public class JniType {
                 break;
             case 'L':
                 if (bytecodeName.charAt(bytecodeName.length() - 1) != ';') { //not in the canonical form
-                    throw new IllegalPatternException("Unknown bytecode type " + bytecodeName);
+                    throw new IllegalPatternError("Unknown bytecode type " + bytecodeName);
                 }
                 this.jniName = "jobject";
                 this.name = bytecodeName.substring(arrayDepth + 1, bytecodeName.length() - 1);
@@ -136,11 +136,11 @@ public class JniType {
                 overload.append(this.name.replaceAll("/", "_"));
                 overload.append("_2");
                 if (this.name.length() == 0) {
-                    throw new IllegalPatternException("Empty object name");
+                    throw new IllegalPatternError("Empty object name");
                 }
                 break;
             default:
-                throw new IllegalPatternException("Unknown bytecode type " + bytecodeName);
+                throw new IllegalPatternError("Unknown bytecode type " + bytecodeName);
         }
         if (arrayDepth > 0) {
             this.jniName = "jobject";

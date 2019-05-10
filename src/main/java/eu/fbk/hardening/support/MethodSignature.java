@@ -35,7 +35,7 @@ public class MethodSignature {
         int lastParenthesisIndex = bytecodeDesc.indexOf(')');
         if (bytecodeDesc.charAt(0) != '(' || lastParenthesisIndex < 0
                 || lastParenthesisIndex + 1 == bytecodeDesc.length()) {
-            throw new IllegalPatternException(bytecodeDesc + "is not a valid method signature");
+            throw new IllegalPatternError(bytecodeDesc + "is not a valid method signature");
         }
 
         //parse the signature, input parameters

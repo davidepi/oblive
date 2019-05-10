@@ -93,25 +93,25 @@ public class TestMethodSignature
         assertEquals("void", ms.getReturnType().getJniName());
     }
 
-    @Test(expected = IllegalPatternException.class)
+    @Test(expected = IllegalPatternError.class)
     public void testMissingOpenParenthesis()
     {
         MethodSignature ms = new MethodSignature("V");
     }
 
-    @Test(expected = IllegalPatternException.class)
+    @Test(expected = IllegalPatternError.class)
     public void testMissingClosedParenthesis()
     {
         MethodSignature ms = new MethodSignature("(IIIIIIIIIIIIIIIIII");
     }
 
-    @Test(expected = IllegalPatternException.class)
+    @Test(expected = IllegalPatternError.class)
     public void testMalformedObjectInput()
     {
         MethodSignature ms = new MethodSignature("(Ljava/lang)V");
     }
 
-    @Test(expected = IllegalPatternException.class)
+    @Test(expected = IllegalPatternError.class)
     public void testMalformedObjectReturn()
     {
         MethodSignature ms = new MethodSignature("(I)Ljava/lang");
@@ -138,7 +138,7 @@ public class TestMethodSignature
         assertNotEquals(ms0, ms3);
     }
 
-    @Test(expected = IllegalPatternException.class)
+    @Test(expected = IllegalPatternError.class)
     public void testMissingReturnType()
     {
         MethodSignature ms = new MethodSignature("(II)");
@@ -184,13 +184,13 @@ public class TestMethodSignature
         assertEquals("void", ms.getReturnType().getJniName());
     }
 
-    @Test(expected = IllegalPatternException.class)
+    @Test(expected = IllegalPatternError.class)
     public void testWrongArrayParamAsInput()
     {
         MethodSignature ms = new MethodSignature("([[[)I");
     }
 
-    @Test(expected = IllegalPatternException.class)
+    @Test(expected = IllegalPatternError.class)
     public void testReturnWrongArray()
     {
         MethodSignature ms = new MethodSignature("(I)[");

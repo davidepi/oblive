@@ -14,8 +14,7 @@ import java.util.List;
  * @author mariano
  */
 
-public class TestUtils
-{
+public class TestUtils {
 
 
     /**
@@ -25,8 +24,7 @@ public class TestUtils
      * @return The relative file name representing this class, for parsing purposes
      */
 
-    public static String fileNameOf(Class<?> clazz)
-    {
+    public static String fileNameOf(Class<?> clazz) {
         return (clazz.getName().replace('.', '/')) + ".class";
     }
 
@@ -38,8 +36,7 @@ public class TestUtils
      * @return The File representing this class, for parsing purposes
      */
 
-    public static File fileFor(String dir, Class<?> clazz)
-    {
+    public static File fileFor(String dir, Class<?> clazz) {
         return new File(dir + "/" + clazz.getName().replace('.', '/') + ".class");
     }
 
@@ -51,8 +48,7 @@ public class TestUtils
      * @return The String representing this class, for parsing purposes
      */
 
-    public static String fileNameFor(String dir, Class<?> clazz)
-    {
+    public static String fileNameFor(String dir, Class<?> clazz) {
         return dir + "/" + (clazz.getName().replace('.', '/')) + ".class";
     }
 
@@ -63,8 +59,7 @@ public class TestUtils
      * @param clazz the class to store there (useful for the package name)
      */
 
-    public static void crateDirsFor(String dir, Class<?> clazz)
-    {
+    public static void crateDirsFor(String dir, Class<?> clazz) {
         String newDirName = dir + "/" + (clazz.getPackage().getName().replace('.', '/'));
         File newDir = new File(newDirName);
         newDir.mkdirs();
@@ -78,8 +73,7 @@ public class TestUtils
      * @return whether the first parameter is in the list (second parameter)
      */
 
-    public static boolean notIn(MethodNode candidate, MethodNode[] toExclude)
-    {
+    public static boolean notIn(MethodNode candidate, MethodNode[] toExclude) {
         for (MethodNode exclusion : toExclude)
             if (candidate.name.equals(exclusion.name) && candidate.desc.equals(exclusion.desc))
                 return false;
@@ -95,15 +89,13 @@ public class TestUtils
      * @return true if the two signature match, false otherwise
      */
 
-    public static boolean sameParameters(String parsedDescriptor, Class<?>[] expected)
-    {
+    public static boolean sameParameters(String parsedDescriptor, Class<?>[] expected) {
         if (parsedDescriptor == null && expected.length == 0)
             return true;
         Type[] actual = Type.getArgumentTypes(parsedDescriptor);
         if (actual.length != expected.length)
             return false;
-        for (int i = 0; i < actual.length; i++)
-        {
+        for (int i = 0; i < actual.length; i++) {
             if (!actual[i].getClassName().equals(expected[i].getName()))
                 return false;
         }
@@ -118,8 +110,7 @@ public class TestUtils
      * @return the number of annotations in the method
      */
 
-    public static int sizeofAnnotations(MethodNode node)
-    {
+    public static int sizeofAnnotations(MethodNode node) {
         List<AnnotationNode> annotations = node.invisibleAnnotations;
         if (annotations == null)
             return 0;
@@ -135,8 +126,7 @@ public class TestUtils
      * @return the number of bytecode statements in the method
      */
 
-    public static int sizeofCode(MethodNode node)
-    {
+    public static int sizeofCode(MethodNode node) {
         InsnList code = node.instructions;
         if (code == null) return 0;
         else

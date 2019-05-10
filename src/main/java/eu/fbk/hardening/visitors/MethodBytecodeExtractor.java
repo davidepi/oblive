@@ -64,7 +64,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
     @Override
     public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
 
-        throw new IllegalPatternException("Unimplemented opcode: INVOKEDYNAMIC");
+        throw new IllegalPatternError("Unimplemented opcode: INVOKEDYNAMIC");
     }
 
     @Override
@@ -129,7 +129,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
             case GOTO:
                 break;
             default:
-                throw new IllegalPatternException("Unimplemented opcode: " + opcode);
+                throw new IllegalPatternError("Unimplemented opcode: " + opcode);
         }
         eb.statements.add("goto LABEL_" + label.toString() + ";");
         eb.usedLabels.add("LABEL_" + label.toString());
@@ -196,7 +196,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 eb.statements.add(handleSystemException("_NewMultidimensionalObjectArray(env,_stack,&_index,\"" + desc + "\"," + dims + ")", NegativeArraySizeException.class));
                 break;
             default:
-                throw new IllegalPatternException("Unimplemented MULTIANEWARRAY array for type: " + desc);
+                throw new IllegalPatternError("Unimplemented MULTIANEWARRAY array for type: " + desc);
         }
     }
 
@@ -233,7 +233,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 eb.statements.add("_Store2(_stack,_vars,&_index," + var + ");");
                 break;
             default:
-                throw new IllegalPatternException("Unimplemented opcode: " + opcode);
+                throw new IllegalPatternError("Unimplemented opcode: " + opcode);
         }
     }
 
@@ -586,7 +586,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 }
                 break;
             default:
-                throw new IllegalPatternException("Unimplemented opcode: " + opcode);
+                throw new IllegalPatternError("Unimplemented opcode: " + opcode);
         }
     }
 
@@ -624,12 +624,12 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                         eb.statements.add(handleSystemException("_NewLongArray(env,_stack,&_index)", NegativeArraySizeException.class));
                         break;
                     default:
-                        throw new IllegalPatternException("Unimplemented opcode: NEWARRAY with type " + operand);
+                        throw new IllegalPatternError("Unimplemented opcode: NEWARRAY with type " + operand);
                 }
             }
             break;
             default:
-                throw new IllegalPatternException("Unimplemented opcode: " + opcode);
+                throw new IllegalPatternError("Unimplemented opcode: " + opcode);
         }
     }
 
@@ -680,7 +680,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 break;
             }
             default:
-                throw new IllegalPatternException("Unimplemented opcode: LDC for object" + cst.getClass().getCanonicalName());
+                throw new IllegalPatternError("Unimplemented opcode: LDC for object" + cst.getClass().getCanonicalName());
         }
     }
 
@@ -733,7 +733,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 eb.statements.add("}");
                 break;
             default:
-                throw new IllegalPatternException("Unimplemented opcode: " + opcode);
+                throw new IllegalPatternError("Unimplemented opcode: " + opcode);
         }
     }
 
@@ -754,7 +754,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 eb.statements.add("_SetStatic_" + type.getJniName() + "(env,_stack,&_index,\"" + owner + "\",\"" + name + "\",\"" + desc + "\");");
                 break;
             default:
-                throw new IllegalPatternException("Unimplemented opcode: " + opcode);
+                throw new IllegalPatternError("Unimplemented opcode: " + opcode);
         }
     }
 
@@ -775,7 +775,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 break;
 
             default:
-                throw new IllegalPatternException("Unimplemented opcode: " + opcode);
+                throw new IllegalPatternError("Unimplemented opcode: " + opcode);
         }
     }
 

@@ -29,8 +29,7 @@ import java.util.Set;
  * @author Andrea Nasato
  * @author mariano
  */
-public class TransformedClassLoader extends URLClassLoader
-{
+public class TransformedClassLoader extends URLClassLoader {
 
     /**
      * List of classes that we permit to search in the parent class loader.
@@ -49,59 +48,49 @@ public class TransformedClassLoader extends URLClassLoader
 
     //private String[] jars;
 
-    public TransformedClassLoader(URL[] urls, ClassLoader parent, String[] localClasses)
-    {
+    public TransformedClassLoader(URL[] urls, ClassLoader parent, String[] localClasses) {
         super(urls, parent);
         initializeLocalFields(localClasses);
     }
 
-    public TransformedClassLoader(URL[] urls, String[] localClasses)
-    {
+    public TransformedClassLoader(URL[] urls, String[] localClasses) {
         super(urls);
         initializeLocalFields(localClasses);
     }
 
-    public TransformedClassLoader(URL[] urls, ClassLoader parent, URLStreamHandlerFactory factory, String[] localClasses)
-    {
+    public TransformedClassLoader(URL[] urls, ClassLoader parent, URLStreamHandlerFactory factory, String[] localClasses) {
         super(urls, parent, factory);
         initializeLocalFields(localClasses);
     }
 
 
     @Override
-    public Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException
-    {
+    public Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
 
-        synchronized (getClassLoadingLock(name))
-        {
+        synchronized (getClassLoadingLock(name)) {
 
             Class<?> c = null;
 
 
             // 1. local search: I'm giving precedence to the URL, because the a class with 
             //    the same name (the non-transformed one) should be available in the path
-            try
-            {
+            try {
                 c = findClass(name);
-                if (c != null)
-                {
+                if (c != null) {
                     /*if(logger.isDebugEnabled()) {
                         logger.debug("class: " + name + " loaded from local search");
                     }*/
-                    if (resolve)
-                    {
+                    if (resolve) {
                         resolveClass(c);
                     }
                     return c;
                 }
-            } catch (ClassNotFoundException e)
-            {
+            } catch (ClassNotFoundException e) {
                 // Ignore
             }
 
             //1.1 it the class is a transformed one, it should fail now
-            if (localClasses.contains(name))
-            {
+            if (localClasses.contains(name)) {
                 String message = "Class " + name + "should be available in the specified URL(s)";
                 throw new ClassNotFoundException(message);
             }
@@ -109,13 +98,11 @@ public class TransformedClassLoader extends URLClassLoader
             // 2. check if class is already loaded in the cache
             c = findLoadedClass(name);
 
-            if (c != null)
-            {
+            if (c != null) {
                 /*if(logger.isDebugEnabled()) {
                     logger.debug("class: " + name + " loaded from cache");
                 }*/
-                if (resolve)
-                {
+                if (resolve) {
                     resolveClass(c);
                 }
 
@@ -125,40 +112,31 @@ public class TransformedClassLoader extends URLClassLoader
             // 3. load class from system class loader
             String resourceName = binaryNameToPath(name, false);
             ClassLoader javaSELoader = getJavaSEClassLoader();
-            if (javaSELoader.getResource(resourceName) != null)
-            {
-                try
-                {
+            if (javaSELoader.getResource(resourceName) != null) {
+                try {
                     c = javaSELoader.loadClass(name);
-                    if (c != null)
-                    {
+                    if (c != null) {
                         /*if(logger.isDebugEnabled()) {
                             logger.debug("class: " + name + " loaded from javaSEClassLoader");
                         }*/
-                        if (resolve)
-                        {
+                        if (resolve) {
                             resolveClass(c);
                         }
 
                         return c;
                     }
-                } catch (ClassNotFoundException e)
-                {
+                } catch (ClassNotFoundException e) {
                     // Ignore
                 }
             }
 
             // 3.1 Permission to access this class when using a SecurityManager
-            if (sm != null)
-            {
+            if (sm != null) {
                 int i = name.lastIndexOf('.');
-                if (i >= 0)
-                {
-                    try
-                    {
+                if (i >= 0) {
+                    try {
                         sm.checkPackageAccess(name.substring(0, i));
-                    } catch (SecurityException se)
-                    {
+                    } catch (SecurityException se) {
                         String error = "Security Violation, attempt to use " +
                                 "Restricted Class: " + name;
                         /*logger.info(error, se);*/
@@ -169,25 +147,21 @@ public class TransformedClassLoader extends URLClassLoader
 
 
             // 4. last resort: parent search for any class
-            try
-            {
+            try {
                 //if(allowedClassesFromParent.stream().anyMatch(s -> s.equals(name))) {
                 c = Class.forName(name, false, getParent());
-                if (c != null)
-                {
+                if (c != null) {
                         /*if (logger.isDebugEnabled()) {
                             logger.debug("class: " + name + " loaded from parent");
                         }*/
-                    if (resolve)
-                    {
+                    if (resolve) {
                         resolveClass(c);
                     }
 
                     return c;
                 }
                 //}
-            } catch (ClassNotFoundException e)
-            {
+            } catch (ClassNotFoundException e) {
                 // Ignore
             }
 
@@ -196,27 +170,22 @@ public class TransformedClassLoader extends URLClassLoader
     }
 
 
-    public ClassLoader getJavaSEClassLoader()
-    {
+    public ClassLoader getJavaSEClassLoader() {
         return javaSEClassLoader;
     }
 
-    public void setJavaSEClassLoader(ClassLoader javaSEClassLoader)
-    {
-        if (javaSEClassLoader == null)
-        {
+    public void setJavaSEClassLoader(ClassLoader javaSEClassLoader) {
+        if (javaSEClassLoader == null) {
             throw new IllegalArgumentException(
                     "javaSEClassLoader cannot be null");
         }
         this.javaSEClassLoader = javaSEClassLoader;
     }
 
-    private String binaryNameToPath(String binaryName, boolean withLeadingSlash)
-    {
+    private String binaryNameToPath(String binaryName, boolean withLeadingSlash) {
         // 1 for leading '/', 6 for ".class"
         StringBuilder path = new StringBuilder(7 + binaryName.length());
-        if (withLeadingSlash)
-        {
+        if (withLeadingSlash) {
             path.append('/');
         }
         path.append(binaryName.replace('.', '/'));
@@ -224,23 +193,19 @@ public class TransformedClassLoader extends URLClassLoader
         return path.toString();
     }
 
-    private void initializeLocalFields(String[] localClasses)
-    {
+    private void initializeLocalFields(String[] localClasses) {
         this.localClasses = new HashSet<String>(Arrays.asList(localClasses));
         ClassLoader j = String.class.getClassLoader();
-        if (j == null)
-        {
+        if (j == null) {
             j = getSystemClassLoader();
-            while (j.getParent() != null)
-            {
+            while (j.getParent() != null) {
                 j = j.getParent();
             }
         }
         this.javaSEClassLoader = j;
 
         sm = System.getSecurityManager();
-        if (sm != null)
-        {
+        if (sm != null) {
             refreshPolicy();
         }
     }
@@ -248,18 +213,15 @@ public class TransformedClassLoader extends URLClassLoader
     /**
      * Refresh the system policy file, to pick up eventual changes.
      */
-    protected void refreshPolicy()
-    {
+    protected void refreshPolicy() {
 
-        try
-        {
+        try {
             // The policy file may have been modified to adjust
             // permissions, so we're reloading it when loading or
             // reloading a Context
             Policy policy = Policy.getPolicy();
             policy.refresh();
-        } catch (AccessControlException e)
-        {
+        } catch (AccessControlException e) {
             // Some policy files may restrict this, even for the core,
             // so this exception is ignored
         }

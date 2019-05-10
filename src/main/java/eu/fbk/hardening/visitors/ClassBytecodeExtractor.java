@@ -2,7 +2,7 @@ package eu.fbk.hardening.visitors;
 
 import eu.fbk.hardening.support.ClassMethodPair;
 import eu.fbk.hardening.support.ExtractedBytecode;
-import eu.fbk.hardening.support.IllegalPatternException;
+import eu.fbk.hardening.support.IllegalPatternError;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 
@@ -91,7 +91,7 @@ public class ClassBytecodeExtractor extends ClassVisitor {
                     && this.className.equals((annotatedMethod.getClassName()))) { //check if method has to be obfuscated
                 //check that native method is not annotated with @Obfuscation(protections = Protections.TO_NATIVE_CODE)
                 if (((access & ACC_NATIVE) | (access & ACC_ABSTRACT)) != 0) {
-                    throw new IllegalPatternException("Can't annotate native method: " + annotatedMethod.getClassName()
+                    throw new IllegalPatternError("Can't annotate native method: " + annotatedMethod.getClassName()
                             + "." + annotatedMethod.getMethodName() + annotatedMethod.getDesc());
                 } else {
                     MethodBytecodeExtractor met;
