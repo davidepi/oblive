@@ -8,6 +8,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -31,6 +34,8 @@ public class NativeCompiler {
      * Default contructor
      */
     public NativeCompiler() {
+        objext = SystemInfo.getObjectExtension();
+        libext = SystemInfo.getSharedLibraryExtension();
         if (SystemInfo.isNix())
             initNix();
         else
@@ -57,18 +62,25 @@ public class NativeCompiler {
                         "JDK/JRE home is not set");
             }
         }
-        objext = ".o";
-        if (SystemInfo.isLinux()) {
-            libext = ".so";
-            include = javaHome + "/include/linux/";
-        } else {
-            libext = ".dylib";
-            include = javaHome + "/include/darwin/";
+        try {
+            final String[] includes = new String[2];
+            Files.walk(Paths.get(javaHome))
+                    .filter(Files::isRegularFile)
+                    .forEach((f)->{
+                        String file = f.toString();
+                        if(file.endsWith("jni.h"))
+                            includes[0] = f.getParent().toString();
+                        else if(file.endsWith("jni_md.h"))
+                            includes[1] = f.getParent().toString();
+                    });
+            include = "-I"+includes[0]+" -I"+includes[1];
+        } catch (IOException e) {
+            throw new IncompleteConfigurationError("Could not find the file `jni.h` in the JAVA_HOME subtree");
         }
     }
 
     /**
-     * Compiles a series of sources file into object files
+     * Compiles a series of source files into object files
      *
      * @param sources      A list of File that will be passed to the compiler
      * @param objectOutput The output of the compilation process. If the extension is wrong or missing it will be added
@@ -81,7 +93,7 @@ public class NativeCompiler {
         //TODO: ASSERT THAT THIS WORKS ON WINDOWS
 
         //assert existence of output
-        boolean created = objectOutput.mkdirs();
+        boolean created = objectOutput.getParentFile().mkdirs();
         //append extension if does not exists or it is wrong
         if (!objectOutput.getAbsolutePath().endsWith(objext))
             objectOutput = new File(objectOutput.getAbsolutePath() + objext);
@@ -93,7 +105,10 @@ public class NativeCompiler {
 
         for (File source : sources) {
             //the .c limitation is used to clearly separate this method from the compileSharedLib
-            if (source.exists() && source.canRead() && source.getAbsolutePath().endsWith(".c")) {
+            if (!source.getAbsolutePath().endsWith(".c")) {
+                throw new IOException("Only .c files can be compiled. Please change extension to " +
+                        source.getAbsolutePath());
+            } else if (source.exists() && source.canRead()) {
                 command.append(' ').append(source.getAbsolutePath()).append(' ');
             } else {
                 throw new IOException("Requested compilation of " + source.getAbsolutePath() + " but it can not be " +
@@ -119,26 +134,27 @@ public class NativeCompiler {
     public String compileSharedLib(File[] sources, @NotNull File libraryOutput) throws IOException {
         //TODO: ASSERT THAT THIS WORKS ON WINDOWS
 
-        //assert existence of output
-        boolean created = libraryOutput.mkdirs();
+        //assert existence of output folder
+        boolean created = libraryOutput.getParentFile().mkdirs();
         //append extension if does not exists or it is wrong
         if (!libraryOutput.getAbsolutePath().endsWith(libext))
             libraryOutput = new File(libraryOutput.getAbsolutePath() + libext);
 
         StringBuilder command = new StringBuilder(compiler);
-        command.append(" -c ");
 
         for (File source : sources) {
-            //the .c limitation is used to clearly separate this method from the compileSharedLib
-            if (source.exists() && source.canRead() && source.getAbsolutePath().endsWith(".out")) {
+            if (!source.getAbsolutePath().endsWith(objext)) {
+                throw new IOException("Requested shared library but the input file " + source.getAbsolutePath() +
+                        " is not an object file.");
+            } else if (source.exists() && source.canRead()) {
                 command.append(' ').append(source.getAbsolutePath()).append(' ');
             } else {
-                throw new IOException("Requested compilation of " + source.getAbsolutePath() + " but it can not be " +
+                throw new IOException("Requested compilation but the file " + source.getAbsolutePath() + " can't be " +
                         "read or does not exists");
             }
         }
-        command.append(' ').append("-o").append(' ');
-        command.append(' ').append(libraryOutput.getAbsolutePath());
+        command.append(' ').append("-shared -o").append(' ');
+        command.append(libraryOutput.getAbsolutePath());
 
         return runCompilation(command.toString());
     }
@@ -153,7 +169,9 @@ public class NativeCompiler {
     @Nullable
     private String runCompilation(@NotNull String command) throws IOException {
         String retval;
-        ProcessBuilder compilationProcess = new ProcessBuilder(command.split(" "));
+        String trimmedCommand = command.replaceAll("\\s+", " ");
+        String[] commandArray = trimmedCommand.split(" ");
+        ProcessBuilder compilationProcess = new ProcessBuilder(commandArray);
         Process child = compilationProcess.start();
         try {
             child.waitFor();
@@ -161,7 +179,7 @@ public class NativeCompiler {
                 retval = null;
             } else {
                 //read compilation message
-                retval = new BufferedReader(new InputStreamReader(child.getInputStream())).lines()
+                retval = new BufferedReader(new InputStreamReader(child.getErrorStream())).lines()
                         .collect(Collectors.joining("\n"));
             }
 
@@ -171,7 +189,6 @@ public class NativeCompiler {
         return retval;
     }
 
-
     /**
      * Init parameters for Windows systems
      */
@@ -180,5 +197,4 @@ public class NativeCompiler {
         //TODO: ADD WINDOWS SUPPORT
         throw new UnsupportedOperationException("Add windows support");
     }
-
 }
