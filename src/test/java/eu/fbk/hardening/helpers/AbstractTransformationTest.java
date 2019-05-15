@@ -1,7 +1,7 @@
 package eu.fbk.hardening.helpers;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -172,15 +172,12 @@ public abstract class AbstractTransformationTest {
 
         // check NON-transformed methods
         sourceNotAnnotatedMethodNodes3 = getOtherMethodNodes(getSourceDir(), getTestClass(), sourceAnnotatedMethodNodes1);
-        destdNotAnnotatedMethodNodes4 = getOtherMethodNodes(getDestDir(), getTestClass(), destAnnotatedMethodNodes2); //TODO: not sure about this line
-
-        //TODO: this can't work, since I need to add <clinit>
-//		Assert.assertEquals("class " + getTestClass().getName() + " Original and transformed code have the same number of methods",
-//				sourceNotAnnotatedMethodNodes3.length, destdNotAnnotatedMethodNodes4.length);
+        destdNotAnnotatedMethodNodes4 = getOtherMethodNodes(getDestDir(), getTestClass(), destAnnotatedMethodNodes2);
 
         // check that NON-transformed methods have the same code before and after transformation
-        if (!changesBeyondAnnotatedMethods())
+        if (!changesBeyondAnnotatedMethods()) {
             checkCodeInPreservedMethods();
+        }
 
         // check that NON-transformed methods have the same annotations before and after transformation
         checkAnnotationsInPreservedMethods();
@@ -286,7 +283,7 @@ public abstract class AbstractTransformationTest {
             int size2 = TestUtils.sizeofCode(destAnnotatedMethodNodes2[i]);
             String message = "method " + getAnnotatedMethodName(i) + ", class " + getTestClass().getName() +
                     ": Original and transformed code have the same number of instructions";
-            Assert.assertNotEquals(message, size1, size2);
+            Assertions.assertNotEquals(size1, size2, message);
 //			System.err.println("Changed method ok");
         }
     }
@@ -304,8 +301,7 @@ public abstract class AbstractTransformationTest {
             int size2 = TestUtils.sizeofAnnotations(destAnnotatedMethodNodes2[i]);
             String message = "method " + getAnnotatedMethodName(i) + ", class " + getTestClass().getName() +
                     ": Original and transformed code have the same number of annotations";
-            Assert.assertNotEquals(message, size1, size2);
-//			System.err.println("Changed annotations ok");
+            Assertions.assertNotEquals(size1, size2, message);
         }
     }
 
@@ -317,14 +313,14 @@ public abstract class AbstractTransformationTest {
     private void checkCodeInPreservedMethods() {
         int length2 = sourceNotAnnotatedMethodNodes3.length;
         for (int i = 0; i < length2; i++) {
-            if (sourceNotAnnotatedMethodNodes3[i].name.equals("<clinit>")) //TODO: dirty hack because I need to modify <clinit>
+            //<clinit> will be modified by this application
+            if (sourceNotAnnotatedMethodNodes3[i].name.equals("<clinit>"))
                 continue;
             int size1 = TestUtils.sizeofCode(sourceNotAnnotatedMethodNodes3[i]);
             int size2 = TestUtils.sizeofCode(destdNotAnnotatedMethodNodes4[i]);
             String message = "method " + sourceNotAnnotatedMethodNodes3[i].name + ", class " + getTestClass().getName() +
                     ": Non-trasformed method has the different number of instructions between original and transformed classes";
-            Assert.assertEquals(message, size1, size2);
-//			System.err.println("Same method ok");
+            Assertions.assertEquals(size1, size2, message);
         }
     }
 
@@ -341,7 +337,7 @@ public abstract class AbstractTransformationTest {
             int size2 = TestUtils.sizeofAnnotations(destdNotAnnotatedMethodNodes4[i]);
             String message = "method " + sourceNotAnnotatedMethodNodes3[i].name + ", class " + getTestClass().getName() +
                     ": Non-trasformed method has the different number of annotations between original and transformed classes";
-            Assert.assertEquals(message, size1, size2);
+            Assertions.assertEquals(size1, size2, message);
 //			System.err.println("Same annotations ok");
         }
     }
@@ -412,27 +408,12 @@ public abstract class AbstractTransformationTest {
         ClassReader cr = new ClassReader(new FileInputStream(TestUtils.fileFor(getDestDir(), getTestClass())));
         ClassNode cn = new ClassNode();
         cr.accept(cn, ClassReader.SKIP_DEBUG);
-
-//		for (FieldNode fieldInClass: cn.fields){
-//			for (int i=0; i<getAnnotatedFieldSize(); i++){
-//				String fieldToChange = getAnnotatedFieldName(i);
-//				if (fieldToChange.compareTo(fieldInClass.name) == 0){
-//					List<AnnotationNode> allAnnotations = fieldInClass.invisibleAnnotations;
-//					if (allAnnotations == null)
-//						allAnnotations = new LinkedList<AnnotationNode>(); //empty list to avoid error in case of null list
-//					for (AnnotationNode annotation: allAnnotations)
-//						Assert.assertNotEquals("Annotation should have been removed from transformed context field '" + fieldToChange + "' in class '" + getTestClass().getName() +"'",
-//								Constants.XOR_MASK_ANNOTATION, annotation.desc);
-//				}
-//			}
-//		}
     }
 
     private void assertSame(String message, Object result1, Object result2) {
         if (result1 instanceof Throwable && result2 instanceof Throwable) {
-            Assert.assertEquals(message, result1.getClass(), result2.getClass());
-//            Assert.assertEquals(message,((Throwable) result1).getMessage(),((Throwable) result2).getMessage());
+            Assertions.assertEquals(result1.getClass(), result2.getClass(), message);
         } else
-            Assert.assertEquals(message, result1, result2);
+            Assertions.assertEquals(result1, result2, message);
     }
 }

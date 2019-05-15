@@ -1,14 +1,14 @@
 package eu.fbk.hardening.support;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class TestSystemInfo {
 
     private static int os;
 
-    @BeforeClass
+    @BeforeAll
     public static void getOS() {
         String osname = System.getProperty("os.name");
         switch (osname) {
@@ -27,26 +27,26 @@ public class TestSystemInfo {
     public void osDetectTest() {
         switch (os) {
             case 0:
-                Assert.assertTrue(SystemInfo.isWindows());
-                Assert.assertFalse(SystemInfo.isMacOS());
-                Assert.assertFalse(SystemInfo.isLinux());
-                Assert.assertFalse(SystemInfo.isNix());
+                Assertions.assertTrue(SystemInfo.isWindows());
+                Assertions.assertFalse(SystemInfo.isMacOS());
+                Assertions.assertFalse(SystemInfo.isLinux());
+                Assertions.assertFalse(SystemInfo.isNix());
                 break;
             case 1:
-                Assert.assertFalse(SystemInfo.isWindows());
-                Assert.assertTrue(SystemInfo.isMacOS());
-                Assert.assertFalse(SystemInfo.isLinux());
-                Assert.assertTrue(SystemInfo.isNix());
+                Assertions.assertFalse(SystemInfo.isWindows());
+                Assertions.assertTrue(SystemInfo.isMacOS());
+                Assertions.assertFalse(SystemInfo.isLinux());
+                Assertions.assertTrue(SystemInfo.isNix());
                 break;
             case 2:
-                Assert.assertFalse(SystemInfo.isWindows());
-                Assert.assertFalse(SystemInfo.isMacOS());
-                Assert.assertTrue(SystemInfo.isLinux());
-                Assert.assertTrue(SystemInfo.isNix());
+                Assertions.assertFalse(SystemInfo.isWindows());
+                Assertions.assertFalse(SystemInfo.isMacOS());
+                Assertions.assertTrue(SystemInfo.isLinux());
+                Assertions.assertTrue(SystemInfo.isNix());
                 break;
             default:
                 //should never end here
-                Assert.fail();
+                Assertions.fail();
         }
     }
 
@@ -54,14 +54,14 @@ public class TestSystemInfo {
     public void whichTest() {
         switch (os) {
             case 0://TODO: Implement windows tests.
-                Assert.fail();
+                Assertions.fail();
                 break;
             case 1:
             case 2:
                 String res = SystemInfo.which("ls");
-                Assert.assertEquals("/bin/ls", res);
+                Assertions.assertEquals("/bin/ls", res);
                 res = SystemInfo.which("invented command");
-                Assert.assertNull(res);
+                Assertions.assertNull(res);
                 break;
         }
     }

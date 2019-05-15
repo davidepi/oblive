@@ -1,125 +1,119 @@
 package eu.fbk.hardening.support;
 
-import org.junit.Test;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-public class TestMethodSignature
-{
+public class TestMethodSignature {
 
     @Test
-    public void testNoInputVoidReturn()
-    {
+    public void testNoInputVoidReturn() {
         MethodSignature ms = new MethodSignature("()V");
-        assertEquals(0, ms.getInput().size());
-        assertEquals("void", ms.getReturnType().getJniName());
+        Assertions.assertEquals(0, ms.getInput().size());
+        Assertions.assertEquals("void", ms.getReturnType().getJniName());
     }
 
     @Test
-    public void testSingleInputVoidReturn()
-    {
+    public void testSingleInputVoidReturn() {
         MethodSignature ms = new MethodSignature("(I)V");
-        assertEquals(1, ms.getInput().size());
-        assertEquals("jint", ms.getInput().get(0).getJniName());
-        assertEquals("void", ms.getReturnType().getJniName());
+        Assertions.assertEquals(1, ms.getInput().size());
+        Assertions.assertEquals("jint", ms.getInput().get(0).getJniName());
+        Assertions.assertEquals("void", ms.getReturnType().getJniName());
     }
 
     @Test
-    public void testIntReturn()
-    {
+    public void testIntReturn() {
         MethodSignature ms = new MethodSignature("()I");
-        assertEquals(0, ms.getInput().size());
-        assertEquals("jint", ms.getReturnType().getJniName());
+        Assertions.assertEquals(0, ms.getInput().size());
+        Assertions.assertEquals("jint", ms.getReturnType().getJniName());
     }
 
     @Test
-    public void testObjectReturn()
-    {
+    public void testObjectReturn() {
         MethodSignature ms = new MethodSignature("()Ljava/lang/String;");
-        assertEquals(0, ms.getInput().size());
-        assertEquals("jobject", ms.getReturnType().getJniName());
-        assertEquals("java/lang/String", ms.getReturnType().getName());
+        Assertions.assertEquals(0, ms.getInput().size());
+        Assertions.assertEquals("jobject", ms.getReturnType().getJniName());
+        Assertions.assertEquals("java/lang/String", ms.getReturnType().getName());
     }
 
     @Test
-    public void testSingleObjectInput()
-    {
+    public void testSingleObjectInput() {
         MethodSignature ms = new MethodSignature("(Ljava/lang/String;)V");
-        assertEquals(1, ms.getInput().size());
-        assertEquals("jobject", ms.getInput().get(0).getJniName());
-        assertEquals("java/lang/String", ms.getInput().get(0).getName());
-        assertEquals("void", ms.getReturnType().getJniName());
+        Assertions.assertEquals(1, ms.getInput().size());
+        Assertions.assertEquals("jobject", ms.getInput().get(0).getJniName());
+        Assertions.assertEquals("java/lang/String", ms.getInput().get(0).getName());
+        Assertions.assertEquals("void", ms.getReturnType().getJniName());
     }
 
     @Test
-    public void testMultipleInputs()
-    {
+    public void testMultipleInputs() {
         MethodSignature ms = new MethodSignature("(ICBZJDF)V");
-        assertEquals(7, ms.getInput().size());
-        assertEquals("jint", ms.getInput().get(0).getJniName());
-        assertEquals("jchar", ms.getInput().get(1).getJniName());
-        assertEquals("jbyte", ms.getInput().get(2).getJniName());
-        assertEquals("jboolean", ms.getInput().get(3).getJniName());
-        assertEquals("jlong", ms.getInput().get(4).getJniName());
-        assertEquals("jdouble", ms.getInput().get(5).getJniName());
-        assertEquals("jfloat", ms.getInput().get(6).getJniName());
-        assertEquals("void", ms.getReturnType().getJniName());
+        Assertions.assertEquals(7, ms.getInput().size());
+        Assertions.assertEquals("jint", ms.getInput().get(0).getJniName());
+        Assertions.assertEquals("jchar", ms.getInput().get(1).getJniName());
+        Assertions.assertEquals("jbyte", ms.getInput().get(2).getJniName());
+        Assertions.assertEquals("jboolean", ms.getInput().get(3).getJniName());
+        Assertions.assertEquals("jlong", ms.getInput().get(4).getJniName());
+        Assertions.assertEquals("jdouble", ms.getInput().get(5).getJniName());
+        Assertions.assertEquals("jfloat", ms.getInput().get(6).getJniName());
+        Assertions.assertEquals("void", ms.getReturnType().getJniName());
     }
 
     @Test
-    public void testMultipleObjectInputs()
-    {
+    public void testMultipleObjectInputs() {
         MethodSignature ms = new MethodSignature("(Ljava/lang/String;Ljava/util/ArrayList;)V");
-        assertEquals(2, ms.getInput().size());
-        assertEquals("jobject", ms.getInput().get(0).getJniName());
-        assertEquals("java/lang/String", ms.getInput().get(0).getName());
-        assertEquals("jobject", ms.getInput().get(1).getJniName());
-        assertEquals("java/util/ArrayList", ms.getInput().get(1).getName());
-        assertEquals("void", ms.getReturnType().getJniName());
+        Assertions.assertEquals(2, ms.getInput().size());
+        Assertions.assertEquals("jobject", ms.getInput().get(0).getJniName());
+        Assertions.assertEquals("java/lang/String", ms.getInput().get(0).getName());
+        Assertions.assertEquals("jobject", ms.getInput().get(1).getJniName());
+        Assertions.assertEquals("java/util/ArrayList", ms.getInput().get(1).getName());
+        Assertions.assertEquals("void", ms.getReturnType().getJniName());
     }
 
     @Test
-    public void testMixedInputs()
-    {
+    public void testMixedInputs() {
         MethodSignature ms = new MethodSignature("(ILjava/lang/String;CLjava/util/ArrayList;B)V");
-        assertEquals(5, ms.getInput().size());
-        assertEquals("jint", ms.getInput().get(0).getJniName());
-        assertEquals("jobject", ms.getInput().get(1).getJniName());
-        assertEquals("java/lang/String", ms.getInput().get(1).getName());
-        assertEquals("jchar", ms.getInput().get(2).getJniName());
-        assertEquals("jobject", ms.getInput().get(3).getJniName());
-        assertEquals("java/util/ArrayList", ms.getInput().get(3).getName());
-        assertEquals("jbyte", ms.getInput().get(4).getJniName());
-        assertEquals("void", ms.getReturnType().getJniName());
-    }
-
-    @Test(expected = IllegalPatternError.class)
-    public void testMissingOpenParenthesis()
-    {
-        MethodSignature ms = new MethodSignature("V");
-    }
-
-    @Test(expected = IllegalPatternError.class)
-    public void testMissingClosedParenthesis()
-    {
-        MethodSignature ms = new MethodSignature("(IIIIIIIIIIIIIIIIII");
-    }
-
-    @Test(expected = IllegalPatternError.class)
-    public void testMalformedObjectInput()
-    {
-        MethodSignature ms = new MethodSignature("(Ljava/lang)V");
-    }
-
-    @Test(expected = IllegalPatternError.class)
-    public void testMalformedObjectReturn()
-    {
-        MethodSignature ms = new MethodSignature("(I)Ljava/lang");
+        Assertions.assertEquals(5, ms.getInput().size());
+        Assertions.assertEquals("jint", ms.getInput().get(0).getJniName());
+        Assertions.assertEquals("jobject", ms.getInput().get(1).getJniName());
+        Assertions.assertEquals("java/lang/String", ms.getInput().get(1).getName());
+        Assertions.assertEquals("jchar", ms.getInput().get(2).getJniName());
+        Assertions.assertEquals("jobject", ms.getInput().get(3).getJniName());
+        Assertions.assertEquals("java/util/ArrayList", ms.getInput().get(3).getName());
+        Assertions.assertEquals("jbyte", ms.getInput().get(4).getJniName());
+        Assertions.assertEquals("void", ms.getReturnType().getJniName());
     }
 
     @Test
-    public void testEquals()
-    {
+    public void testMissingOpenParenthesis() {
+        Assertions.assertThrows(IllegalPatternError.class, () -> {
+            MethodSignature ms = new MethodSignature("V");
+        });
+    }
+
+    @Test
+    public void testMissingClosedParenthesis() {
+        Assertions.assertThrows(IllegalPatternError.class, () -> {
+            MethodSignature ms = new MethodSignature("(IIIIIIIIIIIIIIIIII");
+        });
+    }
+
+    @Test
+    public void testMalformedObjectInput() {
+        Assertions.assertThrows(IllegalPatternError.class, () -> {
+            MethodSignature ms = new MethodSignature("(Ljava/lang)V");
+        });
+    }
+
+    @Test
+    public void testMalformedObjectReturn() {
+        Assertions.assertThrows(IllegalPatternError.class, () -> {
+            MethodSignature ms = new MethodSignature("(I)Ljava/lang");
+        });
+    }
+
+    @Test
+    public void testEquals() {
         MethodSignature ms0 = new MethodSignature("()V");
         MethodSignature ms1 = new MethodSignature("(I)V");
         MethodSignature ms2 = new MethodSignature("(II)V");
@@ -127,72 +121,73 @@ public class TestMethodSignature
         MethodSignature ms4 = new MethodSignature("(ISLjava/lang/String;F)V");
         MethodSignature ms5 = new MethodSignature("(ISLjava/lang/String;F)V");
 
-        assertNotEquals(null, ms0);
-        assertNotEquals(ms0, new JniType("V"));
+        Assertions.assertNotEquals(null, ms0);
+        Assertions.assertNotEquals(ms0, new JniType("V"));
 
-        assertEquals(ms4, ms5);
+        Assertions.assertEquals(ms4, ms5);
         //different inputs
-        assertNotEquals(ms0, ms1);
-        assertNotEquals(ms0, ms2);
+        Assertions.assertNotEquals(ms0, ms1);
+        Assertions.assertNotEquals(ms0, ms2);
         //different return type
-        assertNotEquals(ms0, ms3);
-    }
-
-    @Test(expected = IllegalPatternError.class)
-    public void testMissingReturnType()
-    {
-        MethodSignature ms = new MethodSignature("(II)");
+        Assertions.assertNotEquals(ms0, ms3);
     }
 
     @Test
-    public void testSingleIntArrayReturn()
-    {
+    public void testMissingReturnType() {
+        Assertions.assertThrows(IllegalPatternError.class, () -> {
+            MethodSignature ms = new MethodSignature("(II)");
+        });
+    }
+
+    @Test
+    public void testSingleIntArrayReturn() {
         MethodSignature ms = new MethodSignature("()[I");
-        assertEquals(0, ms.getInput().size());
-        assertEquals("jobject", ms.getReturnType().getJniName());
-        assertEquals(1, ms.getReturnType().getArrayDepth());
+        Assertions.assertEquals(0, ms.getInput().size());
+        Assertions.assertEquals("jobject", ms.getReturnType().getJniName());
+        Assertions.assertEquals(1, ms.getReturnType().getArrayDepth());
     }
 
     @Test
-    public void testMultidimensionalIntArrayReturn()
-    {
+    public void testMultidimensionalIntArrayReturn() {
         MethodSignature ms = new MethodSignature("()[[[[I");
-        assertEquals(0, ms.getInput().size());
-        assertEquals("jobject", ms.getReturnType().getJniName());
-        assertEquals(4, ms.getReturnType().getArrayDepth());
+        Assertions.assertEquals(0, ms.getInput().size());
+        Assertions.assertEquals("jobject", ms.getReturnType().getJniName());
+        Assertions.assertEquals(4, ms.getReturnType().getArrayDepth());
     }
 
     @Test
-    public void testMixedInputsArrays()
-    {
+    public void testMixedInputsArrays() {
         MethodSignature ms = new MethodSignature("(I[Ljava/lang/String;[[CLjava/util/ArrayList;[[[B)V");
-        assertEquals(5, ms.getInput().size());
-        assertEquals("jint", ms.getInput().get(0).getJniName());
-        assertEquals(0, ms.getInput().get(0).getArrayDepth());
-        assertEquals("jobject", ms.getInput().get(1).getJniName());
-        assertEquals("java/lang/String", ms.getInput().get(1).getName());
-        assertEquals(1, ms.getInput().get(1).getArrayDepth());
-        assertEquals("jobject", ms.getInput().get(2).getJniName());
-        assertEquals("jchar", ms.getInput().get(2).getName());
-        assertEquals(2, ms.getInput().get(2).getArrayDepth());
-        assertEquals("jobject", ms.getInput().get(3).getJniName());
-        assertEquals("java/util/ArrayList", ms.getInput().get(3).getName());
-        assertEquals(0, ms.getInput().get(3).getArrayDepth());
-        assertEquals("jbyte", ms.getInput().get(4).getName());
-        assertEquals("jobject", ms.getInput().get(4).getJniName());
-        assertEquals(3, ms.getInput().get(4).getArrayDepth());
-        assertEquals("void", ms.getReturnType().getJniName());
+        Assertions.assertEquals(5, ms.getInput().size());
+        Assertions.assertEquals("jint", ms.getInput().get(0).getJniName());
+        Assertions.assertEquals(0, ms.getInput().get(0).getArrayDepth());
+        Assertions.assertEquals("jobject", ms.getInput().get(1).getJniName());
+        Assertions.assertEquals("java/lang/String", ms.getInput().get(1).getName());
+        Assertions.assertEquals(1, ms.getInput().get(1).getArrayDepth());
+        Assertions.assertEquals("jobject", ms.getInput().get(2).getJniName());
+        Assertions.assertEquals("jchar", ms.getInput().get(2).getName());
+        Assertions.assertEquals(2, ms.getInput().get(2).getArrayDepth());
+        Assertions.assertEquals("jobject", ms.getInput().get(3).getJniName());
+        Assertions.assertEquals("java/util/ArrayList", ms.getInput().get(3).getName());
+        Assertions.assertEquals(0, ms.getInput().get(3).getArrayDepth());
+        Assertions.assertEquals("jbyte", ms.getInput().get(4).getName());
+        Assertions.assertEquals("jobject", ms.getInput().get(4).getJniName());
+        Assertions.assertEquals(3, ms.getInput().get(4).getArrayDepth());
+        Assertions.assertEquals("void", ms.getReturnType().getJniName());
     }
 
-    @Test(expected = IllegalPatternError.class)
-    public void testWrongArrayParamAsInput()
-    {
-        MethodSignature ms = new MethodSignature("([[[)I");
+    @Test
+    public void testWrongArrayParamAsInput() {
+        Assertions.assertThrows(IllegalPatternError.class, () -> {
+            MethodSignature ms = new MethodSignature("([[[)I");
+        });
+
     }
 
-    @Test(expected = IllegalPatternError.class)
-    public void testReturnWrongArray()
-    {
-        MethodSignature ms = new MethodSignature("(I)[");
+    @Test
+    public void testReturnWrongArray() {
+        Assertions.assertThrows(IllegalPatternError.class, () -> {
+            MethodSignature ms = new MethodSignature("(I)[");
+        });
     }
 }

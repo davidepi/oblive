@@ -2,8 +2,7 @@ package testclasses.invoke.invokespecial;
 
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
-
-import static org.junit.Assert.fail;
+import org.junit.jupiter.api.Assertions;
 
 public class InvokeSpecialVoid extends InvokeVirtualVoid
 {
@@ -22,6 +21,6 @@ public class InvokeSpecialVoid extends InvokeVirtualVoid
     //wrong method, I want the one of the superclass to be called -> invokespecial
     public void print(int a, int b)
     {
-        fail("This should not be called. InvokeSpecial has been implemented wrongly");
+        Assertions.fail("This should not be called. InvokeSpecial has been implemented wrongly");
     }
 }

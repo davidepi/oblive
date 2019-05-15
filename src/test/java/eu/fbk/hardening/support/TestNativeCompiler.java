@@ -1,9 +1,9 @@
 package eu.fbk.hardening.support;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,16 +30,16 @@ public class TestNativeCompiler {
     //output of the library compilation, fixed extension
     private static File destinationLibFixed;
 
-    @BeforeClass
+    @BeforeAll
     public static void setSourceUrl() {
         URL url = Thread.currentThread().getContextClassLoader().getResource("helloworld.c");
-        Assert.assertNotNull(url);
+        Assertions.assertNotNull(url);
         sourceC = new File(url.getPath());
         url = Thread.currentThread().getContextClassLoader().getResource("helloworld.cpp");
-        Assert.assertNotNull(url);
+        Assertions.assertNotNull(url);
         sourceCPP = new File(url.getPath());
         url = Thread.currentThread().getContextClassLoader().getResource("helluword.c");
-        Assert.assertNotNull(url);
+        Assertions.assertNotNull(url);
         wrongC = new File(url.getPath());
         destinationObj = new File(System.getProperty("user.dir") + File.separator + "buildedc" + SystemInfo.getObjectExtension());
         destinationObjWrong = new File(System.getProperty("user.dir") + File.separator + "buildedc.txt");
@@ -49,7 +49,7 @@ public class TestNativeCompiler {
         destinationLibFixed = new File(System.getProperty("user.dir") + File.separator + "buildedlib.txt" + SystemInfo.getSharedLibraryExtension());
     }
 
-    @AfterClass
+    @AfterAll
     public static void removeGarbage() {
         if (destinationObj.exists())
             destinationObj.delete();
@@ -73,41 +73,41 @@ public class TestNativeCompiler {
         //correct output extension
         try {
             compilerError = compiler.compileFile(new File[]{sourceC}, destinationObj);
-            Assert.assertNull(compilerError);
+            Assertions.assertNull(compilerError);
         } catch (IOException e) {
-            Assert.fail(e.getMessage());
+            Assertions.fail(e.getMessage());
         }
-        Assert.assertTrue(destinationObj.exists()); //the file exists
-        Assert.assertTrue(destinationObj.delete()); //do not leave garbage around
+        Assertions.assertTrue(destinationObj.exists()); //the file exists
+        Assertions.assertTrue(destinationObj.delete()); //do not leave garbage around
 
         //incorrect output extension, the new extension should be appended
         try {
             compilerError = compiler.compileFile(new File[]{sourceC}, destinationObjWrong);
-            Assert.assertNull(compilerError);
+            Assertions.assertNull(compilerError);
         } catch (IOException e) {
-            Assert.fail(e.getMessage());
+            Assertions.fail(e.getMessage());
         }
-        Assert.assertTrue(destinationObjFixed.exists());
-        Assert.assertFalse(destinationObjWrong.exists());
-        Assert.assertTrue(destinationObjFixed.delete());
+        Assertions.assertTrue(destinationObjFixed.exists());
+        Assertions.assertFalse(destinationObjWrong.exists());
+        Assertions.assertTrue(destinationObjFixed.delete());
 
         //wrong input file
         try {
             compilerError = compiler.compileFile(new File[]{sourceCPP}, destinationObj);
-            Assert.assertNull(compilerError);
-            Assert.fail();
+            Assertions.assertNull(compilerError);
+            Assertions.fail();
         } catch (IOException e) {
-            Assert.assertFalse(destinationObj.exists());
+            Assertions.assertFalse(destinationObj.exists());
         }
 
         //compilation error
         try {
             compilerError = compiler.compileFile(new File[]{wrongC}, destinationObj);
-            Assert.assertNotNull(compilerError);
+            Assertions.assertNotNull(compilerError);
             System.err.println(compilerError);
-            Assert.assertFalse(destinationObj.exists());
+            Assertions.assertFalse(destinationObj.exists());
         } catch (IOException e) {
-            Assert.fail(e.getMessage());
+            Assertions.fail(e.getMessage());
         }
     }
 
@@ -117,50 +117,50 @@ public class TestNativeCompiler {
         NativeCompiler compiler = new NativeCompiler();
         try {
             compilerError = compiler.compileFile(new File[]{sourceC}, destinationObj);
-            Assert.assertNull(compilerError);
+            Assertions.assertNull(compilerError);
         } catch (IOException e) {
-            Assert.fail(e.getMessage());
+            Assertions.fail(e.getMessage());
         }
-        Assert.assertTrue(destinationObj.exists());
+        Assertions.assertTrue(destinationObj.exists());
 
         //unexistent file
         try {
             compilerError = compiler.compileSharedLib(new File[]{new File("iung" + SystemInfo.getObjectExtension())}, destinationLib);
-            Assert.assertNull(compilerError);
-            Assert.fail();
+            Assertions.assertNull(compilerError);
+            Assertions.fail();
         } catch (IOException e) {
             //success!
-            Assert.assertFalse(destinationLib.exists());
+            Assertions.assertFalse(destinationLib.exists());
         }
 
         //not object file
         try {
             compilerError = compiler.compileSharedLib(new File[]{sourceC}, destinationLib);
-            Assert.assertNull(compilerError);
-            Assert.fail();
+            Assertions.assertNull(compilerError);
+            Assertions.fail();
         } catch (IOException e) {
-            Assert.assertFalse(destinationLib.exists());
+            Assertions.assertFalse(destinationLib.exists());
         }
 
         //correct compilation
         try {
             compilerError = compiler.compileSharedLib(new File[]{destinationObj}, destinationLib);
-            Assert.assertNull(compilerError);
-            Assert.assertTrue(destinationLib.exists());
-            Assert.assertTrue(destinationLib.delete());
+            Assertions.assertNull(compilerError);
+            Assertions.assertTrue(destinationLib.exists());
+            Assertions.assertTrue(destinationLib.delete());
         } catch (IOException e) {
-            Assert.fail(e.getMessage());
+            Assertions.fail(e.getMessage());
         }
 
         //added extension
         try {
             compilerError = compiler.compileSharedLib(new File[]{destinationObj}, destinationLibWrong);
-            Assert.assertNull(compilerError);
-            Assert.assertFalse(destinationLibWrong.exists());
-            Assert.assertTrue(destinationLibFixed.exists());
-            Assert.assertTrue(destinationLibFixed.delete());
+            Assertions.assertNull(compilerError);
+            Assertions.assertFalse(destinationLibWrong.exists());
+            Assertions.assertTrue(destinationLibFixed.exists());
+            Assertions.assertTrue(destinationLibFixed.delete());
         } catch (IOException e) {
-            Assert.fail(e.getMessage());
+            Assertions.fail(e.getMessage());
         }
     }
 }

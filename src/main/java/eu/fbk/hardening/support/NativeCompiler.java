@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -31,7 +30,7 @@ public class NativeCompiler {
     private String libext;
 
     /**
-     * Default contructor
+     * Default constructor
      */
     public NativeCompiler() {
         objext = SystemInfo.getObjectExtension();
@@ -63,17 +62,20 @@ public class NativeCompiler {
             }
         }
         try {
-            final String[] includes = new String[2];
+            final String[] includes = new String[]{null, null};
             Files.walk(Paths.get(javaHome))
                     .filter(Files::isRegularFile)
-                    .forEach((f)->{
+                    .forEach((f) -> {
                         String file = f.toString();
-                        if(file.endsWith("jni.h"))
+                        if (file.endsWith("jni.h"))
                             includes[0] = f.getParent().toString();
-                        else if(file.endsWith("jni_md.h"))
+                        else if (file.endsWith("jni_md.h"))
                             includes[1] = f.getParent().toString();
                     });
-            include = "-I"+includes[0]+" -I"+includes[1];
+            if (includes[0] == null || includes[1] == null)
+                throw new IOException();
+            else
+                include = "-I" + includes[0] + " -I" + includes[1];
         } catch (IOException e) {
             throw new IncompleteConfigurationError("Could not find the file `jni.h` in the JAVA_HOME subtree");
         }

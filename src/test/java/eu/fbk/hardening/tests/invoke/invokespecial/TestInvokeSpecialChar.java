@@ -1,15 +1,14 @@
 package eu.fbk.hardening.tests.invoke.invokespecial;
 
 import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import testclasses.invoke.invokespecial.InvokeSpecialChar;
 import testclasses.invoke.invokevirtual.InvokeVirtualChar;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
-public class TestInvokeSpecialChar extends AbstractTestMethodTemplate
-{
+public class TestInvokeSpecialChar extends AbstractTestMethodTemplate {
 
     private Class<?> className = testclasses.invoke.invokespecial.InvokeSpecialChar.class;
     private String[] methodTest = {"add"};
@@ -17,42 +16,36 @@ public class TestInvokeSpecialChar extends AbstractTestMethodTemplate
     private Object[][] methodArgs = {new Object[]{'A', 'b'}};
 
     @Test
-    public void testSuperMethodIsCalled()
-    {
+    public void testSuperMethodIsCalled() {
         InvokeSpecialChar testme = new InvokeSpecialChar();
         InvokeVirtualChar check = new InvokeVirtualChar();
         //the normalAdd method of the testme class is wrong on purpose, the class should call the superclass one
-        assertEquals(check.normalAdd((char) 15, (char) 18), testme.add((char) 15, (char) 18));
-        assertNotEquals(check.normalAdd((char) 15, (char) 18), testme.normalAdd((char) 15, (char) 18));
+        Assertions.assertEquals(check.normalAdd((char) 15, (char) 18), testme.add((char) 15, (char) 18));
+        Assertions.assertNotEquals(check.normalAdd((char) 15, (char) 18), testme.normalAdd((char) 15, (char) 18));
     }
 
     @Override
-    public Class<?> getTestClass()
-    {
+    public Class<?> getTestClass() {
         return className;
     }
 
     @Override
-    public String getTestMethodName(int position)
-    {
+    public String getTestMethodName(int position) {
         return methodTest[position];
     }
 
     @Override
-    public int getTestMethodSize()
-    {
+    public int getTestMethodSize() {
         return methodTest.length;
     }
 
     @Override
-    public Class<?>[] getTestMethodParams(int position)
-    {
+    public Class<?>[] getTestMethodParams(int position) {
         return methodParam[position];
     }
 
     @Override
-    public Object[] getTestMethodArgs(int position)
-    {
+    public Object[] getTestMethodArgs(int position) {
         return methodArgs[position];
     }
 }
