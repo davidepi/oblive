@@ -1,10 +1,10 @@
 package eu.fbk.hardening.tests.casts;
 
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
+import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 
 import java.io.File;
 
-public class TestInstanceOf extends AbstractTestMethodTemplate
+public class TestInstanceOf extends AbstractTestCorrectnessTemplate
 {
     private Class<?> className = testclasses.casts.InstanceOf.class;
     private String[] methodTest = {"instanceofString", "instanceofString", "instanceofString"};
@@ -18,26 +18,20 @@ public class TestInstanceOf extends AbstractTestMethodTemplate
     }
 
     @Override
-    public String getTestMethodName(int position)
+    public String[] getTestMethodName()
     {
-        return methodTest[position];
+        return methodTest;
     }
 
     @Override
-    public int getTestMethodSize()
+    public Class<?>[][] getTestMethodParams()
     {
-        return methodTest.length;
+        return methodParam;
     }
 
     @Override
-    public Class<?>[] getTestMethodParams(int position)
+    public Object[][] getTestMethodArgs()
     {
-        return methodParam[position];
-    }
-
-    @Override
-    public Object[] getTestMethodArgs(int position)
-    {
-        return methodArgs[position];
+        return methodArgs;
     }
 }

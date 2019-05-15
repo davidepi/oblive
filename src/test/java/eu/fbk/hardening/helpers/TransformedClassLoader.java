@@ -27,7 +27,7 @@ import java.util.Set;
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * @author Andrea Nasato
- * @author mariano
+ * @author M.Ceccato
  */
 public class TransformedClassLoader extends URLClassLoader {
 

@@ -1,8 +1,8 @@
 package eu.fbk.hardening.tests.arrays.unidimensional;
 
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
+import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 
-public class TestStoreArrayChar extends AbstractTestMethodTemplate
+public class TestStoreArrayChar extends AbstractTestCorrectnessTemplate
 {
     private Class<?> className = testclasses.arrays.unidimensional.StoreArrayChar.class;
     private String[] methodTest = {"test"};
@@ -34,26 +34,20 @@ public class TestStoreArrayChar extends AbstractTestMethodTemplate
     }
 
     @Override
-    public String getTestMethodName(int position)
+    public String[] getTestMethodName()
     {
-        return methodTest[position];
+        return methodTest;
     }
 
     @Override
-    public int getTestMethodSize()
+    public Class<?>[][] getTestMethodParams()
     {
-        return methodTest.length;
+        return methodParam;
     }
 
     @Override
-    public Class<?>[] getTestMethodParams(int position)
+    public Object[][] getTestMethodArgs()
     {
-        return methodParam[position];
-    }
-
-    @Override
-    public Object[] getTestMethodArgs(int position)
-    {
-        return methodArgs[position];
+        return methodArgs;
     }
 }

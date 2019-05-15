@@ -1,8 +1,8 @@
 package eu.fbk.hardening.tests.conditionals;
 
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
+import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 
-public class TestTableswitchNoDefault extends AbstractTestMethodTemplate
+public class TestTableswitchNoDefault extends AbstractTestCorrectnessTemplate
 {
     private Class<?> className = testclasses.conditionals.TableswitchNoDefault.class;
     private String[] methodTest = {"exec", "exec", "exec"};
@@ -34,26 +34,20 @@ public class TestTableswitchNoDefault extends AbstractTestMethodTemplate
     }
 
     @Override
-    public String getTestMethodName(int position)
+    public String[] getTestMethodName()
     {
-        return methodTest[position];
+        return methodTest;
     }
 
     @Override
-    public int getTestMethodSize()
+    public Class<?>[][] getTestMethodParams()
     {
-        return methodTest.length;
+        return methodParam;
     }
 
     @Override
-    public Class<?>[] getTestMethodParams(int position)
+    public Object[][] getTestMethodArgs()
     {
-        return methodParam[position];
-    }
-
-    @Override
-    public Object[] getTestMethodArgs(int position)
-    {
-        return methodArgs[position];
+        return methodArgs;
     }
 }

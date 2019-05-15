@@ -1,6 +1,6 @@
 package eu.fbk.hardening.tests.invoke.invokespecial;
 
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
+import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,7 @@ import testclasses.invoke.invokespecial.InvokeSpecialChar;
 import testclasses.invoke.invokevirtual.InvokeVirtualChar;
 
 
-public class TestInvokeSpecialChar extends AbstractTestMethodTemplate {
+public class TestInvokeSpecialChar extends AbstractTestCorrectnessTemplate {
 
     private Class<?> className = testclasses.invoke.invokespecial.InvokeSpecialChar.class;
     private String[] methodTest = {"add"};

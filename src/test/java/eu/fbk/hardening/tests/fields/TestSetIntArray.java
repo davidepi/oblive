@@ -1,8 +1,8 @@
 package eu.fbk.hardening.tests.fields;
 
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
+import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 
-public class TestSetIntArray extends AbstractTestMethodTemplate
+public class TestSetIntArray extends AbstractTestCorrectnessTemplate
 {
     private Class<?> className = testclasses.fields.SetFieldIntArray.class;
     private String[] methodTest = {"test"};
@@ -34,26 +34,20 @@ public class TestSetIntArray extends AbstractTestMethodTemplate
     }
 
     @Override
-    public String getTestMethodName(int position)
+    public String[] getTestMethodName()
     {
-        return methodTest[position];
+        return methodTest;
     }
 
     @Override
-    public int getTestMethodSize()
+    public Class<?>[][] getTestMethodParams()
     {
-        return methodTest.length;
+        return methodParam;
     }
 
     @Override
-    public Class<?>[] getTestMethodParams(int position)
+    public Object[][] getTestMethodArgs()
     {
-        return methodParam[position];
-    }
-
-    @Override
-    public Object[] getTestMethodArgs(int position)
-    {
-        return methodArgs[position];
+        return methodArgs;
     }
 }

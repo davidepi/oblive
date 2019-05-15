@@ -1,13 +1,13 @@
 package eu.fbk.hardening.tests.invoke.invokespecial;
 
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
+import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import testclasses.invoke.invokespecial.InvokeSpecialCastShort;
 import testclasses.invoke.invokevirtual.InvokeVirtualCastShort;
 
 
-public class TestInvokeSpecialCastShort extends AbstractTestMethodTemplate {
+public class TestInvokeSpecialCastShort extends AbstractTestCorrectnessTemplate {
 
     private Class<?> className = InvokeSpecialCastShort.class;
     private String[] methodTest = {"add"};

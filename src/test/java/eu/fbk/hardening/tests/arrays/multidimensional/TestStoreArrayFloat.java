@@ -1,8 +1,8 @@
 package eu.fbk.hardening.tests.arrays.multidimensional;
 
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
+import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 
-public class TestStoreArrayFloat extends AbstractTestMethodTemplate
+public class TestStoreArrayFloat extends AbstractTestCorrectnessTemplate
 {
     private Class<?> className = testclasses.arrays.multidimensional.StoreArrayFloat.class;
     private String[] methodTest = {"test"};
@@ -10,15 +10,9 @@ public class TestStoreArrayFloat extends AbstractTestMethodTemplate
     private Object[][] methodArgs = {new Object[]{}};
 
     @Override
-    public String getAnnotatedMethodName(int position)
+    public String getAnnotatedMethodName()
     {
         return "setVal";
-    }
-
-    @Override
-    public int getAnnotatedMethodSize()
-    {
-        return 1;
     }
 
     @Override
@@ -34,26 +28,20 @@ public class TestStoreArrayFloat extends AbstractTestMethodTemplate
     }
 
     @Override
-    public String getTestMethodName(int position)
+    public String[] getTestMethodName()
     {
-        return methodTest[position];
+        return methodTest;
     }
 
     @Override
-    public int getTestMethodSize()
+    public Class<?>[][] getTestMethodParams()
     {
-        return methodTest.length;
+        return methodParam;
     }
 
     @Override
-    public Class<?>[] getTestMethodParams(int position)
+    public Object[][] getTestMethodArgs()
     {
-        return methodParam[position];
-    }
-
-    @Override
-    public Object[] getTestMethodArgs(int position)
-    {
-        return methodArgs[position];
+        return methodArgs;
     }
 }

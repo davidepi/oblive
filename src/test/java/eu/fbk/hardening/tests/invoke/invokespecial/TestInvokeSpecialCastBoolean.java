@@ -1,10 +1,10 @@
 package eu.fbk.hardening.tests.invoke.invokespecial;
 
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
+import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 
 import testclasses.invoke.invokespecial.InvokeSpecialCastBoolean;
 
-public class TestInvokeSpecialCastBoolean extends AbstractTestMethodTemplate {
+public class TestInvokeSpecialCastBoolean extends AbstractTestCorrectnessTemplate {
 
     private Class<?> className = InvokeSpecialCastBoolean.class;
     private String[] methodTest = {"and", "and", "and", "and"};

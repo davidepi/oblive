@@ -1,9 +1,9 @@
 package eu.fbk.hardening.tests.exceptions.nullpointer.getfield;
 
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
+import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 import testclasses.exceptions.nullpointer.getfield.CatchNullPointerExceptionGetFieldChar;
 
-public class TestCatchNullPointerExceptionGetFieldChar extends AbstractTestMethodTemplate
+public class TestCatchNullPointerExceptionGetFieldChar extends AbstractTestCorrectnessTemplate
 {
     private Class<?> className = CatchNullPointerExceptionGetFieldChar.class;
     private String[] methodTest = {"exec"};
@@ -17,26 +17,20 @@ public class TestCatchNullPointerExceptionGetFieldChar extends AbstractTestMetho
     }
 
     @Override
-    public String getTestMethodName(int position)
+    public String[] getTestMethodName()
     {
-        return methodTest[position];
+        return methodTest;
     }
 
     @Override
-    public int getTestMethodSize()
+    public Class<?>[][] getTestMethodParams()
     {
-        return methodTest.length;
+        return methodParam;
     }
 
     @Override
-    public Class<?>[] getTestMethodParams(int position)
+    public Object[][] getTestMethodArgs()
     {
-        return methodParam[position];
-    }
-
-    @Override
-    public Object[] getTestMethodArgs(int position)
-    {
-        return methodArgs[position];
+        return methodArgs;
     }
 }

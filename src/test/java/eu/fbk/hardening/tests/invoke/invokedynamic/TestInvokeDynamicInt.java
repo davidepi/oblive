@@ -1,10 +1,10 @@
 //package eu.fbk.hardening.tests.invoke.invokedynamic;
 //
-//import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
+//import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 //import testclasses.invoke.invokeinterface.AdderInterface;
 //import testclasses.invoke.invokeinterface.ImplementedInterface;
 //
-//public class TestInvokeDynamicInt extends AbstractTestMethodTemplate
+//public class TestInvokeDynamicInt extends AbstractTestCorrectnessTemplate
 //{
 //
 //    private Class<?> className = testclasses.invoke.invokedynamic.InvokeDynamicInt.class;

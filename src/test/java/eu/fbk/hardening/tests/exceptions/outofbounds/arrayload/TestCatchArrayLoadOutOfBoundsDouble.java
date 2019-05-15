@@ -1,8 +1,8 @@
 package eu.fbk.hardening.tests.exceptions.outofbounds.arrayload;
 
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
+import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 
-public class TestCatchArrayLoadOutOfBoundsDouble extends AbstractTestMethodTemplate
+public class TestCatchArrayLoadOutOfBoundsDouble extends AbstractTestCorrectnessTemplate
 {
     private Class<?> className = testclasses.exceptions.outofbounds.arrayload.CatchArrayLoadOutOfBoundsDouble.class;
     private String[] methodTest = {"exec"};
@@ -16,26 +16,20 @@ public class TestCatchArrayLoadOutOfBoundsDouble extends AbstractTestMethodTempl
     }
 
     @Override
-    public String getTestMethodName(int position)
+    public String[] getTestMethodName()
     {
-        return methodTest[position];
+        return methodTest;
     }
 
     @Override
-    public int getTestMethodSize()
+    public Class<?>[][] getTestMethodParams()
     {
-        return methodTest.length;
+        return methodParam;
     }
 
     @Override
-    public Class<?>[] getTestMethodParams(int position)
+    public Object[][] getTestMethodArgs()
     {
-        return methodParam[position];
-    }
-
-    @Override
-    public Object[] getTestMethodArgs(int position)
-    {
-        return methodArgs[position];
+        return methodArgs;
     }
 }

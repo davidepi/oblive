@@ -1,8 +1,8 @@
 package eu.fbk.hardening.tests.arrays.multidimensional;
 
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
+import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 
-public class TestNewArrayCharThreeDims extends AbstractTestMethodTemplate
+public class TestNewArrayCharThreeDims extends AbstractTestCorrectnessTemplate
 {
     private Class<?> className = testclasses.arrays.multidimensional.NewArrayCharThreeDims.class;
     private String[] methodTest = {"test"};
@@ -10,21 +10,15 @@ public class TestNewArrayCharThreeDims extends AbstractTestMethodTemplate
     private Object[][] methodArgs = {new Object[]{}};
 
     @Override
-    public String getAnnotatedMethodName(int position)
+    public String[] getAnnotatedMethodName()
     {
-        return "getArray";
+        return new String[]{"getArray"};
     }
 
     @Override
-    public int getAnnotatedMethodSize()
+    public Class<?>[][] getAnnotatedMethodParams()
     {
-        return 1;
-    }
-
-    @Override
-    public Class<?>[] getAnnotatedMethodParams(int position)
-    {
-        return new Class[]{};
+        return new Class[][]{};
     }
 
     @Override
@@ -34,26 +28,20 @@ public class TestNewArrayCharThreeDims extends AbstractTestMethodTemplate
     }
 
     @Override
-    public String getTestMethodName(int position)
+    public String[] getTestMethodName()
     {
-        return methodTest[position];
+        return methodTest;
     }
 
     @Override
-    public int getTestMethodSize()
+    public Class<?>[][] getTestMethodParams()
     {
-        return methodTest.length;
+        return methodParam;
     }
 
     @Override
-    public Class<?>[] getTestMethodParams(int position)
+    public Object[][] getTestMethodArgs()
     {
-        return methodParam[position];
-    }
-
-    @Override
-    public Object[] getTestMethodArgs(int position)
-    {
-        return methodArgs[position];
+        return methodArgs;
     }
 }

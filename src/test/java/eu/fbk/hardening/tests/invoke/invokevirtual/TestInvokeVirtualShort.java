@@ -1,8 +1,8 @@
 package eu.fbk.hardening.tests.invoke.invokevirtual;
 
-import eu.fbk.hardening.helpers.AbstractTestMethodTemplate;
+import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 
-public class TestInvokeVirtualShort extends AbstractTestMethodTemplate
+public class TestInvokeVirtualShort extends AbstractTestCorrectnessTemplate
 {
 
     private Class<?> className = testclasses.invoke.invokevirtual.InvokeVirtualShort.class;
@@ -18,26 +18,20 @@ public class TestInvokeVirtualShort extends AbstractTestMethodTemplate
     }
 
     @Override
-    public String getTestMethodName(int position)
+    public String[] getTestMethodName()
     {
-        return methodTest[position];
+        return methodTest;
     }
 
     @Override
-    public int getTestMethodSize()
+    public Class<?>[][] getTestMethodParams()
     {
-        return methodTest.length;
+        return methodParam;
     }
 
     @Override
-    public Class<?>[] getTestMethodParams(int position)
+    public Object[][] getTestMethodArgs()
     {
-        return methodParam[position];
-    }
-
-    @Override
-    public Object[] getTestMethodArgs(int position)
-    {
-        return methodArgs[position];
+        return methodArgs;
     }
 }
