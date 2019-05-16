@@ -1,15 +1,13 @@
 stages:
 - build_main
 - test_main
-- build_others
-- test_others
 
 x86_build:
   stage: build_main
   script:
   - ./gradlew assemble
   tags:
-  - x86_64_linux
+  - x86_64
 
 x86_test:
   stage: test_main
@@ -18,4 +16,4 @@ x86_test:
   - cat build/reports/jacoco/test/html/index.html
   coverage: '/Total.*?([0-9]{1,3})%/'
   tags:
-  - x86_64_linux
+  - x86_64

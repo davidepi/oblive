@@ -17,10 +17,6 @@ public class InvokeInterfaceEquals {
     @Override
     public boolean equals(Object obj) {
         InvokeInterfaceEquals that = (InvokeInterfaceEquals) obj;
-//        if(this.map0.equals(that.map0))
-//            return true;
-//        else
-//            return false;
         return true;
     }
 }
