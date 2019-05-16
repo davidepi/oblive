@@ -224,4 +224,94 @@ public class TestJniType {
         Assertions.assertEquals(objectt0, objectt1);
         Assertions.assertNotEquals(objectt0, objectt2);
     }
+
+    @Test
+    public void testClassNonPrimitive() {
+        Class<?> class0 = StringBuilder.class;
+        Class<?> class1 = System[].class;
+
+        String string0 = "Ljava/lang/StringBuilder;";
+        String string1 = "[Ljava/lang/System;";
+
+        JniType jnic0 = new JniType(class0);
+        JniType jnic1 = new JniType(class1);
+
+        JniType jnis0 = new JniType(string0);
+        JniType jnis1 = new JniType(string1);
+
+        Assertions.assertEquals(jnis0, jnic0);
+        Assertions.assertEquals(jnis1, jnic1);
+    }
+
+    @Test
+    public void testClassPrimitive() {
+        Class<?> class0 = int.class;
+        Class<?> class1 = void.class;
+        Class<?> class2 = boolean.class;
+        Class<?> class3 = byte.class;
+        Class<?> class4 = char.class;
+        Class<?> class5 = short.class;
+        Class<?> class6 = long.class;
+        Class<?> class7 = float.class;
+        Class<?> class8 = double.class;
+        Class<?> class9 = double[][][].class;
+
+        String string0 = "I";
+        String string1 = "V";
+        String string2 = "Z";
+        String string3 = "B";
+        String string4 = "C";
+        String string5 = "S";
+        String string6 = "J";
+        String string7 = "F";
+        String string8 = "D";
+        String string9 = "[[[D";
+
+        JniType jnic0 = new JniType(class0);
+        JniType jnic1 = new JniType(class1);
+        JniType jnic2 = new JniType(class2);
+        JniType jnic3 = new JniType(class3);
+        JniType jnic4 = new JniType(class4);
+        JniType jnic5 = new JniType(class5);
+        JniType jnic6 = new JniType(class6);
+        JniType jnic7 = new JniType(class7);
+        JniType jnic8 = new JniType(class8);
+        JniType jnic9 = new JniType(class9);
+
+        JniType jnis0 = new JniType(string0);
+        JniType jnis1 = new JniType(string1);
+        JniType jnis2 = new JniType(string2);
+        JniType jnis3 = new JniType(string3);
+        JniType jnis4 = new JniType(string4);
+        JniType jnis5 = new JniType(string5);
+        JniType jnis6 = new JniType(string6);
+        JniType jnis7 = new JniType(string7);
+        JniType jnis8 = new JniType(string8);
+        JniType jnis9 = new JniType(string9);
+
+        Assertions.assertEquals(jnis0, jnic0);
+        Assertions.assertEquals(jnis1, jnic1);
+        Assertions.assertEquals(jnis2, jnic2);
+        Assertions.assertEquals(jnis3, jnic3);
+        Assertions.assertEquals(jnis4, jnic4);
+        Assertions.assertEquals(jnis5, jnic5);
+        Assertions.assertEquals(jnis6, jnic6);
+        Assertions.assertEquals(jnis7, jnic7);
+        Assertions.assertEquals(jnis8, jnic8);
+        Assertions.assertEquals(jnis9, jnic9);
+    }
+
+    @Test
+    public void testGetInternalRepresentation() {
+        String repr0 = "I";
+        String repr1 = "[Ljava/lang/String;";
+        String repr2 = "[[[D";
+        JniType type0 = new JniType(repr0);
+        JniType type1 = new JniType(repr1);
+        JniType type2 = new JniType(repr2);
+
+        Assertions.assertEquals(repr0, type0.getInternalRepresentation());
+        Assertions.assertEquals(repr1, type1.getInternalRepresentation());
+        Assertions.assertEquals(repr2, type2.getInternalRepresentation());
+    }
 }

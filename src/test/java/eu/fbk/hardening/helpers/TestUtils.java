@@ -1,8 +1,8 @@
 package eu.fbk.hardening.helpers;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodNode;
@@ -25,15 +25,14 @@ import java.util.List;
 
 public class TestUtils {
 
-
     /**
      * Compute the relative file name for a class
      *
      * @param clazz the class to look for
      * @return The relative file name representing this class, for parsing purposes
      */
-
-    public static String fileNameOf(Class<?> clazz) {
+    @NotNull
+    public static String fileNameOf(@NotNull Class<?> clazz) {
         return (clazz.getName().replace('.', '/')) + ".class";
     }
 
@@ -44,8 +43,9 @@ public class TestUtils {
      * @param clazz the class to look for
      * @return The File representing this class, for parsing purposes
      */
-
-    public static File fileFor(String dir, Class<?> clazz) {
+    @NotNull
+    @Contract("_, _ -> new")
+    public static File fileFor(String dir, @NotNull Class<?> clazz) {
         return new File(dir + "/" + clazz.getName().replace('.', '/') + ".class");
     }
 
@@ -56,8 +56,8 @@ public class TestUtils {
      * @param clazz the class to look for
      * @return The String representing this class, for parsing purposes
      */
-
-    public static String fileNameFor(String dir, Class<?> clazz) {
+    @NotNull
+    public static String fileNameFor(String dir, @NotNull Class<?> clazz) {
         return dir + "/" + (clazz.getName().replace('.', '/')) + ".class";
     }
 
@@ -67,8 +67,7 @@ public class TestUtils {
      * @param dir   where the package structure will be starting
      * @param clazz the class to store there (useful for the package name)
      */
-
-    public static void createDirsFor(String dir, Class<?> clazz) {
+    public static void createDirsFor(String dir, @NotNull Class<?> clazz) {
         String newDirName = dir + "/" + (clazz.getPackage().getName().replace('.', '/'));
         File newDir = new File(newDirName);
         newDir.mkdirs();
@@ -81,39 +80,12 @@ public class TestUtils {
      * @param toExclude Exclusion list
      * @return whether the first parameter is in the list (second parameter)
      */
-
-    public static boolean notIn(MethodNode candidate, MethodNode[] toExclude) {
+    public static boolean notIn(MethodNode candidate, @NotNull MethodNode[] toExclude) {
         for (MethodNode exclusion : toExclude)
             if (candidate.name.equals(exclusion.name) && candidate.desc.equals(exclusion.desc))
                 return false;
         return true;
     }
-
-
-    /**
-     * Checks if the parsed method signature correspond to the specified method signature
-     *
-     * @param parsedDescriptor the method formal parameters from the parsed class
-     * @param expected         the method formal parameters from the pattern
-     * @return true if the two signature match, false otherwise
-     */
-
-    public static boolean sameParameters(String parsedDescriptor, Class<?>[] expected) {
-        if (parsedDescriptor == null) {
-            return expected.length == 0;
-        }
-        Type[] actual = Type.getArgumentTypes(parsedDescriptor);
-        if (actual.length != expected.length) {
-            return false;
-        }
-        for (int i = 0; i < actual.length; i++) {
-            if (!actual[i].getClassName().equals(expected[i].getName())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
 
     /**
      * Extracts the number of annotations in the given method
@@ -121,8 +93,7 @@ public class TestUtils {
      * @param node parse tree of method
      * @return the number of annotations in the method
      */
-
-    public static int sizeofAnnotations(MethodNode node) {
+    public static int sizeofAnnotations(@NotNull MethodNode node) {
         List<AnnotationNode> annotations = node.invisibleAnnotations;
         if (annotations == null)
             return 0;
@@ -137,8 +108,7 @@ public class TestUtils {
      * @param node parse tree of method
      * @return the number of bytecode statements in the method
      */
-
-    public static int sizeofCode(MethodNode node) {
+    public static int sizeofCode(@NotNull MethodNode node) {
         InsnList code = node.instructions;
         if (code == null) return 0;
         else
@@ -150,7 +120,7 @@ public class TestUtils {
      *
      * @param source The path to the start of the package dir of the source class
      * @param dest   The path to the start of the package dir of the destination class
-     * @throws IOException
+     * @throws IOException if the path does not exists
      */
     public static void copyInput(String source, String dest, Class<?> testClass) throws IOException {
         File sourceFile = TestUtils.fileFor(source, testClass);

@@ -1,37 +1,35 @@
 package eu.fbk.hardening.helpers;
 
-import eu.fbk.hardening.JavaToC;
-import eu.fbk.hardening.support.NativeCompiler;
-import eu.fbk.hardening.support.SystemInfo;
+import eu.fbk.hardening.support.JniType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * Abstract test class to transform a class and test the occurred transformation.
- * The method must
- * 1. The execution result has not changed
- * 2. The code has changed changed only for intended methods
- * 3. The annotation has changed only for the intended methods/fields
+ * Template used to test the correctness of the transformed (obfuscated) method.
+ * In this case the transformed method must:
+ * <ol>
+ * <li>Yields the same result of the non-transformed method</li>
+ * <li>The <b>code</b> is changed only in transformed methods</li>
+ * <li>The <b>annotation</b> is changed only in transformed methods</li>
+ * </ol>
+ * <p>
+ * For the point 2. above, note that the <tt>&lt;clinit&gt;</tt> method actually is changed in order to link the library. The
+ * check for unchanged code explicitly avoids checking <tt>&lt;clinit&gt;</tt>.
  *
  * @author M.Ceccato
  * @author D.Pizzolotto
  */
-public abstract class AbstractTestCorrectnessTemplate implements TestInterface {
+public abstract class AbstractTestCorrectnessTemplate extends Java2CTests {
 
-    private final String inputClassDir = "build" + File.separator + "classes" + File.separator + "java" + File.separator + "test";
-    private final String copiedClassDir = "build" + File.separator + "transformedclasses";
-    private final String outputLibDir = "build" + File.separator + "libsrc";
     //annotated methods
     private MethodNode[] sourceAnnotatedMethodNodes1;
     private MethodNode[] destAnnotatedMethodNodes2;
@@ -40,6 +38,9 @@ public abstract class AbstractTestCorrectnessTemplate implements TestInterface {
     private MethodNode[] sourceNotAnnotatedMethodNodes3;
     private MethodNode[] destdNotAnnotatedMethodNodes4;
 
+    /**
+     * Checks the correctness of the transformation
+     */
     @Test
     public void testCorrectness() {
         try {
@@ -47,10 +48,10 @@ public abstract class AbstractTestCorrectnessTemplate implements TestInterface {
             //Assert parameters length: name, signature and parameters should be of the same length for annotated and for test
             Assertions.assertEquals(getTestMethodParams().length, getTestMethodName().length, "Param array length does not match Name array length for tested methods");
             Assertions.assertEquals(getTestMethodArgs().length, getTestMethodName().length, "Args array length does not match Name array length for tested methods");
-            Assertions.assertEquals(getAnnotatedMethodParams().length, getAnnotatedMethodName().length,"Param array length does not match Name array length for annotated methods");
+            Assertions.assertEquals(getAnnotatedMethodParams().length, getAnnotatedMethodName().length, "Param array length does not match Name array length for annotated methods");
 
             TestUtils.copyInput(getSourceDir(), getDestDir(), getTestClass());
-            transformClass();
+            transformAndBuild();
 
             // run the original class
             Object[] result1 = TestUtils.runCode(null, getTestClass(), getTestMethodName(), getTestMethodParams(), getTestMethodArgs());
@@ -95,72 +96,6 @@ public abstract class AbstractTestCorrectnessTemplate implements TestInterface {
         }
     }
 
-    @Override
-    public String[] getAnnotatedFieldName() {
-        return new String[]{};
-    }
-
-    @Override
-    public boolean changesBeyondAnnotatedMethods() {
-        return false;
-    }
-
-    @Override
-    public String[] getAnnotatedMethodName() {
-        return this.getTestMethodName();
-    }
-
-    @Override
-    public Class<?>[][] getAnnotatedMethodParams() {
-        return this.getTestMethodParams();
-    }
-
-    @Override
-    public String getSourceDir() {
-        return this.inputClassDir;
-    }
-
-    @Override
-    public String getDestDir() {
-        return this.copiedClassDir;
-    }
-
-    @Override
-    public void transformClass() {
-        String libname = this.getTestClass().toString().replaceFirst("class\\s", "");
-        String className = libname.replaceAll("\\.", "/") + ".class";
-        JavaToC j2c = new JavaToC();
-        try //tranformation
-        {
-            j2c.startParsing(this.outputLibDir, libname);
-            j2c.parseClass(this.getDestDir() + "/" + className);
-            j2c.endParsing();
-        } catch (IOException e) {
-            Assertions.fail("Transformation failed");
-            e.printStackTrace();
-        }
-
-        //building
-        NativeCompiler compiler = new NativeCompiler();
-        File[] sources = new File[]{new File(this.outputLibDir + File.separator + libname + ".c")};
-        File destObj = new File(this.outputLibDir + File.separator + libname + SystemInfo.getObjectExtension());
-        File destLib = new File(this.outputLibDir + File.separator + "lib" + libname + SystemInfo.getSharedLibraryExtension());
-        String error;
-        try {
-            error = compiler.compileFile(sources, destObj);
-            if (error == null) {
-                error = compiler.compileSharedLib(new File[]{destObj}, destLib);
-                if (error != null) {
-                    Assertions.fail(error);
-                }
-            } else {
-                Assertions.fail(error);
-            }
-        } catch (IOException e) {
-            Assertions.fail(e.getMessage());
-        }
-    }
-
     /**
      * Code of transformed methods should look different between original and transformed classes
      */
@@ -199,7 +134,7 @@ public abstract class AbstractTestCorrectnessTemplate implements TestInterface {
     private void checkCodeInPreservedMethods() {
         int length2 = sourceNotAnnotatedMethodNodes3.length;
         for (int i = 0; i < length2; i++) {
-            //<clinit> will be modified by this application
+            //<clinit> will be modified by Java2C
             if (sourceNotAnnotatedMethodNodes3[i].name.equals("<clinit>"))
                 continue;
             int size1 = TestUtils.sizeofCode(sourceNotAnnotatedMethodNodes3[i]);
@@ -233,21 +168,28 @@ public abstract class AbstractTestCorrectnessTemplate implements TestInterface {
      * @param dir       Directory where to find the class
      * @param testClass Fully qualified name of the class
      * @return the methods that should be changed by this transformation
-     * @throws FileNotFoundException
-     * @throws IOException
+     * @throws IOException if the .class cannot be found on disk
      */
-    protected MethodNode[] getMethodNodesForAnnotatedMethods(String dir, Class<?> testClass) throws FileNotFoundException, IOException {
+    protected MethodNode[] getMethodNodesForAnnotatedMethods(String dir, Class<?> testClass) throws IOException {
         ClassReader cr = new ClassReader(new FileInputStream(TestUtils.fileFor(dir, testClass)));
         ClassNode cn = new ClassNode();
         cr.accept(cn, ClassReader.SKIP_DEBUG);
 
         int length = getAnnotatedMethodName().length;
         MethodNode[] result = new MethodNode[length];
+        StringBuilder expectedParametersSb = new StringBuilder();
 
         for (int i = 0; i < length; i++) {
             String expectedName = getAnnotatedMethodName()[i];
+            expectedParametersSb.setLength(0);
+            Class<?>[] expectedParamsClass = getAnnotatedMethodParams()[i];
+            for (Class<?> param : expectedParamsClass) {
+                expectedParametersSb.append(new JniType(param).getInternalRepresentation());
+            }
+            String expectedParameters = expectedParametersSb.toString();
             for (MethodNode candidate : cn.methods) {
-                if (expectedName.equals(candidate.name) && TestUtils.sameParameters(candidate.desc, getAnnotatedMethodParams()[i]))
+                String candidateParameters = candidate.desc.substring(1, candidate.desc.lastIndexOf(')'));
+                if (expectedName.equals(candidate.name) && expectedParameters.equals(candidateParameters))
                     result[i] = candidate;
             }
         }
@@ -262,11 +204,10 @@ public abstract class AbstractTestCorrectnessTemplate implements TestInterface {
      * @param clazz     Fully qualified class name
      * @param toExclude Methods that SHULD be transformed
      * @return Methods that should not be changed by the transformation
-     * @throws FileNotFoundException
-     * @throws IOException
+     * @throws IOException if the .class file cannot be found on disk
      */
-    protected MethodNode[] getOtherMethodNodes(String dir, Class<?> clazz, MethodNode[] toExclude) throws FileNotFoundException, IOException {
-        ClassReader cr = new ClassReader(new FileInputStream(TestUtils.fileFor(dir, getTestClass())));
+    protected MethodNode[] getOtherMethodNodes(String dir, Class<?> clazz, MethodNode[] toExclude) throws IOException {
+        ClassReader cr = new ClassReader(new FileInputStream(TestUtils.fileFor(dir, clazz)));
         ClassNode cn = new ClassNode();
         cr.accept(cn, ClassReader.SKIP_DEBUG);
 
@@ -282,10 +223,9 @@ public abstract class AbstractTestCorrectnessTemplate implements TestInterface {
     /**
      * Assert that annotated fields have annotations removed in case the pattern matches
      *
-     * @throws FileNotFoundException
-     * @throws IOException
+     * @throws IOException if the .class file cannot be found on disk
      */
-    private void checkAnnotationInAnnotatedFields() throws FileNotFoundException, IOException {
+    private void checkAnnotationInAnnotatedFields() throws IOException {
         ClassReader cr = new ClassReader(new FileInputStream(TestUtils.fileFor(getDestDir(), getTestClass())));
         ClassNode cn = new ClassNode();
         cr.accept(cn, ClassReader.SKIP_DEBUG);

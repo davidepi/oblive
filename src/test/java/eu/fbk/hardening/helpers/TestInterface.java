@@ -1,11 +1,13 @@
 package eu.fbk.hardening.helpers;
 
 /**
- * Interface providing various information about a Test. This interface is used where several tests shares the same
- * structure, but requires different parameters. In this case, all the correctness tests are essentially the same
- * but requires different parameters. In this way only the necessary information are provided without duplicating code.
- *
- * The method provided by this class must return the information about the TESTED class.
+ * Interface providing various information about a Test.
+ * This can work as a skeleton for testing an obfuscation tool.
+ * More specifically, the kind of tests expected are tests which require a sort of transformation (in this case the
+ * obfuscation) before being run. This interface provides method returning the name of the annotated (obfuscated) method,
+ * the name of the tested method, etc...
+ * In this way every test can just extend a skeleton implementing this class and override just the required functions
+ * functions.
  *
  * @author M.Ceccato && D.Pizzolotto
  */
@@ -21,14 +23,14 @@ public interface TestInterface {
     /**
      * The field for which the annotation should be changed
      *
-     * @return
+     * @return the annotated field
      */
     String[] getAnnotatedFieldName();
 
     /**
      * A method that is meant to be run to test the transformation
      *
-     * @return
+     * @return the name of the method
      */
     String[] getTestMethodName();
 
@@ -42,24 +44,23 @@ public interface TestInterface {
     /**
      * The actual parameters of the method to be transformed, to execute it
      *
-     * @return the parameters to call the method
+     * @return the parameters used when calling the method
      */
     Object[][] getTestMethodArgs();
 
     /**
-     * A method that is meant to be changed by the transformation
+     * The methods that are meant to be changed by the transformation
      *
-     * @return
+     * @return the annotated methods
      */
     String[] getAnnotatedMethodName();
 
     /**
-     * The signature of the method to be transformed, to uniquely identify it in case of overloading
+     * The signatures of the methods to be transformed, to uniquely identify them in case of overloading
      *
-     * @return the signature of the method
+     * @return the signature of the methods
      */
     Class<?>[][] getAnnotatedMethodParams();
-
 
     /**
      * Whether the changes of the transformation affects also code of methods with no annotation
@@ -81,9 +82,4 @@ public interface TestInterface {
      * @return the directory where the package structure starts
      */
     String getDestDir();
-
-    /**
-     * Calls the class transformation
-     */
-    void transformClass();
 }

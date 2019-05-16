@@ -1,9 +1,9 @@
 package eu.fbk.hardening.support;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Parses a signature in bytecode format and returns the various input types and the return type as JniType classes
@@ -84,18 +84,16 @@ public class MethodSignature {
     /**
      * Checks if his objects is identical to another one
      *
-     * @param object The object used for the comparison
+     * @param o The object used for the comparison
      * @return true if the two objects are equals, false otherwise
      */
-    @Contract(value = "null -> false", pure = true)
     @Override
-    public boolean equals(Object object) {
-        if (object == null || (!MethodSignature.class.isAssignableFrom(object.getClass()))) {
-            return false;
-        } else {
-            final MethodSignature other = (MethodSignature) object;
-            return this.input.equals(other.getInput()) && this.returnType.equals(other.getReturnType());
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MethodSignature that = (MethodSignature) o;
+        return getInput().equals(that.getInput()) &&
+                getReturnType().equals(that.getReturnType());
     }
 
     /**
@@ -106,6 +104,7 @@ public class MethodSignature {
      */
     @Override
     public int hashCode() {
-        return input.hashCode() + 10 * returnType.hashCode();
+        return Objects.hash(getInput(), getReturnType());
     }
+
 }

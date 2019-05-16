@@ -1,7 +1,8 @@
 package eu.fbk.hardening.support;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * Class used to parse string representing types in the bytecode notation and extract features.
@@ -22,19 +23,20 @@ import org.jetbrains.annotations.NotNull;
 public class JniType {
     //if the jniName is an object this is the full name of the ojbect, excluding L and ; like java/lang/String
     //or the primitive type if primitive arrays (which are treated as jobject in the jni, so the jniName is jobject)
-    private final String name;
-    //Name to be used in the method name, if the method has been overloaded
-    private final String overloadName;
+    private String name;
     //true if the jniName is 64 bit long
-    private final boolean doubleLength;
+    private boolean doubleLength;
     //true if the jniName is a float or double
-    private final boolean floatingPoint;
+    private boolean floatingPoint;
     //name of the jniName in c (jint, jboolean, etc...)
     private String jniName;
     //letter used in the jvalue union
     private char jvalueLetter;
+    //letter identifying the primitive type. Always identical to jvalue letter except for primitive arrays
+    private char primitiveLetter;
     //multidimensional array
     private int arrayDepth;
+
 
     /**
      * Construct a new JniType by decoding the input string. The input string can be an object in the bytecode notation
@@ -44,12 +46,65 @@ public class JniType {
      * @param bytecodeName The input in bytecode notation
      */
     public JniType(@NotNull String bytecodeName) {
+        init(bytecodeName);
+    }
+
+    /**
+     * Construct a new JniType by using a Class object.
+     * This is equivalent of calling JniType(param.getName())
+     *
+     * @param param A parameter described as a Class object
+     */
+    public JniType(@NotNull Class<?> param) {
+        if (!param.isArray()) {
+            if (param.isPrimitive()) {
+                switch (param.getName()) {
+                    case "void":
+                        init("V");
+                        break;
+                    case "boolean":
+                        init("Z");
+                        break;
+                    case "byte":
+                        init("B");
+                        break;
+                    case "char":
+                        init("C");
+                        break;
+                    case "short":
+                        init("S");
+                        break;
+                    case "long":
+                        init("J");
+                        break;
+                    case "float":
+                        init("F");
+                        break;
+                    case "double":
+                        init("D");
+                        break;
+                    default:
+                        init("I");
+                        break;
+                }
+            } else {
+                init("L" + param.getName().replaceAll("\\.", "/") + ";");
+            }
+        } else {
+            init(param.getName().replaceAll("\\.", "/"));
+        }
+    }
+
+    /**
+     * Performs the actual initialization.
+     *
+     * @param bytecodeName The string in bytecode notation
+     */
+    private void init(@NotNull String bytecodeName) {
         arrayDepth = 0;
-        StringBuilder overload = new StringBuilder();
         for (int i = 0; i < bytecodeName.length() - 1; i++) { //-1 ensures at least one character for the switch
             if (bytecodeName.charAt(i) == '[') {
                 arrayDepth++;
-                overload.append("_3");
             }
         }
         switch (bytecodeName.charAt(arrayDepth)) {
@@ -59,7 +114,6 @@ public class JniType {
                 this.doubleLength = false;
                 this.floatingPoint = false;
                 this.jvalueLetter = 'i';
-                overload.append('I');
                 break;
             case 'V':
                 this.jniName = "void";
@@ -73,7 +127,6 @@ public class JniType {
                 this.doubleLength = false;
                 this.floatingPoint = false;
                 this.jvalueLetter = 'z';
-                overload.append('Z');
                 break;
             case 'B':
                 this.jniName = "jbyte";
@@ -81,7 +134,6 @@ public class JniType {
                 this.doubleLength = false;
                 this.floatingPoint = false;
                 this.jvalueLetter = 'b';
-                overload.append('B');
                 break;
             case 'C':
                 this.jniName = "jchar";
@@ -89,7 +141,6 @@ public class JniType {
                 this.doubleLength = false;
                 this.floatingPoint = false;
                 this.jvalueLetter = 'c';
-                overload.append('C');
                 break;
             case 'S':
                 this.jniName = "jshort";
@@ -97,7 +148,6 @@ public class JniType {
                 this.doubleLength = false;
                 this.floatingPoint = false;
                 this.jvalueLetter = 's';
-                overload.append('S');
                 break;
             case 'J':
                 this.jniName = "jlong";
@@ -105,7 +155,6 @@ public class JniType {
                 this.doubleLength = true;
                 this.floatingPoint = false;
                 this.jvalueLetter = 'j';
-                overload.append('J');
                 break;
             case 'F':
                 this.jniName = "jfloat";
@@ -113,7 +162,6 @@ public class JniType {
                 this.doubleLength = false;
                 this.floatingPoint = true;
                 this.jvalueLetter = 'f';
-                overload.append('F');
                 break;
             case 'D':
                 this.jniName = "jdouble";
@@ -121,7 +169,6 @@ public class JniType {
                 this.doubleLength = true;
                 this.floatingPoint = true;
                 this.jvalueLetter = 'd';
-                overload.append('D');
                 break;
             case 'L':
                 if (bytecodeName.charAt(bytecodeName.length() - 1) != ';') { //not in the canonical form
@@ -132,9 +179,6 @@ public class JniType {
                 this.doubleLength = false;
                 this.floatingPoint = false;
                 this.jvalueLetter = 'l';
-                overload.append("L");
-                overload.append(this.name.replaceAll("/", "_"));
-                overload.append("_2");
                 if (this.name.length() == 0) {
                     throw new IllegalPatternError("Empty object name");
                 }
@@ -142,11 +186,11 @@ public class JniType {
             default:
                 throw new IllegalPatternError("Unknown bytecode type " + bytecodeName);
         }
+        primitiveLetter = jvalueLetter;
         if (arrayDepth > 0) {
             this.jniName = "jobject";
             this.jvalueLetter = 'l';
         }
-        this.overloadName = overload.toString();
     }
 
     /**
@@ -195,7 +239,6 @@ public class JniType {
         return floatingPoint;
     }
 
-
     /**
      * Returns the number of dimensions of an array. The output will be 0 if the type is not an array.
      *
@@ -206,20 +249,36 @@ public class JniType {
     }
 
     /**
+     * Return this parameter as represented in ASM, Reflection, etc..
+     *
+     * @return The parameters as represented internally (i.e. [[[D, [java/lang/string; ...)
+     */
+    public String getInternalRepresentation() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arrayDepth; i++) {
+            sb.append("[");
+        }
+        if (primitiveLetter != 'l') {
+            sb.append(Character.toUpperCase(primitiveLetter));
+        } else {
+            sb.append('L').append(this.name).append(";");
+        }
+        return sb.toString();
+    }
+
+    /**
      * Checks if the two objects are equals
      *
-     * @param object The object against which the check will be performed
+     * @param o The object against which the check will be performed
      * @return true if the two objects are equals, false otherwise
      */
-    @Contract(value = "null -> false", pure = true)
     @Override
-    public boolean equals(Object object) {
-        if (object == null || (!JniType.class.isAssignableFrom(object.getClass()))) {
-            return false;
-        } else {
-            final JniType other = (JniType) object;
-            return this.name.equals(other.getName());
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JniType jniType = (JniType) o;
+        return getArrayDepth() == jniType.getArrayDepth() &&
+                getName().equals(jniType.getName());
     }
 
     /**
@@ -229,7 +288,7 @@ public class JniType {
      */
     @Override
     public int hashCode() {
-        return jvalueLetter + 10 * arrayDepth + name.hashCode();
+        return Objects.hash(getName(), getArrayDepth());
     }
 
     /**
@@ -240,6 +299,18 @@ public class JniType {
      * @return The mangled name of a type, as it would appear in a jni header
      */
     public String getOverloadName() {
-        return overloadName;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arrayDepth; i++) {
+            sb.append("_3");
+        }
+        if (primitiveLetter != 'l') {
+            //void case
+            if (primitiveLetter != '\0') {
+                sb.append(Character.toUpperCase(primitiveLetter));
+            }
+        } else {
+            sb.append('L').append(this.name.replaceAll("/", "_")).append("_2");
+        }
+        return sb.toString();
     }
 }
