@@ -8,9 +8,7 @@ import org.objectweb.asm.MethodVisitor;
 
 import java.util.ArrayList;
 
-import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
-import static org.objectweb.asm.Opcodes.ACC_NATIVE;
-import static org.objectweb.asm.Opcodes.ACC_STATIC;
+import static org.objectweb.asm.Opcodes.*;
 
 /**
  * Visitor used to inspect the a class and translate in a 1:1 manner every method that should be obfuscated, from the

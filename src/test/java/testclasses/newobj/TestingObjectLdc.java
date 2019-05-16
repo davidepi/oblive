@@ -7,8 +7,7 @@ package testclasses.newobj;
 
 import java.io.PrintStream;
 
-public class TestingObjectLdc
-{
+public class TestingObjectLdc {
     int a;
     long b;
     double c;
@@ -20,8 +19,7 @@ public class TestingObjectLdc
     char j;
     byte k;
 
-    public TestingObjectLdc(int a, long b, PrintStream e, double c, float f, String d, short g, boolean h, char j, byte k)
-    {
+    public TestingObjectLdc(int a, long b, PrintStream e, double c, float f, String d, short g, boolean h, char j, byte k) {
         this.a = a;
         this.b = b;
         this.c = c;
@@ -34,12 +32,10 @@ public class TestingObjectLdc
     }
 
     @Override
-    public boolean equals(Object object)
-    {
+    public boolean equals(Object object) {
         if (object == null || (!TestingObjectLdc.class.isAssignableFrom(object.getClass())))
             return false;
-        else
-        {
+        else {
             final TestingObjectLdc other = (TestingObjectLdc) object;
             return this.a == other.a && this.b == other.b && this.c == other.c && this.d.equals(other.d) && this.f == other.f
                     && this.g == other.g && this.h == other.h && this.j == other.j && this.k == other.k;

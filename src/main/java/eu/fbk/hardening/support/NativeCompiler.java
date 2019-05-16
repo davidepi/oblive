@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
@@ -60,10 +61,14 @@ public class NativeCompiler {
                 throw new IncompleteConfigurationError("The JAVA_HOME environment variable used to specify the " +
                         "JDK/JRE home is not set");
             }
+        } else {
+            //in some cases gradle is configure to return the quoted JAVA_HOME string. I don't want quotes
+            javaHome = javaHome.replaceAll("\"", "");
         }
         try {
             final String[] includes = new String[]{null, null};
-            Files.walk(Paths.get(javaHome))
+            //sometimes the javaHome is a symlink to the correct version, so I need to follow links
+            Files.walk(Paths.get(javaHome), FileVisitOption.FOLLOW_LINKS)
                     .filter(Files::isRegularFile)
                     .forEach((f) -> {
                         String file = f.toString();
@@ -72,8 +77,10 @@ public class NativeCompiler {
                         else if (file.endsWith("jni_md.h"))
                             includes[1] = f.getParent().toString();
                     });
-            if (includes[0] == null || includes[1] == null)
-                throw new IOException();
+            if (includes[0] == null)
+                throw new IOException("Could not find the file `jni.h` in the JAVA_HOME subtree");
+            else if(includes[1]==null)
+                throw new IOException("Could not find the file `jni_md.h` in the JAVA_HOME subtree");
             else
                 include = "-I" + includes[0] + " -I" + includes[1];
         } catch (IOException e) {

@@ -3,16 +3,13 @@ package testclasses.casts; //when changing this, remember to change also the var
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class CastDouble2Long
-{
-    public CastDouble2Long()
-    {
+public class CastDouble2Long {
+    public CastDouble2Long() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public long exec(double a)
-    {
+    public long exec(double a) {
         return (long) (a + a);
     }
 

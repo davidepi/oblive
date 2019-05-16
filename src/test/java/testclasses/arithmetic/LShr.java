@@ -3,17 +3,14 @@ package testclasses.arithmetic; //when changing this, remember to change also th
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class LShr
-{
-    public LShr()
-    {
+public class LShr {
+    public LShr() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     //param 2 is always int. It is casted by the compiler otherwise
-    public long exec(long a, int b)
-    {
+    public long exec(long a, int b) {
         return a >> b;
     }
 

@@ -5,16 +5,13 @@ import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
 //ICONST_M1, ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4, ICONST_5
-public class IConst
-{
-    public IConst()
-    {
+public class IConst {
+    public IConst() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public int exec()
-    {
+    public int exec() {
         int a = 0;
         int b = 1;
         int c = a + b;

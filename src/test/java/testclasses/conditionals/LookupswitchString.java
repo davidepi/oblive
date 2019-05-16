@@ -3,19 +3,15 @@ package testclasses.conditionals;
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class LookupswitchString
-{
-    public LookupswitchString()
-    {
+public class LookupswitchString {
+    public LookupswitchString() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public int exec(String a)
-    {
+    public int exec(String a) {
         int retval;
-        switch (a)
-        {
+        switch (a) {
             case "hello":
                 retval = -1;
                 break;

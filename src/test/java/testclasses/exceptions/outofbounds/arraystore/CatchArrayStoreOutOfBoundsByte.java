@@ -3,62 +3,49 @@ package testclasses.exceptions.outofbounds.arraystore;
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class CatchArrayStoreOutOfBoundsByte
-{
-    private byte array[];
+public class CatchArrayStoreOutOfBoundsByte {
+    private byte[] array;
 
-    public CatchArrayStoreOutOfBoundsByte()
-    {
+    public CatchArrayStoreOutOfBoundsByte() {
         this.array = new byte[2];
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public int exec()
-    {
+    public int exec() {
         int res = 0;
 
-        try
-        {
+        try {
             this.array[2] = 1;
             res += 1000;
-        } catch (ArrayIndexOutOfBoundsException e)
-        {
+        } catch (ArrayIndexOutOfBoundsException e) {
             res++;
         }
 
-        try
-        {
+        try {
             this.array[2] = 0;
             res += 1000;
-        } catch (IndexOutOfBoundsException e)
-        {
+        } catch (IndexOutOfBoundsException e) {
             res++;
         }
 
-        try
-        {
+        try {
             this.array[2] = 1;
             res += 1000;
-        } catch (RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             res++;
         }
 
-        try
-        {
+        try {
             this.array[2] = 0;
             res += 1000;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             res++;
         }
 
-        try
-        {
+        try {
             this.array[2] = 1;
             res += 1000;
-        } catch (Throwable e)
-        {
+        } catch (Throwable e) {
             res++;
         }
 

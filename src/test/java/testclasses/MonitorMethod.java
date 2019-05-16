@@ -3,26 +3,21 @@ package testclasses;
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class MonitorMethod
-{
+public class MonitorMethod {
     static Integer a = 0;
 
-    public MonitorMethod()
-    {
+    public MonitorMethod() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public void exec() throws InterruptedException
-    {
-        synchronized (this)
-        {
+    public void exec() throws InterruptedException {
+        synchronized (this) {
             MonitorMethod.a++;
         }
     }
 
-    public int test()
-    {
+    public int test() {
 //        TODO: This doesn't work even in non obfuscated java, but only with the testing framework 🤔
 //        ExecutorService executor = Executors.newCachedThreadPool();
 //        MonitorMethod testme = new MonitorMethod();
@@ -56,13 +51,10 @@ public class MonitorMethod
 //            future1.cancel(true);
 //        }
 //        return MonitorMethod.a;
-        try
-        {
+        try {
             exec();
-        } catch (InterruptedException ignored)
-        {
+        } catch (InterruptedException ignored) {
         }
-        ;
         return MonitorMethod.a;
     }
 }

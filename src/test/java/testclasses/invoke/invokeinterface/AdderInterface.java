@@ -1,7 +1,6 @@
 package testclasses.invoke.invokeinterface;
 
-public interface AdderInterface
-{
+public interface AdderInterface {
     int add(int a, int b);
 
     int[] array();

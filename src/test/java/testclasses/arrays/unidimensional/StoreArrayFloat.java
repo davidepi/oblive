@@ -5,23 +5,19 @@ import eu.fbk.hardening.annotation.Protections;
 
 import java.util.ArrayList;
 
-public class StoreArrayFloat
-{
+public class StoreArrayFloat {
     private float[] array;
 
-    public StoreArrayFloat()
-    {
+    public StoreArrayFloat() {
         this.array = new float[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public void setVal(int i, float val)
-    {
+    public void setVal(int i, float val) {
         this.array[i] = val;
     }
 
-    public ArrayList<Float> test()
-    {
+    public ArrayList<Float> test() {
         ArrayList<Float> retval = new ArrayList<>();
         int i = 4;
         this.setVal(i, 10.52f);

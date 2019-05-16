@@ -3,50 +3,39 @@ package testclasses.exceptions;
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class CatchArithmeticExceptionLDIV
-{
-    public CatchArithmeticExceptionLDIV()
-    {
+public class CatchArithmeticExceptionLDIV {
+    public CatchArithmeticExceptionLDIV() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public static long divide(long a)
-    {
+    public static long divide(long a) {
         long res = 0;
-        try
-        {
+        try {
             res += a / 0;
             res += 1000;
-        } catch (ArithmeticException e)
-        {
+        } catch (ArithmeticException e) {
             res++;
         }
 
-        try
-        {
+        try {
             res += a / 0;
             res += 1000;
-        } catch (RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             res++;
         }
 
-        try
-        {
+        try {
             res += a / 0;
             res += 1000;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             res++;
         }
 
-        try
-        {
+        try {
             res += a / 0;
             res += 1000;
-        } catch (Throwable e)
-        {
+        } catch (Throwable e) {
             res++;
         }
 

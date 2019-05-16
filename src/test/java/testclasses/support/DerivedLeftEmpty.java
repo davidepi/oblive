@@ -1,6 +1,5 @@
 package testclasses.support;
 
-public class DerivedLeftEmpty extends BaseClassEmpty
-{
+public class DerivedLeftEmpty extends BaseClassEmpty {
 
 }

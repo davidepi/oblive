@@ -3,16 +3,13 @@ package testclasses.arithmetic; //when changing this, remember to change also th
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class LNeg
-{
-    public LNeg()
-    {
+public class LNeg {
+    public LNeg() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public long exec(long a)
-    {
+    public long exec(long a) {
         return -a;
     }
 

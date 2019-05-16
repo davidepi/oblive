@@ -5,23 +5,19 @@ import eu.fbk.hardening.annotation.Protections;
 
 import java.util.ArrayList;
 
-public class StoreArrayBoolean
-{
+public class StoreArrayBoolean {
     private boolean[] array;
 
-    public StoreArrayBoolean()
-    {
+    public StoreArrayBoolean() {
         this.array = new boolean[]{false, false, false, true, false, true, false, false, false, false};
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public void setVal(int i, boolean val)
-    {
+    public void setVal(int i, boolean val) {
         this.array[i] = val;
     }
 
-    public ArrayList<Boolean> test()
-    {
+    public ArrayList<Boolean> test() {
         ArrayList<Boolean> retval = new ArrayList<>();
         int i = 4;
         this.setVal(i, true);

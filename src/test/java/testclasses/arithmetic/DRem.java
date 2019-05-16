@@ -3,16 +3,13 @@ package testclasses.arithmetic; //when changing this, remember to change also th
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class DRem
-{
-    public DRem()
-    {
+public class DRem {
+    public DRem() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public double exec(double a, double b)
-    {
+    public double exec(double a, double b) {
         return a % b;
     }
 

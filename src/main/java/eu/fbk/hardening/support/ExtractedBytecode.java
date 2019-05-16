@@ -2,14 +2,7 @@ package eu.fbk.hardening.support;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Class holding every statement extracted from the original bytecode and some method useful to process and rearrange
@@ -19,56 +12,47 @@ import java.util.Set;
  */
 public class ExtractedBytecode {
     /**
+     * Flag used to indicate where should be put the code checking indicating if an exception has been caught
+     */
+    public static final String POSTPROCESS_IS_CATCHED = "$$_EXCEPTION_CHECK";
+    /**
+     * Flag used to indicate where should be inserted the 'exception cleanup' code
+     */
+    public static final String POSTPROCESS_EXCEPTION_CLEAR = "$$_EXCEPTION_CLEAR";
+    /**
      * List containing every bytecode opcode transformed in C. Every entry of this list correspond to an opcode ready
      * to be written in the C file
      */
     public List<String> statements;
-
     /**
      * List containing every label found in the method, in order
      */
     public List<String> labels; //ordered labels
-
     /**
      * List containing every try-catch block, represented with an ad-hoc structure
      */
     public List<TryCatchBlock> tryCatchBlocks; //these are needed after gathering every label
-
     /**
      * Set containing the list of labels (as they can be found in labels) used by the C code
      */
     public Set<String> usedLabels;
-
     /**
      * A set containing the list of every catch block that can be found anywhere in the method code. This is used to
      * know which block should be undefined after every basic block
      */
     public Set<String> catchedStatements;
-
     /**
      * Maximum size of the opcode stack
      */
     public int maxStack;
-
     /**
      * Maximum size of the variables array
      */
     public int maxLVar;
-
     /**
      * True if the method is static
      */
     public boolean isStatic;
-
-    /**
-     * Flag used to indicate where should be put the code checking indicating if an exception has been caught
-     */
-    public static final String POSTPROCESS_IS_CATCHED = "$$_EXCEPTION_CHECK";
-
-    /**
-     * Flag used to indicate where should be inserted the 'exception cleanup' code
-     */
-    public static final String POSTPROCESS_EXCEPTION_CLEAR = "$$_EXCEPTION_CLEAR";
 
     /**
      * Initialize this class

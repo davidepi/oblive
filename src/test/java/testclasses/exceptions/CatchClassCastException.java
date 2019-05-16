@@ -3,50 +3,39 @@ package testclasses.exceptions;
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class CatchClassCastException
-{
-    public CatchClassCastException()
-    {
+public class CatchClassCastException {
+    public CatchClassCastException() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public static String castString(Object a)
-    {
+    public static String castString(Object a) {
         String retval = "";
-        try
-        {
+        try {
             retval = (String) a;
             retval += "a";
-        } catch (ClassCastException e)
-        {
+        } catch (ClassCastException e) {
             retval += "wrong ";
         }
 
-        try
-        {
+        try {
             retval = (String) a;
             retval += "b";
-        } catch (RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             retval += "type ";
         }
 
-        try
-        {
+        try {
             retval = (String) a;
             retval += "c";
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             retval += "exception ";
         }
 
-        try
-        {
+        try {
             retval = (String) a;
             retval += "d";
-        } catch (Throwable e)
-        {
+        } catch (Throwable e) {
             retval += "! ";
         }
 

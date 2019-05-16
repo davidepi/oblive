@@ -10,15 +10,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -29,10 +21,10 @@ import java.util.stream.Collectors;
  * @author D.Pizzolotto
  */
 public class JavaToC {
+    private static final int ASM_VERSION = Opcodes.ASM6;
     private PrintWriter output;
     private String libname;
     private boolean parsing;
-    private static final int ASM_VERSION = Opcodes.ASM6;
 
     /**
      * Default constructor

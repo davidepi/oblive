@@ -3,62 +3,49 @@ package testclasses.exceptions.outofbounds.arrayload;
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class CatchArrayLoadOutOfBoundsFloat
-{
-    private float array[];
+public class CatchArrayLoadOutOfBoundsFloat {
+    private float[] array;
 
-    public CatchArrayLoadOutOfBoundsFloat()
-    {
+    public CatchArrayLoadOutOfBoundsFloat() {
         this.array = new float[2];
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public float exec()
-    {
+    public float exec() {
         int res = 0;
 
-        try
-        {
+        try {
             res += (int) this.array[2];
             res += 1000;
-        } catch (ArrayIndexOutOfBoundsException e)
-        {
+        } catch (ArrayIndexOutOfBoundsException e) {
             res++;
         }
 
-        try
-        {
+        try {
             res += (int) this.array[2];
             res += 1000;
-        } catch (IndexOutOfBoundsException e)
-        {
+        } catch (IndexOutOfBoundsException e) {
             res++;
         }
 
-        try
-        {
+        try {
             res += (int) this.array[2];
             res += 1000;
-        } catch (RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             res++;
         }
 
-        try
-        {
+        try {
             res += (int) this.array[2];
             res += 1000;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             res++;
         }
 
-        try
-        {
+        try {
             res += (int) this.array[2];
             res += 1000;
-        } catch (Throwable e)
-        {
+        } catch (Throwable e) {
             res++;
         }
 

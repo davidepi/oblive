@@ -5,23 +5,19 @@ import eu.fbk.hardening.annotation.Protections;
 
 import java.util.ArrayList;
 
-public class StoreArrayChar
-{
+public class StoreArrayChar {
     private char[] array;
 
-    public StoreArrayChar()
-    {
+    public StoreArrayChar() {
         this.array = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'};
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public void setVal(int i, char val)
-    {
+    public void setVal(int i, char val) {
         this.array[i] = val;
     }
 
-    public ArrayList<Character> test()
-    {
+    public ArrayList<Character> test() {
         ArrayList<Character> retval = new ArrayList<>();
         int i = 4;
         this.setVal(i, '光');

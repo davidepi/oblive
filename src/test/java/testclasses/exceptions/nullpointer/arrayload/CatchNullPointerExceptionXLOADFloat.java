@@ -4,51 +4,40 @@ import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 import testclasses.exceptions.nullpointer.SupportClassFloat;
 
-public class CatchNullPointerExceptionXLOADFloat
-{
+public class CatchNullPointerExceptionXLOADFloat {
 
-    public CatchNullPointerExceptionXLOADFloat()
-    {
+    public CatchNullPointerExceptionXLOADFloat() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public int exec(SupportClassFloat obj)
-    {
+    public int exec(SupportClassFloat obj) {
         int res = 0;
-        try
-        {
+        try {
             res += (int) obj.b[1];
             res += 1000;
-        } catch (NullPointerException e)
-        {
+        } catch (NullPointerException e) {
             res++;
         }
 
-        try
-        {
+        try {
             res += (int) obj.b[1];
             res += 1000;
-        } catch (RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             res++;
         }
 
-        try
-        {
+        try {
             res += (int) obj.b[1];
             res += 1000;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             res++;
         }
 
-        try
-        {
+        try {
             res += (int) obj.b[1];
             res += 1000;
-        } catch (Throwable e)
-        {
+        } catch (Throwable e) {
             res++;
         }
 

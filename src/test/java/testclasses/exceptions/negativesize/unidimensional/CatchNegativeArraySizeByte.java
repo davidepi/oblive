@@ -3,52 +3,41 @@ package testclasses.exceptions.negativesize.unidimensional;
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class CatchNegativeArraySizeByte
-{
-    private byte array[];
+public class CatchNegativeArraySizeByte {
+    private byte[] array;
 
-    public CatchNegativeArraySizeByte()
-    {
+    public CatchNegativeArraySizeByte() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public int exec()
-    {
+    public int exec() {
         int res = 0;
-        try
-        {
+        try {
             this.array = new byte[-1];
             res += 1000;
-        } catch (NegativeArraySizeException e)
-        {
+        } catch (NegativeArraySizeException e) {
             res++;
         }
 
-        try
-        {
+        try {
             this.array = new byte[-1];
             res += 1000;
-        } catch (RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             res++;
         }
 
-        try
-        {
+        try {
             this.array = new byte[-1];
             res += 1000;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             res++;
         }
 
-        try
-        {
+        try {
             this.array = new byte[-1];
             res += 1000;
-        } catch (Throwable e)
-        {
+        } catch (Throwable e) {
             res++;
         }
 

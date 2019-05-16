@@ -5,23 +5,19 @@ import eu.fbk.hardening.annotation.Protections;
 
 import java.util.ArrayList;
 
-public class StoreArrayObject
-{
+public class StoreArrayObject {
     private String[] array;
 
-    public StoreArrayObject()
-    {
+    public StoreArrayObject() {
         this.array = new String[]{"hello", "hello", "hello", "hello", "hello", "hello", "hello", "hello", "hello", "hello"};
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public void setVal(int i, String val)
-    {
+    public void setVal(int i, String val) {
         this.array[i] = val;
     }
 
-    public ArrayList<String> test()
-    {
+    public ArrayList<String> test() {
         ArrayList<String> retval = new ArrayList<>();
         int i = 4;
         this.setVal(i, "unicode 世界");

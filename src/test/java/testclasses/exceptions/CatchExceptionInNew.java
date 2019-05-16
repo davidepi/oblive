@@ -3,23 +3,18 @@ package testclasses.exceptions;
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class CatchExceptionInNew
-{
-    public CatchExceptionInNew()
-    {
+public class CatchExceptionInNew {
+    public CatchExceptionInNew() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public int exec()
-    {
+    public int exec() {
         int res = 0;
-        try
-        {
+        try {
             new ClassExceptionInInit();
             res += 1000;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             res++;
         }
         return 0;

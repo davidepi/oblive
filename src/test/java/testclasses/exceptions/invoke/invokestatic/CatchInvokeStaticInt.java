@@ -4,44 +4,34 @@ import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 import testclasses.exceptions.UserDefinedException;
 
-public class CatchInvokeStaticInt
-{
-    public CatchInvokeStaticInt()
-    {
+public class CatchInvokeStaticInt {
+    public CatchInvokeStaticInt() {
 
     }
 
+    public static int normalDiv(int a, int b) {
+        return a / b;
+    }
+
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public int div(int a)
-    {
+    public int div(int a) {
         int res = 0;
-        try
-        {
+        try {
             res = normalDiv(a, 0);
-        } catch (ArithmeticException e0)
-        {
-            try
-            {
+        } catch (ArithmeticException e0) {
+            try {
                 other();
                 res += 1000;
-            } catch (UserDefinedException e1)
-            {
+            } catch (UserDefinedException e1) {
                 res++;
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 res -= 10000;
             }
         }
         return res;
     }
 
-    public static int normalDiv(int a, int b)
-    {
-        return a / b;
-    }
-
-    public void other() throws UserDefinedException
-    {
+    public void other() throws UserDefinedException {
         throw new UserDefinedException();
     }
 }

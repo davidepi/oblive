@@ -5,21 +5,17 @@ import eu.fbk.hardening.annotation.Protections;
 
 import java.util.ArrayList;
 
-public class NewArrayLong
-{
-    public NewArrayLong()
-    {
+public class NewArrayLong {
+    public NewArrayLong() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public long[] getArray()
-    {
+    public long[] getArray() {
         return new long[10];
     }
 
-    public ArrayList<Long> test()
-    {
+    public ArrayList<Long> test() {
         ArrayList<Long> res = new ArrayList<Long>(10);
         long[] native_array = this.getArray();
         for (int i = 0; i < native_array.length; i++)

@@ -1,6 +1,5 @@
 package testclasses.support;
 
-public class BaseClassEmpty2
-{
+public class BaseClassEmpty2 {
 
 }

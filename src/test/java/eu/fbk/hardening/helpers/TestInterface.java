@@ -21,17 +21,9 @@ public interface TestInterface {
     /**
      * The field for which the annotation should be changed
      *
-     * @param position Position of the field to query
      * @return
      */
-    String getAnnotatedFieldName(int position);
-
-    /**
-     * The number of the annotated fields
-     *
-     * @return The number of the annotated fields
-     */
-    int getAnnotatedFieldSize();
+    String[] getAnnotatedFieldName();
 
     /**
      * A method that is meant to be run to test the transformation

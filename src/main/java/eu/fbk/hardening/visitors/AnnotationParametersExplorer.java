@@ -1,7 +1,6 @@
 package eu.fbk.hardening.visitors;
 
 import eu.fbk.hardening.annotation.Protections;
-import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.AnnotationVisitor;
 
 /**

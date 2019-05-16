@@ -3,16 +3,13 @@ package testclasses.conditionals;
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class Iflcmp
-{
-    public Iflcmp()
-    {
+public class Iflcmp {
+    public Iflcmp() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public int exec(long value)
-    {
+    public int exec(long value) {
         int a = 0, b = 0, c = 0, d = 0, e = 0, f = 0;
         if (value == 10000000000L)
             a = 1;

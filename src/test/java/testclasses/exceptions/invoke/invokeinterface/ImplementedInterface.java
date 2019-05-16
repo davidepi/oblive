@@ -1,49 +1,39 @@
 package testclasses.exceptions.invoke.invokeinterface;
 
-public class ImplementedInterface implements DivisionInterface
-{
-    public int div(int a)
-    {
+public class ImplementedInterface implements DivisionInterface {
+    public int div(int a) {
         return a / 0;
     }
 
-    public short div(short a)
-    {
+    public short div(short a) {
         return (short) (a / 0);
     }
 
-    public float div(float a)
-    {
+    public float div(float a) {
         return (int) a / 0;
     }
 
-    public double div(double a)
-    {
+    public double div(double a) {
         return (int) a / 0;
     }
 
-    public byte div(byte a)
-    {
+    public byte div(byte a) {
         return (byte) (a / 0);
     }
 
-    public char div(char a)
-    {
+    public char div(char a) {
         return (char) (a / 0);
     }
 
-    public long div(long a)
-    {
-        return (long) (a / 0);
+    public long div(long a) {
+        return a / 0;
     }
 
-    public boolean div(boolean a)
-    {
+    public boolean div(boolean a) {
         return (1 / 0) > 0;
     }
 
-    public String div(String a)
-    {
+    public String div(String a) {
         return ((Integer) (1 / 0)).toString();
     }
 }

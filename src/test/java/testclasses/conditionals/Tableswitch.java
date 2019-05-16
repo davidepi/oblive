@@ -3,19 +3,15 @@ package testclasses.conditionals;
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class Tableswitch
-{
-    public Tableswitch()
-    {
+public class Tableswitch {
+    public Tableswitch() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public int exec(char a)
-    {
+    public int exec(char a) {
         int retval;
-        switch (a)
-        {
+        switch (a) {
             case 10:
                 retval = -1;
                 break;

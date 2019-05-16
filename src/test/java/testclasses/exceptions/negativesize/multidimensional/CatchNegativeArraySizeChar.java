@@ -3,52 +3,41 @@ package testclasses.exceptions.negativesize.multidimensional;
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class CatchNegativeArraySizeChar
-{
-    private char array[][][][];
+public class CatchNegativeArraySizeChar {
+    private char[][][][] array;
 
-    public CatchNegativeArraySizeChar()
-    {
+    public CatchNegativeArraySizeChar() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public int exec()
-    {
+    public int exec() {
         int res = 0;
-        try
-        {
+        try {
             this.array = new char[-1][1][1][1];
             res += 1000;
-        } catch (NegativeArraySizeException e)
-        {
+        } catch (NegativeArraySizeException e) {
             res++;
         }
 
-        try
-        {
+        try {
             this.array = new char[1][-1][1][1];
             res += 1000;
-        } catch (RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             res++;
         }
 
-        try
-        {
+        try {
             this.array = new char[1][1][-1][1];
             res += 1000;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             res++;
         }
 
-        try
-        {
+        try {
             this.array = new char[1][1][1][-1];
             res += 1000;
-        } catch (Throwable e)
-        {
+        } catch (Throwable e) {
             res++;
         }
 

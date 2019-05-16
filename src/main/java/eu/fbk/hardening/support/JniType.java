@@ -20,10 +20,6 @@ import org.jetbrains.annotations.NotNull;
  * @author D.Pizzolotto
  */
 public class JniType {
-    //name of the jniName in c (jint, jboolean, etc...)
-    private String jniName;
-    //letter used in the jvalue union
-    private char jvalueLetter;
     //if the jniName is an object this is the full name of the ojbect, excluding L and ; like java/lang/String
     //or the primitive type if primitive arrays (which are treated as jobject in the jni, so the jniName is jobject)
     private final String name;
@@ -33,6 +29,10 @@ public class JniType {
     private final boolean doubleLength;
     //true if the jniName is a float or double
     private final boolean floatingPoint;
+    //name of the jniName in c (jint, jboolean, etc...)
+    private String jniName;
+    //letter used in the jvalue union
+    private char jvalueLetter;
     //multidimensional array
     private int arrayDepth;
 

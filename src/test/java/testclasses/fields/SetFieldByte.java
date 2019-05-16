@@ -3,24 +3,20 @@ package testclasses.fields;
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class SetFieldByte
-{
+public class SetFieldByte {
     private byte fieldB;
 
-    public SetFieldByte()
-    {
+    public SetFieldByte() {
         this.fieldB = 100;
         this.setField((byte) -100);
     }
 
-    public byte getField()
-    {
+    public byte getField() {
         return this.fieldB;
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public void setField(byte value)
-    {
+    public void setField(byte value) {
         this.fieldB = value;
     }
 }

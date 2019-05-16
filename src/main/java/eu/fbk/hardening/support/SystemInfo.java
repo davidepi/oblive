@@ -40,18 +40,15 @@ public class SystemInfo {
             OS = 0;
             objext = ".obj";
             libext = ".dll";
-        }
-        else if (os.contains("mac")) {
+        } else if (os.contains("mac")) {
             OS = 1;
             objext = ".o";
             libext = ".dylib";
-        }
-        else if (os.contains("nix") || os.contains("nux") || os.indexOf("aix") > 0) {
+        } else if (os.contains("nix") || os.contains("nux") || os.indexOf("aix") > 0) {
             OS = 2;
             objext = ".o";
             libext = ".so";
-        }
-        else
+        } else
             throw new IncompleteConfigurationError("Unsupported OS (only windows, linux and mac are supported)");
     }
 
@@ -96,6 +93,7 @@ public class SystemInfo {
 
     /**
      * Returns the default extension of a compiled object file
+     *
      * @return The extension of a compiled file
      */
     @Contract(pure = true)
@@ -105,6 +103,7 @@ public class SystemInfo {
 
     /**
      * Returns the default extension of a shared library file
+     *
      * @return The extension of a shared library
      */
     @Contract(pure = true)

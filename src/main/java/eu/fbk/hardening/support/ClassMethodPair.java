@@ -6,6 +6,8 @@ package eu.fbk.hardening.support;
  * @author D.Pizzolotto
  */
 public class ClassMethodPair {
+    //true if the method has an overloaded method THAT SHOULD BE OBFUSCATED AS WELL!!!!
+    public boolean overloaded;
     //name of the class containing the method
     private String className;
     //name of the method
@@ -14,8 +16,6 @@ public class ClassMethodPair {
     private String desc;
     //signature of the method -> java style parsed using the MethodSignature class
     private MethodSignature signature;
-    //true if the method has an overloaded method THAT SHOULD BE OBFUSCATED AS WELL!!!!
-    public boolean overloaded;
 
     /**
      * Initialize the ClassMethodPair class

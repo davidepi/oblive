@@ -3,62 +3,49 @@ package testclasses.exceptions.outofbounds.arrayload;
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 
-public class CatchArrayLoadOutOfBoundsInt
-{
-    private int array[];
+public class CatchArrayLoadOutOfBoundsInt {
+    private int[] array;
 
-    public CatchArrayLoadOutOfBoundsInt()
-    {
+    public CatchArrayLoadOutOfBoundsInt() {
         this.array = new int[2];
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public int exec()
-    {
+    public int exec() {
         int res = 0;
 
-        try
-        {
-            res += (int) this.array[2];
+        try {
+            res += this.array[2];
             res += 1000;
-        } catch (ArrayIndexOutOfBoundsException e)
-        {
+        } catch (ArrayIndexOutOfBoundsException e) {
             res++;
         }
 
-        try
-        {
-            res += (int) this.array[2];
+        try {
+            res += this.array[2];
             res += 1000;
-        } catch (IndexOutOfBoundsException e)
-        {
+        } catch (IndexOutOfBoundsException e) {
             res++;
         }
 
-        try
-        {
-            res += (int) this.array[2];
+        try {
+            res += this.array[2];
             res += 1000;
-        } catch (RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             res++;
         }
 
-        try
-        {
-            res += (int) this.array[2];
+        try {
+            res += this.array[2];
             res += 1000;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             res++;
         }
 
-        try
-        {
-            res += (int) this.array[2];
+        try {
+            res += this.array[2];
             res += 1000;
-        } catch (Throwable e)
-        {
+        } catch (Throwable e) {
             res++;
         }
 

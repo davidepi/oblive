@@ -4,51 +4,40 @@ import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
 import testclasses.exceptions.nullpointer.SupportClassDouble;
 
-public class CatchNullPointerExceptionArrayLengthDouble
-{
+public class CatchNullPointerExceptionArrayLengthDouble {
 
-    public CatchNullPointerExceptionArrayLengthDouble()
-    {
+    public CatchNullPointerExceptionArrayLengthDouble() {
 
     }
 
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
-    public int exec(SupportClassDouble obj)
-    {
+    public int exec(SupportClassDouble obj) {
         int res = 0;
-        try
-        {
+        try {
             res = obj.b.length;
             res += 1000;
-        } catch (NullPointerException e)
-        {
+        } catch (NullPointerException e) {
             res++;
         }
 
-        try
-        {
+        try {
             res = obj.b.length;
             res += 1000;
-        } catch (RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             res++;
         }
 
-        try
-        {
+        try {
             res = obj.b.length;
             res += 1000;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             res++;
         }
 
-        try
-        {
+        try {
             res = obj.b.length;
             res += 1000;
-        } catch (Throwable e)
-        {
+        } catch (Throwable e) {
             res++;
         }
 

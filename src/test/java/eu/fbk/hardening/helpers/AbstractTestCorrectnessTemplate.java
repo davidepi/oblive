@@ -43,6 +43,12 @@ public abstract class AbstractTestCorrectnessTemplate implements TestInterface {
     @Test
     public void testCorrectness() {
         try {
+
+            //Assert parameters length: name, signature and parameters should be of the same length for annotated and for test
+            Assertions.assertEquals(getTestMethodParams().length, getTestMethodName().length, "Param array length does not match Name array length for tested methods");
+            Assertions.assertEquals(getTestMethodArgs().length, getTestMethodName().length, "Args array length does not match Name array length for tested methods");
+            Assertions.assertEquals(getAnnotatedMethodParams().length, getAnnotatedMethodName().length,"Param array length does not match Name array length for annotated methods");
+
             TestUtils.copyInput(getSourceDir(), getDestDir(), getTestClass());
             transformClass();
 
@@ -90,13 +96,8 @@ public abstract class AbstractTestCorrectnessTemplate implements TestInterface {
     }
 
     @Override
-    public String getAnnotatedFieldName(int position) {
-        return "";
-    }
-
-    @Override
-    public int getAnnotatedFieldSize() {
-        return 0;
+    public String[] getAnnotatedFieldName() {
+        return new String[]{};
     }
 
     @Override
