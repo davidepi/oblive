@@ -2,6 +2,10 @@ stages:
 - build_main
 - test_main
 
+before_script:
+  - apt update && apt install gcc openjdk-8-jdk
+  - export JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-amd64"
+
 x86_build:
   stage: build_main
   script:
