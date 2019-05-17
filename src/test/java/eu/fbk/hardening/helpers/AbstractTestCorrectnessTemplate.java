@@ -51,7 +51,9 @@ public abstract class AbstractTestCorrectnessTemplate extends Java2CTests {
             Assertions.assertEquals(getAnnotatedMethodParams().length, getAnnotatedMethodName().length, "Param array length does not match Name array length for annotated methods");
 
             TestUtils.copyInput(getSourceDir(), getDestDir(), getTestClass());
-            transformAndBuild();
+            String libname = this.getTestClass().toString().replaceFirst("class\\s", "");
+            String className = libname.replaceAll("\\.", "/") + ".class";
+            transformJava2C(className, libname);
 
             // run the original class
             Object[] result1 = TestUtils.runCode(null, getTestClass(), getTestMethodName(), getTestMethodParams(), getTestMethodArgs());

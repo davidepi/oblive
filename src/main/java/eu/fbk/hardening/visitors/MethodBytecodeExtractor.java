@@ -260,6 +260,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
     public void visitInsn(int opcode) {
         switch (opcode) {
             case NOP:
+                eb.statements.add("NOP;"); //used as a flag by performance tests
                 break;
             case ACONST_NULL:
                 eb.statements.add("push0(_stack,&_index);");

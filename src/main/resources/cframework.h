@@ -4,6 +4,7 @@
 #include <stdio.h> //fprintf
 #include <stdlib.h> //exit
 #include <math.h> //fmod used in DRem
+#define NOP //this is used essentially as a flag. In performance tests will be replaced by #include <time.h>
 typedef jvalue generic_t;
 #define ZERO_OUT_UNION(res) res.j=0
 #define OVERFLOW_CHECK(res,check) res.j&=check
