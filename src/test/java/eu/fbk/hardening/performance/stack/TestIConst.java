@@ -8,7 +8,7 @@ import org.objectweb.asm.Opcodes;
 public class TestIConst extends AbstractTestPerformanceTemplate {
     @Override
     public String getClassName() {
-        return this.getClass().getPackage().getName()+".IConstPerformance";
+        return this.getClass().getPackage().getName() + ".IConstPerformance";
     }
 
     @Override
@@ -18,6 +18,6 @@ public class TestIConst extends AbstractTestPerformanceTemplate {
 
     @Override
     public int numberOfRepetitions() {
-        return 10;
+        return 1;
     }
 }

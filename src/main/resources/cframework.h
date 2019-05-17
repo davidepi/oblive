@@ -14,3 +14,19 @@ typedef jvalue generic_t;
 #define FRETURN {jvalue __freturn_retval__ = pop(_stack,&_index); return __freturn_retval__.f;}
 #define DRETURN {jvalue __dreturn_retval__ = pop2(_stack,&_index); return __dreturn_retval__.d;}
 #define VRETURN {return;}
+
+struct timespec diff(struct timespec start, struct timespec end)
+{
+    struct timespec retval;
+    if ((end.tv_nsec-start.tv_nsec)<0)
+    {
+        retval.tv_sec = end.tv_sec-start.tv_sec-1;
+        retval.tv_nsec = 1000000000+end.tv_nsec-start.tv_nsec;
+    }
+    else
+    {
+        retval.tv_sec = end.tv_sec-start.tv_sec;
+        retval.tv_nsec = end.tv_nsec-start.tv_nsec;
+    }
+    return retval;
+}
