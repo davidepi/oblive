@@ -18,6 +18,7 @@ dependencies {
     testCompile group: 'org.ow2.asm', name: 'asm-tree', version: '6.0'
 }
 
+compileTestJava {options.encoding = "UTF-8"}
 test {
     useJUnitPlatform()
 }
