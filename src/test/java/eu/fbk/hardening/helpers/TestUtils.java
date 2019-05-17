@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
@@ -130,52 +131,51 @@ public class TestUtils {
     }
 
     /**
-     * This method is used to run a specific method of another class via reflection and then collect its results. It
-     * can load any kind of class also outside the classpath.
+     * This method is used to load any kind of class from any source file. If dir is null, the original classloader
+     * will be used, equivalent of calling Class.forName(), otherwise the URLClassLoader will be used
      *
-     * @param dir       The string where the class package directory starts. If the class is in the classpath it can be null
-     * @param testClass the class that will be tested
+     * @param dir                The directory where the package structure of the class starts
+     * @param classCanonicalName canonical name of the class, in the form java.lang.String
+     * @return A Class object representing the class
+     */
+    public static Class<?> loadClass(@Nullable String dir, @NotNull String classCanonicalName) throws IOException, ClassNotFoundException {
+        Class<?> loadedClass;
+        if (dir != null) {
+            URL transformed = new URL("file://" + (new File(dir)).getAbsolutePath() + "/");
+            URL[] urls = {transformed};
+            loadedClass = new URLClassLoader(urls).loadClass(classCanonicalName);
+        } else {
+            loadedClass = Class.forName(classCanonicalName);
+        }
+        return loadedClass;
+    }
+
+    /**
+     * This method is used to run a specific method of another class via reflection and then collect its results.
+     *
+     * @param caller    The object invoking the method
      * @param testName  An array of method names, these are the methods that will be run
      * @param testParam An array of parameters (like int.class) required by the methods that will be run
      * @param testArgs  The actual value of the parameters that will be used when running the methods
      * @return An array containing the results of the various methods run
-     * @throws ClassNotFoundException if the testClass can not be found in the .class file
-     * @throws IOException            if the .class file does not exists on disk
      * @throws IllegalAccessException if the testName, testParam and testArgs arguments have different length
      * @throws NoSuchMethodException  if the provided method does not exist in the class
-     * @throws InstantiationException if the class can not be instantiated
      */
-    public static Object[] runCode(@Nullable String dir, Class<?> testClass,
-                                   @NotNull String[] testName, @NotNull Class<?>[][] testParam, Object[][] testArgs)
-            throws ClassNotFoundException, IOException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+    public static Object[] runCode(Object caller, @NotNull String[] testName, @NotNull Class<?>[][] testParam, Object[][] testArgs)
+            throws IllegalAccessException, NoSuchMethodException {
         if (testName.length != testParam.length || testName.length != testArgs.length)
             throw new IllegalAccessException("Mismatched number of operators between: " +
                     "methods to tests (" + testName.length + "), " +
                     "parameters for these methods (" + testParam.length + "), " +
                     "arguments for these methods (" + testArgs.length + ")");
-        Class<?> loadedClass;
+
         int length = testName.length;
-        if (dir != null) {
-            URL transformed = new URL("file://" + (new File(dir)).getAbsolutePath() + "/");
-            URL[] urls = {transformed};
-            // should be parent last class loader
-            String[] localClasses = {testClass.getName()};
-            TransformedClassLoader newLoader = new TransformedClassLoader(urls, testClass.getClassLoader(), localClasses);
-            Class<?> testClassDifferentLoader = newLoader.loadClass(testClass.getName());
-            newLoader.close();
-            loadedClass = testClassDifferentLoader;
-        } else {
-            loadedClass = testClass;
-        }
-        Object runClass = loadedClass.newInstance();
         Method[] runMethod = new Method[length];
         Object[] runValues = new Object[length];
-
-
         for (int i = 0; i < length; i++) {
-            runMethod[i] = loadedClass.getMethod(testName[i], testParam[i]);
+            runMethod[i] = caller.getClass().getMethod(testName[i], testParam[i]);
             try {
-                runValues[i] = runMethod[i].invoke(runClass, testArgs[i]);
+                runValues[i] = runMethod[i].invoke(caller, testArgs[i]);
             } catch (InvocationTargetException e) {
                 runValues[i] = e.getCause();
             }

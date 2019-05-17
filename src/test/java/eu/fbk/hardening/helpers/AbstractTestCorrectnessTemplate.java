@@ -54,12 +54,19 @@ public abstract class AbstractTestCorrectnessTemplate extends Java2CTests {
             String libname = this.getTestClass().toString().replaceFirst("class\\s", "");
             String className = libname.replaceAll("\\.", "/") + ".class";
             transformJava2C(className, libname);
+            buildJava2C(libname);
+
+            Class clazzOriginal = TestUtils.loadClass(null, getTestClass().getCanonicalName());
+            Class clazzTransformed = TestUtils.loadClass(getDestDir(), getTestClass().getCanonicalName());
+
+            Object instanceOriginal = clazzOriginal.newInstance();
+            Object instanceTransformed = clazzTransformed.newInstance();
 
             // run the original class
-            Object[] result1 = TestUtils.runCode(null, getTestClass(), getTestMethodName(), getTestMethodParams(), getTestMethodArgs());
+            Object[] result1 = TestUtils.runCode(instanceOriginal, getTestMethodName(), getTestMethodParams(), getTestMethodArgs());
 
             // run the transformed class
-            Object[] result2 = TestUtils.runCode(getDestDir(), getTestClass(), getTestMethodName(), getTestMethodParams(), getTestMethodArgs());
+            Object[] result2 = TestUtils.runCode(instanceTransformed, getTestMethodName(), getTestMethodParams(), getTestMethodArgs());
 
             // check for same results
             int length = getTestMethodName().length;

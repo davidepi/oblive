@@ -10,13 +10,13 @@ import org.objectweb.asm.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 
 /**
@@ -65,17 +65,21 @@ public abstract class AbstractTestPerformanceTemplate extends Java2CTests {
 
         //compile it
         buildJava2C(libname);
-        //load it and run it
+        //load it and run it n times
         try {
-            URL url = new File(getDestDir()).toURI().toURL();
-            URL[] urls = new URL[]{url};
-            ClassLoader cl = new URLClassLoader(urls);
-            Class clazz = cl.loadClass(getClassName());
-            Object res = TestUtils.runCode(getDestDir(), clazz, getTestMethodName(), getTestMethodParams(), getTestMethodParams())[0];
-            if (res instanceof Double)
-                afterTest((Double) res);
-            else
-                Assertions.fail("Unexpected return value: " + res.getClass());
+            ArrayList<Double> results = new ArrayList<>(executionRepetitions());
+            Class clazz = TestUtils.loadClass(getDestDir(), getClassName());
+            Object target = clazz.newInstance();
+            for (int i = 0; i < executionRepetitions(); i++) {
+                Object res = TestUtils.runCode(target, getTestMethodName(), getTestMethodParams(), getTestMethodParams())[0];
+                if (res instanceof Double) {
+                    double currentTime = (Double) res;
+                    afterSingleRepetition(currentTime);
+                    results.add(currentTime);
+                } else
+                    Assertions.fail("Unexpected return value: " + res.getClass());
+            }
+            saveMeasurements(results);
         } catch (ClassNotFoundException | IOException | InstantiationException | NoSuchMethodException | IllegalAccessException e) {
             Assertions.fail(e.getMessage());
             e.printStackTrace();
@@ -83,12 +87,33 @@ public abstract class AbstractTestPerformanceTemplate extends Java2CTests {
     }
 
     /**
-     * Function that will be invoked after measuring the time
+     * Function that will be invoked after each repetition of the
      *
-     * @param time The time required in order to run the pattern() opcodes numberOfRepetitions() times
+     * @param time The time required in order to run the pattern() opcodes once, in nanoseconds
      */
-    public void afterTest(double time) {
-        System.out.println(time);
+    public void afterSingleRepetition(double time) {
+
+    }
+
+    /**
+     * Function that will be called after all the repetitions and saves all the time values collected into
+     * build/reports/tests/performance
+     *
+     * @param results the time required to run the pattern() of every repetition, in nanoseconds
+     */
+    public void saveMeasurements(ArrayList<Double> results) {
+        File f = new File("build/reports/tests/performance/" + getClassName().substring(getClassName().lastIndexOf(".") + 1) + ".csv");
+        f.getParentFile().mkdirs();
+        try {
+            FileOutputStream fout = new FileOutputStream(f);
+            PrintWriter pw = new PrintWriter(fout);
+            pw.println("Time(ns)");
+            for (double result : results) {
+                pw.println(result);
+            }
+            pw.close();
+        } catch (IOException ignored) {
+        }
     }
 
     /**
@@ -96,7 +121,16 @@ public abstract class AbstractTestPerformanceTemplate extends Java2CTests {
      *
      * @return how many times the pattern should be repeated in the emitted code in order
      */
-    public int numberOfRepetitions() {
+    public int patternRepetitions() {
+        return 1;
+    }
+
+    /**
+     * Returns the number of executions performed, in order to get a better statistical representation
+     *
+     * @return The number of executions of the performance measurements, without the compilation
+     */
+    public int executionRepetitions() {
         return 1;
     }
 
@@ -109,7 +143,7 @@ public abstract class AbstractTestPerformanceTemplate extends Java2CTests {
     public abstract String getClassName();
 
     /**
-     * The pattern that will be evaluated. This pattern is emitted numberOfRepetitions() times.
+     * The pattern that will be evaluated. This pattern is emitted patternRepetitions() times.
      * This should be implemented by calling the various visitInsn with the MethodVisitor received as parameter
      *
      * @param mv The MethodVisitor that will visit the various instructions
@@ -168,7 +202,7 @@ public abstract class AbstractTestPerformanceTemplate extends Java2CTests {
         mv.visitLabel(labelStart);
         beforePattern(mv);
         mv.visitInsn(Opcodes.NOP); //first NOP, start profilation
-        for (int i = 0; i < numberOfRepetitions(); i++) {
+        for (int i = 0; i < patternRepetitions(); i++) {
             pattern(mv);
         }
         mv.visitInsn(Opcodes.NOP); //second NOP, end profilation

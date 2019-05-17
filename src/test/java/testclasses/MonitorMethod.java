@@ -31,6 +31,8 @@ public class MonitorMethod {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return MonitorMethod.a;
+        int retval = MonitorMethod.a;
+        MonitorMethod.a = 0;
+        return retval;
     }
 }
