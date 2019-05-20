@@ -293,3 +293,22 @@ static inline void _InvokeSpecial_void(JNIEnv* env, generic_t* stack, uint32_t* 
     //If CallIntMethodA is used, if there is an ovveride of the method in a subclass that will be called instead, and it is wrong
     (*env)->CallNonvirtualVoidMethodA(env,class_instance,caller_class,method_id,values);
 }
+
+static inline void _Lambda(JNIEnv* env, generic_t* stack, uint32_t* index, const char* owner, const char* name, const char* signature, const char* sam_method_type, const char* inst_method_type)
+{
+    //resolve MethodHandles
+    jclass method_handles = (*env)->FindClass(env, "java/lang/invoke/MethodHandles");
+    jclass method_handle = (*env)->FindClass(env, "java/lang/invoke/MethodHandle");
+    jclass method_handles_lookup = (*env)->FindClass(env, "java/lang/invoke/MethodHandles/Lookup");
+    jclass method_type = (*env)->FindClass(env, "java/lang/invoke/MethodType");
+    jclass runnable = (*env)->FindClass(env, "java/lang/Runnable");
+    jmethodID lookup_method = (*env)->GetStaticMethodID(env, method_handles, "lookup", "()Ljava/lang/invoke/MethodHandles/Lookup;");
+    jmethodID method_type_ctor = (*env)->GetMethodID(env, method_type, "<init>", "(Ljava/lang/Class;)V");
+    jmethodID find_static = (*env)->GetMethodID(env, method_handles_lookup,"findStatic", "(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;" );
+
+    jclass owner_class = (*env)->FindClass(env, owner);
+
+    //create parameters
+    jobject caller = (*env)->CallStaticObjectMethod(env, method_handles, lookup_method);
+    jobject invoked_type = (*env)->NewObject(env, method_type, method_type_ctor, void_clazz);
+}

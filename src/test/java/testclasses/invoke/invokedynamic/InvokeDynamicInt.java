@@ -11,7 +11,7 @@ public class InvokeDynamicInt {
     @Obfuscation(protections = Protections.TO_NATIVE_CODE)
     public int add(int a, int b) {
 
-        AdderInterface<Integer> adder = (Integer c, Integer d) -> (c + d);
+        AdderInterface<Integer> adder = Integer::sum;
         return adder.add(a, b);
     }
 

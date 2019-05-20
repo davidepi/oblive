@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Type;
 
 import static org.objectweb.asm.Opcodes.*;
 
@@ -64,7 +65,21 @@ public class MethodBytecodeExtractor extends MethodVisitor {
     @Override
     public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
 
-        throw new IllegalPatternError("Unimplemented opcode: INVOKEDYNAMIC");
+        //invoke dynamic for lambda, requires particular care because some arguments are automagically stacked
+        if (bsm.getOwner().equals("java/lang/invoke/LambdaMetafactory") && bsm.getName().equals("metafactory")) {
+            if (bsmArgs.length == 3 && bsmArgs[0] instanceof Type && bsmArgs[1] instanceof Handle && bsmArgs[2] instanceof Type) {
+                Type samMethodType = (Type) bsmArgs[0];
+                Handle implMethod = (Handle) bsmArgs[1];
+                Type instMethodType = (Type) bsmArgs[2];
+                eb.statements.add("_Lambda(env,_stack, &_index,\"" + implMethod.getOwner() + "\",\"" + implMethod.getName() +
+                        "\",\"" + implMethod.getDesc() + "\",\"" + samMethodType.getInternalName() + "\",\"" +
+                        instMethodType.getInternalName() + "\");");
+            } else {
+                throw new IllegalPatternError("Found lambda declaration with unknown pattern");
+            }
+        } else {
+            throw new IllegalPatternError("Unimplemented opcode: INVOKEDYNAMIC for non-lambda procedures");
+        }
     }
 
     @Override
