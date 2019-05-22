@@ -1,5 +1,7 @@
 package eu.fbk.hardening.support;
 
+import eu.fbk.hardening.annotation.Protections;
+
 /**
  * Class used to wrap together several parameters describing a method being visited.
  *
@@ -16,6 +18,8 @@ public class ClassMethodPair {
     private String desc;
     //signature of the method -> java style parsed using the MethodSignature class
     private MethodSignature signature;
+    //type of obfuscation
+    private Protections obfuscation;
 
     /**
      * Initialize the ClassMethodPair class
@@ -24,13 +28,14 @@ public class ClassMethodPair {
      * @param smethod    The name of the method being parsed
      * @param ssignature The signature of the method being parsed as a Java string, i.e (ILjava/lang/String;)V
      */
-    public ClassMethodPair(String sclass, String smethod, String ssignature) {
+    public ClassMethodPair(String sclass, String smethod, String ssignature, Protections obfuscation) {
         this.className = sclass;
         this.methodName = smethod;
         this.desc = ssignature;
         this.signature = new MethodSignature(ssignature);
         //cannot set this variable until every method has been processed
         overloaded = false;
+        this.obfuscation = obfuscation;
     }
 
     /**
@@ -87,6 +92,14 @@ public class ClassMethodPair {
      */
     public String getDesc() {
         return desc;
+    }
+
+    /**
+     * Getter: return the type of obfuscation requested for this class
+     * @return An Enum representing the kind of obfuscation requested
+     */
+    private Protections getObfuscation() {
+        return obfuscation;
     }
 
 }

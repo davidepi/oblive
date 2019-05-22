@@ -12,8 +12,8 @@ import org.objectweb.asm.AnnotationVisitor;
  */
 public class AnnotationParametersExplorer extends AnnotationVisitor {
 
-    //This will be set as true if TO_NATIVE_CODE is found
-    private boolean correctAnnotation;
+    //This will be set as the desired level of obfuscation
+    private Protections correctAnnotation;
 
     /**
      * Class constructor, setup the parameters for this class
@@ -22,21 +22,21 @@ public class AnnotationParametersExplorer extends AnnotationVisitor {
      */
     public AnnotationParametersExplorer(int version) {
         super(version);
-        correctAnnotation = false;
+        correctAnnotation = Protections.NONE;
     }
 
     /**
-     * Returns if the TO_NATIVE_CODE protection was declared in the annotation
+     * Returns the level of protection requested
      *
-     * @return true if the aforementioned enum was declared, false otherwise
+     * @return the value of the enum protections set by the user
      */
-    public boolean toNativeCodeParamFound() {
-        return this.correctAnnotation;
+    public Protections getObfuscation() {
+        return correctAnnotation;
     }
 
     /**
-     * Checks the enum value of the annotation in order to detect the presence of the TO_NATIVE_CODE inside the
-     * protections enum
+     * Checks the enum value of the annotation in order to detect the presence of the TO_NATIVE_CODE or ANTIDEBUG
+     * inside the protections enum
      *
      * @param name  The name of the enum
      * @param desc  The class descriptor of the enumeration class
@@ -45,8 +45,11 @@ public class AnnotationParametersExplorer extends AnnotationVisitor {
     @Override
     public void visitEnum(String name, String desc, String value) {
         //FIXME: the hardcoded name is fragile, but there isn't a proper way to get the name of a variable from a Class
-        if (name.equals("protections") && Protections.valueOf(value) == Protections.TO_NATIVE_CODE) {
-            correctAnnotation = true;
+        if (name.equals("protections")) {
+            Protections curVal = Protections.valueOf(value);
+            if (curVal == Protections.TO_NATIVE_CODE || curVal == Protections.ANTIDEBUG) {
+                correctAnnotation = curVal;
+            }
         }
         super.visitEnum(name, desc, value);
     }

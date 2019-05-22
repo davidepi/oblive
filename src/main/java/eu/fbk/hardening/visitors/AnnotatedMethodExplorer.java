@@ -2,6 +2,7 @@ package eu.fbk.hardening.visitors;
 
 
 import eu.fbk.hardening.annotation.Obfuscation;
+import eu.fbk.hardening.annotation.Protections;
 import eu.fbk.hardening.support.ClassMethodPair;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.AnnotationVisitor;
@@ -34,6 +35,8 @@ public class AnnotatedMethodExplorer extends MethodVisitor {
     private String signature;
     //API version
     private int version;
+    //requested obfuscation
+    private Protections requested;
 
     /**
      * Class constructor. Does nothing but setting parameters
@@ -48,6 +51,7 @@ public class AnnotatedMethodExplorer extends MethodVisitor {
         this.methodName = name;
         this.signature = sign;
         this.visitorList = new ArrayList<>();
+        this.requested = null;
     }
 
     /**
@@ -73,19 +77,19 @@ public class AnnotatedMethodExplorer extends MethodVisitor {
      * This method is used to know if the method should be obfuscated or not.
      * <p>
      * If the name is correct, the result of every annotation visitor (that checked the parameters) is checked. If AT
-     * LEAST ONE (hence the |) annotation had the correct combination name+parameters means that the annotation was
+     * LEAST ONE annotation had the correct combination name+parameters means that the obfuscation was
      * requested for this method.
      *
      * @return true if the method is requested to be obfuscated (the annotation was found), false otherwise
      */
     boolean shouldObfuscate() {
-        boolean obfuscate = false;
         if (correctAnnotationName) {
             for (AnnotationParametersExplorer visitor : visitorList) {
-                obfuscate |= visitor.toNativeCodeParamFound();
+                if(visitor.getObfuscation().getVal() > Protections.NONE.getVal())
+                    return true;
             }
         }
-        return obfuscate;
+        return false;
     }
 
     /**
@@ -95,6 +99,6 @@ public class AnnotatedMethodExplorer extends MethodVisitor {
      * @return information about the current method being parsed
      */
     public ClassMethodPair getMethod() {
-        return new ClassMethodPair("", methodName, signature);
+        return new ClassMethodPair("", methodName, signature, requested);
     }
 }

@@ -1,5 +1,6 @@
 package eu.fbk.hardening.visitors;
 
+import eu.fbk.hardening.annotation.Protections;
 import eu.fbk.hardening.support.ClassMethodPair;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
