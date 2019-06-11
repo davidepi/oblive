@@ -24,7 +24,8 @@ import java.util.stream.Collectors;
  */
 public class NativeCompiler {
 
-    private static final String FLAGS = "-fpic -Wall -Wno-unused-variable -Wno-unused-function -O3";
+    private static final String REQUIRED_FLAGS = "-fpic";
+    private String flags = "-Wall -Wno-unused-variable -Wno-unused-function -O3";
     private String compiler;
     private String include;
     private String objext;
@@ -79,7 +80,7 @@ public class NativeCompiler {
                     });
             if (includes[0] == null)
                 throw new IOException("Could not find the file `jni.h` in the JAVA_HOME subtree");
-            else if(includes[1]==null)
+            else if (includes[1] == null)
                 throw new IOException("Could not find the file `jni_md.h` in the JAVA_HOME subtree");
             else
                 include = "-I" + includes[0] + " -I" + includes[1];
@@ -94,7 +95,7 @@ public class NativeCompiler {
      * @param sources      A list of File that will be passed to the compiler
      * @param objectOutput The output of the compilation process. If the extension is wrong or missing it will be added
      *                     (by modifying this object). Note that if the output is already existent it will be replaced.
-     * @return a null string if the compilation was successfull, otherwise the compiler error
+     * @return a null string if the compilation was successful, otherwise the compiler error
      * @throws IOException in case the source files are not readable or with the wrong extension (only .c, folks)
      */
     @Nullable
@@ -109,7 +110,8 @@ public class NativeCompiler {
 
         StringBuilder command = new StringBuilder(compiler);
         command.append(" -c ");
-        command.append(' ').append(FLAGS).append(' ');
+        command.append(' ').append(REQUIRED_FLAGS).append(' ');
+        command.append(' ').append(flags).append(' ');
         command.append(' ').append(include).append(' ');
 
         for (File source : sources) {
@@ -196,6 +198,17 @@ public class NativeCompiler {
             retval = e.getMessage();
         }
         return retval;
+    }
+
+    /**
+     * Override the default compiler flags
+     * <p>
+     * The default compiler flags are: <pre>-Wall -Wno-unused-variable -Wno-unused-function -O3</pre>
+     *
+     * @param flags The new flags that will be used
+     */
+    public void overrideFlags(String flags) {
+        this.flags = flags;
     }
 
     /**

@@ -1,8 +1,10 @@
+__attribute__((always_inline))
 static inline void push(generic_t* stack, uint32_t* index, generic_t val)
 {
     stack[(*index)++] = val;
 }
 
+__attribute__((always_inline))
 static inline void push2(generic_t* stack, uint32_t* index, generic_t val)
 {
   stack[(*index)++] = val;
@@ -16,6 +18,7 @@ static inline void push0(generic_t* stack, uint32_t* index)
   push(stack,index,pushme);
 }
 
+__attribute__((always_inline))
 static inline void pushi(generic_t* stack, uint32_t* index, jint val)
 {
   generic_t pushme;
@@ -37,6 +40,7 @@ static inline void pushf(generic_t* stack, uint32_t* index, jfloat val)
   push(stack,index,pushme);
 }
 
+__attribute__((always_inline))
 static inline void pushd(generic_t* stack, uint32_t* index, jdouble val)
 {
   generic_t pushme;
@@ -53,11 +57,13 @@ static inline void _Ldc(JNIEnv* env, generic_t* stack, uint32_t* index,
   push(stack,index,pushme);
 }
 
+__attribute__((always_inline))
 static inline generic_t pop(generic_t* stack, uint32_t* index)
 {
     return stack[--(*index)];
 }
 
+__attribute__((always_inline))
 static inline generic_t pop2(generic_t* stack, uint32_t* index)
 {
   --(*index);

@@ -1,6 +1,7 @@
 package eu.fbk.hardening.helpers;
 
 import eu.fbk.hardening.support.JniType;
+import eu.fbk.hardening.support.NativeCompiler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
@@ -54,7 +55,8 @@ public abstract class AbstractTestCorrectnessTemplate extends Java2CTests {
             String libname = this.getTestClass().toString().replaceFirst("class\\s", "");
             String className = libname.replaceAll("\\.", "/") + ".class";
             transformJava2C(className, libname);
-            buildJava2C(libname);
+            NativeCompiler compiler = new NativeCompiler();
+            buildJava2C(libname, compiler);
 
             Class clazzOriginal = TestUtils.loadClass(null, getTestClass().getCanonicalName());
             Class clazzTransformed = TestUtils.loadClass(getDestDir(), getTestClass().getCanonicalName());

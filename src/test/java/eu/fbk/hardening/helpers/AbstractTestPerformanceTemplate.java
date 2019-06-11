@@ -2,6 +2,7 @@ package eu.fbk.hardening.helpers;
 
 import eu.fbk.hardening.annotation.Obfuscation;
 import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.support.NativeCompiler;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -56,15 +57,117 @@ public abstract class AbstractTestPerformanceTemplate extends Java2CTests {
         transformJava2C(name, libname);
 
         try {
-            //profile it
+            //profile the generated .c file
             profileFile(libname);
         } catch (IOException e) {
             Assertions.fail("Profilation impossible");
             e.printStackTrace();
         }
 
-        //compile it
-        buildJava2C(libname);
+        //compile it by setting ad-hoc flags
+        NativeCompiler compiler = new NativeCompiler();
+        compiler.overrideFlags("-fauto-inc-dec " +
+                "-fbranch-count-reg " +
+                "-fcombine-stack-adjustments " +
+                "-fcompare-elim " +
+                "-fcprop-registers " +
+                "-fdefer-pop " +
+                "-fdelayed-branch " +
+                "-fforward-propagate " +
+                "-fguess-branch-probability " +
+                "-fif-conversion " +
+                "-fif-conversion2 " +
+                "-finline-functions-called-once " +
+                "-fipa-profile " +
+                "-fipa-pure-const " +
+                "-fipa-reference " +
+                "-fmerge-constants " +
+                "-fmove-loop-invariants " +
+                "-fomit-frame-pointer " +
+                "-freorder-blocks " +
+                "-fshrink-wrap " +
+                "-fshrink-wrap-separate " +
+                "-fsplit-wide-types " +
+                "-fssa-backprop " +
+                "-fssa-phiopt " +
+                "-ftree-bit-ccp " +
+                "-ftree-ccp " +
+                "-ftree-ch " +
+                "-ftree-coalesce-vars " +
+                "-ftree-copy-prop " +
+                "-ftree-dominator-opts " +
+                "-ftree-forwprop " +
+                "-ftree-fre " +
+                "-ftree-phiprop " +
+                "-ftree-pta " +
+                "-ftree-scev-cprop " +
+                "-ftree-sink " +
+                "-ftree-slsr " +
+                "-ftree-sra " +
+                "-ftree-ter " +
+                "-funit-at-a-time " +
+                //O2
+                "-falign-functions " +
+                "-falign-jumps " +
+                "-falign-labels " +
+                "-falign-loops " +
+                "-fcaller-saves " +
+                "-fcode-hoisting " +
+                "-fcrossjumping " +
+                "-fcse-follow-jumps " +
+                "-fcse-skip-blocks " +
+                "-fdelete-null-pointer-checks " +
+                "-fdevirtualize " +
+                "-fdevirtualize-speculatively " +
+                "-fexpensive-optimizations " +
+                "-fhoist-adjacent-loads " +
+                "-finline-small-functions " +
+                "-findirect-inlining " +
+                "-fipa-bit-cp  " +
+                "-fipa-cp " +
+                "-fipa-icf " +
+                "-fipa-ra " +
+                "-fipa-sra " +
+                "-fipa-vrp " +
+                "-fisolate-erroneous-paths-dereference " +
+                "-flra-remat " +
+                "-foptimize-sibling-calls " +
+                "-foptimize-strlen " +
+                "-fpartial-inlining " +
+                "-fpeephole2 " +
+                "-freorder-blocks-algorithm=stc " +
+                "-freorder-blocks-and-partition  " +
+                "-freorder-functions " +
+                "-frerun-cse-after-loop  " +
+                "-fschedule-insns  " +
+                "-fschedule-insns2 " +
+                "-fsched-interblock  " +
+                "-fsched-spec " +
+                "-fstore-merging " +
+                "-fstrict-aliasing " +
+                "-fthread-jumps " +
+                "-ftree-builtin-call-dce " +
+                "-ftree-pre " +
+                "-ftree-switch-conversion  " +
+                "-ftree-tail-merge " +
+                "-ftree-vrp " +
+                //O3
+                "-finline-functions " +
+                "-fipa-cp-clone " +
+                "-floop-interchange " +
+                "-floop-unroll-and-jam " +
+                "-fpeel-loops " +
+                "-fpredictive-commoning " +
+                "-fsplit-paths " +
+                "-ftree-loop-distribute-patterns " +
+                "-ftree-loop-distribution " +
+                "-ftree-loop-vectorize " +
+                "-ftree-partial-pre " +
+                "-ftree-slp-vectorize " +
+                "-funswitch-loops " +
+                "-fvect-cost-model ");
+        buildJava2C(libname, compiler);
+
         //load it and run it n times
         try {
             ArrayList<Double> results = new ArrayList<>(executionRepetitions());
@@ -132,6 +235,16 @@ public abstract class AbstractTestPerformanceTemplate extends Java2CTests {
      */
     public int executionRepetitions() {
         return 1;
+    }
+
+    /**
+     * How many opcodes are left uncleaned on the stack after every pattern repetition.
+     * This is used to craft the correct stack size with the formula pollution*repetitions
+     *
+     * @return The number of garbage left uncleaned onto the stack after every repetition
+     */
+    public int stackPollution() {
+        return 0;
     }
 
     /**
@@ -215,7 +328,7 @@ public abstract class AbstractTestPerformanceTemplate extends Java2CTests {
         mv.visitLabel(labelEnd);
         mv.visitLocalVariable("this", "L" + className + ";", null, labelStart, labelEnd, 0);
         mv.visitEnd();
-
+        mv.visitMaxs(10 + stackPollution() * patternRepetitions(), 10);
         cw.visitEnd();
 
         File f = new File(getDestDir() + File.separator + className + ".class");

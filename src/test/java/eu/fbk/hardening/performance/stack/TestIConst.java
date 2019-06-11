@@ -2,16 +2,8 @@ package eu.fbk.hardening.performance.stack;
 
 import eu.fbk.hardening.helpers.AbstractTestPerformanceTemplate;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.TestInstance;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 
 public class TestIConst extends AbstractTestPerformanceTemplate {
 
@@ -27,11 +19,16 @@ public class TestIConst extends AbstractTestPerformanceTemplate {
 
     @Override
     public int patternRepetitions() {
-        return 50000;
+        return 10000;
+    }
+
+    @Override
+    public int stackPollution() {
+        return 1;
     }
 
     @Override
     public int executionRepetitions() {
-        return 10000000;
+        return 100000;
     }
 }
