@@ -9,7 +9,7 @@ public class TestIConst extends AbstractTestPerformanceTemplate {
 
     @Override
     public String getClassName() {
-        return this.getClass().getPackage().getName() + ".IConstPerformance";
+        return "IConstPerformance";
     }
 
     @Override
@@ -18,17 +18,7 @@ public class TestIConst extends AbstractTestPerformanceTemplate {
     }
 
     @Override
-    public int patternRepetitions() {
-        return 10000;
-    }
-
-    @Override
     public int stackPollution() {
         return 1;
-    }
-
-    @Override
-    public int executionRepetitions() {
-        return 100000;
     }
 }

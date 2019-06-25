@@ -54,7 +54,7 @@ public abstract class AbstractTestCorrectnessTemplate extends Java2CTests {
             TestUtils.copyInput(getSourceDir(), getDestDir(), getTestClass());
             String libname = this.getTestClass().toString().replaceFirst("class\\s", "");
             String className = libname.replaceAll("\\.", "/") + ".class";
-            transformJava2C(className, libname);
+            transformJava2C(className, libname, getDestDir());
             NativeCompiler compiler = new NativeCompiler();
             buildJava2C(libname, compiler);
 
