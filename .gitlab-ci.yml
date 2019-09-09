@@ -1,3 +1,5 @@
+image: ubuntu:latest
+
 stages:
 - build_main
 - test_main

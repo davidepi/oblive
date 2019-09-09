@@ -310,5 +310,5 @@ static inline void _Lambda(JNIEnv* env, generic_t* stack, uint32_t* index, const
 
     //create parameters
     jobject caller = (*env)->CallStaticObjectMethod(env, method_handles, lookup_method);
-    jobject invoked_type = (*env)->NewObject(env, method_type, method_type_ctor, void_clazz);
+    //jobject invoked_type = (*env)->NewObject(env, method_type, method_type_ctor, void_clazz);
 }

@@ -24,7 +24,7 @@ test {
 }
 
 tasks.withType(Test) {
-    systemProperty "java.library.path", System.getProperty("java.library.path")+":$buildDir/libsrc"
+    systemProperty "java.library.path", "build/libsrc"
     maxParallelForks = 1
 }
 
