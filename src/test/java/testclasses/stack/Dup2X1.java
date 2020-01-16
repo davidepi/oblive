@@ -1,7 +1,6 @@
 package testclasses.stack;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class Dup2X1 {
     private TestingObjectDup obj;
@@ -10,7 +9,7 @@ public class Dup2X1 {
         this.obj = new TestingObjectDup();
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public double exec() {
         obj.setValue(obj.b = 2);
         return obj.b;

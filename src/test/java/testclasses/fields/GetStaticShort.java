@@ -1,7 +1,6 @@
 package testclasses.fields;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class GetStaticShort {
     private static short fieldS;
@@ -10,7 +9,7 @@ public class GetStaticShort {
         GetStaticShort.fieldS = 3000;
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public short getStatic() {
         return GetStaticShort.fieldS;
     }

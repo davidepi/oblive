@@ -1,14 +1,13 @@
 package testclasses.invoke.invokespecial;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeSpecialCastChar extends InvokeVirtualCastChar {
     public InvokeSpecialCastChar() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     @Override
     public boolean add(char a, char b) {
         return super.normalAdd(a, b) == (char) (a + b);

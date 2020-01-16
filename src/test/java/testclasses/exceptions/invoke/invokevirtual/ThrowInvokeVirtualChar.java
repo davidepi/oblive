@@ -1,14 +1,13 @@
 package testclasses.exceptions.invoke.invokevirtual;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class ThrowInvokeVirtualChar {
     public ThrowInvokeVirtualChar() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int div(int a) {
         return (int) normalDiv(a, 0);
     }

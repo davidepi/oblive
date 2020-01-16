@@ -1,7 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeStaticShort {
     public InvokeStaticShort() {
@@ -12,7 +11,7 @@ public class InvokeStaticShort {
         return (short) (a + b);
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public short add(short a, short b) {
         return normalAdd(a, b);
     }

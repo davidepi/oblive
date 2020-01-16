@@ -1,7 +1,6 @@
 package testclasses.exceptions.nullpointer.setfield;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 import testclasses.exceptions.nullpointer.SupportClassBoolean;
 
 public class ThrowNullPointerExceptionSetFieldBoolean {
@@ -9,7 +8,7 @@ public class ThrowNullPointerExceptionSetFieldBoolean {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public boolean exec(SupportClassBoolean obj) {
         obj.a = false;
         return true;

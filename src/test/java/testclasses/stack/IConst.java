@@ -1,8 +1,7 @@
 package testclasses.stack;
 
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 //ICONST_M1, ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4, ICONST_5
 public class IConst {
@@ -10,7 +9,7 @@ public class IConst {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int exec() {
         int a = 0;
         int b = 1;

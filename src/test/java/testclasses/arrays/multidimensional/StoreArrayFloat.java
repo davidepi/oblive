@@ -1,7 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 import java.util.ArrayList;
 
@@ -14,7 +13,7 @@ public class StoreArrayFloat {
         this.array[1] = new float[]{-1.f, -1.f, -1.f, -1.f, -1.f, -1.f, -1.f, -1.f, -1.f, -1.f};
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public void setVal(int i, int j, float val) {
         this.array[i][j] = val;
     }

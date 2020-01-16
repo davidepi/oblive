@@ -1,15 +1,13 @@
 package testclasses.exceptions.invoke.invokespecial;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
-
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class ThrowInvokeSpecialBoolean extends InvokeVirtualBoolean {
     public ThrowInvokeSpecialBoolean() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     @Override
     public boolean and(boolean a, boolean b) {
         return super.normalAnd(a, b);

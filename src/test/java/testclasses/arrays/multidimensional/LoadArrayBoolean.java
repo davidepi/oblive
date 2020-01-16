@@ -1,7 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class LoadArrayBoolean {
     private boolean[][] array;
@@ -12,7 +11,7 @@ public class LoadArrayBoolean {
         this.array[1] = new boolean[]{false, true, false};
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public boolean getVal() {
         return this.array[1][1];
     }

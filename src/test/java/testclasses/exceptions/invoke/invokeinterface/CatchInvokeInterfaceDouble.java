@@ -1,14 +1,13 @@
 package testclasses.exceptions.invoke.invokeinterface;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class CatchInvokeInterfaceDouble {
     public CatchInvokeInterfaceDouble() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int div(DivisionInterface interf, double a) {
         int res = 0;
         try {

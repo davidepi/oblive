@@ -1,7 +1,6 @@
 package testclasses.exceptions.outofbounds.arraystore;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class CatchArrayStoreOutOfBoundsByte {
     private byte[] array;
@@ -10,7 +9,7 @@ public class CatchArrayStoreOutOfBoundsByte {
         this.array = new byte[2];
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int exec() {
         int res = 0;
 

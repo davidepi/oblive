@@ -1,7 +1,6 @@
 package testclasses.exceptions.nullpointer.arraylength;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 import testclasses.exceptions.nullpointer.SupportClassFloat;
 
 public class ThrowNullPointerExceptionArrayLengthFloat {
@@ -9,7 +8,7 @@ public class ThrowNullPointerExceptionArrayLengthFloat {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int exec(SupportClassFloat obj) {
         return obj.b.length;
     }

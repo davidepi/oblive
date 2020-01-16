@@ -8,7 +8,6 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 
 @Retention(CLASS)
 @Target(METHOD)
-public @interface Obfuscation {
-    Protections protections();
+public @interface NativeObfuscation {
 }
 

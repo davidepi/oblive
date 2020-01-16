@@ -1,7 +1,6 @@
 package testclasses.arrays.unidimensional;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 import java.util.ArrayList;
 
@@ -10,7 +9,7 @@ public class NewArrayFloat {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public float[] getArray() {
         return new float[10];
     }

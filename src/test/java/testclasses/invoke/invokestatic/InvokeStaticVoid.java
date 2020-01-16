@@ -1,7 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeStaticVoid {
     public InvokeStaticVoid() {
@@ -12,7 +11,7 @@ public class InvokeStaticVoid {
         System.out.println(a + b);
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public void add(int a, int b) {
         print(a, b);
     }

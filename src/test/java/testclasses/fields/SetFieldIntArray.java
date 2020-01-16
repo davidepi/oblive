@@ -1,7 +1,6 @@
 package testclasses.fields;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 import java.util.ArrayList;
 
@@ -13,7 +12,7 @@ public class SetFieldIntArray {
         this.array2 = new int[]{1, 2, 3, 4, 6, 5, 7, 8, 9, 0};
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public void setArray() {
         this.array = array2;
     }

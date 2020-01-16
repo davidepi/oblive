@@ -1,7 +1,6 @@
 package testclasses.fields;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class SetFieldChar {
     private char fieldC;
@@ -15,7 +14,7 @@ public class SetFieldChar {
         return this.fieldC;
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public void setField(char value) {
         this.fieldC = value;
     }

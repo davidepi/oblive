@@ -1,7 +1,6 @@
 package testclasses;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 import testclasses.arithmetic.IAdd;
 
 public class AnonymousInnerClass {
@@ -11,7 +10,7 @@ public class AnonymousInnerClass {
 
     public static int add(int a, int b) {
         IAdd cls = new IAdd() {
-            @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+            @NativeObfuscation
             public int exec(int a, int b) {
                 return a + a + b + b;
             }

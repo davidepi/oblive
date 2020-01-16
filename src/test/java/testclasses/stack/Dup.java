@@ -1,14 +1,13 @@
 package testclasses.stack;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class Dup {
     public Dup() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int exec() {
         TestingObjectDup obj = new TestingObjectDup();
         ++(obj.a);

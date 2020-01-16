@@ -1,10 +1,9 @@
 package testclasses.exceptions.invoke.invokespecial;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeVirtualObject {
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public String concatenate(String a, char b) {
         return normalcat(a, b);
     }

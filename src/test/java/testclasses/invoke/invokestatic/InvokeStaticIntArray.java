@@ -1,7 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 import java.util.ArrayList;
 
@@ -14,7 +13,7 @@ public class InvokeStaticIntArray {
         return new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int[] exec() {
         return testclasses.invoke.invokestatic.InvokeStaticIntArray.returnArray();
     }

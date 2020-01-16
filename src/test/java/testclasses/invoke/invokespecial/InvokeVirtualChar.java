@@ -1,14 +1,13 @@
 package testclasses.invoke.invokespecial;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeVirtualChar {
     public InvokeVirtualChar() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public char add(char a, char b) {
         return normalAdd(a, b);
     }

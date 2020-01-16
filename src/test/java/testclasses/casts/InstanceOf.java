@@ -1,14 +1,13 @@
 package testclasses.casts;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InstanceOf {
     public InstanceOf() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public static boolean instanceofString(Object a) {
         return a instanceof String;
     }

@@ -1,14 +1,13 @@
 package testclasses.invoke.invokevirtual;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeVirtualNoInput {
     public InvokeVirtualNoInput() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public boolean add(int a, int b) {
         return alwaysTrue();
     }

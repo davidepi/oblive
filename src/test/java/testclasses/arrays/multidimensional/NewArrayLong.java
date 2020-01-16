@@ -1,7 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 import java.util.ArrayList;
 
@@ -10,7 +9,7 @@ public class NewArrayLong {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public long[][] getArray() {
         return new long[2][3];
     }

@@ -1,14 +1,13 @@
 package testclasses.conditionals;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class Lookupswitch {
     public Lookupswitch() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int exec(int a) {
         int retval;
         switch (a) {

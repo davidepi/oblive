@@ -1,14 +1,13 @@
 package testclasses.conditionals;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class Ifdcmp {
     public Ifdcmp() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int exec(double value) {
         int a = 0, b = 0, c = 0, d = 0, e = 0, f = 0;
         double compareme = 3.5;

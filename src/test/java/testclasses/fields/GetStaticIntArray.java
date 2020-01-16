@@ -1,7 +1,6 @@
 package testclasses.fields;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 import java.util.ArrayList;
 
@@ -12,7 +11,7 @@ public class GetStaticIntArray {
         array = new int[10];
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int[] getArray() {
         return array;
     }

@@ -1,7 +1,6 @@
 package testclasses.exceptions.negativesize.multidimensional;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class ThrowNegativeArraySizeDouble {
     private double[][][] array;
@@ -10,7 +9,7 @@ public class ThrowNegativeArraySizeDouble {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int exec() {
         this.array = new double[-1][1][1];
         return 0;

@@ -1,7 +1,6 @@
 package testclasses;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class CollidingString {
     public CollidingString() {
@@ -10,7 +9,7 @@ public class CollidingString {
 
     //test strings with the same content, that in Java are mapped onto LDC commands (used to ensure that I do not create
     // variables with same name)
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public static String exec() {
         String a = "a";
         String b = "a";

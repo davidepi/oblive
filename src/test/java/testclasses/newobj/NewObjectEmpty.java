@@ -1,14 +1,13 @@
 package testclasses.newobj;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class NewObjectEmpty {
     public NewObjectEmpty() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public String getObject() {
         return "";
     }

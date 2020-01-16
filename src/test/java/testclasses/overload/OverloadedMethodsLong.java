@@ -1,19 +1,18 @@
 package testclasses.overload;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class OverloadedMethodsLong {
     public OverloadedMethodsLong() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public static int add(int a, double b) {
         return a + (int) b;
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public static long add(long a, int b) {
         return a + b;
     }

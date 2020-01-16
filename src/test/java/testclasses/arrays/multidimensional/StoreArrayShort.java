@@ -1,7 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 import java.util.ArrayList;
 
@@ -14,7 +13,7 @@ public class StoreArrayShort {
         this.array[1] = new short[]{1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000};
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public void setVal(int i, int j, short val) {
         this.array[i][j] = val;
     }

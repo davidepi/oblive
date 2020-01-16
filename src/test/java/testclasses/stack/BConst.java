@@ -1,8 +1,7 @@
 package testclasses.stack;
 
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 //BIPUSH
 public class BConst {
@@ -10,7 +9,7 @@ public class BConst {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int exec() {
         byte a = -30;
         byte b = 120;

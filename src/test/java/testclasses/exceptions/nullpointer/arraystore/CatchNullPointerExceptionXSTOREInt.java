@@ -1,7 +1,6 @@
 package testclasses.exceptions.nullpointer.arraystore;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 import testclasses.exceptions.nullpointer.SupportClassInt;
 
 public class CatchNullPointerExceptionXSTOREInt {
@@ -10,7 +9,7 @@ public class CatchNullPointerExceptionXSTOREInt {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int exec(SupportClassInt obj) {
         int res = 0;
         try {

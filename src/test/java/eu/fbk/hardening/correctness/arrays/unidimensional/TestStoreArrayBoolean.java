@@ -2,8 +2,7 @@ package eu.fbk.hardening.correctness.arrays.unidimensional;
 
 import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 
-public class TestStoreArrayBoolean extends AbstractTestCorrectnessTemplate
-{
+public class TestStoreArrayBoolean extends AbstractTestCorrectnessTemplate {
     private Class<?> className = testclasses.arrays.unidimensional.StoreArrayBoolean.class;
     private String[] methodTest = {"test"};
     private Class[][] methodParam = {new Class[]{}};
@@ -20,26 +19,22 @@ public class TestStoreArrayBoolean extends AbstractTestCorrectnessTemplate
     }
 
     @Override
-    public Class<?> getTestClass()
-    {
+    public Class<?> getTestClass() {
         return className;
     }
 
     @Override
-    public String[] getTestMethodName()
-    {
+    public String[] getTestMethodName() {
         return methodTest;
     }
 
     @Override
-    public Class<?>[][] getTestMethodParams()
-    {
+    public Class<?>[][] getTestMethodParams() {
         return methodParam;
     }
 
     @Override
-    public Object[][] getTestMethodArgs()
-    {
+    public Object[][] getTestMethodArgs() {
         return methodArgs;
     }
 }

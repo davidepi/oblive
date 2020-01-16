@@ -1,7 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeStaticByte {
     public InvokeStaticByte() {
@@ -12,7 +11,7 @@ public class InvokeStaticByte {
         return (byte) (a + b);
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public byte add(byte a, byte b) {
         return normalAdd(a, b);
     }

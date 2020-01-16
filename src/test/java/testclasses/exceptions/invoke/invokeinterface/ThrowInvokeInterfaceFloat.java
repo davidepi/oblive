@@ -1,14 +1,13 @@
 package testclasses.exceptions.invoke.invokeinterface;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class ThrowInvokeInterfaceFloat {
     public ThrowInvokeInterfaceFloat() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public float div(DivisionInterface interf, float a) {
         return interf.div(a);
     }

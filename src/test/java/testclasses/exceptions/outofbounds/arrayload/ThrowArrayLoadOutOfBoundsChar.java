@@ -1,7 +1,6 @@
 package testclasses.exceptions.outofbounds.arrayload;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class ThrowArrayLoadOutOfBoundsChar {
     private char[] array;
@@ -10,7 +9,7 @@ public class ThrowArrayLoadOutOfBoundsChar {
         this.array = new char[2];
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public char exec() {
         return this.array[2];
     }

@@ -1,14 +1,13 @@
 package testclasses.newobj;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class NewObjectMultiDup {
     public NewObjectMultiDup() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public TestingObjectMultiDup getObject() {
         int a = 1;
         TestingObjectMultiDup b = new TestingObjectMultiDup(1, 1, 1, 1);

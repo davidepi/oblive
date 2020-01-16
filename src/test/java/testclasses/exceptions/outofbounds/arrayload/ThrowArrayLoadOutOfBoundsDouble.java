@@ -1,7 +1,6 @@
 package testclasses.exceptions.outofbounds.arrayload;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class ThrowArrayLoadOutOfBoundsDouble {
     private double[] array;
@@ -10,7 +9,7 @@ public class ThrowArrayLoadOutOfBoundsDouble {
         this.array = new double[2];
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public double exec() {
         return this.array[2];
     }

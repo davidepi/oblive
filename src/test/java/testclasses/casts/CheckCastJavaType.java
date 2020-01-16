@@ -1,14 +1,13 @@
 package testclasses.casts;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class CheckCastJavaType {
     public CheckCastJavaType() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public static String castString(Object a) {
         return (String) a;
     }

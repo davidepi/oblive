@@ -1,7 +1,6 @@
 package testclasses.fields;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class SetStaticInt {
     private static int fieldI;
@@ -15,7 +14,7 @@ public class SetStaticInt {
         return SetStaticInt.fieldI;
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public void setStatic(int value) {
         SetStaticInt.fieldI = value;
     }

@@ -1,14 +1,13 @@
 package testclasses.conditionals;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class Ifacmpeq {
     public Ifacmpeq() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public boolean exec(Object value0, Object value1) {
         return value0 != value1;
     }

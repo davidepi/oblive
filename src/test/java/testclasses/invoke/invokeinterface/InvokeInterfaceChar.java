@@ -1,14 +1,13 @@
 package testclasses.invoke.invokeinterface;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeInterfaceChar {
     public InvokeInterfaceChar() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public char add(AdderInterface interf, char a, char b) {
         return interf.add(a, b);
     }

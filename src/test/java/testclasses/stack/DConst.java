@@ -1,8 +1,7 @@
 package testclasses.stack;
 
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 //DCONST_0, DCONST_1, DADD, DSTORE, DLOAD
 public class DConst {
@@ -10,7 +9,7 @@ public class DConst {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public double exec() {
         double a = 0.0;
         double b = 1.0;

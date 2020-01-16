@@ -1,7 +1,6 @@
 package testclasses.invoke.overflow;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class OverflowShort {
     short a;
@@ -14,7 +13,7 @@ public class OverflowShort {
         c = (short) (a + b);
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public boolean add(short a, short b) {
         this.b = this.c;
         short r0 = normalAdd(a, b);

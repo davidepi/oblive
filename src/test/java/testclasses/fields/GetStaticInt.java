@@ -1,7 +1,6 @@
 package testclasses.fields;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class GetStaticInt {
     private static int fieldI;
@@ -10,7 +9,7 @@ public class GetStaticInt {
         GetStaticInt.fieldI = 1000000;
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int getStatic() {
         return GetStaticInt.fieldI;
     }

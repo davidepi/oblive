@@ -1,14 +1,13 @@
 package testclasses.invoke.invokespecial;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeSpecialLong extends InvokeVirtualLong {
     public InvokeSpecialLong() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     @Override
     public long add(long a, long b) {
         return super.normalAdd(a, b);

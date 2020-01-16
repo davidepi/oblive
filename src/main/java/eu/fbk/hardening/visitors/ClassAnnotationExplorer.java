@@ -1,6 +1,6 @@
 package eu.fbk.hardening.visitors;
 
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 import eu.fbk.hardening.support.ClassMethodPair;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -82,7 +82,7 @@ public class ClassAnnotationExplorer extends ClassVisitor {
         //the syntax for overloaded methods must be used
         HashMap<String, Integer> overloadCount = new HashMap<>();
         for (AnnotatedMethodExplorer method : obfuscateMethods) {
-            if (method.shouldObfuscate()) {
+            if (method.containsAnnotation(NativeObfuscation.class)) {
                 ClassMethodPair cmp = method.getMethod();
                 cmp.setClassName(this.className);
                 annotated.add(cmp);

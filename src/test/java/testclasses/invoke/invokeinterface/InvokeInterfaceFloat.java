@@ -1,14 +1,13 @@
 package testclasses.invoke.invokeinterface;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeInterfaceFloat {
     public InvokeInterfaceFloat() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public float add(AdderInterface interf, float a, float b) {
         return interf.add(a, b);
     }

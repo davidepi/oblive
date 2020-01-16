@@ -1,14 +1,13 @@
 package testclasses.invoke.invokespecial;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeSpecialByte extends InvokeVirtualByte {
     public InvokeSpecialByte() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     @Override
     public byte add(byte a, byte b) {
         return super.normalAdd(a, b);

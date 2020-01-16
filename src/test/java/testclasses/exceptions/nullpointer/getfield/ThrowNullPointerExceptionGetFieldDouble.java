@@ -1,7 +1,6 @@
 package testclasses.exceptions.nullpointer.getfield;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 import testclasses.exceptions.nullpointer.SupportClassDouble;
 
 public class ThrowNullPointerExceptionGetFieldDouble {
@@ -9,7 +8,7 @@ public class ThrowNullPointerExceptionGetFieldDouble {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public double exec(SupportClassDouble obj) {
         return obj.a;
     }

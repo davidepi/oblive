@@ -1,14 +1,13 @@
 package testclasses;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class AdderStaticMethod {
     public AdderStaticMethod() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public static int add(int a, int b) {
         return a + b;
     }

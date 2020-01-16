@@ -1,14 +1,13 @@
 package testclasses.exceptions.invoke.invokespecial;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class CatchInvokeSpecialDouble extends InvokeVirtualDouble {
     public CatchInvokeSpecialDouble() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     @Override
     public double add(double a, double b) {
         int res = 0;

@@ -1,7 +1,6 @@
 package testclasses.exceptions.nullpointer.arrayload;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 import testclasses.exceptions.nullpointer.SupportClassShort;
 
 public class ThrowNullPointerExceptionXLOADShort {
@@ -9,7 +8,7 @@ public class ThrowNullPointerExceptionXLOADShort {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int exec(SupportClassShort obj) {
         return obj.b[1];
     }

@@ -1,7 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeStaticDouble {
     public InvokeStaticDouble() {
@@ -12,7 +11,7 @@ public class InvokeStaticDouble {
         return a + b;
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public double add(double a, double b) {
         return normalAdd(a, b);
     }

@@ -1,7 +1,6 @@
 package testclasses.invoke.overflow;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class OverflowLong {
     long a;
@@ -14,7 +13,7 @@ public class OverflowLong {
         c = a + b;
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public boolean add(long a, long b) {
         this.b = this.c;
         long r0 = normalAdd(a, b);

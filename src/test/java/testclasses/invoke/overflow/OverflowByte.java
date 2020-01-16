@@ -1,7 +1,6 @@
 package testclasses.invoke.overflow;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class OverflowByte {
     byte a = Byte.MAX_VALUE;
@@ -12,7 +11,7 @@ public class OverflowByte {
         c = (byte) (a + b);
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public boolean add(byte a, byte b) {
         this.b = this.c;
         byte r0 = normalAdd(a, b);

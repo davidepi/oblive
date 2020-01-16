@@ -1,14 +1,13 @@
 package testclasses.invoke.invokevirtual;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeVirtualCastBoolean {
     public InvokeVirtualCastBoolean() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public boolean and(boolean a, boolean b) {
         return normalAnd(a, b) == a && b;
     }

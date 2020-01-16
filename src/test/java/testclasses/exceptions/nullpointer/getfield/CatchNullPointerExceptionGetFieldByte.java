@@ -1,7 +1,6 @@
 package testclasses.exceptions.nullpointer.getfield;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 import testclasses.exceptions.nullpointer.SupportClassByte;
 
 public class CatchNullPointerExceptionGetFieldByte {
@@ -10,7 +9,7 @@ public class CatchNullPointerExceptionGetFieldByte {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int exec(SupportClassByte obj) {
         int res = 0;
         try {

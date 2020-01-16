@@ -1,7 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeStaticLong {
     public InvokeStaticLong() {
@@ -12,7 +11,7 @@ public class InvokeStaticLong {
         return a + b;
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public long add(long a, long b) {
         return normalAdd(a, b);
     }

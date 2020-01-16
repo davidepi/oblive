@@ -1,7 +1,6 @@
 package testclasses.exceptions.outofbounds.arraystore;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class ThrowArrayStoreOutOfBoundsObject {
     private String[] array;
@@ -10,7 +9,7 @@ public class ThrowArrayStoreOutOfBoundsObject {
         this.array = new String[2];
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public String exec() {
         this.array[2] = "string0";
         return this.array[2];

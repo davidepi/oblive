@@ -1,14 +1,13 @@
 package testclasses.arrays.unidimensional;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeArrayParameterDoubleSize {
     public InvokeArrayParameterDoubleSize() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public long exec() {
         long[] array = new long[3];
         array[0] = 0L;

@@ -1,7 +1,6 @@
 package testclasses.exceptions;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class ThrowArrayStoreException {
     private Object[] array;
@@ -12,7 +11,7 @@ public class ThrowArrayStoreException {
         this.array[1] = "world";
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public Object exec() {
         this.array[1] = 1;
         return this.array[1];

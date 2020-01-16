@@ -1,14 +1,13 @@
 package testclasses.invoke.invokevirtual;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class InvokeVirtualShort {
     public InvokeVirtualShort() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public short add(short a, short b) {
         return normalAdd(a, b);
     }

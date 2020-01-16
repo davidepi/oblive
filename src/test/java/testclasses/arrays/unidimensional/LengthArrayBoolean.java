@@ -1,7 +1,6 @@
 package testclasses.arrays.unidimensional;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class LengthArrayBoolean {
     private boolean[] array;
@@ -10,7 +9,7 @@ public class LengthArrayBoolean {
         this.array = new boolean[61];
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int getLen() {
         return this.array.length;
     }

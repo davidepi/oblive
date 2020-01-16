@@ -1,7 +1,6 @@
 package testclasses.exceptions.nullpointer.arrayload;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 import testclasses.exceptions.nullpointer.SupportClassLong;
 
 public class CatchNullPointerExceptionXLOADLong {
@@ -10,7 +9,7 @@ public class CatchNullPointerExceptionXLOADLong {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int exec(SupportClassLong obj) {
         int res = 0;
         try {

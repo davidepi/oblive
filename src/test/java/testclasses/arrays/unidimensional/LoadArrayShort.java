@@ -1,7 +1,6 @@
 package testclasses.arrays.unidimensional;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class LoadArrayShort {
     private short[] array;
@@ -10,7 +9,7 @@ public class LoadArrayShort {
         this.array = new short[]{1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000};
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public short getVal() {
         return this.array[4];
     }

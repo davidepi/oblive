@@ -1,7 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class LoadArrayInt {
     private int[][] array;
@@ -12,7 +11,7 @@ public class LoadArrayInt {
         this.array[1] = new int[]{1300000000, 1400000000, 1500000000};
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int getVal() {
         return this.array[1][2];
     }

@@ -1,14 +1,13 @@
 package testclasses.exceptions.invoke.invokespecial;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class ThrowInvokeSpecialFloat extends InvokeVirtualFloat {
     public ThrowInvokeSpecialFloat() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     @Override
     public float add(float a, float b) {
         return super.normalAdd(a, b);

@@ -1,14 +1,13 @@
 package testclasses.exceptions.invoke.invokespecial;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class ThrowInvokeSpecialChar extends InvokeVirtualChar {
     public ThrowInvokeSpecialChar() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     @Override
     public char add(char a, char b) {
         return super.normalAdd(a, b);

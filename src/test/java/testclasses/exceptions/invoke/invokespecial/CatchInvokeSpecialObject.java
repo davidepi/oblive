@@ -1,14 +1,13 @@
 package testclasses.exceptions.invoke.invokespecial;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class CatchInvokeSpecialObject extends InvokeVirtualObject {
     public CatchInvokeSpecialObject() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     @Override
     public String concatenate(String a, char b) {
         int res = 0;

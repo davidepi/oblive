@@ -2,8 +2,7 @@ package eu.fbk.hardening.correctness.arithmetic;
 
 import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 
-public class TestIShl extends AbstractTestCorrectnessTemplate
-{
+public class TestIShl extends AbstractTestCorrectnessTemplate {
 
     private Class<?> className = testclasses.arithmetic.IShl.class;
     private String[] methodTest = {"exec", "exec"};
@@ -11,26 +10,22 @@ public class TestIShl extends AbstractTestCorrectnessTemplate
     private Object[][] methodArgs = {new Object[]{1, 3}, new Object[]{-1, 3}};
 
     @Override
-    public Class<?> getTestClass()
-    {
+    public Class<?> getTestClass() {
         return className;
     }
 
     @Override
-    public String[] getTestMethodName()
-    {
+    public String[] getTestMethodName() {
         return methodTest;
     }
 
     @Override
-    public Class<?>[][] getTestMethodParams()
-    {
+    public Class<?>[][] getTestMethodParams() {
         return methodParam;
     }
 
     @Override
-    public Object[][] getTestMethodArgs()
-    {
+    public Object[][] getTestMethodArgs() {
         return methodArgs;
     }
 }

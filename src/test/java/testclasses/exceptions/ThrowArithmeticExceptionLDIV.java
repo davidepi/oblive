@@ -1,14 +1,13 @@
 package testclasses.exceptions;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class ThrowArithmeticExceptionLDIV {
     public ThrowArithmeticExceptionLDIV() {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public static long divide(long a) {
         return a / 0L;
     }

@@ -1,7 +1,6 @@
 package testclasses.fields;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class SetStaticShort {
     private static short fieldS;
@@ -15,7 +14,7 @@ public class SetStaticShort {
         return SetStaticShort.fieldS;
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public void setStatic(short value) {
         SetStaticShort.fieldS = value;
     }

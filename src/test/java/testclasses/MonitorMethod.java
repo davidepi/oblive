@@ -1,14 +1,13 @@
 package testclasses;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class MonitorMethod {
 
-    private static Integer a = 0;
     private static final Object lock = new Object();
+    private static Integer a = 0;
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public void exec() {
         for (int i = 0; i < 1000000; i++) {
             synchronized (MonitorMethod.lock) {

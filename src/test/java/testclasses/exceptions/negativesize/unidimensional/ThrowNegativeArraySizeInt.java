@@ -1,7 +1,6 @@
 package testclasses.exceptions.negativesize.unidimensional;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class ThrowNegativeArraySizeInt {
     private int[] array;
@@ -10,7 +9,7 @@ public class ThrowNegativeArraySizeInt {
 
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public int exec() {
         this.array = new int[-1];
         return 0;

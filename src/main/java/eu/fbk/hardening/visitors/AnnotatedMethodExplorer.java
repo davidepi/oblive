@@ -1,8 +1,6 @@
 package eu.fbk.hardening.visitors;
 
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
 import eu.fbk.hardening.support.ClassMethodPair;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.AnnotationVisitor;
@@ -24,34 +22,25 @@ import java.util.ArrayList;
  */
 public class AnnotatedMethodExplorer extends MethodVisitor {
 
-    //true if the annotation with the correct name has been found
-    private boolean correctAnnotationName;
-    //annotation visitor, in case this annotation name is correct, and the parameters must be checked.
-    //This is a list because to add support for multiple annotation with the same name but different parameters
-    private ArrayList<AnnotationParametersExplorer> visitorList;
+    // annotation names found for this method
+    private ArrayList<String> annotationNames;
     //name of the current method being visited
     private String methodName;
     //signature of the method being visited
     private String signature;
-    //API version
-    private int version;
-    //requested obfuscation
-    private Protections requested;
 
     /**
      * Class constructor. Does nothing but setting parameters
      *
-     * @param name    Name of the method being parsed
-     * @param sign    Signature of the method being parsed
-     * @param version ASM version to use
+     * @param name      Name of the method being parsed
+     * @param signature Signature of the method being parsed
+     * @param version   ASM version to use
      */
-    public AnnotatedMethodExplorer(int version, String name, String sign) {
+    public AnnotatedMethodExplorer(int version, String name, String signature) {
         super(version);
-        this.version = version;
         this.methodName = name;
-        this.signature = sign;
-        this.visitorList = new ArrayList<>();
-        this.requested = null;
+        this.signature = signature;
+        this.annotationNames = new ArrayList<>();
     }
 
     /**
@@ -64,32 +53,22 @@ public class AnnotatedMethodExplorer extends MethodVisitor {
      */
     @Override
     public AnnotationVisitor visitAnnotation(@NotNull String desc, boolean visible) {
-        correctAnnotationName = desc.equals("L" + Obfuscation.class.getName().replace('.', '/') + ";");
-        if (correctAnnotationName) {
-            AnnotationParametersExplorer av = new AnnotationParametersExplorer(version);
-            this.visitorList.add(av);
-            return av;
-        } else
-            return super.visitAnnotation(desc, visible);
+        // ease the comparison for later by transforming the ASM syntax to the java one
+        String newdesc = desc.replace('/', '.');
+        newdesc = newdesc.substring(1, newdesc.length() - 1); // remove the L and ;
+        annotationNames.add(newdesc);
+        return super.visitAnnotation(desc, visible);
     }
 
     /**
-     * This method is used to know if the method should be obfuscated or not.
-     * <p>
-     * If the name is correct, the result of every annotation visitor (that checked the parameters) is checked. If AT
-     * LEAST ONE annotation had the correct combination name+parameters means that the obfuscation was
-     * requested for this method.
+     * Check if a particular annotation is applied to this method
+     * This method is used to know if the method should be obfuscated or not
      *
+     * @param annotation The annotation that will be checked
      * @return true if the method is requested to be obfuscated (the annotation was found), false otherwise
      */
-    boolean shouldObfuscate() {
-        if (correctAnnotationName) {
-            for (AnnotationParametersExplorer visitor : visitorList) {
-                if(visitor.getObfuscation().getVal() > Protections.NONE.getVal())
-                    return true;
-            }
-        }
-        return false;
+    boolean containsAnnotation(Class<?> annotation) {
+        return annotationNames.contains(annotation.getName());
     }
 
     /**
@@ -99,6 +78,6 @@ public class AnnotatedMethodExplorer extends MethodVisitor {
      * @return information about the current method being parsed
      */
     public ClassMethodPair getMethod() {
-        return new ClassMethodPair("", methodName, signature, requested);
+        return new ClassMethodPair("", methodName, signature);
     }
 }

@@ -1,7 +1,6 @@
 package testclasses.invoke.overflow;
 
-import eu.fbk.hardening.annotation.Obfuscation;
-import eu.fbk.hardening.annotation.Protections;
+import eu.fbk.hardening.annotation.NativeObfuscation;
 
 public class OverflowChar {
     char a;
@@ -14,7 +13,7 @@ public class OverflowChar {
         c = (char) (a + b);
     }
 
-    @Obfuscation(protections = Protections.TO_NATIVE_CODE)
+    @NativeObfuscation
     public boolean add(char a, char b) {
         this.b = this.c;
         char r0 = normalAdd(a, b);
