@@ -60,6 +60,7 @@ public class JavaToC {
         appendHeaderFile("invoke.h");
         appendHeaderFile("multi_arrays.h");
         appendHeaderFile("new.h");
+        appendHeaderFile("antidebug.h");
     }
 
     /**
@@ -136,7 +137,7 @@ public class JavaToC {
             className = methodsToProcess.get(j);
             ExtractedBytecode bytecode = extractedBytecodes.get(j);
             bytecode.postprocess(); //remove unnecessary labels. Otherwise empty labels could be created and gcc fails
-            c.append(CSourceGenerator.generateCode(className.getClassName(), className.getMethodName(), className.getSignature(), bytecode, className.overloaded));
+            c.append(CSourceGenerator.generateCode(className.getClassName(), className.getMethodName(), className.getSignature(), bytecode, className.overloaded, className.getRequestedObfuscations()));
         }
         this.output.write(c.toString());
 

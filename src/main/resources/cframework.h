@@ -4,6 +4,13 @@
 #include <stdio.h> //fprintf
 #include <stdlib.h> //exit
 #include <math.h> //fmod used in DRem
+#include <time.h> //required by the AntidebugTime and some performance test. Not a big deal if it is unnecessary
+#include <sys/prctl.h> // Here starts the includes for the AntidebugSelf Technique
+#include <sys/ptrace.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/wait.h> // Here ends the includes for the AntidebugSelf Technique
+
 typedef jvalue generic_t;
 #define ZERO_OUT_UNION(res) res.j=0
 #define OVERFLOW_CHECK(res,check) res.j&=check

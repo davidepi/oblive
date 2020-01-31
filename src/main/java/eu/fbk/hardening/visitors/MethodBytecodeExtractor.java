@@ -367,7 +367,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 eb.statements.add("dupx2(_stack,&_index);");
                 break;
             case DUP2:
-                eb.statements.add("dup2(_stack,&_index);");
+                eb.statements.add("dup2java(_stack,&_index);");
                 break;
             case DUP2_X1:
                 eb.statements.add("dup2x1(_stack,&_index);");
@@ -580,7 +580,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
 
             case DUP:
                 if (!processingNew) {
-                    eb.statements.add("dup(_stack,&_index);");
+                    eb.statements.add("dupjava(_stack,&_index);");
                 } else {
                     this.processingNew = false;
                 }

@@ -64,13 +64,15 @@ static inline generic_t pop2(generic_t* stack, uint32_t* index)
   return stack[--(*index)];
 }
 
-static inline void dup(generic_t* stack, uint32_t* index)
+// the java in the name is to avoid clash with the POSIX dup
+static inline void dupjava(generic_t* stack, uint32_t* index)
 {
   generic_t val = stack[(*index)-1];
   push(stack,index,val);
 }
 
-static inline void dup2(generic_t* stack, uint32_t* index)
+// the java in the name is to avoid clash with the POSIX dup2
+static inline void dup2java(generic_t* stack, uint32_t* index)
 {
   generic_t val0 = stack[(*index)-2];
   generic_t val1 = stack[(*index)-1];

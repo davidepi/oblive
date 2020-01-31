@@ -1,5 +1,7 @@
 package eu.fbk.hardening.support;
 
+import java.util.HashSet;
+
 /**
  * Class used to wrap together several parameters describing a method being visited.
  *
@@ -16,6 +18,8 @@ public class ClassMethodPair {
     private String desc;
     //signature of the method -> java style parsed using the MethodSignature class
     private MethodSignature signature;
+    //the requested obfuscations
+    private HashSet<Class> obfuscations;
 
     /**
      * Initialize the ClassMethodPair class
@@ -29,6 +33,7 @@ public class ClassMethodPair {
         this.methodName = smethod;
         this.desc = ssignature;
         this.signature = new MethodSignature(ssignature);
+        this.obfuscations = new HashSet<>();
         //cannot set this variable until every method has been processed
         overloaded = false;
     }
@@ -89,4 +94,24 @@ public class ClassMethodPair {
         return desc;
     }
 
+    /**
+     * Get the requested obfuscations
+     * Each obfuscation is implemented as an annotation, this class contains the annotations (in form of Class type)
+     * for the obfuscation-related tasks (including the eu.fbk.hardening.annotation.NativeObfuscation)
+     *
+     * @return the requested obfuscations
+     */
+    public HashSet<Class> getRequestedObfuscations() {
+        return this.obfuscations;
+    }
+
+    /**
+     * Add an obfuscation to the family
+     * It is not checked if the obfuscation exists or not. That's the role of the ClassAnnotationExplorer
+     *
+     * @param obfuscation The obfuscation to be added (in form of Class)
+     */
+    public void addObfuscation(Class obfuscation) {
+        this.obfuscations.add(obfuscation);
+    }
 }

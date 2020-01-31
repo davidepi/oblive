@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.MethodVisitor;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * This class extends the visit of a method by ASM and searches for the annotation responsible for enabling the
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class AnnotatedMethodExplorer extends MethodVisitor {
 
     // annotation names found for this method
-    private ArrayList<String> annotationNames;
+    private HashSet<String> annotationNames;
     //name of the current method being visited
     private String methodName;
     //signature of the method being visited
@@ -40,7 +40,7 @@ public class AnnotatedMethodExplorer extends MethodVisitor {
         super(version);
         this.methodName = name;
         this.signature = signature;
-        this.annotationNames = new ArrayList<>();
+        this.annotationNames = new HashSet<>();
     }
 
     /**

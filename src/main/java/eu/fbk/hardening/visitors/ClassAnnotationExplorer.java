@@ -1,5 +1,7 @@
 package eu.fbk.hardening.visitors;
 
+import eu.fbk.hardening.annotation.AntidebugSelf;
+import eu.fbk.hardening.annotation.AntidebugTime;
 import eu.fbk.hardening.annotation.NativeObfuscation;
 import eu.fbk.hardening.support.ClassMethodPair;
 import org.objectweb.asm.ClassVisitor;
@@ -86,6 +88,14 @@ public class ClassAnnotationExplorer extends ClassVisitor {
                 ClassMethodPair cmp = method.getMethod();
                 cmp.setClassName(this.className);
                 annotated.add(cmp);
+                cmp.addObfuscation(NativeObfuscation.class);
+                //these two annotations depends on NativeObfuscation.class, add them only if the first one is present
+                if (method.containsAnnotation(AntidebugSelf.class)) {
+                    cmp.addObfuscation(AntidebugSelf.class);
+                }
+                if (method.containsAnnotation(AntidebugTime.class)) {
+                    cmp.addObfuscation(AntidebugTime.class);
+                }
                 //set the number of overloaded methods with this name
                 if (overloadCount.containsKey(cmp.getMethodName())) {
                     overloadCount.put(cmp.getMethodName(), overloadCount.get(cmp.getMethodName()) + 1); //put oldVal+1

@@ -1,10 +1,14 @@
 package eu.fbk.hardening;
 
 
+import eu.fbk.hardening.annotation.AntidebugSelf;
+import eu.fbk.hardening.annotation.AntidebugTime;
 import eu.fbk.hardening.support.ExtractedBytecode;
 import eu.fbk.hardening.support.JniType;
 import eu.fbk.hardening.support.MethodSignature;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashSet;
 
 /**
  * This class creates the C source file starting from the output of the MethodBytecodeExtractor.
@@ -18,17 +22,20 @@ public class CSourceGenerator {
      * source code, along with performing the method name mangling. The implementation of the various opcodes should be
      * added BEFORE the results of this call, otherwise linking would fail
      *
-     * @param className  name of the class owning the native method
-     * @param methodName name of the native method
-     * @param signature  signature of the native method
-     * @param eb         result of the MethodBytecodeExtractor
-     * @param overloaded true if other methods within the same class and with the same name exists.
+     * @param className    name of the class owning the native method
+     * @param methodName   name of the native method
+     * @param signature    signature of the native method
+     * @param eb           result of the MethodBytecodeExtractor
+     * @param overloaded   true if other methods within the same class and with the same name exists.
+     * @param obfuscations a set containing the Class for every obfuscation requested. Although this will not
      * @return a String representing the content of the generated source file
      */
     @NotNull
     public static String generateCode(String className, String methodName, @NotNull MethodSignature signature,
-                                      ExtractedBytecode eb, boolean overloaded) {
+                                      ExtractedBytecode eb, boolean overloaded, HashSet<Class> obfuscations) {
         StringBuilder sb = new StringBuilder();
+        boolean antidebugTime = obfuscations.contains(AntidebugTime.class);
+        boolean antidebugSelf = obfuscations.contains(AntidebugSelf.class);
 
         //if the function is void, the exception should not return 0, but just return
         if (signature.getReturnType().getJniName().equals("void")) {
@@ -71,6 +78,16 @@ public class CSourceGenerator {
         sb.append(")\n");
         sb.append("{\n");
 
+        /* ----------------------------- FUNCTION BODY STARTS HERE ---------------------------------------------------*/
+        //antidebug techniques
+        if (antidebugTime) {
+            sb.append("time_t debug_timer;\n");
+            sb.append("time_start(&debug_timer);\n");
+        }
+        if (antidebugSelf) {
+            sb.append("self_debug();\n");
+        }
+
         //generate stack vars
         sb.append("uint32_t _index = 0;\n");
         sb.append("generic_t _stack[");
@@ -79,6 +96,7 @@ public class CSourceGenerator {
         sb.append("generic_t _vars[");
         sb.append(eb.maxLVar);
         sb.append("];\n");
+
         //avoid having garbage values if bytes/shorts/booleans/chars are passed, since int will be returned
         sb.append("memset(_vars,0,sizeof(_vars));\n");
         sb.append("jclass exception = NULL;\n");
@@ -115,7 +133,11 @@ public class CSourceGenerator {
                 }
             }
         }
+        if (antidebugTime) {
+            sb.append("time_check(&debug_timer);\n");
+        }
         sb.append("}\n");
+        /* ----------------------------- FUNCTION BODY ENDS HERE -----------------------------------------------------*/
         sb.append("#undef RETURN_EXCEPTION\n\n");
         return sb.toString();
     }
