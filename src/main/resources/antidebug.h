@@ -7,7 +7,7 @@ static inline void time_check(time_t* start)
 {
     if(difftime(time(NULL),*start)>0)
     {
-        _exit(EXIT_SUCCESS);
+        exit(EXIT_SUCCESS);
     }
 }
 
@@ -18,26 +18,25 @@ static inline void self_debug()
     if (child_pid == 0)
     {
         int true_child_pid = getpid();
-        if (ptrace(PTRACE_SEIZE, parent_pid, NULL, NULL) != -1)
+        if(ptrace(PTRACE_SEIZE, parent_pid, NULL, NULL) != -1)
         {
         }
         else
         {
-             _exit(EXIT_SUCCESS);
+            exit(EXIT_SUCCESS);
         }
     }
     else {
-        if (prctl(PR_SET_PTRACER, child_pid) != -1) {
-            // log
-            //printf("parent: successfully used prctl PR_SET_PTRACER\n");
+        if(prctl(PR_SET_PTRACER, child_pid) != -1)
+        {
         }
-        else {
-            // log
-            //printf("parent: error when using used prctl PR_SET_PTRACER\n");
+        else
+        {
+            exit(EXIT_SUCCESS);
         }
         int status;
         waitpid(child_pid, &status, 0);
-        _exit(EXIT_SUCCESS);
+        exit(EXIT_SUCCESS);
     }
 
 }
