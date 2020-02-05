@@ -14,9 +14,15 @@
 typedef jvalue generic_t;
 #define ZERO_OUT_UNION(res) res.j=0
 #define OVERFLOW_CHECK(res,check) res.j&=check
-#define ARETURN {jvalue __areturn_retval__ = pop(_stack,&_index); return __areturn_retval__.l;}
-#define IRETURN {jvalue __ireturn_retval__ = pop(_stack,&_index); return __ireturn_retval__.i;}
-#define LRETURN {jvalue __lreturn_retval__ = pop2(_stack,&_index); return __lreturn_retval__.j;}
-#define FRETURN {jvalue __freturn_retval__ = pop(_stack,&_index); return __freturn_retval__.f;}
-#define DRETURN {jvalue __dreturn_retval__ = pop2(_stack,&_index); return __dreturn_retval__.d;}
-#define VRETURN {return;}
+#define ARETURN_SET __return_retval__ = pop(_stack,&_index); goto exitpoint;
+#define ARETURN_EXEC return __return_retval__.l;
+#define IRETURN_SET __return_retval__ = pop(_stack,&_index); goto exitpoint;
+#define IRETURN_EXEC return __return_retval__.i;
+#define LRETURN_SET __return_retval__ = pop2(_stack,&_index); goto exitpoint;
+#define LRETURN_EXEC return __return_retval__.j;
+#define FRETURN_SET __return_retval__ = pop(_stack,&_index); goto exitpoint;
+#define FRETURN_EXEC return __return_retval__.f;
+#define DRETURN_SET __return_retval__ = pop2(_stack,&_index); goto exitpoint;
+#define DRETURN_EXEC return __return_retval__.d;
+#define VRETURN_SET goto exitpoint;
+#define VRETURN_EXEC return;

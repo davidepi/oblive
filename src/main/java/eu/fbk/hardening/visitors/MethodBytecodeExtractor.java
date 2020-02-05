@@ -547,22 +547,28 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 eb.statements.add("dcmpg(_stack,&_index);");
                 break;
             case ARETURN:
-                eb.statements.add("ARETURN;");
+                eb.statements.add("ARETURN_SET;");
+                eb.returnType = 'A';
                 break;
             case IRETURN:
-                eb.statements.add("IRETURN;");
+                eb.statements.add("IRETURN_SET;");
+                eb.returnType = 'I';
                 break;
             case LRETURN:
-                eb.statements.add("LRETURN;");
+                eb.statements.add("LRETURN_SET;");
+                eb.returnType = 'L';
                 break;
             case FRETURN:
-                eb.statements.add("FRETURN;");
+                eb.statements.add("FRETURN_SET;");
+                eb.returnType = 'F';
                 break;
             case DRETURN:
-                eb.statements.add("DRETURN;");
+                eb.statements.add("DRETURN_SET;");
+                eb.returnType = 'D';
                 break;
             case RETURN:
-                eb.statements.add("VRETURN;");
+                eb.statements.add("VRETURN_SET;");
+                eb.returnType = 'V';
                 break;
             case ARRAYLENGTH:
                 eb.statements.add(handleSystemException("_Arraylength(env,_stack,&_index)", NullPointerException.class));

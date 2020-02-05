@@ -89,6 +89,7 @@ public class CSourceGenerator {
         }
 
         //generate stack vars
+        sb.append("generic_t __return_retval__;\n");
         sb.append("uint32_t _index = 0;\n");
         sb.append("generic_t _stack[");
         sb.append(eb.maxStack);
@@ -133,11 +134,15 @@ public class CSourceGenerator {
                 }
             }
         }
+        sb.append("exitpoint:\n");
+        /* --------------------------------- FUNCTION CLEANUP HERE ---------------------------------------------------*/
         if (antidebugTime) {
             sb.append("time_check(&debug_timer);\n");
         }
+        /* --------------------------------------- END OF FUNCTION ---------------------------------------------------*/
+        sb.append(eb.returnType);
+        sb.append("RETURN_EXEC;\n");
         sb.append("}\n");
-        /* ----------------------------- FUNCTION BODY ENDS HERE -----------------------------------------------------*/
         sb.append("#undef RETURN_EXCEPTION\n\n");
         return sb.toString();
     }

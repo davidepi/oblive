@@ -21,7 +21,7 @@ import java.util.Objects;
  * @author D.Pizzolotto
  */
 public class JniType {
-    //if the jniName is an object this is the full name of the ojbect, excluding L and ; like java/lang/String
+    //if the jniName is an object this is the full name of the object, excluding L and ; like java/lang/String
     //or the primitive type if primitive arrays (which are treated as jobject in the jni, so the jniName is jobject)
     private String name;
     //true if the jniName is 64 bit long

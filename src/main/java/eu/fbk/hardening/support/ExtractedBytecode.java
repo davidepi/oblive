@@ -55,6 +55,11 @@ public class ExtractedBytecode {
     public boolean isStatic;
 
     /**
+     * The type of return used in the function (the UPPERCASE letter preceding the RETURN in the opcode name)
+     */
+    public char returnType;
+
+    /**
      * Initialize this class
      *
      * @param staticMethod true if the method is flagged as static
@@ -66,6 +71,7 @@ public class ExtractedBytecode {
         usedLabels = new HashSet<>();
         catchedStatements = new HashSet<>();
         this.isStatic = staticMethod;
+        this.returnType = 'V';
     }
 
     /**
