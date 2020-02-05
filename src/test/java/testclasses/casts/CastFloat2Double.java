@@ -9,7 +9,7 @@ public class CastFloat2Double {
 
     @NativeObfuscation
     public double exec(float a) {
-        return (double) (a + a);
+        return a + a;
     }
 
 }

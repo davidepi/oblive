@@ -27,7 +27,7 @@ public class CatchInvokeVirtualLong {
     }
 
     public long normalDiv(int a, int b) {
-        return (long) (a / b);
+        return a / b;
     }
 
     public void other() throws UserDefinedException {

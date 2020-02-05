@@ -9,7 +9,7 @@ public class CastInt2Long {
 
     @NativeObfuscation
     public long exec(int a) {
-        return (long) (a + a);
+        return a + a;
     }
 
 }

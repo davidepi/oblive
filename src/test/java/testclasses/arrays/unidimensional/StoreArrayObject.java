@@ -8,7 +8,8 @@ public class StoreArrayObject {
     private String[] array;
 
     public StoreArrayObject() {
-        this.array = new String[]{"hello", "hello", "hello", "hello", "hello", "hello", "hello", "hello", "hello", "hello"};
+        this.array = new String[]{"hello", "hello", "hello", "hello", "hello", "hello", "hello", "hello", "hello",
+                "hello"};
     }
 
     @NativeObfuscation

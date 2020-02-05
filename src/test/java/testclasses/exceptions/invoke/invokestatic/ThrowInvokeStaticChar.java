@@ -13,6 +13,6 @@ public class ThrowInvokeStaticChar {
 
     @NativeObfuscation
     public int div(int a) {
-        return (int) normalDiv(a, 0);
+        return normalDiv(a, 0);
     }
 }

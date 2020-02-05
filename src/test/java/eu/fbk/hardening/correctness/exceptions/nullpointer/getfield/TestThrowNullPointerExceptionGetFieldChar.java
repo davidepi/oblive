@@ -3,7 +3,8 @@ package eu.fbk.hardening.correctness.exceptions.nullpointer.getfield;
 import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 
 public class TestThrowNullPointerExceptionGetFieldChar extends AbstractTestCorrectnessTemplate {
-    private Class<?> className = testclasses.exceptions.nullpointer.getfield.ThrowNullPointerExceptionGetFieldChar.class;
+    private Class<?> className =
+            testclasses.exceptions.nullpointer.getfield.ThrowNullPointerExceptionGetFieldChar.class;
     private String[] methodTest = {"exec"};
     private Class[][] methodParam = {new Class[]{testclasses.exceptions.nullpointer.SupportClassChar.class}};
     private Object[][] methodArgs = {new Object[]{null}};

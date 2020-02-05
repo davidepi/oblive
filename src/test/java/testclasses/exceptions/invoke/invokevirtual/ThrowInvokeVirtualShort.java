@@ -9,7 +9,7 @@ public class ThrowInvokeVirtualShort {
 
     @NativeObfuscation
     public int div(int a) {
-        return (int) normalDiv(a, 0);
+        return normalDiv(a, 0);
     }
 
     public short normalDiv(int a, int b) {

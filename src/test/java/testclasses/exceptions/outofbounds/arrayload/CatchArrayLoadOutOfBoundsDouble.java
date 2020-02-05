@@ -48,6 +48,6 @@ public class CatchArrayLoadOutOfBoundsDouble {
             res++;
         }
 
-        return (double) res;
+        return res;
     }
 }

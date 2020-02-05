@@ -22,7 +22,8 @@ import java.util.List;
  * <li>The <b>annotation</b> is changed only in transformed methods</li>
  * </ol>
  * <p>
- * For the point 2. above, note that the <tt>&lt;clinit&gt;</tt> method actually is changed in order to link the library. The
+ * For the point 2. above, note that the <tt>&lt;clinit&gt;</tt> method actually is changed in order to link the
+ * library. The
  * check for unchanged code explicitly avoids checking <tt>&lt;clinit&gt;</tt>.
  *
  * @author M.Ceccato
@@ -45,24 +46,31 @@ public abstract class AbstractTestCorrectnessTemplate extends Java2CTests {
     public void testCorrectness() {
         try {
 
-            //Assert parameters length: name, signature and parameters should be of the same length for annotated and for test
-            Assertions.assertEquals(getTestMethodParams().length, getTestMethodName().length, "Param array length does not match Name array length for tested methods");
-            Assertions.assertEquals(getTestMethodArgs().length, getTestMethodName().length, "Args array length does not match Name array length for tested methods");
-            Assertions.assertEquals(getAnnotatedMethodParams().length, getAnnotatedMethodName().length, "Param array length does not match Name array length for annotated methods");
+            //Assert parameters length: name, signature and parameters should be of the same length for annotated and
+            // for test
+            Assertions.assertEquals(getTestMethodParams().length, getTestMethodName().length, "Param array length " +
+                    "does not match Name array length for tested methods");
+            Assertions.assertEquals(getTestMethodArgs().length, getTestMethodName().length, "Args array length does " +
+                    "not match Name array length for tested methods");
+            Assertions.assertEquals(getAnnotatedMethodParams().length, getAnnotatedMethodName().length, "Param array " +
+                    "length does not match Name array length for annotated methods");
 
             TestUtils.copyInput(getSourceDir(), getDestDir(), getTestClass());
             transformAndBuild();
 
             // run the original class
-            Object[] result1 = TestUtils.runCode(null, getTestClass(), getTestMethodName(), getTestMethodParams(), getTestMethodArgs());
+            Object[] result1 = TestUtils.runCode(null, getTestClass(), getTestMethodName(), getTestMethodParams(),
+                    getTestMethodArgs());
 
             // run the transformed class
-            Object[] result2 = TestUtils.runCode(getDestDir(), getTestClass(), getTestMethodName(), getTestMethodParams(), getTestMethodArgs());
+            Object[] result2 = TestUtils.runCode(getDestDir(), getTestClass(), getTestMethodName(),
+                    getTestMethodParams(), getTestMethodArgs());
 
             // check for same results
             int length = getTestMethodName().length;
             for (int i = 0; i < length; i++) {
-                String message = "method: " + getTestMethodName()[i] + ", class: " + getTestClass().getName() + " --- Different execution result";
+                String message = "method: " + getTestMethodName()[i] + ", class: " + getTestClass().getName() + " ---" +
+                        " Different execution result";
                 assertSameObj(result1[i], result2[i], message);
             }
 
@@ -77,8 +85,10 @@ public abstract class AbstractTestCorrectnessTemplate extends Java2CTests {
             checkAnnotationsInTransformedMethods();
 
             // check NON-transformed methods
-            sourceNotAnnotatedMethodNodes3 = getOtherMethodNodes(getSourceDir(), getTestClass(), sourceAnnotatedMethodNodes1);
-            destdNotAnnotatedMethodNodes4 = getOtherMethodNodes(getDestDir(), getTestClass(), destAnnotatedMethodNodes2);
+            sourceNotAnnotatedMethodNodes3 = getOtherMethodNodes(getSourceDir(), getTestClass(),
+                    sourceAnnotatedMethodNodes1);
+            destdNotAnnotatedMethodNodes4 = getOtherMethodNodes(getDestDir(), getTestClass(),
+                    destAnnotatedMethodNodes2);
 
             // check that NON-transformed methods have the same code before and after transformation
             if (!changesBeyondAnnotatedMethods()) {
@@ -139,8 +149,10 @@ public abstract class AbstractTestCorrectnessTemplate extends Java2CTests {
                 continue;
             int size1 = TestUtils.sizeofCode(sourceNotAnnotatedMethodNodes3[i]);
             int size2 = TestUtils.sizeofCode(destdNotAnnotatedMethodNodes4[i]);
-            String message = "method " + sourceNotAnnotatedMethodNodes3[i].name + ", class " + getTestClass().getName() +
-                    ": Non-trasformed method has the different number of instructions between original and transformed classes";
+            String message =
+                    "method " + sourceNotAnnotatedMethodNodes3[i].name + ", class " + getTestClass().getName() +
+                    ": Non-trasformed method has the different number of instructions between original and " +
+                            "transformed classes";
             Assertions.assertEquals(size1, size2, message);
         }
     }
@@ -155,8 +167,10 @@ public abstract class AbstractTestCorrectnessTemplate extends Java2CTests {
         for (int i = 0; i < length2; i++) {
             int size1 = TestUtils.sizeofAnnotations(sourceNotAnnotatedMethodNodes3[i]);
             int size2 = TestUtils.sizeofAnnotations(destdNotAnnotatedMethodNodes4[i]);
-            String message = "method " + sourceNotAnnotatedMethodNodes3[i].name + ", class " + getTestClass().getName() +
-                    ": Non-trasformed method has the different number of annotations between original and transformed classes";
+            String message =
+                    "method " + sourceNotAnnotatedMethodNodes3[i].name + ", class " + getTestClass().getName() +
+                    ": Non-trasformed method has the different number of annotations between original and transformed" +
+                            " classes";
             Assertions.assertEquals(size1, size2, message);
         }
     }
@@ -232,7 +246,8 @@ public abstract class AbstractTestCorrectnessTemplate extends Java2CTests {
     }
 
     /**
-     * Asserts that two object are the same, with a special clause that, in case of exceptions, checks just the exception
+     * Asserts that two object are the same, with a special clause that, in case of exceptions, checks just the
+     * exception
      * type
      *
      * @param expected Expected result

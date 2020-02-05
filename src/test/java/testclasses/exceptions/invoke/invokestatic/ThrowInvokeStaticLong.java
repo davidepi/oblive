@@ -8,7 +8,7 @@ public class ThrowInvokeStaticLong {
     }
 
     public static long normalDiv(int a, int b) {
-        return (long) (a / b);
+        return a / b;
     }
 
     @NativeObfuscation

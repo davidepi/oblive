@@ -17,7 +17,7 @@ public class CatchInvokeSpecialDouble extends InvokeVirtualDouble {
         } catch (Exception e) {
             res++;
         }
-        return (double) res;
+        return res;
     }
 
     //wrong method, I want the one of the superclass to be called -> invokespecial

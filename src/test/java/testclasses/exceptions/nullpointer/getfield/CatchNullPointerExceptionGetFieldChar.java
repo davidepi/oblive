@@ -13,28 +13,28 @@ public class CatchNullPointerExceptionGetFieldChar {
     public int exec(SupportClassChar obj) {
         int res = 0;
         try {
-            res += (int) obj.a;
+            res += obj.a;
             res += 1000;
         } catch (NullPointerException e) {
             res++;
         }
 
         try {
-            res += (int) obj.a;
+            res += obj.a;
             res += 1000;
         } catch (RuntimeException e) {
             res++;
         }
 
         try {
-            res += (int) obj.a;
+            res += obj.a;
             res += 1000;
         } catch (Exception e) {
             res++;
         }
 
         try {
-            res += (int) obj.a;
+            res += obj.a;
             res += 1000;
         } catch (Throwable e) {
             res++;

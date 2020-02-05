@@ -13,6 +13,6 @@ public class ThrowInvokeVirtualDouble {
     }
 
     public double normalDiv(int a, int b) {
-        return (double) (a / b);
+        return a / b;
     }
 }

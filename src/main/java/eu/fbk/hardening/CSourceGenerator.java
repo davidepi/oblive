@@ -104,7 +104,8 @@ public class CSourceGenerator {
         sb.append("char retcode = 0;\n"); //used by some methods to check if some exceptions were raised
 
         //push arguments into local vars
-        int vars_index = 0; //vars_index, could differ from actual operands index because of static functions or double words;
+        int vars_index = 0; //vars_index, could differ from actual operands index because of static functions or
+        // double words;
         if (!eb.isStatic) {
             sb.append("_vars[0].l=this;\n"); //this pointer is pushed only if the class is not static
             vars_index++;

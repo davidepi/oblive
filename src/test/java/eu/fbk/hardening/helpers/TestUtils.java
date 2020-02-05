@@ -133,7 +133,8 @@ public class TestUtils {
      * This method is used to run a specific method of another class via reflection and then collect its results. It
      * can load any kind of class also outside the classpath.
      *
-     * @param dir       The string where the class package directory starts. If the class is in the classpath it can be null
+     * @param dir       The string where the class package directory starts. If the class is in the classpath it can
+     *                  be null
      * @param testClass the class that will be tested
      * @param testName  An array of method names, these are the methods that will be run
      * @param testParam An array of parameters (like int.class) required by the methods that will be run
@@ -147,7 +148,8 @@ public class TestUtils {
      */
     public static Object[] runCode(@Nullable String dir, Class<?> testClass,
                                    @NotNull String[] testName, @NotNull Class<?>[][] testParam, Object[][] testArgs)
-            throws ClassNotFoundException, IOException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+            throws ClassNotFoundException, IOException, IllegalAccessException, NoSuchMethodException,
+            InstantiationException {
         if (testName.length != testParam.length || testName.length != testArgs.length)
             throw new IllegalAccessException("Mismatched number of operators between: " +
                     "methods to tests (" + testName.length + "), " +
@@ -160,7 +162,8 @@ public class TestUtils {
             URL[] urls = {transformed};
             // should be parent last class loader
             String[] localClasses = {testClass.getName()};
-            TransformedClassLoader newLoader = new TransformedClassLoader(urls, testClass.getClassLoader(), localClasses);
+            TransformedClassLoader newLoader = new TransformedClassLoader(urls, testClass.getClassLoader(),
+                    localClasses);
             Class<?> testClassDifferentLoader = newLoader.loadClass(testClass.getName());
             newLoader.close();
             loadedClass = testClassDifferentLoader;

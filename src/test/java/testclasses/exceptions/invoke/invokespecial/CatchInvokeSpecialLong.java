@@ -17,7 +17,7 @@ public class CatchInvokeSpecialLong extends InvokeVirtualLong {
         } catch (Exception e) {
             res++;
         }
-        return (long) res;
+        return res;
     }
 
     //wrong method, I want the one of the superclass to be called -> invokespecial

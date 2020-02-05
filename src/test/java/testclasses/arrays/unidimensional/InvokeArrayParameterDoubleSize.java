@@ -16,7 +16,8 @@ public class InvokeArrayParameterDoubleSize {
         return doSomething(array, array, 3, array, array);
     }
 
-    public long doSomething(long[] values, long[] unusedValues0, long size, long[] unusedValues1, long[] unusedValues2) {
+    public long doSomething(long[] values, long[] unusedValues0, long size, long[] unusedValues1,
+                            long[] unusedValues2) {
         return values[(int) size / 2];
     }
 }

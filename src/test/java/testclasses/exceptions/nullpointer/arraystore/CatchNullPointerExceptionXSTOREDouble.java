@@ -13,28 +13,28 @@ public class CatchNullPointerExceptionXSTOREDouble {
     public int exec(SupportClassDouble obj) {
         int res = 0;
         try {
-            obj.b[1] = (double) 1;
+            obj.b[1] = 1;
             res += 1000;
         } catch (NullPointerException e) {
             res++;
         }
 
         try {
-            obj.b[1] = (double) 0;
+            obj.b[1] = 0;
             res += 1000;
         } catch (RuntimeException e) {
             res++;
         }
 
         try {
-            obj.b[1] = (double) 1;
+            obj.b[1] = 1;
             res += 1000;
         } catch (Exception e) {
             res++;
         }
 
         try {
-            obj.b[1] = (double) 0;
+            obj.b[1] = 0;
             res += 1000;
         } catch (Throwable e) {
             res++;

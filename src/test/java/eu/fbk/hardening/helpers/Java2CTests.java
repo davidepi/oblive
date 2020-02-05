@@ -10,7 +10,8 @@ import java.io.IOException;
 
 /**
  * This is the actual skeleton for the entire Java2C test suite. This skeleton implements a transformation method,
- * that is used to apply the Java2C obfuscation. Additional methods from the TestInterface interface which are always the
+ * that is used to apply the Java2C obfuscation. Additional methods from the TestInterface interface which are always
+ * the
  * same in Java2C are implemented here
  *
  * @author D.Pizzolotto
@@ -20,7 +21,8 @@ public abstract class Java2CTests implements TestInterface {
     /**
      * Path to the classes that will be obfuscated (where the package structure starts)
      */
-    private static final String INPUT_CLASS_DIR = "build" + File.separator + "classes" + File.separator + "java" + File.separator + "test";
+    private static final String INPUT_CLASS_DIR =
+            "build" + File.separator + "classes" + File.separator + "java" + File.separator + "test";
 
     /**
      * Path to the folder where the classes will be copied
@@ -53,7 +55,8 @@ public abstract class Java2CTests implements TestInterface {
         NativeCompiler compiler = new NativeCompiler();
         File[] sources = new File[]{new File(OUTPUT_LIB_DIR + File.separator + libname + ".c")};
         File destObj = new File(OUTPUT_LIB_DIR + File.separator + libname + SystemInfo.getObjectExtension());
-        File destLib = new File(OUTPUT_LIB_DIR + File.separator + "lib" + libname + SystemInfo.getSharedLibraryExtension());
+        File destLib =
+                new File(OUTPUT_LIB_DIR + File.separator + "lib" + libname + SystemInfo.getSharedLibraryExtension());
         String error;
         try {
             error = compiler.compileFile(sources, destObj);

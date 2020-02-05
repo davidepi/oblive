@@ -6,7 +6,8 @@ public class TestInvokeVirtualCastBoolean extends AbstractTestCorrectnessTemplat
 
     private Class<?> className = testclasses.invoke.invokevirtual.InvokeVirtualCastBoolean.class;
     private String[] methodTest = {"and", "and", "and", "and"};
-    private Class[][] methodParam = {new Class[]{boolean.class, boolean.class}, new Class[]{boolean.class, boolean.class},
+    private Class[][] methodParam = {new Class[]{boolean.class, boolean.class}, new Class[]{boolean.class,
+            boolean.class},
             new Class[]{boolean.class, boolean.class}, new Class[]{boolean.class, boolean.class}};
     private Object[][] methodArgs = {new Object[]{false, false}, new Object[]{true, false},
             new Object[]{false, true}, new Object[]{true, true}};

@@ -19,7 +19,8 @@ public class TestingObjectLdc {
     char j;
     byte k;
 
-    public TestingObjectLdc(int a, long b, PrintStream e, double c, float f, String d, short g, boolean h, char j, byte k) {
+    public TestingObjectLdc(int a, long b, PrintStream e, double c, float f, String d, short g, boolean h, char j,
+                            byte k) {
         this.a = a;
         this.b = b;
         this.c = c;

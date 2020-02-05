@@ -8,7 +8,7 @@ public class ThrowInvokeStaticDouble {
     }
 
     public static double normalDiv(int a, int b) {
-        return (double) (a / b);
+        return a / b;
     }
 
     @NativeObfuscation

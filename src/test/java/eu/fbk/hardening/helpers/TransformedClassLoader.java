@@ -58,7 +58,8 @@ public class TransformedClassLoader extends URLClassLoader {
         initializeLocalFields(localClasses);
     }
 
-    public TransformedClassLoader(URL[] urls, ClassLoader parent, URLStreamHandlerFactory factory, String[] localClasses) {
+    public TransformedClassLoader(URL[] urls, ClassLoader parent, URLStreamHandlerFactory factory,
+                                  String[] localClasses) {
         super(urls, parent, factory);
         initializeLocalFields(localClasses);
     }

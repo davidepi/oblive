@@ -79,7 +79,7 @@ public class NativeCompiler {
                     });
             if (includes[0] == null)
                 throw new IOException("Could not find the file `jni.h` in the JAVA_HOME subtree");
-            else if(includes[1]==null)
+            else if (includes[1] == null)
                 throw new IOException("Could not find the file `jni_md.h` in the JAVA_HOME subtree");
             else
                 include = "-I" + includes[0] + " -I" + includes[1];

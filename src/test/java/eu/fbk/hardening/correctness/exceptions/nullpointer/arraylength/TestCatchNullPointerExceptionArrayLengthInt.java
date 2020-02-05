@@ -4,7 +4,8 @@ import eu.fbk.hardening.helpers.AbstractTestCorrectnessTemplate;
 import testclasses.exceptions.nullpointer.SupportClassInt;
 
 public class TestCatchNullPointerExceptionArrayLengthInt extends AbstractTestCorrectnessTemplate {
-    private Class<?> className = testclasses.exceptions.nullpointer.arraylength.CatchNullPointerExceptionArrayLengthInt.class;
+    private Class<?> className =
+            testclasses.exceptions.nullpointer.arraylength.CatchNullPointerExceptionArrayLengthInt.class;
     private String[] methodTest = {"exec"};
     private Class[][] methodParam = {new Class[]{SupportClassInt.class}};
     private Object[][] methodArgs = {new Object[]{new SupportClassInt()}};

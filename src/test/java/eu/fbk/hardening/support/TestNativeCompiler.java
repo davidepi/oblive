@@ -41,12 +41,15 @@ public class TestNativeCompiler {
         url = Thread.currentThread().getContextClassLoader().getResource("helluword.c");
         Assertions.assertNotNull(url);
         wrongC = new File(url.getPath());
-        destinationObj = new File(System.getProperty("user.dir") + File.separator + "buildedc" + SystemInfo.getObjectExtension());
+        destinationObj =
+                new File(System.getProperty("user.dir") + File.separator + "buildedc" + SystemInfo.getObjectExtension());
         destinationObjWrong = new File(System.getProperty("user.dir") + File.separator + "buildedc.txt");
         destinationObjFixed = new File(destinationObjWrong.getAbsoluteFile() + SystemInfo.getObjectExtension());
-        destinationLib = new File(System.getProperty("user.dir") + File.separator + "buildedlib" + SystemInfo.getSharedLibraryExtension());
+        destinationLib =
+                new File(System.getProperty("user.dir") + File.separator + "buildedlib" + SystemInfo.getSharedLibraryExtension());
         destinationLibWrong = new File(System.getProperty("user.dir") + File.separator + "buildedlib.txt");
-        destinationLibFixed = new File(System.getProperty("user.dir") + File.separator + "buildedlib.txt" + SystemInfo.getSharedLibraryExtension());
+        destinationLibFixed =
+                new File(System.getProperty("user.dir") + File.separator + "buildedlib.txt" + SystemInfo.getSharedLibraryExtension());
     }
 
     @AfterAll
@@ -125,7 +128,8 @@ public class TestNativeCompiler {
 
         //unexistent file
         try {
-            compilerError = compiler.compileSharedLib(new File[]{new File("iung" + SystemInfo.getObjectExtension())}, destinationLib);
+            compilerError = compiler.compileSharedLib(new File[]{new File("iung" + SystemInfo.getObjectExtension())},
+                    destinationLib);
             Assertions.assertNull(compilerError);
             Assertions.fail();
         } catch (IOException e) {

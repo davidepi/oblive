@@ -29,7 +29,8 @@ public class ParseRecursively {
         assert SystemInfo.isLinux() || SystemInfo.isMacOS();
 
         if (args.length < 3) {
-            System.err.println("Missing arguments: <folder containing class files> <output folder of the C library> <name of the C library>");
+            System.err.println("Missing arguments: <folder containing class files> <output folder of the C library> " +
+                    "<name of the C library>");
             System.exit(1);
         }
         JavaToC j2c = new JavaToC();

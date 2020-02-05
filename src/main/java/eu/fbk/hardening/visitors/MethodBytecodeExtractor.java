@@ -571,10 +571,12 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 eb.returnType = 'V';
                 break;
             case ARRAYLENGTH:
-                eb.statements.add(handleSystemException("_Arraylength(env,_stack,&_index)", NullPointerException.class));
+                eb.statements.add(handleSystemException("_Arraylength(env,_stack,&_index)",
+                        NullPointerException.class));
                 break;
             case ATHROW:
-                eb.statements.add(handleSystemException("_ThrowFromUser(env,_stack,&_index)", NullPointerException.class));
+                eb.statements.add(handleSystemException("_ThrowFromUser(env,_stack,&_index)",
+                        NullPointerException.class));
                 eb.statements.add(ExtractedBytecode.POSTPROCESS_IS_CATCHED);
                 break;
             case MONITORENTER:
@@ -606,28 +608,36 @@ public class MethodBytecodeExtractor extends MethodVisitor {
             case NEWARRAY: {
                 switch (operand) {
                     case T_BOOLEAN:
-                        eb.statements.add(handleSystemException("_NewBooleanArray(env,_stack,&_index)", NegativeArraySizeException.class));
+                        eb.statements.add(handleSystemException("_NewBooleanArray(env,_stack,&_index)",
+                                NegativeArraySizeException.class));
                         break;
                     case T_CHAR:
-                        eb.statements.add(handleSystemException("_NewCharArray(env,_stack,&_index)", NegativeArraySizeException.class));
+                        eb.statements.add(handleSystemException("_NewCharArray(env,_stack,&_index)",
+                                NegativeArraySizeException.class));
                         break;
                     case T_FLOAT:
-                        eb.statements.add(handleSystemException("_NewFloatArray(env,_stack,&_index)", NegativeArraySizeException.class));
+                        eb.statements.add(handleSystemException("_NewFloatArray(env,_stack,&_index)",
+                                NegativeArraySizeException.class));
                         break;
                     case T_DOUBLE:
-                        eb.statements.add(handleSystemException("_NewDoubleArray(env,_stack,&_index)", NegativeArraySizeException.class));
+                        eb.statements.add(handleSystemException("_NewDoubleArray(env,_stack,&_index)",
+                                NegativeArraySizeException.class));
                         break;
                     case T_BYTE:
-                        eb.statements.add(handleSystemException("_NewByteArray(env,_stack,&_index)", NegativeArraySizeException.class));
+                        eb.statements.add(handleSystemException("_NewByteArray(env,_stack,&_index)",
+                                NegativeArraySizeException.class));
                         break;
                     case T_SHORT:
-                        eb.statements.add(handleSystemException("_NewShortArray(env,_stack,&_index)", NegativeArraySizeException.class));
+                        eb.statements.add(handleSystemException("_NewShortArray(env,_stack,&_index)",
+                                NegativeArraySizeException.class));
                         break;
                     case T_INT:
-                        eb.statements.add(handleSystemException("_NewIntArray(env,_stack,&_index)", NegativeArraySizeException.class));
+                        eb.statements.add(handleSystemException("_NewIntArray(env,_stack,&_index)",
+                                NegativeArraySizeException.class));
                         break;
                     case T_LONG:
-                        eb.statements.add(handleSystemException("_NewLongArray(env,_stack,&_index)", NegativeArraySizeException.class));
+                        eb.statements.add(handleSystemException("_NewLongArray(env,_stack,&_index)",
+                                NegativeArraySizeException.class));
                         break;
                     default:
                         throw new IllegalPatternError("Unimplemented opcode: NEWARRAY with type " + operand);
@@ -714,7 +724,8 @@ public class MethodBytecodeExtractor extends MethodVisitor {
         switch (opcode) {
             case INVOKEINTERFACE:
             case INVOKEVIRTUAL:
-                eb.statements.add("_InvokeVirtual_" + signature.getReturnType().getJniName() + "(env,_stack,&_index,\"" +
+                eb.statements.add("_InvokeVirtual_" + signature.getReturnType().getJniName() + "(env,_stack,&_index," +
+                        "\"" +
                         owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
                 eb.statements.add("if((*env)->ExceptionCheck(env)){\n_ThrowFromJVM(env,_stack,&_index);");
                 eb.statements.add(ExtractedBytecode.POSTPROCESS_EXCEPTION_CLEAR);
@@ -722,7 +733,8 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 break;
             case INVOKESPECIAL:
                 if (!name.equals("<init>")) {
-                    eb.statements.add("_InvokeSpecial_" + signature.getReturnType().getJniName() + "(env,_stack,&_index,\"" +
+                    eb.statements.add("_InvokeSpecial_" + signature.getReturnType().getJniName() + "(env,_stack," +
+                            "&_index,\"" +
                             owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
                 } else {
                     eb.statements.add("_New(env,_stack,&_index,\"" + owner + "\",\"" + desc + "\"," + argumentsName + ");");
@@ -748,16 +760,20 @@ public class MethodBytecodeExtractor extends MethodVisitor {
         JniType type = new JniType(desc);
         switch (opcode) {
             case GETFIELD:
-                eb.statements.add(handleSystemException("_GetField_" + type.getJniName() + "(env,_stack,&_index,\"" + owner + "\",\"" + name + "\",\"" + desc + "\")", NullPointerException.class));
+                eb.statements.add(handleSystemException("_GetField_" + type.getJniName() + "(env,_stack,&_index,\"" +
+                        owner + "\",\"" + name + "\",\"" + desc + "\")", NullPointerException.class));
                 break;
             case GETSTATIC:
-                eb.statements.add("_GetStatic_" + type.getJniName() + "(env,_stack,&_index,\"" + owner + "\",\"" + name + "\",\"" + desc + "\");");
+                eb.statements.add("_GetStatic_" + type.getJniName() + "(env,_stack,&_index,\"" + owner + "\",\"" +
+                        name + "\",\"" + desc + "\");");
                 break;
             case PUTFIELD:
-                eb.statements.add(handleSystemException("_SetField_" + type.getJniName() + "(env,_stack,&_index,\"" + owner + "\",\"" + name + "\",\"" + desc + "\")", NullPointerException.class));
+                eb.statements.add(handleSystemException("_SetField_" + type.getJniName() + "(env,_stack,&_index,\"" +
+                        owner + "\",\"" + name + "\",\"" + desc + "\")", NullPointerException.class));
                 break;
             case PUTSTATIC:
-                eb.statements.add("_SetStatic_" + type.getJniName() + "(env,_stack,&_index,\"" + owner + "\",\"" + name + "\",\"" + desc + "\");");
+                eb.statements.add("_SetStatic_" + type.getJniName() + "(env,_stack,&_index,\"" + owner + "\",\"" +
+                        name + "\",\"" + desc + "\");");
                 break;
             default:
                 throw new IllegalPatternError("Unimplemented opcode: " + opcode);
@@ -771,13 +787,15 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 processingNew = true;
                 break;
             case ANEWARRAY:
-                eb.statements.add(handleSystemException("_NewObjectArray(env,_stack,&_index,\"" + type + "\")", NegativeArraySizeException.class));
+                eb.statements.add(handleSystemException("_NewObjectArray(env,_stack,&_index,\"" + type + "\")",
+                        NegativeArraySizeException.class));
                 break;
             case INSTANCEOF:
                 eb.statements.add("_InstanceOf(env,_stack,&_index,\"" + type + "\");");
                 break;
             case CHECKCAST:
-                eb.statements.add(handleSystemException("_CheckCast(env,_stack,&_index,\"" + type + "\")", ClassCastException.class));
+                eb.statements.add(handleSystemException("_CheckCast(env,_stack,&_index,\"" + type + "\")",
+                        ClassCastException.class));
                 break;
 
             default:

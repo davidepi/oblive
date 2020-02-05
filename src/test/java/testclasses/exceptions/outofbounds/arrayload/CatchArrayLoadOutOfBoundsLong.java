@@ -48,6 +48,6 @@ public class CatchArrayLoadOutOfBoundsLong {
             res++;
         }
 
-        return (long) res;
+        return res;
     }
 }

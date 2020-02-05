@@ -4,7 +4,8 @@ package eu.fbk.hardening.helpers;
  * Interface providing various information about a Test.
  * This can work as a skeleton for testing an obfuscation tool.
  * More specifically, the kind of tests expected are tests which require a sort of transformation (in this case the
- * obfuscation) before being run. This interface provides method returning the name of the annotated (obfuscated) method,
+ * obfuscation) before being run. This interface provides method returning the name of the annotated (obfuscated)
+ * method,
  * the name of the tested method, etc...
  * In this way every test can just extend a skeleton implementing this class and override just the required functions
  * functions.
