@@ -1,2 +1,3 @@
-rootProject.name = 'java2c'
-
+rootProject.name = 'hardening'
+include 'annotations'
+include 'java2c'

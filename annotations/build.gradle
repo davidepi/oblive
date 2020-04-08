@@ -1,0 +1,8 @@
+plugins {
+    id 'java'
+}
+
+group 'eu.fbk.hardening'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8

@@ -1,46 +1,11 @@
-group 'java2c'
-version '1.0-SNAPSHOT'
+allprojects {
+    apply plugin: 'java'
+    group = 'eu.fbk.hardening'
+    version = '1.0-SNAPSHOT'
 
-apply plugin: 'java'
-apply plugin: 'jacoco'
+    sourceCompatibility = 1.8
 
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compile group: 'org.ow2.asm', name: 'asm', version: '6.0'
-    compile group: 'org.jetbrains', name: 'annotations', version: '17.0.0'
-    testImplementation('org.junit.jupiter:junit-jupiter-api:5.3.2')
-    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.3.2')
-    testCompile group: 'org.ow2.asm', name: 'asm-tree', version: '6.0'
-}
-
-compileTestJava {options.encoding = "UTF-8"}
-test {
-    useJUnitPlatform()
-}
-
-tasks.withType(Test) {
-    systemProperty "java.library.path", System.getProperty("java.library.path")+":$buildDir/libsrc"
-    maxParallelForks = 1
-}
-
-jacocoTestReport {
-    reports {
-        html.enabled true
-        csv.enabled false
-        xml.enabled false
-    }
-}
-
-jar {
-    manifest {
-        attributes 'Main-Class': 'eu.fbk.hardening.ParseRecursively'
-    }
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    repositories {
+        mavenCentral()
     }
 }
