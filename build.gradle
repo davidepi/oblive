@@ -1,11 +1,24 @@
 allprojects {
     apply plugin: 'java'
+    apply plugin: 'maven-publish'
     group = 'eu.fbk.hardening'
-    version = '1.0-SNAPSHOT'
 
     sourceCompatibility = 1.8
 
     repositories {
         mavenCentral()
+    }
+
+    publishing {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/davidepi/java2c")
+                credentials {
+                    username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
+                    password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN_PKG_WRITE")
+                }
+            }
+        }
     }
 }
