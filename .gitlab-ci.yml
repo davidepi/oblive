@@ -19,7 +19,7 @@ x86_test:
   stage: test_main
   script:
     - ./gradlew test jacocoTestReport
-    - cat build/reports/jacoco/test/html/index.html
+    - cat java2c/build/reports/jacoco/test/html/index.html
   coverage: '/Total.*?([0-9]{1,3})%/'
   tags:
     - x86_64
