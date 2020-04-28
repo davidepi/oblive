@@ -13,7 +13,7 @@ import java.nio.file.Paths;
  *
  * @author D.Pizzolotto
  */
-public class ParseRecursively {
+public class ClassParser {
 
     /**
      * Parse every Class file inside a folder to apply the Java2c obfuscation.
@@ -23,7 +23,7 @@ public class ParseRecursively {
      *             1 - Output folder for the output C source file
      *             2 - Name of the library that will be linked against every Class file (without `lib` and `.so`)
      */
-    public static void main(@NotNull String[] args) {
+    public static void parseRecursively(@NotNull String[] args) {
         //TODO: ADD WINDOWS TO THE ASSERT WHEN IMPLEMENTED
         //assert that the OS is correct (no solaris or some other strange os)
         assert SystemInfo.isLinux() || SystemInfo.isMacOS();
@@ -33,30 +33,6 @@ public class ParseRecursively {
                     "<name of the C library>");
             System.exit(1);
         }
-        JavaToC j2c = new JavaToC();
-        try {
-            int[] analyzed = {0};
-            long[] ttime = {0};
-            j2c.startParsing(args[1], args[2]);
-            Files.walk(Paths.get(args[0])).forEach(a -> {
-                if (a.toString().endsWith(".class")) {
-                    try {
-                        analyzed[0]++;
-                        long t0 = System.currentTimeMillis();
-                        j2c.parseClass(a.toString());
-                        long t1 = System.currentTimeMillis();
-                        ttime[0] += t1 - t0;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
 
-                }
-            });
-            j2c.endParsing();
-            System.out.println("Analyzed " + analyzed[0] + " files");
-            System.err.print((double) ttime[0] * 1.f / 1000.f + ",");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

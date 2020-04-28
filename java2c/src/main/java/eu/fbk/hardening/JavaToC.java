@@ -67,25 +67,23 @@ public class JavaToC {
      * Starts the Java2C transformation. This method can be seen as a sort of initialization.
      *
      * @param outputFolder The output folder of the processed class files
-     * @param libname      name of the generated C library
+     * @param outlib       The output .c lib that will be generated. name MUST start with lib
      * @throws IOException Exception indicating that another parsing is in progress or insufficient permissions
      */
-    public void startParsing(final String outputFolder, final String libname) throws IOException {
-        this.libname = libname;
-        String output = outputFolder;
+    public void startParsing(final String outputFolder, File outlib) throws IOException {
+        this.libname = outlib.getName().substring(0, outlib.getName().lastIndexOf('.'));
+        if (!this.libname.startsWith("lib")) {
+            throw new IOException("The requested output filename for Java2C does not start with 'lib'");
+        }
         if (parsing) {
             throw new IOException("Still parsing another library. Forgot to call endParsing()?");
         }
-        if (outputFolder.charAt(outputFolder.length() - 1) != File.separatorChar) {
-            output += File.separator;
-        }
-        File outputDir = new File(output); //create output directory
-        if (!outputDir.exists()) {
-            if (!outputDir.mkdirs()) {
+        if (!outlib.getParentFile().exists()) {
+            if (!outlib.mkdirs()) {
                 throw new IOException("Unable to create directory " + output);
             }
         }
-        this.output = new PrintWriter(new FileOutputStream(output + libname + ".c"));
+        this.output = new PrintWriter(new FileOutputStream(outlib));
         printHeader();
         parsing = true;
     }

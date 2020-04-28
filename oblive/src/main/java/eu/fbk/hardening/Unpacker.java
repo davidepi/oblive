@@ -56,14 +56,15 @@ public abstract class Unpacker {
 
     /**
      * Delete the temporary folder
-     *
-     * @throws IOException if the temporary folder cannot be read (unlikely, but maybe due to changed permissions)
      */
-    public void dispose() throws IOException {
-        Files.walk(unpackDir)
-                .sorted(Comparator.reverseOrder())
-                .map(Path::toFile)
-                .forEach(File::delete);
+    public void dispose() {
+        try {
+            Files.walk(unpackDir)
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+        } catch (IOException ignored) {
+        }
     }
 
     /**

@@ -57,6 +57,7 @@ public class NativeCompiler {
         String javaHome = System.getenv("JAVA_HOME");
         if (javaHome == null) {
             javaHome = System.getProperty("java.home");
+            javaHome = javaHome.substring(0, javaHome.length() - 3); //remove 'jre' at the end
             if (javaHome == null) {
                 throw new IncompleteConfigurationError("The JAVA_HOME environment variable used to specify the " +
                         "JDK/JRE home is not set");
@@ -101,8 +102,10 @@ public class NativeCompiler {
     public String compileFile(final File[] sources, @NotNull File objectOutput) throws IOException {
         //TODO: ASSERT THAT THIS WORKS ON WINDOWS
 
-        //assert existence of output
-        boolean created = objectOutput.getParentFile().mkdirs();
+        //assert existence of folder if it is not the current one
+        if (objectOutput.getParentFile() != null) {
+            boolean created = objectOutput.getParentFile().mkdirs();
+        }
         //append extension if does not exists or it is wrong
         if (!objectOutput.getAbsolutePath().endsWith(objext))
             objectOutput = new File(objectOutput.getAbsolutePath() + objext);
@@ -143,8 +146,10 @@ public class NativeCompiler {
     public String compileSharedLib(File[] sources, @NotNull File libraryOutput) throws IOException {
         //TODO: ASSERT THAT THIS WORKS ON WINDOWS
 
-        //assert existence of output folder
-        boolean created = libraryOutput.getParentFile().mkdirs();
+        //assert existence of folder if it is not the current one
+        if (libraryOutput.getParentFile() != null) {
+            boolean created = libraryOutput.getParentFile().mkdirs();
+        }
         //append extension if does not exists or it is wrong
         if (!libraryOutput.getAbsolutePath().endsWith(libext))
             libraryOutput = new File(libraryOutput.getAbsolutePath() + libext);

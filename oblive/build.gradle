@@ -11,6 +11,16 @@ repositories {
 test {
     useJUnitPlatform()
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'eu.fbk.hardening.AppStart'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
 dependencies {
     implementation project(':annotations')
     implementation project(':java2c')
