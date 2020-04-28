@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+}
+
+group 'eu.fbk.hardening'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+test {
+    useJUnitPlatform()
+}
+dependencies {
+    implementation project(':annotations')
+    implementation project(':java2c')
+    implementation group: 'org.jetbrains', name: 'annotations', version: '19.0.0'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.2'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.3.2'
+}

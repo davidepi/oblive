@@ -1,3 +1,4 @@
 rootProject.name = 'hardening'
 include 'annotations'
+include 'oblive'
 include 'java2c'

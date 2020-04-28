@@ -1,6 +1,7 @@
 allprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
+    apply from: new File(project(':').projectDir,'secrets.gradle')
     group = 'eu.fbk.hardening'
 
     sourceCompatibility = 1.8
@@ -15,8 +16,8 @@ allprojects {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/davidepi/java2c")
                 credentials {
-                    username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
-                    password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN_PKG_WRITE")
+                    username = "${project.github_username}" ?: System.getenv("GITHUB_USERNAME")
+                    password = "${project.github_token}" ?: System.getenv("GITHUB_TOKEN_PKG_READ")
                 }
             }
         }
