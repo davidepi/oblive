@@ -123,7 +123,7 @@ public class JavaToC {
 
         //third pass, modify the class by removing the methods' bodies and adding static init
         classWriter = new ClassWriter(classReader, 0);
-        codeEliminator = new ClassCodeEliminator(ASM_VERSION, methodsToProcess, libname, classWriter);
+        codeEliminator = new ClassCodeEliminator(ASM_VERSION, methodsToProcess, libname.substring(3), classWriter);
         classReader.accept(codeEliminator, 0);
 
         //next step: convert the ExtractedBytecode to actual c code

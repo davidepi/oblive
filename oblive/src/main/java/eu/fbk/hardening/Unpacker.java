@@ -1,6 +1,9 @@
 package eu.fbk.hardening;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Comparator;
@@ -75,28 +78,19 @@ public abstract class Unpacker {
      * @throws IOException if the zip file is not readable or the target folder not writable
      */
     protected static void unzip(final File source, Path targetFolder) throws IOException {
-        // strictly taken from "https://stackoverflow.com/questions/10633595/java-zip-how-to-unzip-folder" :D
         ZipInputStream zis = new ZipInputStream(new FileInputStream(source));
-        ZipEntry entry = zis.getNextEntry();
-        while (entry != null) {
-            File file = new File(String.valueOf(targetFolder), entry.getName());
+        ZipEntry entry;
+        while ((entry = zis.getNextEntry()) != null) {
+            Path fullPath = targetFolder.resolve(entry.getName());
             if (entry.isDirectory()) {
-                file.mkdirs();
+                Files.createDirectories(fullPath);
             } else {
-                File parent = file.getParentFile();
-                if (!parent.exists()) {
-                    parent.mkdirs();
-                }
-                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-                byte[] buffer = new byte[Math.toIntExact(entry.getSize())];
-                int location;
-                while ((location = zis.read(buffer)) != -1) {
-                    bos.write(buffer, 0, location);
-                }
+                //this will always be a fresh directory, so no problem with REPLACE_EXISTING
+                //but somehow I managed to create a zip file containing two files with the same name and this would
+                //throw an unwanted exception (given that they have the same content)
+                Files.copy(zis, fullPath, StandardCopyOption.REPLACE_EXISTING);
             }
-            entry = zis.getNextEntry();
         }
-        zis.close();
     }
 
     /**
