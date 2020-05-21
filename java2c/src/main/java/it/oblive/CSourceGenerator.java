@@ -80,12 +80,15 @@ public class CSourceGenerator {
 
         /* ----------------------------- FUNCTION BODY STARTS HERE ---------------------------------------------------*/
         //antidebug techniques
-        if (antidebugTime) {
-            sb.append("time_t debug_timer;\n");
-            sb.append("time_start(&debug_timer);\n");
-        }
-        if (antidebugSelf) {
-            sb.append("self_debug();\n");
+        if (antidebugTime || antidebugSelf) {
+            sb.append("break_java_debugger();\n");
+            if (antidebugTime) {
+                sb.append("time_t debug_timer;\n");
+                sb.append("time_start(&debug_timer);\n");
+            }
+            if (antidebugSelf) {
+                sb.append("self_debug();\n");
+            }
         }
 
         //generate stack vars

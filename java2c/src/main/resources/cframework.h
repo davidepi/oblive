@@ -7,6 +7,7 @@
 #include <time.h> //required by the AntidebugTime and some performance test. Not a big deal if it is unnecessary
 #include <sys/prctl.h> // Here starts the includes for the AntidebugSelf Technique
 #include <sys/ptrace.h>
+#include <sys/mman.h> //To change the protection of invoked libraries (and fuck up the java debugging library)
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/wait.h> // Here ends the includes for the AntidebugSelf Technique

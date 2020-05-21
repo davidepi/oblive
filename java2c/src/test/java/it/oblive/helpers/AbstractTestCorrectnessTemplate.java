@@ -37,7 +37,7 @@ public abstract class AbstractTestCorrectnessTemplate extends Java2CTests {
 
     //not-annotated methods
     private MethodNode[] sourceNotAnnotatedMethodNodes3;
-    private MethodNode[] destdNotAnnotatedMethodNodes4;
+    private MethodNode[] destNotAnnotatedMethodNodes4;
 
     /**
      * Checks the correctness of the transformation
@@ -87,7 +87,7 @@ public abstract class AbstractTestCorrectnessTemplate extends Java2CTests {
             // check NON-transformed methods
             sourceNotAnnotatedMethodNodes3 = getOtherMethodNodes(getSourceDir(), getTestClass(),
                     sourceAnnotatedMethodNodes1);
-            destdNotAnnotatedMethodNodes4 = getOtherMethodNodes(getDestDir(), getTestClass(),
+            destNotAnnotatedMethodNodes4 = getOtherMethodNodes(getDestDir(), getTestClass(),
                     destAnnotatedMethodNodes2);
 
             // check that NON-transformed methods have the same code before and after transformation
@@ -148,10 +148,10 @@ public abstract class AbstractTestCorrectnessTemplate extends Java2CTests {
             if (sourceNotAnnotatedMethodNodes3[i].name.equals("<clinit>"))
                 continue;
             int size1 = TestUtils.sizeofCode(sourceNotAnnotatedMethodNodes3[i]);
-            int size2 = TestUtils.sizeofCode(destdNotAnnotatedMethodNodes4[i]);
+            int size2 = TestUtils.sizeofCode(destNotAnnotatedMethodNodes4[i]);
             String message =
                     "method " + sourceNotAnnotatedMethodNodes3[i].name + ", class " + getTestClass().getName() +
-                    ": Non-trasformed method has the different number of instructions between original and " +
+                            ": Non-trasformed method has the different number of instructions between original and " +
                             "transformed classes";
             Assertions.assertEquals(size1, size2, message);
         }
@@ -166,10 +166,10 @@ public abstract class AbstractTestCorrectnessTemplate extends Java2CTests {
         int length2 = sourceNotAnnotatedMethodNodes3.length;
         for (int i = 0; i < length2; i++) {
             int size1 = TestUtils.sizeofAnnotations(sourceNotAnnotatedMethodNodes3[i]);
-            int size2 = TestUtils.sizeofAnnotations(destdNotAnnotatedMethodNodes4[i]);
+            int size2 = TestUtils.sizeofAnnotations(destNotAnnotatedMethodNodes4[i]);
             String message =
                     "method " + sourceNotAnnotatedMethodNodes3[i].name + ", class " + getTestClass().getName() +
-                    ": Non-trasformed method has the different number of annotations between original and transformed" +
+                            ": Non-trasformed method has the different number of annotations between original and transformed" +
                             " classes";
             Assertions.assertEquals(size1, size2, message);
         }
