@@ -1,6 +1,6 @@
 package testclasses.stack;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class DLoad {
     public DLoad() {

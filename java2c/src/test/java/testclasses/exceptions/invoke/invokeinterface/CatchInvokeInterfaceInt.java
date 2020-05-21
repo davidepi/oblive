@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokeinterface;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class CatchInvokeInterfaceInt {
     public CatchInvokeInterfaceInt() {

@@ -1,6 +1,6 @@
 package testclasses.invoke.invokestatic;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class InvokeStaticInt {
     public InvokeStaticInt() {

@@ -1,6 +1,6 @@
 package testclasses.arrays.multidimensional;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class LoadArrayInt {
     private int[][] array;

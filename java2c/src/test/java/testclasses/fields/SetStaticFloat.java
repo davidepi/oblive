@@ -1,6 +1,6 @@
 package testclasses.fields;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class SetStaticFloat {
     private static float fieldF;

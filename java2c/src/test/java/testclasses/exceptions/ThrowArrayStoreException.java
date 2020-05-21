@@ -1,6 +1,6 @@
 package testclasses.exceptions;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class ThrowArrayStoreException {
     private Object[] array;

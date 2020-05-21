@@ -1,6 +1,6 @@
 package testclasses.arithmetic; //when changing this, remember to change also the variable in eu.fbk.hardening.helpers
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class LNeg {
     public LNeg() {

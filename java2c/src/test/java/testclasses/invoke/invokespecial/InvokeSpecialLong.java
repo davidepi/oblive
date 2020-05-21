@@ -1,6 +1,6 @@
 package testclasses.invoke.invokespecial;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class InvokeSpecialLong extends InvokeVirtualLong {
     public InvokeSpecialLong() {

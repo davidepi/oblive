@@ -1,6 +1,6 @@
 package testclasses.casts; //when changing this, remember to change also the variable in eu.fbk.hardening.helpers
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class CastInt2Byte {
     public CastInt2Byte() {

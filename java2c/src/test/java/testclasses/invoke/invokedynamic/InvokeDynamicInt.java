@@ -1,6 +1,6 @@
 package testclasses.invoke.invokedynamic;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class InvokeDynamicInt {
     public InvokeDynamicInt() {

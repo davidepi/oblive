@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.arrayload;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 import testclasses.exceptions.nullpointer.SupportClassDouble;
 
 public class CatchNullPointerExceptionXLOADDouble {

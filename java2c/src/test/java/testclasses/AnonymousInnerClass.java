@@ -1,6 +1,6 @@
 package testclasses;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 import testclasses.arithmetic.IAdd;
 
 public class AnonymousInnerClass {

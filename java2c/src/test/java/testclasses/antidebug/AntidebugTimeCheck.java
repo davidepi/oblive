@@ -1,7 +1,7 @@
 package testclasses.antidebug;
 
-import eu.fbk.hardening.annotations.AntidebugTime;
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.AntidebugTime;
+import it.oblive.annotations.NativeObfuscation;
 
 public class AntidebugTimeCheck {
     public AntidebugTimeCheck() {

@@ -1,7 +1,7 @@
 package testclasses.stack;
 
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 //DCONST_0, DCONST_1, DADD, DSTORE, DLOAD
 public class DConst {

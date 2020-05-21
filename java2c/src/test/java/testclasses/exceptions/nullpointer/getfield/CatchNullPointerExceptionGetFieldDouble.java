@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.getfield;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 import testclasses.exceptions.nullpointer.SupportClassDouble;
 
 public class CatchNullPointerExceptionGetFieldDouble {

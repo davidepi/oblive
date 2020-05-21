@@ -1,6 +1,6 @@
 package testclasses.exceptions.outofbounds.arraystore;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class CatchArrayStoreOutOfBoundsDouble {
     private double[] array;

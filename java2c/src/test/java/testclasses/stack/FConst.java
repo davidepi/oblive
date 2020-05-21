@@ -1,7 +1,7 @@
 package testclasses.stack;
 
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 //FCONST_0, FCONST_1, FCONST_2, FADD, FSTORE, FLOAD
 public class FConst {

@@ -1,4 +1,4 @@
-rootProject.name = 'hardening'
+rootProject.name = 'oblive'
 include 'annotations'
 include 'oblive'
 include 'java2c'

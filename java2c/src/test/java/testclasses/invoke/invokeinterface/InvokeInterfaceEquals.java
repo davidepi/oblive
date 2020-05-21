@@ -1,6 +1,6 @@
 package testclasses.invoke.invokeinterface;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 import java.util.HashMap;
 import java.util.Map;

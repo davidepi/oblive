@@ -1,6 +1,6 @@
 package testclasses.invoke.overflow;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class OverflowLong {
     long a;

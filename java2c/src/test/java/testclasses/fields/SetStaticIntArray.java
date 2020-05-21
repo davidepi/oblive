@@ -1,6 +1,6 @@
 package testclasses.fields;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 import java.util.ArrayList;
 

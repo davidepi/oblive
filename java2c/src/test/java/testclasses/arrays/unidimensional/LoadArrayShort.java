@@ -1,6 +1,6 @@
 package testclasses.arrays.unidimensional;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class LoadArrayShort {
     private short[] array;

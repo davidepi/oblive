@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.setfield;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 import testclasses.exceptions.nullpointer.SupportClassChar;
 
 public class ThrowNullPointerExceptionSetFieldChar {

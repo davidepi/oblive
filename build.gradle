@@ -2,7 +2,7 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
     apply from: new File(project(':').projectDir,'secrets.gradle')
-    group = 'eu.fbk.hardening'
+    group = 'it.oblive'
 
     sourceCompatibility = 1.8
 

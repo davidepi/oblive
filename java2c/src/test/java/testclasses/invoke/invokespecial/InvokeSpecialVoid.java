@@ -1,6 +1,6 @@
 package testclasses.invoke.invokespecial;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 import org.junit.jupiter.api.Assertions;
 
 public class InvokeSpecialVoid extends InvokeVirtualVoid {

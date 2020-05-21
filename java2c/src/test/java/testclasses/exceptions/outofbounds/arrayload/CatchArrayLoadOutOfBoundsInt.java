@@ -1,6 +1,6 @@
 package testclasses.exceptions.outofbounds.arrayload;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class CatchArrayLoadOutOfBoundsInt {
     private int[] array;

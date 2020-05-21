@@ -1,6 +1,6 @@
 package testclasses.invoke.invokeinterface;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class InvokeInterfaceChar {
     public InvokeInterfaceChar() {

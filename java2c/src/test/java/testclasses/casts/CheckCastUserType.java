@@ -1,6 +1,6 @@
 package testclasses.casts;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 import testclasses.support.BaseClassEmpty;
 
 public class CheckCastUserType {

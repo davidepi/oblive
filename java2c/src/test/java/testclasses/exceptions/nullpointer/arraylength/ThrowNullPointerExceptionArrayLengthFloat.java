@@ -1,6 +1,6 @@
 package testclasses.exceptions.nullpointer.arraylength;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 import testclasses.exceptions.nullpointer.SupportClassFloat;
 
 public class ThrowNullPointerExceptionArrayLengthFloat {

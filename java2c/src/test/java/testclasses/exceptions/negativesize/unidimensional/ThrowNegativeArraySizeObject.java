@@ -1,6 +1,6 @@
 package testclasses.exceptions.negativesize.unidimensional;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class ThrowNegativeArraySizeObject {
     private Object[] array;

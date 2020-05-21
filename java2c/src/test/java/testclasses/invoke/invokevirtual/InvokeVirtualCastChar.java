@@ -1,6 +1,6 @@
 package testclasses.invoke.invokevirtual;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 //saving the result of the JNI fun CallCharMethod inside a char performs strange casts and returns wrong errors if the
 //char is later retrieved as int

@@ -1,6 +1,6 @@
 package testclasses;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class AdderStaticMethod {
     public AdderStaticMethod() {

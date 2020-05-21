@@ -1,7 +1,7 @@
 package testclasses.antidebug;
 
-import eu.fbk.hardening.annotations.AntidebugSelf;
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.AntidebugSelf;
+import it.oblive.annotations.NativeObfuscation;
 
 public class AntidebugSelfDebugging {
     public AntidebugSelfDebugging() {

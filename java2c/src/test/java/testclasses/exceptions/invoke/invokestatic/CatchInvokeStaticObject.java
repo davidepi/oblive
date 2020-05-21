@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokestatic;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 import testclasses.exceptions.UserDefinedException;
 
 public class CatchInvokeStaticObject {

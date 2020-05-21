@@ -1,6 +1,6 @@
 package testclasses.newobj;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class NewObjectMultiDup {
     public NewObjectMultiDup() {

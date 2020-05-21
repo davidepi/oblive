@@ -1,6 +1,6 @@
 package testclasses.exceptions.negativesize.multidimensional;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class ThrowNegativeArraySizeInt {
     private int[][][] array;

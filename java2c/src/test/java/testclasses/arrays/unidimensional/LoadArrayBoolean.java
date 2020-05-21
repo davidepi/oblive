@@ -1,6 +1,6 @@
 package testclasses.arrays.unidimensional;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class LoadArrayBoolean {
     private boolean[] array;

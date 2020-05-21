@@ -1,6 +1,6 @@
 package testclasses.overload;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 
 public class OverloadedMethodsBoolean {
     public OverloadedMethodsBoolean() {

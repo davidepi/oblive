@@ -1,6 +1,6 @@
 package testclasses.exceptions.invoke.invokevirtual;
 
-import eu.fbk.hardening.annotations.NativeObfuscation;
+import it.oblive.annotations.NativeObfuscation;
 import testclasses.exceptions.UserDefinedException;
 
 public class CatchInvokeVirtualBoolean {

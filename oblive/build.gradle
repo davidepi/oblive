@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'eu.fbk.hardening'
+group 'it.oblive'
 version '1.0.0'
 
 repositories {
@@ -14,7 +14,7 @@ test {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'eu.fbk.hardening.AppStart'
+        attributes 'Main-Class': 'it.oblive.AppStart'
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
