@@ -59,7 +59,9 @@ public class TestSystemInfo {
             case 1:
             case 2:
                 String res = SystemInfo.which("ls");
-                Assertions.assertEquals("/bin/ls", res);
+                Assertions.assertNotNull(res);
+                // In the latest ubuntu image the path changed to /usr/bin/ls (which is quite uncommon imho)
+                Assertions.assertTrue(res.equals("/bin/ls") || res.equals("/usr/bin/ls"));
                 res = SystemInfo.which("invented command");
                 Assertions.assertNull(res);
                 break;
