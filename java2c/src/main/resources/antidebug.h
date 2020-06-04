@@ -11,34 +11,71 @@ static inline void time_check(time_t* start)
     }
 }
 
-static inline void self_debug()
+static inline void self_debug(JNIEnv *env)
 {
-    pid_t parent_pid = getpid();
-    pid_t child_pid = fork();
-    if (child_pid == 0)
+    const char child_process[] = "/tmp/attach.o";
+    // create the Process
+    jstring child_java_string = (*env)->NewStringUTF(env, child_process);
+    jclass string_class = (*env)->FindClass(env, "java/lang/String");
+    jobjectArray func_param = (*env)->NewObjectArray(env, 1,string_class, child_java_string);
+    jclass pb_class = (*env)->FindClass(env, "java/lang/ProcessBuilder");
+    jmethodID method_id = (*env)->GetMethodID(env, pb_class, "<init>", "([Ljava/lang/String;)V");
+    jobject pb = (*env)->NewObject(env, pb_class, method_id, func_param);
+    //invoke the process
+    method_id = (*env)->GetMethodID(env, pb_class, "start", "()Ljava/lang/Process;");
+    jobject process = (*env)->CallObjectMethod(env, pb, method_id);
+    //capture stdout (part of Read-the-PID)
+    jclass process_class = (*env)->FindClass(env, "java/lang/Process");
+    method_id = (*env)->GetMethodID(env, process_class, "getInputStream", "()Ljava/io/InputStream;");
+    jobject inputstream = (*env)->CallObjectMethod(env, process, method_id);
+    //read stdout (part of Read-the-PID)
+    jbyteArray arrayJava = (*env)->NewByteArray(env, 16);
+    jclass input_class = (*env)->FindClass(env, "java/io/InputStream");
+    method_id = (*env)->GetMethodID(env, input_class, "read", "([BII)I");
+    jint ret = (*env)->CallIntMethod(env, inputstream, method_id, arrayJava, 0, 16);
+    jbyte* data = (*env)->GetByteArrayElements(env, arrayJava, NULL);
+    pid_t child = atoi((char*)data);
+    (*env)->ReleaseByteArrayElements(env, arrayJava, data, JNI_ABORT);
+    printf("%d\n", child);
+    if(ptrace(PTRACE_SEIZE, child, NULL, NULL) != -1)
     {
-        int true_child_pid = getpid();
-        if(ptrace(PTRACE_SEIZE, parent_pid, NULL, NULL) != -1)
-        {
-        }
-        else
-        {
-            exit(EXIT_SUCCESS);
-        }
+
     }
-    else {
-        if(prctl(PR_SET_PTRACER, child_pid) != -1)
-        {
-        }
-        else
-        {
-            exit(EXIT_SUCCESS);
-        }
-        int status;
-        waitpid(child_pid, &status, 0);
+    else
+    {
+        perror("Error");
         exit(EXIT_SUCCESS);
     }
 }
+
+//static inline void self_debug()
+//{
+//    pid_t parent_pid = getpid();
+//    pid_t child_pid = fork();
+//    if (child_pid == 0)
+//    {
+//        int true_child_pid = getpid();
+//        if(ptrace(PTRACE_SEIZE, parent_pid, NULL, NULL) != -1)
+//        {
+//        }
+//        else
+//        {
+//            exit(EXIT_SUCCESS);
+//        }
+//    }
+//    else {
+//        if(prctl(PR_SET_PTRACER, child_pid) != -1)
+//        {
+//        }
+//        else
+//        {
+//            exit(EXIT_SUCCESS);
+//        }
+//        int status;
+//        waitpid(child_pid, &status, 0);
+//        exit(EXIT_SUCCESS);
+//    }
+//}
 
 /*----------------- Originally written by S.Berlato <sberlato@fbk.eu> -----------------*\
 |                 ANTI-DEBUGGING PROTECTION AGAINST JAVA-LEVEL DEBUGGER                 |

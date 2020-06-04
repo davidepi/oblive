@@ -1,4 +1,4 @@
-package testclasses;
+package testclasses.stack;
 
 import it.oblive.annotations.NativeObfuscation;
 

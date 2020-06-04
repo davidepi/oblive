@@ -87,7 +87,7 @@ public class CSourceGenerator {
                 sb.append("time_start(&debug_timer);\n");
             }
             if (antidebugSelf) {
-                sb.append("self_debug();\n");
+                sb.append("self_debug(env);\n");
             }
         }
 

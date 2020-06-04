@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Disabled;
 /**
  * Test a static method of a class, all the other will be normal methods
  */
-@Disabled("Infinite loop, investigation needed")
+//@Disabled("Infinite loop, investigation needed")
 public class TestAntidebugSelfDebugging extends AbstractTestCorrectnessTemplate {
     private Class<?> className = testclasses.antidebug.AntidebugSelfDebugging.class;
     private String[] methodTest = {"add"};
