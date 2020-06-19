@@ -44,13 +44,21 @@ static inline void pushd(generic_t* stack, uint32_t* index, jdouble val)
   push2(stack,index,pushme);
 }
 
-static inline void _Ldc(JNIEnv* env, generic_t* stack, uint32_t* index, 
+static inline void _LdcString(JNIEnv* env, generic_t* stack, uint32_t* index,
                         const jchar* str, int len)
 {
   jstring string = (*env)->NewString(env,str,len);
   generic_t pushme;
   pushme.l = string;
   push(stack,index,pushme);
+}
+
+static inline void _LdcClassRef(JNIEnv* env, generic_t* stack, uint32_t* index, const jchar* name)
+{
+    jclass requested_class = (*env)->FindClass(env, name);
+    generic_t pushme;
+    pushme.l = requested_class;
+    push(stack, index, pushme);
 }
 
 static inline generic_t pop(generic_t* stack, uint32_t* index)

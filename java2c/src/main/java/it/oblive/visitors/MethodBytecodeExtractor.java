@@ -692,7 +692,12 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 for (int i = 0; i < str.length(); i++) {
                     eb.statements.add("string_" + stringID + "[" + i + "]=" + (short) str.charAt(i) + ";");
                 }
-                eb.statements.add("_Ldc(env,_stack,&_index,string_" + stringID + "," + str.length() + ");");
+                eb.statements.add("_LdcString(env,_stack,&_index,string_" + stringID + "," + str.length() + ");");
+                break;
+            }
+            case "org.objectweb.asm.Type": {
+                String className = cst.toString();
+                eb.statements.add("_LdcClassRef(env,_stack,&_index,\"" + className + "\");");
                 break;
             }
             default:
