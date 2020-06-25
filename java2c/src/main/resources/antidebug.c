@@ -31,7 +31,6 @@ int main(int argc, const char* argv[])
   addr.sun_family = AF_UNIX;
   *addr.sun_path = '\0';
   strncpy(addr.sun_path + 1, socket_path + 1, sizeof(addr.sun_path) - 2);
-  FILE* fout = fopen("/home/davide/Desktop/log.txt", "w");
   while(connect(fd, (struct sockaddr*)&addr, sizeof(addr)) == -1)
     ;
   uint32_t mypid_h = getpid();
