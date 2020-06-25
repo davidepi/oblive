@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @author D.Pizzolotto
  */
 public class JavaToC {
-    private static final int ASM_VERSION = Opcodes.ASM6;
+    private static final int ASM_VERSION = Opcodes.ASM8;
     private PrintWriter output;
     private String libname;
     private boolean parsing;

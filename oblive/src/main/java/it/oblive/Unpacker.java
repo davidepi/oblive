@@ -82,9 +82,9 @@ public abstract class Unpacker {
         ZipEntry entry;
         while ((entry = zis.getNextEntry()) != null) {
             Path fullPath = targetFolder.resolve(entry.getName());
-            if (entry.isDirectory()) {
-                Files.createDirectories(fullPath);
-            } else {
+            if (!entry.isDirectory()) {
+                //in some zip files the directories are not explicitly listed so creates them when iterating files
+                Files.createDirectories(fullPath.getParent());
                 //this will always be a fresh directory, so no problem with REPLACE_EXISTING
                 //but somehow I managed to create a zip file containing two files with the same name and this would
                 //throw an unwanted exception (given that they have the same content)

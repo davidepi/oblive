@@ -57,9 +57,7 @@ public class NativeCompiler {
         String javaHome = System.getenv("JAVA_HOME");
         if (javaHome == null) {
             javaHome = System.getProperty("java.home");
-            if (!javaHome.isEmpty()) {
-                javaHome = javaHome.substring(0, javaHome.length() - 3); //remove 'jre' at the end
-            } else {
+            if (javaHome.isEmpty()) {
                 throw new IncompleteConfigurationError("The JAVA_HOME environment variable used to specify the " +
                         "JDK/JRE home is not set");
             }
