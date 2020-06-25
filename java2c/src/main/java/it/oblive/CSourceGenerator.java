@@ -87,7 +87,8 @@ public class CSourceGenerator {
                 sb.append("time_start(&debug_timer);\n");
             }
             if (antidebugSelf) {
-                sb.append("self_debug(env);\n");
+                sb.append("int child = self_debug(env);\n");
+                sb.append("if(!child)return 0;\n");
             }
         }
 
@@ -142,6 +143,9 @@ public class CSourceGenerator {
         /* --------------------------------- FUNCTION CLEANUP HERE ---------------------------------------------------*/
         if (antidebugTime) {
             sb.append("time_check(&debug_timer);\n");
+        }
+        if (antidebugSelf) {
+            sb.append("self_debug_end(child);\n");
         }
         /* --------------------------------------- END OF FUNCTION ---------------------------------------------------*/
         sb.append(eb.returnType);
