@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.MethodVisitor;
 
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
-import static org.objectweb.asm.Opcodes.RETURN;
 
 /**
  * This visitor is used to add the loadLibrary used to load dynamically the generated C library.
@@ -13,6 +12,7 @@ import static org.objectweb.asm.Opcodes.RETURN;
  */
 public class StaticInitExplorer extends MethodVisitor {
     private final String libname;
+    private int nthInstruction;
 
     /**
      * Default constructor
@@ -24,14 +24,17 @@ public class StaticInitExplorer extends MethodVisitor {
     public StaticInitExplorer(int version, MethodVisitor mv, @NotNull String libname) {
         super(version, mv);
         this.libname = libname.replace('/', '.');
+        this.nthInstruction = 0;
     }
 
     @Override
     public void visitInsn(int opcode) {
-        //end of the static block
-        if (opcode == RETURN) {
+        //beginning of the static block
+        if (nthInstruction == 0) {
             super.visitLdcInsn(libname);
             super.visitMethodInsn(INVOKESTATIC, "java/lang/System", "loadLibrary", "(Ljava/lang/String;)V", false);
+        } else {
+            nthInstruction++;
         }
         super.visitInsn(opcode);
     }
