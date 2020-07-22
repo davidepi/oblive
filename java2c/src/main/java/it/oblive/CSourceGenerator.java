@@ -52,9 +52,9 @@ public class CSourceGenerator {
         }
         sb.append(" JNICALL ");
         sb.append("Java_");
-        sb.append(className.replace('/', '_').replace("$", "_00024"));
+        sb.append(className.replace("_", "_1").replace('/', '_').replace("$", "_00024"));
         sb.append('_');
-        sb.append(methodName);
+        sb.append(methodName.replace("_", "_1"));
         if (overloaded) //add special signature for overloaded methods
         {
             sb.append("__");

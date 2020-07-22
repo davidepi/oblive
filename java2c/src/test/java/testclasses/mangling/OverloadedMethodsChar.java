@@ -1,9 +1,9 @@
-package testclasses.overload;
+package testclasses.mangling;
 
 import it.oblive.annotations.NativeObfuscation;
 
-public class OverloadedMethodsDouble {
-    public OverloadedMethodsDouble() {
+public class OverloadedMethodsChar {
+    public OverloadedMethodsChar() {
 
     }
 
@@ -13,7 +13,7 @@ public class OverloadedMethodsDouble {
     }
 
     @NativeObfuscation
-    public static int add(double a, double b) {
-        return (int) (a + b);
+    public static char add(char a, char b) {
+        return (char) (a + b);
     }
 }

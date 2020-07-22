@@ -1,4 +1,4 @@
-package testclasses.overload;
+package testclasses.mangling;
 
 import it.oblive.annotations.NativeObfuscation;
 

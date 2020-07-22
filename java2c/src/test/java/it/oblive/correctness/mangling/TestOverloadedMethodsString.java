@@ -1,12 +1,14 @@
-package it.oblive.correctness.overload;
+package it.oblive.correctness.mangling;
 
 import it.oblive.helpers.AbstractTestCorrectnessTemplate;
+import testclasses.mangling.OverloadedMethodsString;
 
-public class TestOverloadedMethodsLong extends AbstractTestCorrectnessTemplate {
-    private Class<?> className = testclasses.overload.OverloadedMethodsLong.class;
+public class TestOverloadedMethodsString extends AbstractTestCorrectnessTemplate {
+    private Class<?> className = OverloadedMethodsString.class;
     private String[] methodTest = {"add", "add"};
-    private Class[][] methodParam = {new Class[]{int.class, double.class}, new Class[]{long.class, int.class}};
-    private Object[][] methodArgs = {new Object[]{15, 21}, new Object[]{15L, 18}};
+    private Class[][] methodParam = {new Class[]{int.class, double.class}, new Class[]{String.class, String.class,
+            int.class}};
+    private Object[][] methodArgs = {new Object[]{15, 21}, new Object[]{"15", "18", 36}};
 
     @Override
     public Class<?> getTestClass() {
