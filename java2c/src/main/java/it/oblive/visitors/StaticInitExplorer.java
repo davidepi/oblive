@@ -33,9 +33,8 @@ public class StaticInitExplorer extends MethodVisitor {
         if (nthInstruction == 0) {
             super.visitLdcInsn(libname);
             super.visitMethodInsn(INVOKESTATIC, "java/lang/System", "loadLibrary", "(Ljava/lang/String;)V", false);
-        } else {
-            nthInstruction++;
         }
+        nthInstruction++;
         super.visitInsn(opcode);
     }
 
