@@ -1,5 +1,6 @@
 package it.oblive;
 
+import it.oblive.annotations.AntidebugSelf;
 import it.oblive.support.ClassMethodPair;
 import it.oblive.support.ExtractedBytecode;
 import it.oblive.visitors.ClassAnnotationExplorer;
@@ -11,6 +12,8 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -22,9 +25,11 @@ import java.util.stream.Collectors;
  */
 public class JavaToC {
     private static final int ASM_VERSION = Opcodes.ASM8;
-    private PrintWriter output;
+    private PrintWriter outCSourceWriter;
     private String libname;
     private boolean parsing;
+    private Path antidebugVMsource; //the file containing vm logic for self debug
+    private boolean antidebugSelf; //antidebug requires additional files to be written
 
     /**
      * Default constructor
@@ -32,6 +37,7 @@ public class JavaToC {
     @Contract(pure = true)
     public JavaToC() {
         parsing = false;
+        antidebugSelf = false;
     }
 
     /**
@@ -44,8 +50,8 @@ public class JavaToC {
         assert stream != null;
         String fileContent = new BufferedReader(new InputStreamReader(stream))
                 .lines().collect(Collectors.joining("\n"));
-        output.write(fileContent);
-        output.write("\n");
+        outCSourceWriter.write(fileContent);
+        outCSourceWriter.write("\n");
     }
 
 
@@ -66,24 +72,25 @@ public class JavaToC {
     /**
      * Starts the Java2C transformation. This method can be seen as a sort of initialization.
      *
-     * @param outputFolder The output folder of the processed class files
-     * @param outlib       The output .c lib that will be generated. name MUST start with lib and, possibly, end with .c
+     * @param outCSource   The output .c lib that will be generated. name MUST start with lib and, possibly, end
+     *                     with .c
      * @throws IOException Exception indicating that another parsing is in progress or insufficient permissions
      */
-    public void startParsing(final String outputFolder, File outlib) throws IOException {
-        this.libname = outlib.getName().substring(0, outlib.getName().lastIndexOf('.'));
+    public void startParsing(File outCSource) throws IOException {
+        this.libname = outCSource.getName().substring(0, outCSource.getName().lastIndexOf('.'));
         if (!this.libname.startsWith("lib")) {
             throw new IOException("The requested output filename for Java2C does not start with 'lib'");
         }
         if (parsing) {
             throw new IOException("Still parsing another library. Forgot to call endParsing()?");
         }
-        if (!outlib.getParentFile().exists()) {
-            if (!outlib.getParentFile().mkdirs()) {
-                throw new IOException("Unable to create directory " + output);
+        if (!outCSource.getParentFile().exists()) {
+            if (!outCSource.getParentFile().mkdirs()) {
+                throw new IOException("Unable to create directory " + outCSourceWriter);
             }
         }
-        this.output = new PrintWriter(new FileOutputStream(outlib));
+        this.antidebugVMsource = Paths.get(outCSource.toPath().getParent().toString(), this.libname + "vm.c");
+        this.outCSourceWriter = new PrintWriter(new FileOutputStream(outCSource));
         printHeader();
         parsing = true;
     }
@@ -136,9 +143,11 @@ public class JavaToC {
             ExtractedBytecode bytecode = extractedBytecodes.get(j);
             bytecode.postprocess(); //remove unnecessary labels. Otherwise empty labels could be created and gcc fails
             c.append(CSourceGenerator.generateCode(className.getClassName(), className.getMethodName(),
-                    className.getSignature(), bytecode, className.overloaded, className.getRequestedObfuscations()));
+                    className.getSignature(), bytecode, className.overloaded, className.getRequestedObfuscations(),
+                    this.libname));
+            antidebugSelf |= className.getRequestedObfuscations().contains(AntidebugSelf.class);
         }
-        this.output.write(c.toString());
+        this.outCSourceWriter.write(c.toString());
 
         inputClass.close();
         outputClass = new FileOutputStream(inputClassPath);
@@ -149,9 +158,19 @@ public class JavaToC {
     /**
      * Finalized the parsing
      */
-    public void endParsing() {
+    public void endParsing() throws IOException {
         if (parsing) {
-            output.close();
+            if (antidebugSelf) {
+                InputStream stream = this.getClass().getClassLoader().getResourceAsStream("antidebug.c");
+                assert stream != null;
+                String fileContent = new BufferedReader(new InputStreamReader(stream))
+                        .lines().collect(Collectors.joining("\n"));
+                PrintWriter writer = new PrintWriter(new FileOutputStream(this.antidebugVMsource.toString()));
+                writer.write(fileContent);
+                writer.close();
+                antidebugSelf = false;
+            }
+            outCSourceWriter.close();
             parsing = false;
         }
     }

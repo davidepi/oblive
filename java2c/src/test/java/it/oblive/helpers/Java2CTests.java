@@ -41,12 +41,16 @@ public abstract class Java2CTests implements TestInterface {
         String libname = this.getTestClass().toString().replaceFirst("class\\s", "");
         String className = libname.replaceAll("\\.", "/") + ".class";
         File outSource = new File(OUTPUT_LIB_DIR + File.separator + "lib" + libname + ".c");
+        File outVM = new File(OUTPUT_LIB_DIR + File.separator + "lib" + libname + "vm.c");
         File outObject = new File(OUTPUT_LIB_DIR + File.separator + "lib" + libname + SystemInfo.getObjectExtension());
-        File outLib = new File(OUTPUT_LIB_DIR + File.separator + "lib" + libname + SystemInfo.getSharedLibraryExtension());
+        File outObjectVM =
+                new File(OUTPUT_LIB_DIR + File.separator + "lib" + libname + "vm" + SystemInfo.getObjectExtension());
+        File outLib =
+                new File(OUTPUT_LIB_DIR + File.separator + "lib" + libname + SystemInfo.getSharedLibraryExtension());
         JavaToC j2c = new JavaToC();
         try //tranformation
         {
-            j2c.startParsing(OUTPUT_LIB_DIR, outSource);
+            j2c.startParsing(outSource);
             j2c.parseClass(this.getDestDir() + File.separator + className);
             j2c.endParsing();
         } catch (IOException e) {
@@ -59,7 +63,10 @@ public abstract class Java2CTests implements TestInterface {
         File[] sources = new File[]{outSource};
         String error;
         try {
-            error = compiler.compileFile(sources, outObject);
+            error = compiler.compileFile(sources, outObject, false);
+            if (outVM.exists()) {
+                compiler.compileFile(new File[]{outVM}, outObjectVM, true);
+            }
             if (error == null) {
                 error = compiler.compileSharedLib(new File[]{outObject}, outLib);
                 if (error != null) {

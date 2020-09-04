@@ -32,7 +32,8 @@ public class CSourceGenerator {
      */
     @NotNull
     public static String generateCode(String className, String methodName, @NotNull MethodSignature signature,
-                                      ExtractedBytecode eb, boolean overloaded, HashSet<Class> obfuscations) {
+                                      ExtractedBytecode eb, boolean overloaded, HashSet<Class> obfuscations,
+                                      String libname) {
         StringBuilder sb = new StringBuilder();
         boolean antidebugTime = obfuscations.contains(AntidebugTime.class);
         boolean antidebugSelf = obfuscations.contains(AntidebugSelf.class);
@@ -87,7 +88,7 @@ public class CSourceGenerator {
                 sb.append("time_start(&debug_timer);\n");
             }
             if (antidebugSelf) {
-                sb.append("int child = self_debug(env);\n");
+                sb.append("int child = self_debug(env, \"" +libname+"vm.o\");\n");
                 sb.append("if(!child)return 0;\n");
             }
         }

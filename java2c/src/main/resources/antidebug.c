@@ -10,6 +10,14 @@
 #include <sys/un.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <time.h>
+
+static inline void synchronize(int fd)
+{
+  int sync = 0;
+  send(fd, &sync, 1, 0);
+  recv(fd, &sync, 1, 0);
+}
 
 static inline void self_debug_end(int fd)
 {
@@ -49,6 +57,5 @@ int main(int argc, const char* argv[])
   if(ptrace(PTRACE_SEIZE, parent_pid_h, NULL, NULL) == -1)
     exit(0);
   synchronize(fd);
-  // printf("waiting\n");
   synchronize(fd);
 }

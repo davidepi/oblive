@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  */
 public class NativeCompiler {
 
-    private static final String FLAGS = "-fpic -Wall -Wno-unused-variable -Wno-unused-function -O3";
+    private static final String FLAGS = "-Wall -Wno-unused-variable -Wno-unused-function -O3";
     private String compiler;
     private String include;
     private final String objext;
@@ -94,11 +94,12 @@ public class NativeCompiler {
      * @param sources      A list of File that will be passed to the compiler
      * @param objectOutput The output of the compilation process. If the extension is wrong or missing it will be added
      *                     (by modifying this object). Note that if the output is already existent it will be replaced.
+     * @param executable   true if the file have a main
      * @return a null string if the compilation was successfull, otherwise the compiler error
      * @throws IOException in case the source files are not readable or with the wrong extension (only .c, folks)
      */
     @Nullable
-    public String compileFile(final File[] sources, @NotNull File objectOutput) throws IOException {
+    public String compileFile(final File[] sources, @NotNull File objectOutput, boolean executable) throws IOException {
         //TODO: ASSERT THAT THIS WORKS ON WINDOWS
 
         //assert existence of folder if it is not the current one
@@ -110,7 +111,9 @@ public class NativeCompiler {
             objectOutput = new File(objectOutput.getAbsolutePath() + objext);
 
         StringBuilder command = new StringBuilder(compiler);
-        command.append(" -c ");
+        if (!executable) {
+            command.append(" -c -fpic ");
+        }
         command.append(' ').append(FLAGS).append(' ');
         command.append(' ').append(include).append(' ');
 

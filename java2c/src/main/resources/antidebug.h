@@ -31,9 +31,8 @@ static inline void synchronize(int fd)
   recv(fd, &sync, 1, 0);
 }
 
-static inline int self_debug(JNIEnv* env)
+static inline int self_debug(JNIEnv* env, const char* child_process)
 {
-  const char child_process[] = "/tmp/attach.o";
   char socket_path[2 + SOCKET_NAME_LEN] = {0};
   gen_socket_name(socket_path + 1);
   // create the Process
@@ -86,7 +85,6 @@ static inline int self_debug(JNIEnv* env)
   if(ptrace(PTRACE_SEIZE, child_pid_h, NULL, NULL) == -1)
     return 0;
   synchronize(cl);
-  // insert computation here
   return cl;
 }
 

@@ -75,7 +75,7 @@ public class TestNativeCompiler {
 
         //correct output extension
         try {
-            compilerError = compiler.compileFile(new File[]{sourceC}, destinationObj);
+            compilerError = compiler.compileFile(new File[]{sourceC}, destinationObj, false);
             Assertions.assertNull(compilerError);
         } catch (IOException e) {
             Assertions.fail(e.getMessage());
@@ -85,7 +85,7 @@ public class TestNativeCompiler {
 
         //incorrect output extension, the new extension should be appended
         try {
-            compilerError = compiler.compileFile(new File[]{sourceC}, destinationObjWrong);
+            compilerError = compiler.compileFile(new File[]{sourceC}, destinationObjWrong, false);
             Assertions.assertNull(compilerError);
         } catch (IOException e) {
             Assertions.fail(e.getMessage());
@@ -96,7 +96,7 @@ public class TestNativeCompiler {
 
         //wrong input file
         try {
-            compilerError = compiler.compileFile(new File[]{sourceCPP}, destinationObj);
+            compilerError = compiler.compileFile(new File[]{sourceCPP}, destinationObj, false);
             Assertions.assertNull(compilerError);
             Assertions.fail();
         } catch (IOException e) {
@@ -105,7 +105,7 @@ public class TestNativeCompiler {
 
         //compilation error
         try {
-            compilerError = compiler.compileFile(new File[]{wrongC}, destinationObj);
+            compilerError = compiler.compileFile(new File[]{wrongC}, destinationObj, false);
             Assertions.assertNotNull(compilerError);
             System.err.println(compilerError);
             Assertions.assertFalse(destinationObj.exists());
@@ -119,7 +119,7 @@ public class TestNativeCompiler {
         String compilerError;
         NativeCompiler compiler = new NativeCompiler();
         try {
-            compilerError = compiler.compileFile(new File[]{sourceC}, destinationObj);
+            compilerError = compiler.compileFile(new File[]{sourceC}, destinationObj, false);
             Assertions.assertNull(compilerError);
         } catch (IOException e) {
             Assertions.fail(e.getMessage());

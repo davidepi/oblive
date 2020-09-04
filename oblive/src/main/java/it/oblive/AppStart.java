@@ -54,7 +54,7 @@ public class AppStart {
             jar.unpack(inputJar);
             int[] analyzed = {0};
             long[] ttime = {0};
-            j2c.startParsing(String.valueOf(jar.getUnpackDir()), outLibSource);
+            j2c.startParsing(outLibSource);
             Files.walkFileTree(jar.getUnpackDir(), new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
@@ -73,9 +73,14 @@ public class AppStart {
             jar.repack(outJar);
             // compile
             File inputSource = new File(tempdir + File.separator + "lib" + libname + ".c");
+            File vmSource = new File(tempdir + File.separator + "lib" + libname + "vm.c");
             File objectFile = new File(tempdir + File.separator + "lib" + libname + ".o");
+            File objectVMFile = new File(outdir + File.separator + "lib" + libname + "vm.o");
             NativeCompiler compiler = new NativeCompiler();
-            compiler.compileFile(new File[]{inputSource}, objectFile);
+            compiler.compileFile(new File[]{inputSource}, objectFile, false);
+            if (vmSource.exists()) {
+                compiler.compileFile(new File[]{vmSource}, objectVMFile, true);
+            }
             compiler.compileSharedLib(new File[]{objectFile}, sharedLib);
             jar.dispose();
             Files.walk(tempdir).filter(Files::isRegularFile).map(Path::toFile).forEach(File::delete);
