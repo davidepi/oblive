@@ -1,175 +1,219 @@
-static inline void push(generic_t* stack, uint32_t* index, generic_t val)
+static inline void push(int socket, generic_t* stack, uint32_t* index, generic_t val)
 {
+#ifdef SELF_DEBUG
+    run_command_params(socket, PUSH, val);
+#else
     stack[(*index)++] = val;
+#endif
 }
 
-static inline void push2(generic_t* stack, uint32_t* index, generic_t val)
+static inline void push2(int socket, generic_t* stack, uint32_t* index, generic_t val)
 {
+#ifdef SELF_DEBUG
+    run_command_params(socket, PUSH2, val);
+#else
   stack[(*index)++] = val;
   (*index)++;
+#endif
 }
 
-static inline void push0(generic_t* stack, uint32_t* index)
+static inline generic_t pop(int socket, generic_t* stack, uint32_t* index)
+{
+#ifdef SELF_DEBUG
+    return run_command(socket, POP);
+#else
+    return stack[--(*index)];
+#endif
+}
+
+static inline generic_t pop2(int socket, generic_t* stack, uint32_t* index)
+{
+#ifdef SELF_DEBUG
+    return run_command(socket, POP2);
+#else
+  --(*index);
+  return stack[--(*index)];
+#endif
+}
+
+// the java in the name is to avoid clash with the POSIX dup
+static inline void dupjava(int socket, generic_t* stack, uint32_t* index)
+{
+#ifdef SELF_DEBUG
+    run_command(socket, DUP);
+#else
+  generic_t val = stack[(*index)-1];
+  push(socket, stack,index,val);
+#endif
+}
+
+// the java in the name is to avoid clash with the POSIX dup2
+static inline void dup2java(int socket, generic_t* stack, uint32_t* index)
+{
+#ifdef SELF_DEBUG
+    run_command(socket, DUP2);
+#else
+  generic_t val0 = stack[(*index)-2];
+  generic_t val1 = stack[(*index)-1];
+  push(socket,stack,index,val0);
+  push(socket,stack,index,val1);
+#endif
+}
+
+static inline void dupx1(int socket, generic_t* stack, uint32_t* index)
+{
+#ifdef SELF_DEBUG
+    run_command(socket, DUPX1);
+#else
+  generic_t duplicateme = pop(socket,stack,index);
+  generic_t middleval = pop(socket,stack,index);
+  push(socket,stack,index,duplicateme);
+  push(socket,stack,index,middleval);
+  push(socket,stack,index,duplicateme);
+#endif
+}
+
+static inline void dupx2(int socket, generic_t* stack, uint32_t* index)
+{
+#ifdef SELF_DEBUG
+    run_command(socket, DUPX2);
+#else
+  generic_t duplicateme = pop(socket,stack,index);
+  generic_t middleval1 = pop(socket,stack,index);
+  generic_t middleval0 = pop(socket,stack,index);
+  push(socket,stack,index,duplicateme);
+  push(socket,stack,index,middleval0);
+  push(socket,stack,index,middleval1);
+  push(socket,stack,index,duplicateme);
+#endif
+}
+
+static inline void dup2x1(int socket, generic_t* stack, uint32_t* index)
+{
+#ifdef SELF_DEBUG
+    run_command(socket, DUP2X1);
+#else
+  generic_t duplicateme1 = pop(socket,stack,index);
+  generic_t duplicateme0 = pop(socket,stack,index);
+  generic_t middleval = pop(socket,stack,index);
+  push(socket,stack,index,duplicateme0);
+  push(socket,stack,index,duplicateme1);
+  push(socket,stack,index,middleval);
+  push(socket,stack,index,duplicateme0);
+  push(socket,stack,index,duplicateme1);
+#endif
+}
+
+static inline void dup2x2(int socket, generic_t* stack, uint32_t* index)
+{
+#ifdef SELF_DEBUG
+    run_command(socket, DUP2X2);
+#else
+  generic_t duplicateme1 = pop(socket,stack,index);
+  generic_t duplicateme0 = pop(socket,stack,index);
+  generic_t middleval1 = pop(socket,stack,index);
+  generic_t middleval0 = pop(socket,stack,index);
+  push(socket,stack,index,duplicateme0);
+  push(socket,stack,index,duplicateme1);
+  push(socket,stack,index,middleval0);
+  push(socket,stack,index,middleval1);
+  push(socket,stack,index,duplicateme0);
+  push(socket,stack,index,duplicateme1);
+#endif
+}
+
+static inline void swap(int socket, generic_t* stack, uint32_t* index)
+{
+#ifdef SELF_DEBUG
+    run_command(socket, SWAP);
+#else
+  generic_t tmp = stack[(*index)-2];
+  stack[(*index)-2] = stack[(*index)-1];
+  stack[(*index)-1] = tmp;
+#endif
+}
+
+static inline void push0(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t pushme;
   pushme.l = NULL;
-  push(stack,index,pushme);
+  push(socket,stack,index,pushme);
 }
 
-static inline void pushi(generic_t* stack, uint32_t* index, jint val)
+static inline void pushi(int socket, generic_t* stack, uint32_t* index, jint val)
 {
   generic_t pushme;
   pushme.i = val;
-  push(stack,index,pushme);
+  push(socket,stack,index,pushme);
 }
 
-static inline void pushl(generic_t* stack, uint32_t* index, jlong val)
+static inline void pushl(int socket, generic_t* stack, uint32_t* index, jlong val)
 {
   generic_t pushme;
   pushme.j = val;
-  push2(stack,index,pushme);
+  push2(socket,stack,index,pushme);
 }
 
-static inline void pushf(generic_t* stack, uint32_t* index, jfloat val)
+static inline void pushf(int socket, generic_t* stack, uint32_t* index, jfloat val)
 {
   generic_t pushme;
   pushme.f = val;
-  push(stack,index,pushme);
+  push(socket,stack,index,pushme);
 }
 
-static inline void pushd(generic_t* stack, uint32_t* index, jdouble val)
+static inline void pushd(int socket, generic_t* stack, uint32_t* index, jdouble val)
 {
   generic_t pushme;
   pushme.d = val;
-  push2(stack,index,pushme);
+  push2(socket,stack,index,pushme);
 }
 
-static inline void _LdcString(JNIEnv* env, generic_t* stack, uint32_t* index,
+static inline void _LdcString(int socket, JNIEnv* env, generic_t* stack, uint32_t* index,
                         const jchar* str, int len)
 {
   jstring string = (*env)->NewString(env,str,len);
   generic_t pushme;
   pushme.l = string;
-  push(stack,index,pushme);
+  push(socket,stack,index,pushme);
 }
 
-static inline void _LdcClassRef(JNIEnv* env, generic_t* stack, uint32_t* index, const jchar* name)
+static inline void _LdcClassRef(int socket, JNIEnv* env, generic_t* stack, uint32_t* index, const char* name)
 {
     jclass requested_class = (*env)->FindClass(env, name);
     generic_t pushme;
     pushme.l = requested_class;
-    push(stack, index, pushme);
+    push(socket,stack, index, pushme);
 }
 
-static inline generic_t pop(generic_t* stack, uint32_t* index)
+static inline void _Load(int socket, generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
 {
-    return stack[--(*index)];
+    push(socket,stack,index,arg[valueIndex]);
 }
 
-static inline generic_t pop2(generic_t* stack, uint32_t* index)
+static inline void _Load2(int socket, generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
 {
-  --(*index);
-  return stack[--(*index)];
+    push2(socket,stack,index,arg[valueIndex]);
 }
 
-// the java in the name is to avoid clash with the POSIX dup
-static inline void dupjava(generic_t* stack, uint32_t* index)
+static inline void _Store(int socket, generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
 {
-  generic_t val = stack[(*index)-1];
-  push(stack,index,val);
+  arg[valueIndex] = pop(socket,stack,index);
 }
 
-// the java in the name is to avoid clash with the POSIX dup2
-static inline void dup2java(generic_t* stack, uint32_t* index)
+static inline void _Store2(int socket, generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
 {
-  generic_t val0 = stack[(*index)-2];
-  generic_t val1 = stack[(*index)-1];
-  push(stack,index,val0);
-  push(stack,index,val1);
+  arg[valueIndex] = pop2(socket,stack,index);
 }
 
-static inline void dupx1(generic_t* stack, uint32_t* index)
+static inline void _MonitorEnter(int socket, JNIEnv* env, generic_t* stack, uint32_t* index)
 {
-  generic_t duplicateme = pop(stack,index);
-  generic_t middleval = pop(stack,index);
-  push(stack,index,duplicateme);
-  push(stack,index,middleval);
-  push(stack,index,duplicateme);
-}
-
-static inline void dupx2(generic_t* stack, uint32_t* index)
-{
-  generic_t duplicateme = pop(stack,index);
-  generic_t middleval1 = pop(stack,index);
-  generic_t middleval0 = pop(stack,index);
-  push(stack,index,duplicateme);
-  push(stack,index,middleval0);
-  push(stack,index,middleval1);
-  push(stack,index,duplicateme);
-}
-
-static inline void dup2x1(generic_t* stack, uint32_t* index)
-{
-  generic_t duplicateme1 = pop(stack,index);
-  generic_t duplicateme0 = pop(stack,index);
-  generic_t middleval = pop(stack,index);
-  push(stack,index,duplicateme0);
-  push(stack,index,duplicateme1);
-  push(stack,index,middleval);
-  push(stack,index,duplicateme0);
-  push(stack,index,duplicateme1);
-}
-
-static inline void dup2x2(generic_t* stack, uint32_t* index)
-{
-  generic_t duplicateme1 = pop(stack,index);
-  generic_t duplicateme0 = pop(stack,index);
-  generic_t middleval1 = pop(stack,index);
-  generic_t middleval0 = pop(stack,index);
-  push(stack,index,duplicateme0);
-  push(stack,index,duplicateme1);
-  push(stack,index,middleval0);
-  push(stack,index,middleval1);
-  push(stack,index,duplicateme0);
-  push(stack,index,duplicateme1);
-}
-
-static inline void swap(generic_t* stack, uint32_t* index)
-{
-  generic_t tmp = stack[(*index)-2];
-  stack[(*index)-2] = stack[(*index)-1];
-  stack[(*index)-1] = tmp;
-}
-
-static inline void _Load(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
-{
-    push(stack,index,arg[valueIndex]);
-}
-
-static inline void _Load2(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
-{
-    push2(stack,index,arg[valueIndex]);
-}
-
-static inline void _Store(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
-{
-  arg[valueIndex] = pop(stack,index);
-}
-
-static inline void _Store2(generic_t* stack, generic_t* arg, uint32_t* index, int valueIndex)
-{
-  arg[valueIndex] = pop2(stack,index);
-}
-
-static inline void _MonitorEnter(JNIEnv* env, generic_t* stack, uint32_t* index)
-{
-  generic_t lock = pop(stack,index);
+  generic_t lock = pop(socket,stack,index);
   (*env)->MonitorEnter(env, lock.l);
 }
 
-static inline void _MonitorExit(JNIEnv* env, generic_t* stack, uint32_t* index)
+static inline void _MonitorExit(int socket, JNIEnv* env, generic_t* stack, uint32_t* index)
 {
-  generic_t lock = pop(stack,index);
+  generic_t lock = pop(socket,stack,index);
   (*env)->MonitorExit(env,lock.l);
 }
 

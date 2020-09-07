@@ -10,23 +10,56 @@
 #include <sys/un.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <time.h>
 
-static inline void synchronize(int fd)
-{
-  int sync = 0;
-  send(fd, &sync, 1, 0);
-  recv(fd, &sync, 1, 0);
+//TODO: generate this dynamically
+#define STACK_SIZE 999
+
+#ifndef STACK_SIZE
+#error "stack size not defined"
+#endif
+
+const char* op_as_string(enum Ops op) {
+    switch(op){
+        case PUSH: return "PUSH";
+        case PUSH2:return "PUSH2";
+        case POP: return "POP";
+        case POP2:return "POP2";
+        case DUP:return "DUP";
+        case DUP2:return "DUP2";
+        case DUPX1:return "DUPX1";
+        case DUPX2:return "DUPX2";
+        case DUP2X1:return "DUP2X1";
+        case DUP2X2:return "DUP2X2";
+        case SWAP:return "SWAP";
+        case KILL:return "KILL";
+        case SYN:return "SYN";
+        case ACK:return "ACK";
+        default: return "UNK";
+    }
 }
 
-static inline void self_debug_end(int fd)
+static inline enum Ops fetch_command(int fd, void** data)
 {
-  synchronize(fd);
-  close(fd);
+    uint8_t buf[sizeof(void*)+1];
+    uint8_t* data_as_u8;
+    recv(fd, &buf, sizeof(void*)+1, 0);
+    data_as_u8 = buf+1;
+    *data = (void*)*data_as_u8;
+    return buf[0];
+}
+
+static inline void send_result(int fd, void* data)
+{
+    uint8_t buf[sizeof(void*)+1];
+    uint8_t* data_as_u8 = (void*)&data;
+    strcpy(buf+1, data_as_u8);
+    buf[0] = ACK;
+    send(fd, &buf, sizeof(void*)+1, 0);
 }
 
 int main(int argc, const char* argv[])
 {
+  FILE* fout = fopen("/tmp/log_child.txt","w");
   struct sockaddr_un addr;
   char socket_path[34] = {0};
   int fd;
@@ -51,11 +84,114 @@ int main(int argc, const char* argv[])
     exit(0);
   parent_pid_h = ntohl(parent_pid_n);
   // start antidebug operations
+  enum Ops command = SYN;
+  void* data = 0x0;
+  size_t stack_index = 0;
+  void* stack[STACK_SIZE];
+
+  fetch_command(fd, &data);
   if(prctl(PR_SET_PTRACER, parent_pid_h) == -1)
     exit(0);
-  synchronize(fd);
+  send_result(fd, 0x0);
+  fetch_command(fd, &data);
   if(ptrace(PTRACE_SEIZE, parent_pid_h, NULL, NULL) == -1)
     exit(0);
-  synchronize(fd);
-  synchronize(fd);
+  send_result(fd, 0x0);
+  while(command != KILL)
+  {
+    command = fetch_command(fd, &data);
+    fprintf(fout, "Command: [%s][%d]\n", op_as_string(command), (int)data);
+    fflush(fout);
+    switch(command)
+    {
+        case PUSH:{
+            stack[stack_index++] = data;
+            data = 0x0;
+            fflush(fout);
+            break;}
+        case PUSH2:{
+            stack[stack_index++] = data;
+            stack_index++;
+            data = 0x0;
+            break;}
+        case POP:{
+            data = stack[--stack_index];
+            break;}
+        case POP2:{
+            stack_index--;
+            data = stack[--stack_index];
+            break;}
+        case DUP:{
+            data = 0x0;
+            stack[stack_index] = stack[stack_index-1];
+            stack_index++;
+            break;}
+        case DUP2:{
+            data = 0x0;
+            stack[stack_index] = stack[stack_index-2];
+            stack[stack_index+1] = stack[stack_index-1];
+            stack_index++;
+            stack_index++;
+            break;}
+        case DUPX1:{
+            data = 0x0;
+            void* dup0 = stack[--stack_index];
+            void* mid0 = stack[--stack_index];
+            stack[stack_index++] = dup0;
+            stack[stack_index++] = mid0;
+            stack[stack_index++] = dup0;
+            break;}
+        case DUPX2:{
+            data = 0x0;
+            void* dup0 = stack[--stack_index];
+            void* mid1 = stack[--stack_index];
+            void* mid0 = stack[--stack_index];
+            stack[stack_index++] = dup0;
+            stack[stack_index++] = mid0;
+            stack[stack_index++] = mid1;
+            stack[stack_index++] = dup0;
+            break;}
+        case DUP2X1:
+            {data = 0x0;
+            void* dup1 = stack[--stack_index];
+            void* dup0 = stack[--stack_index];
+            void* mid0 = stack[--stack_index];
+            stack[stack_index++] = dup0;
+            stack[stack_index++] = dup1;
+            stack[stack_index++] = mid0;
+            stack[stack_index++] = dup0;
+            stack[stack_index++] = dup1;
+            break;}
+        case DUP2X2:
+            {void* dup1 = stack[--stack_index];
+            void* dup0 = stack[--stack_index];
+            void* mid1 = stack[--stack_index];
+            void* mid0 = stack[--stack_index];
+            stack[stack_index++] = dup0;
+            stack[stack_index++] = dup1;
+            stack[stack_index++] = mid0;
+            stack[stack_index++] = mid1;
+            stack[stack_index++] = dup0;
+            stack[stack_index++] = dup1;
+            break;}
+        case SWAP:
+           {void* tmp = stack[stack_index-2];
+           stack[stack_index-2] = stack[stack_index-1];
+           stack[stack_index-1] = tmp;
+           break;}
+        case KILL:
+        case SYN:
+        case ACK:
+            data = 0x0;
+            break;
+        default: //unrecognized command, brutally murder parent, then suicide
+            kill(parent_pid_h, SIGKILL);
+            exit(0);
+    }
+    fprintf(fout, "Answer: [%s][%d]\n", op_as_string(ACK), (int)data);
+        fflush(fout);
+    send_result(fd, data);
+  }
+    fclose(fout);
+  return 0;
 }

@@ -1,111 +1,111 @@
-static inline void _int2long(generic_t* stack, uint32_t* index)
+static inline void _int2long(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.j = (jlong)pop(stack,index).i;
-  push2(stack,index,res);
+  res.j = (jlong)pop(socket,stack,index).i;
+  push2(socket,stack,index,res);
 }
 
-static inline void _int2float(generic_t* stack, uint32_t* index)
+static inline void _int2float(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.f = (jfloat)pop(stack,index).i;
-  push(stack,index,res);
+  res.f = (jfloat)pop(socket,stack,index).i;
+  push(socket,stack,index,res);
 }
 
-static inline void _int2double(generic_t* stack, uint32_t* index)
+static inline void _int2double(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.d = (jdouble)pop(stack,index).i;
-  push2(stack,index,res);
+  res.d = (jdouble)pop(socket,stack,index).i;
+  push2(socket,stack,index,res);
 }
 
-static inline void _int2byte(generic_t* stack, uint32_t* index)
+static inline void _int2byte(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.i = (jbyte)pop(stack,index).i;
-  push(stack,index,res);
+  res.i = (jbyte)pop(socket,stack,index).i;
+  push(socket,stack,index,res);
 }
 
-static inline void _int2char(generic_t* stack, uint32_t* index)
+static inline void _int2char(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.i = (jchar)pop(stack,index).i;
-  push(stack,index,res);
+  res.i = (jchar)pop(socket,stack,index).i;
+  push(socket,stack,index,res);
 }
 
-static inline void _int2short(generic_t* stack, uint32_t* index)
+static inline void _int2short(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.i = (jshort)pop(stack,index).i;
-  push(stack,index,res);
+  res.i = (jshort)pop(socket,stack,index).i;
+  push(socket,stack,index,res);
 }
 
-static inline void _long2int(generic_t* stack, uint32_t* index)
+static inline void _long2int(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.i = (jint)pop2(stack,index).j;
-  push(stack,index,res);
+  res.i = (jint)pop2(socket,stack,index).j;
+  push(socket,stack,index,res);
 }
 
-static inline void _long2float(generic_t* stack, uint32_t* index)
+static inline void _long2float(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.f = (jfloat)pop2(stack,index).j;
-  push(stack,index,res);
+  res.f = (jfloat)pop2(socket,stack,index).j;
+  push(socket,stack,index,res);
 }
 
-static inline void _long2double(generic_t* stack, uint32_t* index)
+static inline void _long2double(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.d = (jdouble)pop2(stack,index).j;
-  push2(stack,index,res);
+  res.d = (jdouble)pop2(socket,stack,index).j;
+  push2(socket,stack,index,res);
 }
 
-static inline void _float2int(generic_t* stack, uint32_t* index)
+static inline void _float2int(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.i = (jint)pop(stack,index).f;
-  push(stack,index,res);
+  res.i = (jint)pop(socket,stack,index).f;
+  push(socket,stack,index,res);
 }
 
-static inline void _float2long(generic_t* stack, uint32_t* index)
+static inline void _float2long(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.j = (jlong)pop(stack,index).f;
-  push2(stack,index,res);
+  res.j = (jlong)pop(socket,stack,index).f;
+  push2(socket,stack,index,res);
 }
 
-static inline void _float2double(generic_t* stack, uint32_t* index)
+static inline void _float2double(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.d = (jdouble)pop(stack,index).f;
-  push2(stack,index,res);
+  res.d = (jdouble)pop(socket,stack,index).f;
+  push2(socket,stack,index,res);
 }
 
-static inline void _double2int(generic_t* stack, uint32_t* index)
+static inline void _double2int(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.i = (jint)pop2(stack,index).d;
-  push(stack,index,res);
+  res.i = (jint)pop2(socket,stack,index).d;
+  push(socket,stack,index,res);
 }
 
-static inline void _double2long(generic_t* stack, uint32_t* index)
+static inline void _double2long(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.j = (jdouble)pop2(stack,index).d;
-  push2(stack,index,res);
+  res.j = (jdouble)pop2(socket,stack,index).d;
+  push2(socket,stack,index,res);
 }
 
-static inline void _double2float(generic_t* stack, uint32_t* index)
+static inline void _double2float(int socket, generic_t* stack, uint32_t* index)
 {
   generic_t res;
-  res.f = (jfloat)pop2(stack,index).d;
-  push(stack,index,res);
+  res.f = (jfloat)pop2(socket,stack,index).d;
+  push(socket,stack,index,res);
 }
 
-static inline void _InstanceOf(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className)
+static inline void _InstanceOf(int socket, JNIEnv* env, generic_t* stack, uint32_t* index, const char* className)
 {
-  jobject obj = pop(stack,index).l;
+  jobject obj = pop(socket,stack,index).l;
   generic_t res;
   if(obj!=NULL)
   {
@@ -115,10 +115,10 @@ static inline void _InstanceOf(JNIEnv* env, generic_t* stack, uint32_t* index, c
   }
   else
     ZERO_OUT_UNION(res);
-  push(stack,index,res);
+  push(socket,stack,index,res);
 }
 
-static inline char _ExceptionInstanceOf(JNIEnv* env, generic_t* stack, const char* exceptionName)
+static inline char _ExceptionInstanceOf(int socket, JNIEnv* env, generic_t* stack, const char* exceptionName)
 {
   jthrowable obj = stack[0].l;
   //guaranteed that obj is NEVER null, by a previous check
@@ -126,15 +126,15 @@ static inline char _ExceptionInstanceOf(JNIEnv* env, generic_t* stack, const cha
   return (*env)->IsInstanceOf(env,obj,caller_class);
 }
 
-static inline char _CheckCast(JNIEnv* env, generic_t* stack, uint32_t* index, const char* className)
+static inline char _CheckCast(int socket, JNIEnv* env, generic_t* stack, uint32_t* index, const char* className)
 {
-  generic_t obj = pop(stack,index);
+  generic_t obj = pop(socket,stack,index);
   if(obj.l!=NULL)
   {
     jclass caller_class = (*env)->FindClass(env, className);if(caller_class == NULL){fprintf(stderr,"Class %s not found\n",className);exit(EXIT_FAILURE);}
     if((*env)->IsInstanceOf(env,obj.l,caller_class))
     {
-      push(stack,index,obj);
+      push(socket,stack,index,obj);
     }
     else
     {
@@ -142,6 +142,6 @@ static inline char _CheckCast(JNIEnv* env, generic_t* stack, uint32_t* index, co
     }
   }
   else
-    push(stack,index,obj);
+    push(socket,stack,index,obj);
   return 0;
 }

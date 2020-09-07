@@ -222,7 +222,7 @@ public class ExtractedBytecode {
                     list.sort(Comparator.comparingInt(block -> (block.order)));
                     for (TryCatchBlock catched : list) {
                         //no need to if-elif-else since every if is broken by a goto
-                        it.add("if(_ExceptionInstanceOf(env,_stack,\"" + catched.catched + "\")){\n");
+                        it.add("if(_ExceptionInstanceOf(child,env,_stack,\"" + catched.catched + "\")){\n");
                         if (clear) {
                             it.add("(*env)->ExceptionClear(env);\n");
                         }

@@ -24,11 +24,49 @@ static inline void gen_socket_name(char* buffer)
   }
 }
 
-static inline void synchronize(int fd)
+const char* op_as_string(enum Ops op) {
+    switch(op){
+        case PUSH: return "PUSH";
+        case PUSH2:return "PUSH2";
+        case POP: return "POP";
+        case POP2:return "POP2";
+        case DUP:return "DUP";
+        case DUP2:return "DUP2";
+        case DUPX1:return "DUPX1";
+        case DUPX2:return "DUPX2";
+        case DUP2X1:return "DUP2X1";
+        case DUP2X2:return "DUP2X2";
+        case SWAP:return "SWAP";
+        case KILL:return "KILL";
+        case SYN:return "SYN";
+        case ACK:return "ACK";
+        default: return "UNK";
+    }
+}
+
+static inline generic_t run_command_params(int fd, enum Ops command, generic_t data)
 {
-  int sync = 0;
-  send(fd, &sync, 1, 0);
-  recv(fd, &sync, 1, 0);
+    // send command to the VM and retrieve result
+    uint8_t buf[sizeof(generic_t)+1];
+    uint8_t* data_as_u8 = (uint8_t*)&data;
+    strcpy((char*)buf+1, (char*)data_as_u8);
+    buf[0] = command;
+    const char* cmd = op_as_string(command);
+    printf("Sent: [%s][%d]\n", cmd, data.i);
+    send(fd, &buf, sizeof(generic_t)+1, 0);
+    recv(fd, &buf, sizeof(generic_t)+1, 0);
+    data_as_u8 = buf+1;
+    data = (generic_t)*data_as_u8;
+    cmd = op_as_string(buf[0]);
+    printf("Received: [%s][%d]\n", cmd, data.i);
+    return data;
+}
+
+static inline generic_t run_command(int fd, enum Ops command)
+{
+    generic_t empty_val;
+    ZERO_OUT_UNION(empty_val);
+    return run_command_params(fd, command, empty_val);
 }
 
 static inline int self_debug(JNIEnv* env, const char* child_process)
@@ -81,16 +119,16 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   // start antidebug operations
   if(prctl(PR_SET_PTRACER, child_pid_h) == -1)
     return 0;
-  synchronize(cl);
+  run_command(cl, SYN);
   if(ptrace(PTRACE_SEIZE, child_pid_h, NULL, NULL) == -1)
     return 0;
-  synchronize(cl);
+  run_command(cl, SYN);
   return cl;
 }
 
 static inline void self_debug_end(int fd)
 {
-  synchronize(fd);
+  run_command(fd, KILL);
   close(fd);
 }
 

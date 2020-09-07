@@ -9,6 +9,8 @@ import it.oblive.support.MethodSignature;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Random;
 
 /**
  * This class creates the C source file starting from the output of the MethodBytecodeExtractor.
@@ -27,7 +29,8 @@ public class CSourceGenerator {
      * @param signature    signature of the native method
      * @param eb           result of the MethodBytecodeExtractor
      * @param overloaded   true if other methods within the same class and with the same name exists.
-     * @param obfuscations a set containing the Class for every obfuscation requested. Although this will not
+     * @param obfuscations a set containing the Class for every obfuscation requested.
+     * @param libname      The name of the generated library. Used for invoking the second process in the self-debugging
      * @return a String representing the content of the generated source file
      */
     @NotNull
@@ -88,9 +91,13 @@ public class CSourceGenerator {
                 sb.append("time_start(&debug_timer);\n");
             }
             if (antidebugSelf) {
-                sb.append("int child = self_debug(env, \"" +libname+"vm.o\");\n");
+                sb.append("int child = self_debug(env, \"" + libname + "vm.o\");\n");
                 sb.append("if(!child)return 0;\n");
+            } else {
+                sb.append("int child = 0;\n");
             }
+        } else {
+            sb.append("int child = 0;\n");
         }
 
         //generate stack vars
@@ -153,6 +160,34 @@ public class CSourceGenerator {
         sb.append("RETURN_EXEC;\n");
         sb.append("}\n");
         sb.append("#undef RETURN_EXCEPTION\n\n");
+        return sb.toString();
+    }
+
+    /**
+     * Generates the VM table composed of opname - opcode values, used for the self debugging
+     *
+     * @return A string containing the generated table in the C language.
+     */
+    public static String generateVMTable() {
+        Random rand = new Random();
+        StringBuilder sb = new StringBuilder("enum Ops\n{\n");
+        String[] opname = {
+                "PUSH", "PUSH2", "POP", "POP2", "DUP", "DUP2", "DUPX1", "DUPX2", "DUP2X1", "DUP2X2", "SWAP",
+                "KILL", "SYN", "ACK"
+        };
+        HashSet<Integer> opcodes = new HashSet<>();
+        while (opcodes.size() < opname.length) {
+            opcodes.add(rand.nextInt(0xFF));
+        }
+        Iterator<Integer> opcodesIter = opcodes.iterator();
+        for (String op : opname) {
+            sb.append('\t');
+            sb.append(op);
+            sb.append(" = ");
+            sb.append(opcodesIter.next());
+            sb.append(",\n");
+        }
+        sb.append("};\n");
         return sb.toString();
     }
 }

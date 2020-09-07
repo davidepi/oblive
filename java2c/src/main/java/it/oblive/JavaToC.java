@@ -30,6 +30,7 @@ public class JavaToC {
     private boolean parsing;
     private Path antidebugVMsource; //the file containing vm logic for self debug
     private boolean antidebugSelf; //antidebug requires additional files to be written
+    private String vmTable; //VM table opcodes for self debugging
 
     /**
      * Default constructor
@@ -57,6 +58,7 @@ public class JavaToC {
 
     private void printHeader() {
         appendHeaderFile("cframework.h");
+        appendHeaderFile("antidebug.h");
         appendHeaderFile("stack.h");
         appendHeaderFile("arithmetic.h");
         appendHeaderFile("arrays.h");
@@ -66,14 +68,13 @@ public class JavaToC {
         appendHeaderFile("invoke.h");
         appendHeaderFile("multi_arrays.h");
         appendHeaderFile("new.h");
-        appendHeaderFile("antidebug.h");
     }
 
     /**
      * Starts the Java2C transformation. This method can be seen as a sort of initialization.
      *
-     * @param outCSource   The output .c lib that will be generated. name MUST start with lib and, possibly, end
-     *                     with .c
+     * @param outCSource The output .c lib that will be generated. name MUST start with lib and, possibly, end
+     *                   with .c
      * @throws IOException Exception indicating that another parsing is in progress or insufficient permissions
      */
     public void startParsing(File outCSource) throws IOException {
@@ -91,6 +92,8 @@ public class JavaToC {
         }
         this.antidebugVMsource = Paths.get(outCSource.toPath().getParent().toString(), this.libname + "vm.c");
         this.outCSourceWriter = new PrintWriter(new FileOutputStream(outCSource));
+        this.vmTable = CSourceGenerator.generateVMTable();
+        this.outCSourceWriter.write(this.vmTable);
         printHeader();
         parsing = true;
     }
@@ -166,6 +169,7 @@ public class JavaToC {
                 String fileContent = new BufferedReader(new InputStreamReader(stream))
                         .lines().collect(Collectors.joining("\n"));
                 PrintWriter writer = new PrintWriter(new FileOutputStream(this.antidebugVMsource.toString()));
+                writer.write(this.vmTable);
                 writer.write(fileContent);
                 writer.close();
                 antidebugSelf = false;

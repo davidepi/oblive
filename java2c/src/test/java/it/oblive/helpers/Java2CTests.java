@@ -64,8 +64,8 @@ public abstract class Java2CTests implements TestInterface {
         String error;
         try {
             error = compiler.compileFile(sources, outObject, false);
-            if (outVM.exists()) {
-                compiler.compileFile(new File[]{outVM}, outObjectVM, true);
+            if (outVM.exists() && error == null) {
+                error = compiler.compileFile(new File[]{outVM}, outObjectVM, true);
             }
             if (error == null) {
                 error = compiler.compileSharedLib(new File[]{outObject}, outLib);
