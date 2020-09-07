@@ -7,10 +7,21 @@ import it.oblive.support.ExtractedBytecode;
 import it.oblive.support.JniType;
 import it.oblive.support.MethodSignature;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * This class creates the C source file starting from the output of the MethodBytecodeExtractor.
@@ -19,10 +30,55 @@ import java.util.Random;
  */
 public class CSourceGenerator {
 
+    private ArrayList<String> headers;
+    private ArrayList<String> defines;
+    private ArrayList<String> methods;
+
+    public CSourceGenerator() {
+        this.headers = new ArrayList<>();
+        this.defines = new ArrayList<>();
+        this.methods = new ArrayList<>();
+    }
+
     /**
-     * This method transforms the ExtractedBytecode resulting from a MethodBytecodeExtractor into a fully-functional C
-     * source code, along with performing the method name mangling. The implementation of the various opcodes should be
-     * added BEFORE the results of this call, otherwise linking would fail
+     * Append the content of a header C file in the resources to the output file
+     *
+     * @param filename Name of the INPUT C  header file. Must be in the resources.
+     */
+    public void addHeaderInResources(@NotNull final String filename) {
+        InputStream stream = this.getClass().getClassLoader().getResourceAsStream(filename);
+        assert stream != null;
+        String fileContent = new BufferedReader(new InputStreamReader(stream))
+                .lines().collect(Collectors.joining("\n"));
+        headers.add(fileContent);
+    }
+
+    /**
+     * Append a C header file passed as string
+     *
+     * @param content The actual content of the header that should be appended
+     */
+    public void addHeader(@NotNull final String content) {
+        headers.add(content);
+    }
+
+    /**
+     * Add a global define on top of the C file
+     *
+     * @param name  name of the define, without the #define keyword
+     * @param value value of the define
+     */
+    public void addGlobalDefine(@NotNull final String name, @Nullable String value) {
+        if (value == null) {
+            defines.add("#define " + name);
+        } else {
+            defines.add("#define " + value);
+        }
+    }
+
+    /**
+     * This method transforms the ExtractedBytecode resulting from a MethodBytecodeExtractor into a C method,
+     * performing also the method name mangling.
      *
      * @param className    name of the class owning the native method
      * @param methodName   name of the native method
@@ -31,12 +87,11 @@ public class CSourceGenerator {
      * @param overloaded   true if other methods within the same class and with the same name exists.
      * @param obfuscations a set containing the Class for every obfuscation requested.
      * @param libname      The name of the generated library. Used for invoking the second process in the self-debugging
-     * @return a String representing the content of the generated source file
      */
-    @NotNull
-    public static String generateCode(String className, String methodName, @NotNull MethodSignature signature,
-                                      ExtractedBytecode eb, boolean overloaded, HashSet<Class> obfuscations,
-                                      String libname) {
+    public void addNativeMethod(@NotNull String className, @NotNull String methodName,
+                                @NotNull MethodSignature signature,
+                                @NotNull ExtractedBytecode eb, boolean overloaded, @NotNull HashSet<Class> obfuscations,
+                                @NotNull String libname) {
         StringBuilder sb = new StringBuilder();
         boolean antidebugTime = obfuscations.contains(AntidebugTime.class);
         boolean antidebugSelf = obfuscations.contains(AntidebugSelf.class);
@@ -160,7 +215,28 @@ public class CSourceGenerator {
         sb.append("RETURN_EXEC;\n");
         sb.append("}\n");
         sb.append("#undef RETURN_EXCEPTION\n\n");
-        return sb.toString();
+        methods.add(sb.toString());
+    }
+
+    /**
+     * Writes the final C source to file
+     *
+     * @param filename the name of the file that will be created
+     * @throws IOException if the file can not be created
+     */
+    public void writeToFile(final String filename) throws IOException {
+        StringBuilder content = new StringBuilder();
+        defines.forEach(x -> {
+            content.append(x).append("\n");
+        });
+        headers.forEach(x -> {
+            content.append(x).append("\n");
+        });
+        methods.forEach(x -> {
+            content.append(x).append("\n");
+        });
+        Files.write(Paths.get(filename), content.toString().getBytes(StandardCharsets.UTF_8),
+                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     /**

@@ -25,9 +25,10 @@ import java.util.stream.Collectors;
  */
 public class JavaToC {
     private static final int ASM_VERSION = Opcodes.ASM8;
-    private PrintWriter outCSourceWriter;
+    private CSourceGenerator generator;
     private String libname;
     private boolean parsing;
+    private File outCsource; //output file that will contain the C source for the main program
     private Path antidebugVMsource; //the file containing vm logic for self debug
     private boolean antidebugSelf; //antidebug requires additional files to be written
     private String vmTable; //VM table opcodes for self debugging
@@ -39,35 +40,7 @@ public class JavaToC {
     public JavaToC() {
         parsing = false;
         antidebugSelf = false;
-    }
-
-    /**
-     * Append the content of a header C file to the output file
-     *
-     * @param filename Name of the INPUT C  header file
-     */
-    private void appendHeaderFile(final String filename) {
-        InputStream stream = this.getClass().getClassLoader().getResourceAsStream(filename);
-        assert stream != null;
-        String fileContent = new BufferedReader(new InputStreamReader(stream))
-                .lines().collect(Collectors.joining("\n"));
-        outCSourceWriter.write(fileContent);
-        outCSourceWriter.write("\n");
-    }
-
-
-    private void printHeader() {
-        appendHeaderFile("cframework.h");
-        appendHeaderFile("antidebug.h");
-        appendHeaderFile("stack.h");
-        appendHeaderFile("arithmetic.h");
-        appendHeaderFile("arrays.h");
-        appendHeaderFile("casts.h");
-        appendHeaderFile("conditionals.h");
-        appendHeaderFile("fields.h");
-        appendHeaderFile("invoke.h");
-        appendHeaderFile("multi_arrays.h");
-        appendHeaderFile("new.h");
+        generator = new CSourceGenerator();
     }
 
     /**
@@ -87,14 +60,24 @@ public class JavaToC {
         }
         if (!outCSource.getParentFile().exists()) {
             if (!outCSource.getParentFile().mkdirs()) {
-                throw new IOException("Unable to create directory " + outCSourceWriter);
+                throw new IOException("Unable to create directory " + outCSource.getParentFile());
             }
         }
         this.antidebugVMsource = Paths.get(outCSource.toPath().getParent().toString(), this.libname + "vm.c");
-        this.outCSourceWriter = new PrintWriter(new FileOutputStream(outCSource));
+        this.outCsource = outCSource;
         this.vmTable = CSourceGenerator.generateVMTable();
-        this.outCSourceWriter.write(this.vmTable);
-        printHeader();
+        generator.addHeader(this.vmTable);
+        generator.addHeaderInResources("cframework.h");
+        generator.addHeaderInResources("antidebug.h");
+        generator.addHeaderInResources("stack.h");
+        generator.addHeaderInResources("arithmetic.h");
+        generator.addHeaderInResources("arrays.h");
+        generator.addHeaderInResources("casts.h");
+        generator.addHeaderInResources("conditionals.h");
+        generator.addHeaderInResources("fields.h");
+        generator.addHeaderInResources("invoke.h");
+        generator.addHeaderInResources("multi_arrays.h");
+        generator.addHeaderInResources("new.h");
         parsing = true;
     }
 
@@ -136,22 +119,17 @@ public class JavaToC {
         codeEliminator = new ClassCodeEliminator(ASM_VERSION, methodsToProcess, libname.substring(3), classWriter);
         classReader.accept(codeEliminator, 0);
 
-        //next step: convert the ExtractedBytecode to actual c code
-        StringBuilder c = new StringBuilder();
-
         //this cannot change since only 1 file is processed as input
         ClassMethodPair className;
         for (int j = 0; j < extractedBytecodes.size(); j++) {
             className = methodsToProcess.get(j);
             ExtractedBytecode bytecode = extractedBytecodes.get(j);
             bytecode.postprocess(); //remove unnecessary labels. Otherwise empty labels could be created and gcc fails
-            c.append(CSourceGenerator.generateCode(className.getClassName(), className.getMethodName(),
+            generator.addNativeMethod(className.getClassName(), className.getMethodName(),
                     className.getSignature(), bytecode, className.overloaded, className.getRequestedObfuscations(),
-                    this.libname));
+                    this.libname);
             antidebugSelf |= className.getRequestedObfuscations().contains(AntidebugSelf.class);
         }
-        this.outCSourceWriter.write(c.toString());
-
         inputClass.close();
         outputClass = new FileOutputStream(inputClassPath);
         outputClass.write(classWriter.toByteArray());
@@ -173,8 +151,9 @@ public class JavaToC {
                 writer.write(fileContent);
                 writer.close();
                 antidebugSelf = false;
+                generator.addGlobalDefine("SELF_DEBUG", null);
             }
-            outCSourceWriter.close();
+            generator.writeToFile(this.outCsource.toString());
             parsing = false;
         }
     }

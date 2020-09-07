@@ -18,6 +18,7 @@ x86_build:
 x86_test:
   stage: test_main
   script:
+    - export PATH="java2c/build/libsrc:$PATH"
     - ./gradlew test jacocoTestReport
     - cat java2c/build/reports/jacoco/test/html/index.html
   coverage: '/Total.*?([0-9]{1,3})%/'
