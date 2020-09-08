@@ -47,16 +47,14 @@ const char* op_as_string(enum Ops op) {
 static inline generic_t run_command_params(int fd, enum Ops command, generic_t data)
 {
     // send command to the VM and retrieve result
-    uint8_t buf[sizeof(generic_t)+1];
-    uint8_t* data_as_u8 = (uint8_t*)&data;
-    strcpy((char*)buf+1, (char*)data_as_u8);
+    uint8_t buf[sizeof(void*)+1];
+    memcpy(buf+1, &data, sizeof(void*));
     buf[0] = command;
     const char* cmd = op_as_string(command);
-    printf("Sent: [%s][%d]\n", cmd, data.i);
-    send(fd, &buf, sizeof(generic_t)+1, 0);
-    recv(fd, &buf, sizeof(generic_t)+1, 0);
-    data_as_u8 = buf+1;
-    data = (generic_t)*data_as_u8;
+    printf("Sent: [%s][%u]\n", cmd, *(uint64_t*)(buf+1));
+    send(fd, buf, sizeof(void*)+1, 0);
+    recv(fd, buf, sizeof(void*)+1, 0);
+    memcpy(&data, buf+1, sizeof(void*));
     cmd = op_as_string(buf[0]);
     printf("Received: [%s][%d]\n", cmd, data.i);
     return data;

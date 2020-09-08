@@ -38,28 +38,29 @@ const char* op_as_string(enum Ops op) {
     }
 }
 
-static inline enum Ops fetch_command(int fd, void** data)
+static inline enum Ops fetch_command(int fd, void** data, FILE* log)
 {
     uint8_t buf[sizeof(void*)+1];
-    uint8_t* data_as_u8;
-    recv(fd, &buf, sizeof(void*)+1, 0);
-    data_as_u8 = buf+1;
-    *data = (void*)*data_as_u8;
+    recv(fd, buf, sizeof(void*)+1, 0);
+    memcpy(data, buf+1, sizeof(void*));
+    fprintf(log, "Command: [%s][%u]\n", op_as_string(buf[0]), *data);
+    fflush(log);
     return buf[0];
 }
 
-static inline void send_result(int fd, void* data)
+static inline void send_result(int fd, void* data, FILE* log)
 {
     uint8_t buf[sizeof(void*)+1];
-    uint8_t* data_as_u8 = (void*)&data;
-    strcpy(buf+1, data_as_u8);
+    memcpy(buf+1, &data, sizeof(void*));
     buf[0] = ACK;
-    send(fd, &buf, sizeof(void*)+1, 0);
+    fprintf(log, "Answer: [%s][%u]\n", op_as_string(buf[0]), data);
+    fflush(log);
+    send(fd, buf, sizeof(void*)+1, 0);
 }
 
 int main(int argc, const char* argv[])
 {
-  FILE* fout = fopen("/tmp/log_child.txt","w");
+  FILE* log = fopen("/tmp/log_child.txt","w");
   struct sockaddr_un addr;
   char socket_path[34] = {0};
   int fd;
@@ -89,25 +90,26 @@ int main(int argc, const char* argv[])
   size_t stack_index = 0;
   void* stack[STACK_SIZE];
 
-  fetch_command(fd, &data);
-  if(prctl(PR_SET_PTRACER, parent_pid_h) == -1)
+  fetch_command(fd, &data, log);
+  if(prctl(PR_SET_PTRACER, parent_pid_h) == -1) {
+    fprintf(log, "prctl failure\n");
     exit(0);
-  send_result(fd, 0x0);
-  fetch_command(fd, &data);
-  if(ptrace(PTRACE_SEIZE, parent_pid_h, NULL, NULL) == -1)
+    }
+  send_result(fd, 0x0, log);
+  fetch_command(fd, &data, log);
+  if(ptrace(PTRACE_SEIZE, parent_pid_h, NULL, NULL) == -1) {
+  fprintf(log, "ptrace failure\n");
     exit(0);
-  send_result(fd, 0x0);
+    }
+  send_result(fd, 0x0, log);
   while(command != KILL)
   {
-    command = fetch_command(fd, &data);
-    fprintf(fout, "Command: [%s][%d]\n", op_as_string(command), (int)data);
-    fflush(fout);
+    command = fetch_command(fd, &data, log);
     switch(command)
     {
         case PUSH:{
             stack[stack_index++] = data;
             data = 0x0;
-            fflush(fout);
             break;}
         case PUSH2:{
             stack[stack_index++] = data;
@@ -188,10 +190,8 @@ int main(int argc, const char* argv[])
             kill(parent_pid_h, SIGKILL);
             exit(0);
     }
-    fprintf(fout, "Answer: [%s][%d]\n", op_as_string(ACK), (int)data);
-        fflush(fout);
-    send_result(fd, data);
+    send_result(fd, data, log);
   }
-    fclose(fout);
+    fclose(log);
   return 0;
 }
