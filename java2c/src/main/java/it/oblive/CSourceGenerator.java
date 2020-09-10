@@ -1,6 +1,5 @@
 package it.oblive;
 
-
 import it.oblive.annotations.AntidebugSelf;
 import it.oblive.annotations.AntidebugTime;
 import it.oblive.support.ExtractedBytecode;
@@ -110,17 +109,7 @@ public class CSourceGenerator {
             sb.append("Array");
         }
         sb.append(" JNICALL ");
-        sb.append("Java_");
-        sb.append(className.replace("_", "_1").replace('/', '_').replace("$", "_00024"));
-        sb.append('_');
-        sb.append(methodName.replace("_", "_1"));
-        if (overloaded) //add special signature for overloaded methods
-        {
-            sb.append("__");
-            for (int i = 0; i < signature.getInput().size(); i++) {
-                sb.append(signature.getInput().get(i).getOverloadName());
-            }
-        }
+        sb.append(mangleCMethodName(className, methodName, overloaded, signature));
         sb.append("(JNIEnv* env, ");
         if (!eb.isStatic) {
             sb.append("jobject this");
@@ -240,12 +229,61 @@ public class CSourceGenerator {
     }
 
     /**
+     * Mangle a single char in a class name or method name in order to support it in the JNI signature
+     *
+     * @param charval The integer value of the char that will be mangled
+     * @return A string representing the mangled character
+     */
+    private static String mangleJNIChar(int charval) {
+        if (charval <= 127) {
+            switch (charval) {
+                case '_':
+                    return "_1";
+                case '/':
+                    return "_";
+                case '$':
+                    return "_00024";
+                default:
+                    return Character.toString((char) charval);
+            }
+        } else {
+            return String.format("_%05x", charval);
+        }
+    }
+
+    /**
+     * Creates the mangled method name that will be used as the JNI signature.
+     *
+     * @param className  The original name of the Java class
+     * @param methodName The original name of the Java method
+     * @param overloaded If the method is overloaded at least once in the Java code.
+     * @param signature  The signature of the Java method
+     * @return The method name in JNI
+     */
+    private String mangleCMethodName(final String className, final String methodName, boolean overloaded,
+                                     final MethodSignature signature) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Java_");
+        sb.append(className.chars().mapToObj(CSourceGenerator::mangleJNIChar).collect(Collectors.joining()));
+        sb.append('_');
+        sb.append(methodName.chars().mapToObj(CSourceGenerator::mangleJNIChar).collect(Collectors.joining()));
+        if (overloaded) //add special signature for overloaded methods
+        {
+            sb.append("__");
+            for (int i = 0; i < signature.getInput().size(); i++) {
+                sb.append(signature.getInput().get(i).getOverloadName());
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
      * Generates the VM table composed of opname - opcode values, used for the self debugging
      *
      * @return A string containing the generated table in the C language.
      */
     public static String generateVMTable() {
-        Random rand = new Random();
+        Random rand = new Random(32000);
         StringBuilder sb = new StringBuilder("enum Ops\n{\n");
         String[] opname = {
                 "PUSH", "PUSH2", "POP", "POP2", "DUP", "DUP2", "DUPX1", "DUPX2", "DUP2X1", "DUP2X2", "SWAP",
