@@ -11,15 +11,11 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-//TODO: generate this dynamically
-#define STACK_SIZE 999
-
-#ifndef STACK_SIZE
-#error "stack size not defined"
-#endif
+#define DEFAULT_STACKS 8
 
 const char* op_as_string(enum Ops op) {
     switch(op){
+        case STACK: return "STACK";
         case PUSH:return "PUSH";
         case PUSH2:return "PUSH2";
         case POP: return "POP";
@@ -87,8 +83,13 @@ int main(int argc, const char* argv[])
   // start antidebug operations
   enum Ops command = SYN;
   void* data = 0x0;
-  size_t stack_index = 0;
-  void* stack[STACK_SIZE];
+
+  // each stack is an instance of a JVM (like a call to a method. Each recursive call needs a new stack)
+  // only recursive calls and not async ones! Stacks are expected to die in order!
+  size_t cur_stack = -1;
+  size_t stacks_allocs = DEFAULT_STACKS;
+  void*** stacks = (void***)malloc(sizeof(void**)*stacks_allocs); // void* -> type. ** -> stack *** -> array of stacks
+  size_t* stacks_indices = (size_t*)malloc(sizeof(size_t)*stacks_allocs); //each stack needs an index
 
   fetch_command(fd, &data, log);
   if(prctl(PR_SET_PTRACER, parent_pid_h) == -1) {
@@ -98,90 +99,111 @@ int main(int argc, const char* argv[])
   send_result(fd, 0x0, log);
   fetch_command(fd, &data, log);
   if(ptrace(PTRACE_SEIZE, parent_pid_h, NULL, NULL) == -1) {
-  fprintf(log, "ptrace failure\n");
+    fprintf(log, "ptrace failure\n");
     exit(0);
-    }
+  }
   send_result(fd, 0x0, log);
-  while(command != KILL)
+  while(command!=KILL || cur_stack != -1)
   {
     command = fetch_command(fd, &data, log);
     switch(command)
     {
+        case STACK:
+            cur_stack++;
+            if (cur_stack == stacks_allocs) {
+                fprintf(log, "Requested %d stacks but %d are allocated. Realloc.\n", cur_stack+1, stacks_allocs);
+                stacks_allocs<<=1;
+                stacks = realloc(stacks, sizeof(void**)*stacks_allocs);
+                stacks_indices = realloc(stacks_indices, sizeof(size_t)*stacks_allocs);
+                fprintf(log, "Allocated %d stacks\n", stacks_allocs);
+            }
+            size_t stack_len;
+            memcpy(&stack_len, &data, sizeof(void*));
+            stacks[cur_stack] = (void**)malloc(sizeof(void*)*stack_len);
+            stacks_indices[cur_stack] = 0;
+            data = cur_stack;
+            break;
         case PUSH:{
-            stack[stack_index++] = data;
+            fprintf(log, "Pushing stack %d position %d, value %u\n", cur_stack, stacks_indices[cur_stack], data);
+            stacks[cur_stack][stacks_indices[cur_stack]++] = data;
             data = 0x0;
             break;}
         case PUSH2:{
-            stack[stack_index++] = data;
-            stack_index++;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = data;
+            stacks_indices[cur_stack]++;
             data = 0x0;
             break;}
         case POP:{
-            data = stack[--stack_index];
+            data = stacks[cur_stack][--stacks_indices[cur_stack]];
+            fprintf(log, "Popping stack %d position %d, value %u\n", cur_stack, stacks_indices[cur_stack], data);
             break;}
         case POP2:{
-            stack_index--;
-            data = stack[--stack_index];
+            stacks_indices[cur_stack]--;
+            data = stacks[cur_stack][--stacks_indices[cur_stack]];
             break;}
         case DUP:{
             data = 0x0;
-            stack[stack_index] = stack[stack_index-1];
-            stack_index++;
+            stacks[cur_stack][stacks_indices[cur_stack]] = stacks[cur_stack][stacks_indices[cur_stack]-1];
+            stacks_indices[cur_stack]++;
             break;}
         case DUP2:{
             data = 0x0;
-            stack[stack_index] = stack[stack_index-2];
-            stack[stack_index+1] = stack[stack_index-1];
-            stack_index++;
-            stack_index++;
+            stacks[cur_stack][stacks_indices[cur_stack]] = stacks[cur_stack][stacks_indices[cur_stack]-2];
+            stacks[cur_stack][stacks_indices[cur_stack]+1] = stacks[cur_stack][stacks_indices[cur_stack]-1];
+            stacks_indices[cur_stack]++;
+            stacks_indices[cur_stack]++;
             break;}
         case DUPX1:{
             data = 0x0;
-            void* dup0 = stack[--stack_index];
-            void* mid0 = stack[--stack_index];
-            stack[stack_index++] = dup0;
-            stack[stack_index++] = mid0;
-            stack[stack_index++] = dup0;
+            void* dup0 = stacks[--stacks_indices[cur_stack]];
+            void* mid0 = stacks[--stacks_indices[cur_stack]];
+            stacks[cur_stack][stacks_indices[cur_stack]++] = dup0;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = mid0;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = dup0;
             break;}
         case DUPX2:{
             data = 0x0;
-            void* dup0 = stack[--stack_index];
-            void* mid1 = stack[--stack_index];
-            void* mid0 = stack[--stack_index];
-            stack[stack_index++] = dup0;
-            stack[stack_index++] = mid0;
-            stack[stack_index++] = mid1;
-            stack[stack_index++] = dup0;
+            void* dup0 = stacks[--stacks_indices[cur_stack]];
+            void* mid1 = stacks[--stacks_indices[cur_stack]];
+            void* mid0 = stacks[--stacks_indices[cur_stack]];
+            stacks[cur_stack][stacks_indices[cur_stack]++] = dup0;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = mid0;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = mid1;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = dup0;
             break;}
         case DUP2X1:
             {data = 0x0;
-            void* dup1 = stack[--stack_index];
-            void* dup0 = stack[--stack_index];
-            void* mid0 = stack[--stack_index];
-            stack[stack_index++] = dup0;
-            stack[stack_index++] = dup1;
-            stack[stack_index++] = mid0;
-            stack[stack_index++] = dup0;
-            stack[stack_index++] = dup1;
+            void* dup1 = stacks[--stacks_indices[cur_stack]];
+            void* dup0 = stacks[--stacks_indices[cur_stack]];
+            void* mid0 = stacks[--stacks_indices[cur_stack]];
+            stacks[cur_stack][stacks_indices[cur_stack]++] = dup0;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = dup1;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = mid0;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = dup0;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = dup1;
             break;}
         case DUP2X2:
-            {void* dup1 = stack[--stack_index];
-            void* dup0 = stack[--stack_index];
-            void* mid1 = stack[--stack_index];
-            void* mid0 = stack[--stack_index];
-            stack[stack_index++] = dup0;
-            stack[stack_index++] = dup1;
-            stack[stack_index++] = mid0;
-            stack[stack_index++] = mid1;
-            stack[stack_index++] = dup0;
-            stack[stack_index++] = dup1;
+            {void* dup1 =stacks[--stacks_indices[cur_stack]];
+            void* dup0 = stacks[--stacks_indices[cur_stack]];
+            void* mid1 = stacks[--stacks_indices[cur_stack]];
+            void* mid0 = stacks[--stacks_indices[cur_stack]];
+            stacks[cur_stack][stacks_indices[cur_stack]++] = dup0;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = dup1;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = mid0;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = mid1;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = dup0;
+            stacks[cur_stack][stacks_indices[cur_stack]++] = dup1;
             break;}
         case SWAP:
-           {void* tmp = stack[stack_index-2];
-           stack[stack_index-2] = stack[stack_index-1];
-           stack[stack_index-1] = tmp;
+           {void* tmp = stacks[cur_stack][stacks_indices[cur_stack]-2];
+           stacks[cur_stack][stacks_indices[cur_stack]-2] = stacks[cur_stack][stacks_indices[cur_stack]-1];
+           stacks[cur_stack][stacks_indices[cur_stack]-1] = tmp;
            break;}
         case KILL:
+            free(stacks[cur_stack]);
+            data = cur_stack;
+            cur_stack--;
+            break;
         case SYN:
         case ACK:
             data = 0x0;
@@ -192,6 +214,8 @@ int main(int argc, const char* argv[])
     }
     send_result(fd, data, log);
   }
-    fclose(log);
+  fclose(log);
+  free(stacks_indices);
+  free(stacks);
   return 0;
 }

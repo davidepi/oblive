@@ -26,9 +26,10 @@ static inline void gen_socket_name(char* buffer)
 
 const char* op_as_string(enum Ops op) {
     switch(op){
-        case PUSH: return "PUSH";
+        case STACK:return "STACK";
+        case PUSH:return "PUSH";
         case PUSH2:return "PUSH2";
-        case POP: return "POP";
+        case POP:return "POP";
         case POP2:return "POP2";
         case DUP:return "DUP";
         case DUP2:return "DUP2";
@@ -40,7 +41,7 @@ const char* op_as_string(enum Ops op) {
         case KILL:return "KILL";
         case SYN:return "SYN";
         case ACK:return "ACK";
-        default: return "UNK";
+        default:return "UNK";
     }
 }
 
@@ -122,12 +123,6 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
     return 0;
   run_command(cl, SYN);
   return cl;
-}
-
-static inline void self_debug_end(int fd)
-{
-  run_command(fd, KILL);
-  close(fd);
 }
 
 /*------------ Originally written by S.Berlato <sberlato@fbk.eu> -------------*\

@@ -102,6 +102,9 @@ public class CSourceGenerator {
             sb.append("#define RETURN_EXCEPTION return 0;\n");
         }
 
+        sb.append("unsigned int child = 0;\n"); //if the selfdebug is active this is not 0
+        sb.append("unsigned int calls = 0;\n"); //number of method calls
+
         //generate JNI signature
         sb.append("JNIEXPORT ");
         sb.append(signature.getReturnType().getJniName());
@@ -127,29 +130,39 @@ public class CSourceGenerator {
         sb.append("{\n");
 
         /* ----------------------------- FUNCTION BODY STARTS HERE ---------------------------------------------------*/
+        sb.append("calls++;\n");
         //antidebug techniques
         if (antidebugTime || antidebugSelf) {
-            sb.append("break_java_debugger();\n");
+            sb.append("if(child==0)break_java_debugger();\n");
             if (antidebugTime) {
                 sb.append("time_t debug_timer;\n");
                 sb.append("time_start(&debug_timer);\n");
             }
             if (antidebugSelf) {
-                sb.append("int child = self_debug(env, \"" + libname + "vm.o\");\n");
+                sb.append("if(child==0){\n"); //recursive calls won't apply selfdebug (or they will fail to attach)
+                sb.append("child = self_debug(env, \"").append(libname).append("vm.o\");\n");
                 sb.append("if(!child)return 0;\n");
-            } else {
-                sb.append("int child = 0;\n");
+                sb.append("}\n");
             }
-        } else {
-            sb.append("int child = 0;\n");
         }
 
         //generate stack vars
         sb.append("generic_t __return_retval__;\n");
-        sb.append("uint32_t _index = 0;\n");
-        sb.append("generic_t _stack[");
-        sb.append(eb.maxStack);
-        sb.append("];\n");
+        if (antidebugSelf) {
+            sb.append("generic_t stack_size;\n");
+            sb.append("stack_size.i = ");
+            sb.append(eb.maxStack);
+            sb.append(";\n");
+            sb.append("run_command_params(child, STACK, stack_size);\n");
+            //generate anyway the vars _stack and _index, even though they won't be used
+            sb.append("uint32_t _index = 0;\n");
+            sb.append("generic_t* _stack = NULL;\n");
+        } else {
+            sb.append("uint32_t _index = 0;\n");
+            sb.append("generic_t _stack[");
+            sb.append(eb.maxStack);
+            sb.append("];\n");
+        }
         sb.append("generic_t _vars[");
         sb.append(eb.maxLVar);
         sb.append("];\n");
@@ -197,7 +210,8 @@ public class CSourceGenerator {
             sb.append("time_check(&debug_timer);\n");
         }
         if (antidebugSelf) {
-            sb.append("self_debug_end(child);\n");
+            sb.append("run_command(child, KILL);\n");
+            sb.append("if(calls==0)close(child);\n");
         }
         /* --------------------------------------- END OF FUNCTION ---------------------------------------------------*/
         sb.append(eb.returnType);
@@ -283,10 +297,10 @@ public class CSourceGenerator {
      * @return A string containing the generated table in the C language.
      */
     public static String generateVMTable() {
-        Random rand = new Random(32000);
+        Random rand = new Random();
         StringBuilder sb = new StringBuilder("enum Ops\n{\n");
         String[] opname = {
-                "PUSH", "PUSH2", "POP", "POP2", "DUP", "DUP2", "DUPX1", "DUPX2", "DUP2X1", "DUP2X2", "SWAP",
+                "STACK", "PUSH", "PUSH2", "POP", "POP2", "DUP", "DUP2", "DUPX1", "DUPX2", "DUP2X1", "DUP2X2", "SWAP",
                 "KILL", "SYN", "ACK"
         };
         HashSet<Integer> opcodes = new HashSet<>();

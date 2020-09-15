@@ -6,7 +6,7 @@ public class TestAntidebugSelfDebuggingRecursive extends AbstractTestCorrectness
     private Class<?> className = testclasses.antidebug.AntidebugSelfDebuggingRecursive.class;
     private String[] methodTest = {"factorial"};
     private Class[][] methodParam = {new Class[]{int.class}};
-    private Object[][] methodArgs = {new Object[]{15}};
+    private Object[][] methodArgs = {new Object[]{8}};
 
     @Override
     public Class<?> getTestClass() {
