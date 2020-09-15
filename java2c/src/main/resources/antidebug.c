@@ -20,7 +20,7 @@
 
 const char* op_as_string(enum Ops op) {
     switch(op){
-        case PUSH: return "PUSH";
+        case PUSH:return "PUSH";
         case PUSH2:return "PUSH2";
         case POP: return "POP";
         case POP2:return "POP2";
@@ -34,7 +34,7 @@ const char* op_as_string(enum Ops op) {
         case KILL:return "KILL";
         case SYN:return "SYN";
         case ACK:return "ACK";
-        default: return "UNK";
+        default:return "UNK";
     }
 }
 
