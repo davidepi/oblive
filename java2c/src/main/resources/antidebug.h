@@ -113,6 +113,8 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   if(read(cl, &child_pid_n, sizeof(uint32_t)) == -1)
     return 0;
   child_pid_h = ntohl(child_pid_n);
+  //TODO: remove log insn
+    printf("Spawned child %d\n", child_pid_h);
   if(write(cl, &mypid_n, sizeof(uint32_t)) == -1)
     return 0;
   // start antidebug operations
@@ -254,3 +256,6 @@ static inline void break_java_debugger()
   fclose(maps_file);
   return;
 }
+
+unsigned int child = 0;
+unsigned int calls = 0;

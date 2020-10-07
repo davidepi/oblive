@@ -102,9 +102,6 @@ public class CSourceGenerator {
             sb.append("#define RETURN_EXCEPTION return 0;\n");
         }
 
-        sb.append("unsigned int child = 0;\n"); //if the selfdebug is active this is not 0
-        sb.append("unsigned int calls = 0;\n"); //number of method calls
-
         //generate JNI signature
         sb.append("JNIEXPORT ");
         sb.append(signature.getReturnType().getJniName());
@@ -211,7 +208,8 @@ public class CSourceGenerator {
         }
         if (antidebugSelf) {
             sb.append("run_command(child, KILL);\n");
-            sb.append("if(calls==0)close(child);\n");
+            sb.append("calls--;\n");
+            sb.append("if(calls==0){close(child);child=0;}\n");
         }
         /* --------------------------------------- END OF FUNCTION ---------------------------------------------------*/
         sb.append(eb.returnType);

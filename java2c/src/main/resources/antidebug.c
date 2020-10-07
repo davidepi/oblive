@@ -56,7 +56,6 @@ static inline void send_result(int fd, void* data, FILE* log)
 
 int main(int argc, const char* argv[])
 {
-  FILE* log = fopen("/tmp/log_child.txt","w");
   struct sockaddr_un addr;
   char socket_path[34] = {0};
   int fd;
@@ -75,6 +74,9 @@ int main(int argc, const char* argv[])
   uint32_t mypid_n = htonl(mypid_h);
   uint32_t parent_pid_h;
   uint32_t parent_pid_n;
+  char log_filename[32];
+  snprintf(log_filename, 32, "/tmp/log_child_%d.txt", mypid_h);
+  FILE* log = fopen(log_filename,"w");
   if(send(fd, &mypid_n, sizeof(uint32_t), 0) == -1)
     exit(0);
   if(recv(fd, &parent_pid_n, sizeof(uint32_t), 0) == -1)
