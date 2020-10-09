@@ -11,7 +11,11 @@ static inline void _New(int socket, JNIEnv* env, generic_t* stack, uint32_t* ind
 //exception is created from the JNI layer
 static inline void _ThrowFromJNI(int socket, JNIEnv* env, generic_t* stack, uint32_t* index, const char* exception_name)
 {
+#ifdef SELF_DEBUG
+    run_command(socket, CLR);
+#else
   *index = 0;
+#endif
   jclass constructed_class = (*env)->FindClass(env,exception_name);
   jmethodID method_id = (*env)->GetMethodID(env,constructed_class,"<init>","()V");
   generic_t res;
@@ -26,7 +30,11 @@ static inline char _ThrowFromUser(int socket, JNIEnv* nev, generic_t* stack, uin
   generic_t res = pop(socket,stack,index);
   if(res.l!=NULL)
   {
-    *index = 0;
+    #ifdef SELF_DEBUG
+        run_command(socket, CLR);
+    #else
+      *index = 0;
+    #endif
     push(socket,stack,index,res);
   }
   else
@@ -37,8 +45,18 @@ static inline char _ThrowFromUser(int socket, JNIEnv* nev, generic_t* stack, uin
 //exception is created from the JVM
 static inline void _ThrowFromJVM(int socket,JNIEnv* env, generic_t* stack, uint32_t* index)
 {
-  *index = 0;
+  #ifdef SELF_DEBUG
+      run_command(socket, CLR);
+  #else
+    *index = 0;
+  #endif
   generic_t res;
   res.l = (*env)->ExceptionOccurred(env);
   push(socket,stack,index,res);
+}
+
+//exception is handled to the JVM for resolution
+static inline void _ThrowBack(int socket, JNIEnv* env, generic_t* stack, uint32_t* index) {
+    generic_t res = pop(socket, stack, index);
+    (*env)->Throw(env,res.l);
 }

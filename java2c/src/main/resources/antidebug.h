@@ -38,6 +38,7 @@ const char* op_as_string(enum Ops op) {
         case DUP2X1:return "DUP2X1";
         case DUP2X2:return "DUP2X2";
         case SWAP:return "SWAP";
+        case CLR: return "CLEAR";
         case KILL:return "KILL";
         case SYN:return "SYN";
         case ACK:return "ACK";

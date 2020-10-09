@@ -185,7 +185,8 @@ int main(int argc, const char* argv[])
             stacks[cur_stack][stacks_indices[cur_stack]++] = dup1;
             break;}
         case DUP2X2:
-            {void* dup1 =stacks[--stacks_indices[cur_stack]];
+            {data = 0x0;
+            void* dup1 =stacks[--stacks_indices[cur_stack]];
             void* dup0 = stacks[--stacks_indices[cur_stack]];
             void* mid1 = stacks[--stacks_indices[cur_stack]];
             void* mid0 = stacks[--stacks_indices[cur_stack]];
@@ -197,10 +198,15 @@ int main(int argc, const char* argv[])
             stacks[cur_stack][stacks_indices[cur_stack]++] = dup1;
             break;}
         case SWAP:
-           {void* tmp = stacks[cur_stack][stacks_indices[cur_stack]-2];
+           {data = 0x0;
+           void* tmp = stacks[cur_stack][stacks_indices[cur_stack]-2];
            stacks[cur_stack][stacks_indices[cur_stack]-2] = stacks[cur_stack][stacks_indices[cur_stack]-1];
            stacks[cur_stack][stacks_indices[cur_stack]-1] = tmp;
            break;}
+        case CLR:
+            {data = 0x0;
+             stacks_indices[cur_stack] = 0;
+             break;}
         case KILL:
             free(stacks[cur_stack]);
             data = cur_stack;

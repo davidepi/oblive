@@ -97,9 +97,9 @@ public class CSourceGenerator {
 
         //if the function is void, the exception should not return 0, but just return
         if (signature.getReturnType().getJniName().equals("void")) {
-            sb.append("#define RETURN_EXCEPTION return;\n");
+            sb.append("#define RETURN_EXCEPTION goto exitpoint;\n");
         } else {
-            sb.append("#define RETURN_EXCEPTION return 0;\n");
+            sb.append("#define RETURN_EXCEPTION __return_retval__.i = 0;goto exitpoint;\n");
         }
 
         //generate JNI signature
@@ -299,7 +299,7 @@ public class CSourceGenerator {
         StringBuilder sb = new StringBuilder("enum Ops\n{\n");
         String[] opname = {
                 "STACK", "PUSH", "PUSH2", "POP", "POP2", "DUP", "DUP2", "DUPX1", "DUPX2", "DUP2X1", "DUP2X2", "SWAP",
-                "KILL", "SYN", "ACK"
+                "KILL", "SYN", "ACK", "CLR"
         };
         HashSet<Integer> opcodes = new HashSet<>();
         while (opcodes.size() < opname.length) {

@@ -212,7 +212,7 @@ public class ExtractedBytecode {
                 // last label used, since I'm not right after a label ----------v
                 Map<String, TryCatchBlock> currentLabelCatch = tryCatches.get(labelpure);
                 if (currentLabelCatch == null) { //no catchblock for the current basic block, so throw the exception
-                    it.add("(*env)->Throw(env,_stack[0].l);\nRETURN_EXCEPTION;\n");
+                    it.add("_ThrowBack(child,env,_stack,&_index);\nRETURN_EXCEPTION;\n");
                 } else { //inside a catchblock, so if(raised exception instance of catched exception) goto catch, else
                     // throw
                     //flatten into array
@@ -228,7 +228,7 @@ public class ExtractedBytecode {
                         }
                         it.add("goto LABEL_" + catched.handle + ";\n}\n");
                     }
-                    it.add("(*env)->Throw(env,_stack[0].l);\nRETURN_EXCEPTION;\n");
+                    it.add("_ThrowBack(child,env,_stack,&_index);\nRETURN_EXCEPTION;\n");
                 }
             }
         }
