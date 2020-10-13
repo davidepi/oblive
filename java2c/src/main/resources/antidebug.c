@@ -28,6 +28,7 @@ const char* op_as_string(enum Ops op) {
         case DUP2X2:return "DUP2X2";
         case SWAP:return "SWAP";
         case KILL:return "KILL";
+        case CLR:return "CLEAR";
         case SYN:return "SYN";
         case ACK:return "ACK";
         default:return "UNK";
@@ -157,17 +158,17 @@ int main(int argc, const char* argv[])
             break;}
         case DUPX1:{
             data = 0x0;
-            void* dup0 = stacks[--stacks_indices[cur_stack]];
-            void* mid0 = stacks[--stacks_indices[cur_stack]];
+            void* dup0 = stacks[cur_stack][--stacks_indices[cur_stack]];
+            void* mid0 = stacks[cur_stack][--stacks_indices[cur_stack]];
             stacks[cur_stack][stacks_indices[cur_stack]++] = dup0;
             stacks[cur_stack][stacks_indices[cur_stack]++] = mid0;
             stacks[cur_stack][stacks_indices[cur_stack]++] = dup0;
             break;}
         case DUPX2:{
             data = 0x0;
-            void* dup0 = stacks[--stacks_indices[cur_stack]];
-            void* mid1 = stacks[--stacks_indices[cur_stack]];
-            void* mid0 = stacks[--stacks_indices[cur_stack]];
+            void* dup0 = stacks[cur_stack][--stacks_indices[cur_stack]];
+            void* mid1 = stacks[cur_stack][--stacks_indices[cur_stack]];
+            void* mid0 = stacks[cur_stack][--stacks_indices[cur_stack]];
             stacks[cur_stack][stacks_indices[cur_stack]++] = dup0;
             stacks[cur_stack][stacks_indices[cur_stack]++] = mid0;
             stacks[cur_stack][stacks_indices[cur_stack]++] = mid1;
@@ -175,9 +176,9 @@ int main(int argc, const char* argv[])
             break;}
         case DUP2X1:
             {data = 0x0;
-            void* dup1 = stacks[--stacks_indices[cur_stack]];
-            void* dup0 = stacks[--stacks_indices[cur_stack]];
-            void* mid0 = stacks[--stacks_indices[cur_stack]];
+            void* dup1 = stacks[cur_stack][--stacks_indices[cur_stack]];
+            void* dup0 = stacks[cur_stack][--stacks_indices[cur_stack]];
+            void* mid0 = stacks[cur_stack][--stacks_indices[cur_stack]];
             stacks[cur_stack][stacks_indices[cur_stack]++] = dup0;
             stacks[cur_stack][stacks_indices[cur_stack]++] = dup1;
             stacks[cur_stack][stacks_indices[cur_stack]++] = mid0;
@@ -186,10 +187,10 @@ int main(int argc, const char* argv[])
             break;}
         case DUP2X2:
             {data = 0x0;
-            void* dup1 =stacks[--stacks_indices[cur_stack]];
-            void* dup0 = stacks[--stacks_indices[cur_stack]];
-            void* mid1 = stacks[--stacks_indices[cur_stack]];
-            void* mid0 = stacks[--stacks_indices[cur_stack]];
+            void* dup1 =stacks[cur_stack][--stacks_indices[cur_stack]];
+            void* dup0 = stacks[cur_stack][--stacks_indices[cur_stack]];
+            void* mid1 = stacks[cur_stack][--stacks_indices[cur_stack]];
+            void* mid0 = stacks[cur_stack][--stacks_indices[cur_stack]];
             stacks[cur_stack][stacks_indices[cur_stack]++] = dup0;
             stacks[cur_stack][stacks_indices[cur_stack]++] = dup1;
             stacks[cur_stack][stacks_indices[cur_stack]++] = mid0;
