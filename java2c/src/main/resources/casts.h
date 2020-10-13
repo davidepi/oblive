@@ -120,7 +120,13 @@ static inline void _InstanceOf(int socket, JNIEnv* env, generic_t* stack, uint32
 
 static inline char _ExceptionInstanceOf(int socket, JNIEnv* env, generic_t* stack, const char* exceptionName)
 {
-  jthrowable obj = stack[0].l;
+generic_t front;
+#ifdef SELF_DEBUG
+  front = run_command(socket, FRONT);
+#else
+  front = stack[0];
+#endif
+  jthrowable obj = front.l;
   //guaranteed that obj is NEVER null, by a previous check
   jclass caller_class = (*env)->FindClass(env, exceptionName);
   return (*env)->IsInstanceOf(env,obj,caller_class);

@@ -172,7 +172,8 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 eb.statements.add(handleSystemException("_NewMultidimensionalIntArray(child,env,_stack,&_index,\"" + desc + "\"," + dims + ")", NegativeArraySizeException.class));
                 break;
             case 'Z':
-                eb.statements.add(handleSystemException("_NewMultidimensionalBooleanArray(child,env,_stack,&_index,\"" + desc + "\"," + dims + ")", NegativeArraySizeException.class));
+                eb.statements.add(handleSystemException("_NewMultidimensionalBooleanArray(child,env,_stack,&_index," +
+                        "\"" + desc + "\"," + dims + ")", NegativeArraySizeException.class));
                 break;
             case 'B':
                 eb.statements.add(handleSystemException("_NewMultidimensionalByteArray(child,env,_stack,&_index,\"" + desc + "\"," + dims + ")", NegativeArraySizeException.class));
@@ -729,7 +730,8 @@ public class MethodBytecodeExtractor extends MethodVisitor {
         switch (opcode) {
             case INVOKEINTERFACE:
             case INVOKEVIRTUAL:
-                eb.statements.add("_InvokeVirtual_" + signature.getReturnType().getJniName() + "(child,env,_stack,&_index," +
+                eb.statements.add("_InvokeVirtual_" + signature.getReturnType().getJniName() + "(child,env,_stack," +
+                        "&_index," +
                         "\"" +
                         owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
                 eb.statements.add("if((*env)->ExceptionCheck(env)){\n_ThrowFromJVM(child,env,_stack,&_index);");
@@ -738,7 +740,8 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 break;
             case INVOKESPECIAL:
                 if (!name.equals("<init>")) {
-                    eb.statements.add("_InvokeSpecial_" + signature.getReturnType().getJniName() + "(child,env,_stack," +
+                    eb.statements.add("_InvokeSpecial_" + signature.getReturnType().getJniName() + "(child,env," +
+                            "_stack," +
                             "&_index,\"" +
                             owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
                 } else {
@@ -749,7 +752,8 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 eb.statements.add("}");
                 break;
             case INVOKESTATIC:
-                eb.statements.add("_InvokeStatic_" + signature.getReturnType().getJniName() + "(child,env,_stack,&_index,\"" +
+                eb.statements.add("_InvokeStatic_" + signature.getReturnType().getJniName() + "(child,env,_stack," +
+                        "&_index,\"" +
                         owner + "\",\"" + name + "\",\"" + desc + "\"," + argumentsName + ");");
                 eb.statements.add("if((*env)->ExceptionCheck(env)){\n_ThrowFromJVM(child,env,_stack,&_index);");
                 eb.statements.add(ExtractedBytecode.POSTPROCESS_EXCEPTION_CLEAR);
@@ -765,7 +769,8 @@ public class MethodBytecodeExtractor extends MethodVisitor {
         JniType type = new JniType(desc);
         switch (opcode) {
             case GETFIELD:
-                eb.statements.add(handleSystemException("_GetField_" + type.getJniName() + "(child,env,_stack,&_index,\"" +
+                eb.statements.add(handleSystemException("_GetField_" + type.getJniName() + "(child,env,_stack," +
+                        "&_index,\"" +
                         owner + "\",\"" + name + "\",\"" + desc + "\")", NullPointerException.class));
                 break;
             case GETSTATIC:
@@ -773,7 +778,8 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                         name + "\",\"" + desc + "\");");
                 break;
             case PUTFIELD:
-                eb.statements.add(handleSystemException("_SetField_" + type.getJniName() + "(child,env,_stack,&_index,\"" +
+                eb.statements.add(handleSystemException("_SetField_" + type.getJniName() + "(child,env,_stack," +
+                        "&_index,\"" +
                         owner + "\",\"" + name + "\",\"" + desc + "\")", NullPointerException.class));
                 break;
             case PUTSTATIC:
@@ -827,7 +833,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 "#elif defined(CATCH_java_lang_Object)\n" +
                 "goto CATCH_java_lang_Object;\n" +
                 "#else\n" +
-                "(*env)->Throw(env,_stack[0].l);\n" +
+                "_ThrowBack(child,env,_stack,&_index);\n" +
                 "RETURN_EXCEPTION;\n" +
                 "#endif\n" +
                 "}\n" +
@@ -844,7 +850,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 "#elif defined(CATCH_java_lang_Object)\n" +
                 "goto CATCH_java_lang_Object;\n" +
                 "#else\n" +
-                "(*env)->Throw(env,_stack[0].l);\n" +
+                "_ThrowBack(child,env,_stack,&_index);\n" +
                 "RETURN_EXCEPTION;\n" +
                 "#endif\n" +
                 "}\n";
@@ -862,7 +868,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                     "#elif defined(CATCH_java_lang_Object)\n" +
                     "goto CATCH_java_lang_Object;\n" +
                     "#else\n" +
-                    "(*env)->Throw(env,_stack[0].l);\n" +
+                    "_ThrowBack(child,env,_stack,&_index);\n" +
                     "RETURN_EXCEPTION;\n" +
                     "#endif\n" +
                     "}\n";
@@ -887,7 +893,7 @@ public class MethodBytecodeExtractor extends MethodVisitor {
                 "#elif defined(CATCH_java_lang_Object)\n" +
                 "goto CATCH_java_lang_Object;\n" +
                 "#else\n" +
-                "(*env)->Throw(env,_stack[0].l);\n" +
+                "_ThrowBack(child,env,_stack,&_index);\n" +
                 "RETURN_EXCEPTION;\n" +
                 "#endif\n" +
                 "}\n";

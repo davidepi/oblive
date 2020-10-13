@@ -22,6 +22,7 @@ const char* op_as_string(enum Ops op) {
         case POP2:return "POP2";
         case DUP:return "DUP";
         case DUP2:return "DUP2";
+        case FRONT:return "FRONT";
         case DUPX1:return "DUPX1";
         case DUPX2:return "DUPX2";
         case DUP2X1:return "DUP2X1";
@@ -156,6 +157,10 @@ int main(int argc, const char* argv[])
             stacks_indices[cur_stack]++;
             stacks_indices[cur_stack]++;
             break;}
+        case FRONT:{
+            data = stacks[cur_stack][stacks_indices[cur_stack]-1];
+            break;
+        }
         case DUPX1:{
             data = 0x0;
             void* dup0 = stacks[cur_stack][--stacks_indices[cur_stack]];

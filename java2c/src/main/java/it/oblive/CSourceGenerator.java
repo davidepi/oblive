@@ -299,7 +299,7 @@ public class CSourceGenerator {
         StringBuilder sb = new StringBuilder("enum Ops\n{\n");
         String[] opname = {
                 "STACK", "PUSH", "PUSH2", "POP", "POP2", "DUP", "DUP2", "DUPX1", "DUPX2", "DUP2X1", "DUP2X2", "SWAP",
-                "KILL", "SYN", "ACK", "CLR"
+                "KILL", "SYN", "ACK", "CLR", "FRONT"
         };
         HashSet<Integer> opcodes = new HashSet<>();
         while (opcodes.size() < opname.length) {

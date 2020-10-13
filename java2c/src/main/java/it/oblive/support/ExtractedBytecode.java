@@ -216,7 +216,7 @@ public class ExtractedBytecode {
                 } else { //inside a catchblock, so if(raised exception instance of catched exception) goto catch, else
                     // throw
                     //flatten into array
-                    List<TryCatchBlock> list = new ArrayList<TryCatchBlock>(currentLabelCatch.values());
+                    List<TryCatchBlock> list = new ArrayList<>(currentLabelCatch.values());
                     //reorder array otherwise I could break inheritance (catching in the wrong block)
 
                     list.sort(Comparator.comparingInt(block -> (block.order)));
