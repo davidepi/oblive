@@ -30,29 +30,54 @@ const char* op_as_string(enum Ops op) {
         case SWAP:return "SWAP";
         case KILL:return "KILL";
         case CLR:return "CLEAR";
-        case SYN:return "SYN";
         case ACK:return "ACK";
         default:return "UNK";
     }
 }
 
+static inline void get_key(uint8_t* opcode_key, uint64_t* data_key)
+{
+    uint64_t opcode_key_full = next_rng();
+    *opcode_key = ((uint8_t*)(&opcode_key_full))[0];
+    *data_key = next_rng();
+}
+
 static inline enum Ops fetch_command(int fd, void** data, FILE* log)
 {
+    // get parent key
+    uint64_t data_key;
+    uint8_t opcode_key;
+    get_key(&opcode_key, &data_key);
+    // retrieve data
     uint8_t buf[sizeof(void*)+1];
     recv(fd, buf, sizeof(void*)+1, 0);
     memcpy(data, buf+1, sizeof(void*));
-    fprintf(log, "Command: [%s][%u]\n", op_as_string(buf[0]), *data);
+    uint8_t cmd = buf[0];
+    //decrypt it
+    fprintf(log, "data 0x%16lX key 0x%16lX\n", *data, data_key);
+    uint64_t data_enc = *data;
+    data_enc ^= data_key;
+    *data = data_enc;
+    cmd ^= opcode_key;
+    fprintf(log, "Command: [%s][%lu]\n", op_as_string(cmd), *data);
+    fprintf(log, "The parent key was 0x%02X%16lX\n", opcode_key, data_key);
     fflush(log);
-    return buf[0];
+    return cmd;
 }
 
 static inline void send_result(int fd, void* data, FILE* log)
 {
+    uint64_t data_key;
+    uint8_t opcode_key;
+    get_key(&opcode_key, &data_key);
     uint8_t buf[sizeof(void*)+1];
-    memcpy(buf+1, &data, sizeof(void*));
-    buf[0] = ACK;
-    fprintf(log, "Answer: [%s][%u]\n", op_as_string(buf[0]), data);
+    fprintf(log, "Answer: [%s][%lu]\n", op_as_string(ACK), data);
+    fprintf(log, "My key is 0x%02X%16lX\n", opcode_key, data_key);
     fflush(log);
+    data = (uint64_t)data ^ data_key;
+    // FIXME: possible leak: this ACK is constant, may leak information about the prng
+    buf[0] = ACK ^ opcode_key;
+    memcpy(buf+1, &data, sizeof(void*));
     send(fd, buf, sizeof(void*)+1, 0);
 }
 
@@ -85,7 +110,7 @@ int main(int argc, const char* argv[])
     exit(0);
   parent_pid_h = ntohl(parent_pid_n);
   // start antidebug operations
-  enum Ops command = SYN;
+  enum Ops command = !KILL;
   void* data = 0x0;
 
   // each stack is an instance of a JVM (like a call to a method. Each recursive call needs a new stack)
@@ -95,18 +120,25 @@ int main(int argc, const char* argv[])
   void*** stacks = (void***)malloc(sizeof(void**)*stacks_allocs); // void* -> type. ** -> stack *** -> array of stacks
   size_t* stacks_indices = (size_t*)malloc(sizeof(size_t)*stacks_allocs); //each stack needs an index
 
-  fetch_command(fd, &data, log);
+  uint8_t true_random[2*(sizeof(void*)+1)]; //9 byte: SYN1, 9 byte: SYN2
+  recv(fd, true_random, sizeof(void*)+1, 0);
+  getrandom(&true_random, sizeof(true_random), 0);
   if(prctl(PR_SET_PTRACER, parent_pid_h) == -1) {
     fprintf(log, "prctl failure\n");
     exit(0);
     }
-  send_result(fd, 0x0, log);
-  fetch_command(fd, &data, log);
+  send(fd, true_random, sizeof(void*)+1, 0);
+  recv(fd, true_random, sizeof(void*)+1, 0);
   if(ptrace(PTRACE_SEIZE, parent_pid_h, NULL, NULL) == -1) {
     fprintf(log, "ptrace failure\n");
     exit(0);
   }
-  send_result(fd, 0x0, log);
+  send(fd, (true_random+sizeof(void*)+1), sizeof(void*)+1, 0);
+  prng_state[0] = 0xe63023c4ac1e278b;
+  prng_state[1] = 0x8c936af7aa9255a2;
+  prng_state[2] = 0x4cd15297ba9aefae;
+  prng_state[3] = 0x0819e4eac91b737b;
+
   while(command!=KILL || cur_stack != -1)
   {
     command = fetch_command(fd, &data, log);
@@ -121,14 +153,15 @@ int main(int argc, const char* argv[])
                 stacks_indices = realloc(stacks_indices, sizeof(size_t)*stacks_allocs);
                 fprintf(log, "Allocated %d stacks\n", stacks_allocs);
             }
-            size_t stack_len;
+            uint64_t stack_len;
             memcpy(&stack_len, &data, sizeof(void*));
             stacks[cur_stack] = (void**)malloc(sizeof(void*)*stack_len);
             stacks_indices[cur_stack] = 0;
             data = cur_stack;
             break;
         case PUSH:{
-            fprintf(log, "Pushing stack %d position %d, value %u\n", cur_stack, stacks_indices[cur_stack], data);
+            fprintf(log, "Pushing stack %d position %d, value %lu\n", cur_stack, stacks_indices[cur_stack], data);
+            fflush(log);
             stacks[cur_stack][stacks_indices[cur_stack]++] = data;
             data = 0x0;
             break;}
@@ -159,8 +192,7 @@ int main(int argc, const char* argv[])
             break;}
         case FRONT:{
             data = stacks[cur_stack][stacks_indices[cur_stack]-1];
-            break;
-        }
+            break;}
         case DUPX1:{
             data = 0x0;
             void* dup0 = stacks[cur_stack][--stacks_indices[cur_stack]];
@@ -218,7 +250,6 @@ int main(int argc, const char* argv[])
             data = cur_stack;
             cur_stack--;
             break;
-        case SYN:
         case ACK:
             data = 0x0;
             break;

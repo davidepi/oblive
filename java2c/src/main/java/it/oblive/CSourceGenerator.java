@@ -8,6 +8,8 @@ import it.oblive.support.MethodSignature;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,10 +18,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Random;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -40,16 +41,15 @@ public class CSourceGenerator {
     }
 
     /**
-     * Append the content of a header C file in the resources to the output file
+     * Get the content of a resource file as String
      *
-     * @param filename Name of the INPUT C  header file. Must be in the resources.
+     * @param filename Name of the INPUT file. Must be in the resources.
      */
-    public void addHeaderInResources(@NotNull final String filename) {
+    public String getResources(@NotNull final String filename) {
         InputStream stream = this.getClass().getClassLoader().getResourceAsStream(filename);
         assert stream != null;
-        String fileContent = new BufferedReader(new InputStreamReader(stream))
+        return new BufferedReader(new InputStreamReader(stream))
                 .lines().collect(Collectors.joining("\n"));
-        headers.add(fileContent);
     }
 
     /**
@@ -299,7 +299,7 @@ public class CSourceGenerator {
         StringBuilder sb = new StringBuilder("enum Ops\n{\n");
         String[] opname = {
                 "STACK", "PUSH", "PUSH2", "POP", "POP2", "DUP", "DUP2", "DUPX1", "DUPX2", "DUP2X1", "DUP2X2", "SWAP",
-                "KILL", "SYN", "ACK", "CLR", "FRONT"
+                "KILL", "ACK", "CLR", "FRONT"
         };
         HashSet<Integer> opcodes = new HashSet<>();
         while (opcodes.size() < opname.length) {
@@ -312,6 +312,44 @@ public class CSourceGenerator {
             sb.append(" = ");
             sb.append(opcodesIter.next());
             sb.append(",\n");
+        }
+        sb.append("};\n");
+        return sb.toString();
+    }
+
+    public static Stack<SecretKey> generateKeys(int num) {
+        SecureRandom srand = new SecureRandom();
+        KeyGenerator gen = null;
+        try {
+            gen = KeyGenerator.getInstance("AES");
+        } catch (NoSuchAlgorithmException e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
+        }
+        gen.init(256, srand);
+        Stack<SecretKey> ret = new Stack<>();
+        for (int i = 0; i < num; i++) {
+            ret.add(gen.generateKey());
+        }
+        return ret;
+    }
+
+    public static String getKeyAsMaskedCString(SecretKey key, SecretKey mask, String varName) {
+        StringBuilder sb = new StringBuilder("unsigned char ").append(varName).append("[] = {");
+        byte[] bkey = key.getEncoded();
+        byte[] bxor = mask.getEncoded();
+        assert bkey.length == bxor.length;
+        for (int i = 0; i < bkey.length; i++) {
+            sb.append(String.format("0x%02X", (byte) (bkey[i] ^ bxor[i]))).append(",");
+        }
+        sb.append("};\n");
+        return sb.toString();
+    }
+
+    public static String getKeyAsCString(SecretKey key, String varName) {
+        StringBuilder sb = new StringBuilder("unsigned char ").append(varName).append("[] = {");
+        for (byte val : key.getEncoded()) {
+            sb.append(String.format("0x%02X", val)).append(",");
         }
         sb.append("};\n");
         return sb.toString();

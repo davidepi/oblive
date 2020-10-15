@@ -11,10 +11,12 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 
+import javax.crypto.SecretKey;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
@@ -32,6 +34,7 @@ public class JavaToC {
     private Path antidebugVMsource; //the file containing vm logic for self debug
     private boolean antidebugSelf; //antidebug requires additional files to be written
     private String vmTable; //VM table opcodes for self debugging
+    private SecretKey authKey;
 
     /**
      * Default constructor
@@ -40,7 +43,6 @@ public class JavaToC {
     public JavaToC() {
         parsing = false;
         antidebugSelf = false;
-        generator = new CSourceGenerator();
     }
 
     /**
@@ -66,18 +68,25 @@ public class JavaToC {
         this.antidebugVMsource = Paths.get(outCSource.toPath().getParent().toString(), this.libname + "vm.c");
         this.outCsource = outCSource;
         this.vmTable = CSourceGenerator.generateVMTable();
+        Stack<SecretKey> keys = CSourceGenerator.generateKeys(2);
+        this.authKey = keys.pop();
+        this.generator = new CSourceGenerator();
+        SecretKey maskParent = keys.pop();
+        generator.addHeader(CSourceGenerator.getKeyAsMaskedCString(authKey, maskParent, "auth_key"));
+        generator.addHeader(CSourceGenerator.getKeyAsCString(maskParent, "mask_key"));
         generator.addHeader(this.vmTable);
-        generator.addHeaderInResources("cframework.h");
-        generator.addHeaderInResources("antidebug.h");
-        generator.addHeaderInResources("stack.h");
-        generator.addHeaderInResources("arithmetic.h");
-        generator.addHeaderInResources("arrays.h");
-        generator.addHeaderInResources("casts.h");
-        generator.addHeaderInResources("conditionals.h");
-        generator.addHeaderInResources("fields.h");
-        generator.addHeaderInResources("invoke.h");
-        generator.addHeaderInResources("multi_arrays.h");
-        generator.addHeaderInResources("new.h");
+        generator.addHeader(generator.getResources("cframework.h"));
+        generator.addHeader(generator.getResources("xoshiro256starstar.c"));
+        generator.addHeader(generator.getResources("antidebug.h"));
+        generator.addHeader(generator.getResources("stack.h"));
+        generator.addHeader(generator.getResources("arithmetic.h"));
+        generator.addHeader(generator.getResources("arrays.h"));
+        generator.addHeader(generator.getResources("casts.h"));
+        generator.addHeader(generator.getResources("conditionals.h"));
+        generator.addHeader(generator.getResources("fields.h"));
+        generator.addHeader(generator.getResources("invoke.h"));
+        generator.addHeader(generator.getResources("multi_arrays.h"));
+        generator.addHeader(generator.getResources("new.h"));
         parsing = true;
     }
 
@@ -147,7 +156,13 @@ public class JavaToC {
                 String fileContent = new BufferedReader(new InputStreamReader(stream))
                         .lines().collect(Collectors.joining("\n"));
                 PrintWriter writer = new PrintWriter(new FileOutputStream(this.antidebugVMsource.toString()));
+                Stack<SecretKey> keys = CSourceGenerator.generateKeys(1);
+                SecretKey maskChild = keys.pop();
+                writer.write(CSourceGenerator.getKeyAsMaskedCString(this.authKey, maskChild, "auth_key"));
+                writer.write(CSourceGenerator.getKeyAsCString(maskChild, "mask"));
                 writer.write(this.vmTable);
+                writer.write(generator.getResources("xoshiro256starstar.c"));
+                writer.write("\n");
                 writer.write(fileContent);
                 writer.close();
                 antidebugSelf = false;
