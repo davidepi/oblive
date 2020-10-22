@@ -64,7 +64,7 @@ static inline generic_t run_command_params(int fd, enum Ops command, generic_t d
     //log before encrypting
     const char* cmd = op_as_string(command);
     printf("Sent: [%s][%lu]\n", cmd, data.j);
-    printf("My key is 0x%02X%16lX\n", opcode_key, data_key);
+    printf("My key is 0x%02X%016lX\n", opcode_key, data_key);
     fflush(stdout);
     // prepare encrypted data
     uint8_t buf[sizeof(void*)+1];
@@ -81,7 +81,7 @@ static inline generic_t run_command_params(int fd, enum Ops command, generic_t d
     data.j = data.j ^ data_key;
     cmd = op_as_string(buf[0]^opcode_key);
     printf("Received: [%s][%lu]\n", cmd, data.j);
-    printf("The child key was 0x%02X%16lX\n", opcode_key, data_key);
+    printf("The child key was 0x%02X%016lX\n", opcode_key, data_key);
     fflush(stdout);
     return data;
 }
@@ -135,29 +135,68 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   uint32_t mypid_n = htonl(mypid_h);
   uint32_t child_pid_h;
   uint32_t child_pid_n;
-  uint8_t true_random[52]; //9 byte: SYN1, 9 byte: SYN2, 32 byte: prng seed, 1 byte: short jmp, 2 byte: long jmp
-  getrandom(&true_random, sizeof(true_random), 0);
   if(read(cl, &child_pid_n, sizeof(uint32_t)) == -1)
     return 0;
   child_pid_h = ntohl(child_pid_n);
-  //TODO: remove log insn
     printf("Spawned child %d\n", child_pid_h);
   if(write(cl, &mypid_n, sizeof(uint32_t)) == -1)
     return 0;
   // start antidebug operations
   if(prctl(PR_SET_PTRACER, child_pid_h) == -1)
     return 0;
-  send(cl, true_random, sizeof(void*)+1, 0);
-  recv(cl, true_random, sizeof(void*)+1, 0);
-  if(ptrace(PTRACE_SEIZE, child_pid_h, NULL, NULL) == -1)
-    return 0;
-  send(cl, (true_random+sizeof(void*)+1), sizeof(void*)+1, 0);
-  recv(cl, (true_random+sizeof(void*)+1), sizeof(void*)+1, 0);
+  uint8_t parent_random[32];
+  uint8_t child_random[32];
+  void* my_mem_addr = (void*)child_random; //memory address of child_random in my process
+  void* ot_mem_addr; //memory address of the parent_random in the other process
+  void* sink;
+  send(cl, &my_mem_addr, sizeof(void*), 0);
+  recv(cl, &ot_mem_addr, sizeof(void*), 0);
+  printf("My address is 0x%016lX, Other address is 0x%016lX\n", my_mem_addr, ot_mem_addr);
+  fflush(stdout);
+  // without this stop everything ends up in a deadlock
+  raise(SIGSTOP);
+  if(ptrace(PTRACE_ATTACH, child_pid_h, NULL, NULL) != -1)
+  {
+    printf("Ptraced\n");
+    fflush(stdout);
+    int status;
+    waitpid(child_pid_h, &status, 0);
+    getrandom(&parent_random, sizeof(parent_random), 0);
+    printf("Generated data 0x%016lX 0x%016lX\n", ((uint64_t*)parent_random)[0], ((uint64_t*)parent_random)[1]);
+     if(WIFSTOPPED(status))
+        {
+       for(int i=0;i<4;i++)
+         {
+           void* data = (void*)(((uint64_t*)parent_random)[i]);
+           if(ptrace(PTRACE_POKEDATA, child_pid_h, ot_mem_addr+(i*sizeof(void*)), data) == -1)
+           {
+               printf("Poke Failed\n");
+           } else
+           {
+               printf("Poked %d/4\n",i+1);
+           }
+       }
+     } else {
+        printf("Poke not even tried\n");
+     }
+     fflush(stdout);
+     ptrace(PTRACE_CONT, child_pid_h, NULL, NULL);
+  } else {
+    getrandom(&parent_random, sizeof(parent_random), 0); //fills the parent anyway to avoid having a seed of 0 by chance.
+  }
+
+  send(cl, &sink, sizeof(void*), 0);
+
   // SEED:
-  prng_state[0] = 0xe63023c4ac1e278b;
-  prng_state[1] = 0x8c936af7aa9255a2;
-  prng_state[2] = 0x4cd15297ba9aefae;
-  prng_state[3] = 0x0819e4eac91b737b;
+  long_jump = parent_random[20];
+  short_jump = child_random[20];
+  prng_state[0] = ((uint64_t*)parent_random)[0];
+  prng_state[1] = ((uint64_t*)parent_random)[1];
+  prng_state[2] = ((uint64_t*)child_random)[0];
+  prng_state[3] = ((uint64_t*)child_random)[1];
+  printf("Seed is 0x%016lX 0x%016lX 0x%016lX 0x%016lX\n", prng_state[0], prng_state[1], prng_state[2], prng_state[3]);
+  printf("Long jump is 0x%02X, Short jump is 0x%02X\n", long_jump, short_jump);
+
   return cl;
 }
 

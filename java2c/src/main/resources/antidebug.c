@@ -54,13 +54,12 @@ static inline enum Ops fetch_command(int fd, void** data, FILE* log)
     memcpy(data, buf+1, sizeof(void*));
     uint8_t cmd = buf[0];
     //decrypt it
-    fprintf(log, "data 0x%16lX key 0x%16lX\n", *data, data_key);
     uint64_t data_enc = *data;
     data_enc ^= data_key;
     *data = data_enc;
     cmd ^= opcode_key;
     fprintf(log, "Command: [%s][%lu]\n", op_as_string(cmd), *data);
-    fprintf(log, "The parent key was 0x%02X%16lX\n", opcode_key, data_key);
+    fprintf(log, "The parent key was 0x%02X%016lX\n", opcode_key, data_key);
     fflush(log);
     return cmd;
 }
@@ -72,7 +71,7 @@ static inline void send_result(int fd, void* data, FILE* log)
     get_key(&opcode_key, &data_key);
     uint8_t buf[sizeof(void*)+1];
     fprintf(log, "Answer: [%s][%lu]\n", op_as_string(ACK), data);
-    fprintf(log, "My key is 0x%02X%16lX\n", opcode_key, data_key);
+    fprintf(log, "My key is 0x%02X%016lX\n", opcode_key, data_key);
     fflush(log);
     data = (uint64_t)data ^ data_key;
     // FIXME: possible leak: this ACK is constant, may leak information about the prng
@@ -119,25 +118,61 @@ int main(int argc, const char* argv[])
   size_t stacks_allocs = DEFAULT_STACKS;
   void*** stacks = (void***)malloc(sizeof(void**)*stacks_allocs); // void* -> type. ** -> stack *** -> array of stacks
   size_t* stacks_indices = (size_t*)malloc(sizeof(size_t)*stacks_allocs); //each stack needs an index
-
-  uint8_t true_random[2*(sizeof(void*)+1)]; //9 byte: SYN1, 9 byte: SYN2
-  recv(fd, true_random, sizeof(void*)+1, 0);
-  getrandom(&true_random, sizeof(true_random), 0);
+  uint8_t parent_random[32]; //filled by parent with a POKEDATA call
+  uint8_t child_random[32]; //filled by me, data passed to parent with a POKEDATA into ot_mem_addr
+  void* my_mem_addr = (void*)parent_random; //memory address of parent_random in my process
+  void* ot_mem_addr; //memory address of the child_random in the other process
+  void* sink;
+  uint64_t small_buf = 0;
+  recv(fd, &ot_mem_addr, sizeof(void*), 0);
   if(prctl(PR_SET_PTRACER, parent_pid_h) == -1) {
     fprintf(log, "prctl failure\n");
     exit(0);
     }
-  send(fd, true_random, sizeof(void*)+1, 0);
-  recv(fd, true_random, sizeof(void*)+1, 0);
-  if(ptrace(PTRACE_SEIZE, parent_pid_h, NULL, NULL) == -1) {
-    fprintf(log, "ptrace failure\n");
-    exit(0);
+  fprintf(log, "My address is 0x%016lX, Other address is 0x%016lX\n", my_mem_addr, ot_mem_addr);
+  send(fd, &my_mem_addr, sizeof(void*), 0);
+  if(ptrace(PTRACE_ATTACH, parent_pid_h, NULL, NULL) != -1)
+  {
+    fprintf(log, "Ptraced\n");
+    fflush(log);
+    int status;
+    waitpid(parent_pid_h, &status, 0);
+        getrandom(&child_random, sizeof(child_random), 0); //generates the random seed
+        fprintf(log, "Generated data 0x%016lX 0x%016lX\n", ((uint64_t*)child_random)[0], ((uint64_t*)child_random)[1]);
+      if(WIFSTOPPED(status))
+      {
+        for(int i=0;i<4;i++)
+        {
+          void* data = (void*)(((uint64_t*)child_random)[i]);
+          if(ptrace(PTRACE_POKEDATA, parent_pid_h, ot_mem_addr+(i*sizeof(void*)), data) == -1)
+          {
+            fprintf(log,"Poke Failed\n");
+          } else
+          {
+            fprintf(log,"Poked %d/4\n",i+1);
+          }
+        }
+      } else {
+        fprintf(log, "Poke not even tried\n");
+      }
+    fflush(log);
+    ptrace(PTRACE_CONT, parent_pid_h, NULL, NULL);
+  } else {
+    fprintf(log, "Ptrace failed, generating random seed\n");
+    fflush(log);
+    getrandom(&child_random, sizeof(child_random), 0); //generates the random seed
   }
-  send(fd, (true_random+sizeof(void*)+1), sizeof(void*)+1, 0);
-  prng_state[0] = 0xe63023c4ac1e278b;
-  prng_state[1] = 0x8c936af7aa9255a2;
-  prng_state[2] = 0x4cd15297ba9aefae;
-  prng_state[3] = 0x0819e4eac91b737b;
+  kill(parent_pid_h, SIGCONT);
+  recv(fd, &sink, sizeof(void*), 0); //wait for the parent to finish writing its part of the data or the seed will be wrong
+
+  long_jump = parent_random[20];
+  short_jump = child_random[20];
+  prng_state[0] = ((uint64_t*)parent_random)[0];
+  prng_state[1] = ((uint64_t*)parent_random)[1];
+  prng_state[2] = ((uint64_t*)child_random)[0];
+  prng_state[3] = ((uint64_t*)child_random)[1];
+  fprintf(log, "Seed is 0x%016lX 0x%016lX 0x%016lX 0x%016lX\n", prng_state[0], prng_state[1], prng_state[2], prng_state[3]);
+  fprintf(log, "Long jump is 0x%02X, Short jump is 0x%02X\n", long_jump, short_jump);
 
   while(command!=KILL || cur_stack != -1)
   {
@@ -160,8 +195,6 @@ int main(int argc, const char* argv[])
             data = cur_stack;
             break;
         case PUSH:{
-            fprintf(log, "Pushing stack %d position %d, value %lu\n", cur_stack, stacks_indices[cur_stack], data);
-            fflush(log);
             stacks[cur_stack][stacks_indices[cur_stack]++] = data;
             data = 0x0;
             break;}
@@ -172,7 +205,6 @@ int main(int argc, const char* argv[])
             break;}
         case POP:{
             data = stacks[cur_stack][--stacks_indices[cur_stack]];
-            fprintf(log, "Popping stack %d position %d, value %u\n", cur_stack, stacks_indices[cur_stack], data);
             break;}
         case POP2:{
             stacks_indices[cur_stack]--;
@@ -253,8 +285,11 @@ int main(int argc, const char* argv[])
         case ACK:
             data = 0x0;
             break;
-        default: //unrecognized command, brutally murder parent, then suicide
-            kill(parent_pid_h, SIGKILL);
+        default: //unrecognized command, send normal answer, but reseeds prng so all the next answers will be wrong
+            getrandom(&prng_state[0], sizeof(uint64_t), 0);
+            getrandom(&prng_state[1], sizeof(uint64_t), 0);
+            getrandom(&prng_state[2], sizeof(uint64_t), 0);
+            getrandom(&prng_state[3], sizeof(uint64_t), 0);
             exit(0);
     }
     send_result(fd, data, log);

@@ -1,3 +1,4 @@
+/**********************************************************************************************************************/
 /*  Written in 2018 by David Blackman and Sebastiano Vigna (vigna@acm.org)
 
 To the extent possible under law, the author has dedicated all copyright
@@ -29,7 +30,7 @@ static uint64_t prng_state[4];
 static uint8_t long_jump;
 static uint8_t short_jump;
 
-uint64_t next_rng(void) {
+uint64_t next_rng_internal(void) {
 	const uint64_t result = rotl(prng_state[1] * 5, 7) * 9;
 
 	const uint64_t t = prng_state[1] << 17;
@@ -58,7 +59,7 @@ void jump_rng(void) {
 				s2 ^= prng_state[2];
 				s3 ^= prng_state[3];
 			}
-			next_rng();
+			next_rng_internal();
 		}
 	prng_state[0] = s0;
 	prng_state[1] = s1;
@@ -80,7 +81,7 @@ void long_jump_rng(void) {
 				s2 ^= prng_state[2];
 				s3 ^= prng_state[3];
 			}
-			next_rng();
+			next_rng_internal();
 		}
 	prng_state[0] = s0;
 	prng_state[1] = s1;
@@ -88,3 +89,13 @@ void long_jump_rng(void) {
 	prng_state[3] = s3;
 }
 
+uint64_t next_rng()
+{
+uint64_t result = next_rng_internal();
+if(result%short_jump==0)
+        jump_rng();
+    else if(result%long_jump==0)
+        long_jump_rng();
+    return result;
+}
+/**********************************************************************************************************************/
