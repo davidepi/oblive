@@ -113,6 +113,8 @@ public class NativeCompiler {
         StringBuilder command = new StringBuilder(compiler);
         if (!executable) {
             command.append(" -c -fpic ");
+        } else {
+            command.append(" /usr/lib/x86_64-linux-gnu/libcrypto.so ");
         }
         command.append(' ').append(FLAGS).append(' ');
         command.append(' ').append(include).append(' ');
@@ -171,6 +173,7 @@ public class NativeCompiler {
         }
         command.append(' ').append("-shared -o").append(' ');
         command.append(libraryOutput.getAbsolutePath());
+        command.append(' ').append("/usr/lib/x86_64-linux-gnu/libcrypto.so");
 
         return runCompilation(command.toString());
     }

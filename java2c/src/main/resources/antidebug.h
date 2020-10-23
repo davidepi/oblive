@@ -1,4 +1,11 @@
+#include <openssl/err.h>
+#include <openssl/evp.h>
 #include <sys/random.h>
+
+#define EVP_ERR                  \
+  {                              \
+    ERR_print_errors_fp(stdout); \
+  }
 
 static inline void time_start(time_t* start)
 {
@@ -26,71 +33,142 @@ static inline void gen_socket_name(char* buffer)
   }
 }
 
-const char* op_as_string(enum Ops op) {
-    switch(op){
-        case STACK:return "STACK";
-        case PUSH:return "PUSH";
-        case PUSH2:return "PUSH2";
-        case POP:return "POP";
-        case POP2:return "POP2";
-        case DUP:return "DUP";
-        case DUP2:return "DUP2";
-        case FRONT:return "FRONT";
-        case DUPX1:return "DUPX1";
-        case DUPX2:return "DUPX2";
-        case DUP2X1:return "DUP2X1";
-        case DUP2X2:return "DUP2X2";
-        case SWAP:return "SWAP";
-        case CLR: return "CLEAR";
-        case KILL:return "KILL";
-        case ACK:return "ACK";
-        default:return "UNK";
-    }
+const char* op_as_string(enum Ops op)
+{
+  switch(op)
+  {
+    case STACK:
+      return "STACK";
+    case PUSH:
+      return "PUSH";
+    case PUSH2:
+      return "PUSH2";
+    case POP:
+      return "POP";
+    case POP2:
+      return "POP2";
+    case DUP:
+      return "DUP";
+    case DUP2:
+      return "DUP2";
+    case FRONT:
+      return "FRONT";
+    case DUPX1:
+      return "DUPX1";
+    case DUPX2:
+      return "DUPX2";
+    case DUP2X1:
+      return "DUP2X1";
+    case DUP2X2:
+      return "DUP2X2";
+    case SWAP:
+      return "SWAP";
+    case CLR:
+      return "CLEAR";
+    case KILL:
+      return "KILL";
+    case ACK:
+      return "ACK";
+    default:
+      return "UNK";
+  }
+}
+
+static inline int encrypt_aes256(unsigned char* plaintext, int plainlen,
+                                 unsigned char key[32], unsigned char mask[32],
+                                 unsigned char* ciphertext)
+{
+  EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+  unsigned char unmasked_key[32];
+  for(int i = 0; i < 32; i++)
+  {
+    unmasked_key[i] = mask[i] ^ key[i];
+  }
+  int cipherlen;
+  int len;
+  if(!ctx)
+    EVP_ERR;
+  if(!EVP_EncryptInit_ex(ctx, EVP_aes_256_ecb(), NULL, unmasked_key, NULL))
+    EVP_ERR;
+  EVP_CIPHER_CTX_set_padding(ctx, 0);
+  if(!EVP_EncryptUpdate(ctx, ciphertext, &cipherlen, plaintext, plainlen))
+    EVP_ERR;
+  if(!EVP_EncryptFinal_ex(ctx, ciphertext + cipherlen, &len))
+    EVP_ERR;
+  EVP_CIPHER_CTX_free(ctx);
+  return cipherlen + len;
+}
+
+static inline int decrypt_aes256(unsigned char* ciphertext, int cipherlen,
+                                 unsigned char key[32], unsigned char mask[32],
+                                 unsigned char* plaintext)
+{
+  EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+  EVP_CIPHER_CTX_set_padding(ctx, 0);
+  unsigned char unmasked_key[32];
+  for(int i = 0; i < 32; i++)
+  {
+    unmasked_key[i] = mask[i] ^ key[i];
+  }
+  int plainlen;
+  int len;
+  if(!ctx)
+    EVP_ERR;
+  if(!EVP_DecryptInit_ex(ctx, EVP_aes_256_ecb(), NULL, unmasked_key, NULL))
+    EVP_ERR;
+  EVP_CIPHER_CTX_set_padding(ctx, 0);
+  if(!EVP_DecryptUpdate(ctx, plaintext, &plainlen, ciphertext, cipherlen))
+    EVP_ERR;
+  if(!EVP_DecryptFinal_ex(ctx, plaintext + plainlen, &len))
+    EVP_ERR;
+  EVP_CIPHER_CTX_free(ctx);
+  return plainlen + len;
 }
 
 static inline void get_key(uint8_t* opcode_key, uint64_t* data_key)
 {
-    uint64_t opcode_key_full = next_rng();
-    *opcode_key = ((uint8_t*)(&opcode_key_full))[0];
-    *data_key = next_rng();
+  uint64_t opcode_key_full = next_rng();
+  *opcode_key = ((uint8_t*)(&opcode_key_full))[0];
+  *data_key = next_rng();
 }
 
-static inline generic_t run_command_params(int fd, enum Ops command, generic_t data)
+static inline generic_t run_command_params(int fd, enum Ops command,
+                                           generic_t data)
 {
-    //generate my one time key
-    uint64_t data_key;
-    uint8_t opcode_key;
-    get_key(&opcode_key, &data_key);
-    //log before encrypting
-    const char* cmd = op_as_string(command);
-    printf("Sent: [%s][%lu]\n", cmd, data.j);
-    printf("My key is 0x%02X%016lX\n", opcode_key, data_key);
-    fflush(stdout);
-    // prepare encrypted data
-    uint8_t buf[sizeof(void*)+1];
-    data.j = data.j ^ data_key;
-    memcpy(buf+1, &data, sizeof(void*));
-    buf[0] = command ^ opcode_key;
-    //send data to child
-    send(fd, buf, sizeof(void*)+1, 0);
-    //generate child one time key
-    get_key(&opcode_key, &data_key);
-    // retrieve the data and decrypt it
-    recv(fd, buf, sizeof(void*)+1, 0);
-    memcpy(&data, buf+1, sizeof(void*));
-    data.j = data.j ^ data_key;
-    cmd = op_as_string(buf[0]^opcode_key);
-    printf("Received: [%s][%lu]\n", cmd, data.j);
-    printf("The child key was 0x%02X%016lX\n", opcode_key, data_key);
-    fflush(stdout);
-    return data;
+  // generate my one time key
+  uint64_t data_key;
+  uint8_t opcode_key;
+  get_key(&opcode_key, &data_key);
+  // log before encrypting
+  const char* cmd = op_as_string(command);
+  printf("Sent: [%s][%lu]\n", cmd, data.j);
+  printf("My key is 0x%02X%016lX\n", opcode_key, data_key);
+  fflush(stdout);
+  // prepare encrypted data
+  uint8_t buf[sizeof(void*) + 1];
+  data.j = data.j ^ data_key;
+  memcpy(buf + 1, &data, sizeof(void*));
+  buf[0] = command ^ opcode_key;
+  // send data to child
+  send(fd, buf, sizeof(void*) + 1, 0);
+  // generate child one time key
+  get_key(&opcode_key, &data_key);
+  // retrieve the data and decrypt it
+  recv(fd, buf, sizeof(void*) + 1, 0);
+  memcpy(&data, buf + 1, sizeof(void*));
+  data.j = data.j ^ data_key;
+  cmd = op_as_string(buf[0] ^ opcode_key);
+  printf("Received: [%s][%lu]\n", cmd, data.j);
+  printf("The child key was 0x%02X%016lX\n", opcode_key, data_key);
+  fflush(stdout);
+  return data;
 }
 
 static inline generic_t run_command(int fd, enum Ops command)
 {
-    generic_t empty_val;
-    ZERO_OUT_UNION(empty_val);
-    return run_command_params(fd, command, empty_val);
+  generic_t empty_val;
+  ZERO_OUT_UNION(empty_val);
+  return run_command_params(fd, command, empty_val);
 }
 
 static inline int self_debug(JNIEnv* env, const char* child_process)
@@ -138,7 +216,7 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   if(read(cl, &child_pid_n, sizeof(uint32_t)) == -1)
     return 0;
   child_pid_h = ntohl(child_pid_n);
-    printf("Spawned child %d\n", child_pid_h);
+  printf("Spawned child %d\n", child_pid_h);
   if(write(cl, &mypid_n, sizeof(uint32_t)) == -1)
     return 0;
   // start antidebug operations
@@ -146,12 +224,14 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
     return 0;
   uint8_t parent_random[32];
   uint8_t child_random[32];
-  void* my_mem_addr = (void*)child_random; //memory address of child_random in my process
-  void* ot_mem_addr; //memory address of the parent_random in the other process
+  void* my_mem_addr =
+      (void*)child_random; // memory address of child_random in my process
+  void* ot_mem_addr; // memory address of the parent_random in the other process
   void* sink;
   send(cl, &my_mem_addr, sizeof(void*), 0);
   recv(cl, &ot_mem_addr, sizeof(void*), 0);
-  printf("My address is 0x%016lX, Other address is 0x%016lX\n", my_mem_addr, ot_mem_addr);
+  printf("My address is 0x%016lX, Other address is 0x%016lX\n", my_mem_addr,
+         ot_mem_addr);
   fflush(stdout);
   // without this stop everything ends up in a deadlock
   raise(SIGSTOP);
@@ -162,39 +242,56 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
     int status;
     waitpid(child_pid_h, &status, 0);
     getrandom(&parent_random, sizeof(parent_random), 0);
-    printf("Generated data 0x%016lX 0x%016lX\n", ((uint64_t*)parent_random)[0], ((uint64_t*)parent_random)[1]);
-     if(WIFSTOPPED(status))
+    printf("Generated data 0x%016lX 0x%016lX\n", ((uint64_t*)parent_random)[0],
+           ((uint64_t*)parent_random)[1]);
+    if(WIFSTOPPED(status))
+    {
+      uint8_t plain[32];
+      uint8_t encrypted[32];
+      memcpy(plain, parent_random, sizeof(parent_random));
+      encrypt_aes256(plain, sizeof(plain), auth_key, mask_key, encrypted);
+      for(int i = 0; i < 4; i++)
+      {
+        void* data = (void*)(((uint64_t*)encrypted)[i]);
+        if(ptrace(PTRACE_POKEDATA, child_pid_h,
+                  ot_mem_addr + (i * sizeof(void*)), data) == -1)
         {
-       for(int i=0;i<4;i++)
-         {
-           void* data = (void*)(((uint64_t*)parent_random)[i]);
-           if(ptrace(PTRACE_POKEDATA, child_pid_h, ot_mem_addr+(i*sizeof(void*)), data) == -1)
-           {
-               printf("Poke Failed\n");
-           } else
-           {
-               printf("Poked %d/4\n",i+1);
-           }
-       }
-     } else {
-        printf("Poke not even tried\n");
-     }
-     fflush(stdout);
-     ptrace(PTRACE_CONT, child_pid_h, NULL, NULL);
-  } else {
-    getrandom(&parent_random, sizeof(parent_random), 0); //fills the parent anyway to avoid having a seed of 0 by chance.
+          printf("Poke Failed\n");
+        }
+        else
+        {
+          printf("Poked %d/4\n", i + 1);
+        }
+      }
+    }
+    else
+    {
+      printf("Poke not even tried\n");
+    }
+    fflush(stdout);
+    ptrace(PTRACE_CONT, child_pid_h, NULL, NULL);
   }
-
+  else
+  {
+    getrandom(
+        &parent_random, sizeof(parent_random),
+        0); // fills the parent anyway to avoid having a seed of 0 by chance.
+  }
   send(cl, &sink, sizeof(void*), 0);
-
-  // SEED:
+  uint8_t decrypted[32];
+  decrypt_aes256(child_random, 32, auth_key, mask_key, decrypted);
+  printf("Encrypted was 0x%016lX 0x%016lX. ", ((uint64_t*)child_random)[0],
+         ((uint64_t*)child_random)[1]);
+  printf("Decrypted is 0x%016lX 0x%016lX.\n", ((uint64_t*)decrypted)[0],
+         ((uint64_t*)decrypted)[1]);
   long_jump = parent_random[20];
-  short_jump = child_random[20];
+  short_jump = decrypted[20];
   prng_state[0] = ((uint64_t*)parent_random)[0];
   prng_state[1] = ((uint64_t*)parent_random)[1];
-  prng_state[2] = ((uint64_t*)child_random)[0];
-  prng_state[3] = ((uint64_t*)child_random)[1];
-  printf("Seed is 0x%016lX 0x%016lX 0x%016lX 0x%016lX\n", prng_state[0], prng_state[1], prng_state[2], prng_state[3]);
+  prng_state[2] = ((uint64_t*)decrypted)[0];
+  prng_state[3] = ((uint64_t*)decrypted)[1];
+  printf("Seed is 0x%016lX 0x%016lX 0x%016lX 0x%016lX\n", prng_state[0],
+         prng_state[1], prng_state[2], prng_state[3]);
   printf("Long jump is 0x%02X, Short jump is 0x%02X\n", long_jump, short_jump);
 
   return cl;

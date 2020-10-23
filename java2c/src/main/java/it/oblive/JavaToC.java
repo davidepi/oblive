@@ -159,7 +159,7 @@ public class JavaToC {
                 Stack<SecretKey> keys = CSourceGenerator.generateKeys(1);
                 SecretKey maskChild = keys.pop();
                 writer.write(CSourceGenerator.getKeyAsMaskedCString(this.authKey, maskChild, "auth_key"));
-                writer.write(CSourceGenerator.getKeyAsCString(maskChild, "mask"));
+                writer.write(CSourceGenerator.getKeyAsCString(maskChild, "mask_key"));
                 writer.write(this.vmTable);
                 writer.write(generator.getResources("xoshiro256starstar.c"));
                 writer.write("\n");
