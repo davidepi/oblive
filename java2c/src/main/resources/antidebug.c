@@ -196,17 +196,18 @@ int main(int argc, const char* argv[])
   // expected to die in order!
   size_t cur_stack = -1;
   size_t stacks_allocs = DEFAULT_STACKS;
-  void*** stacks = (void***)malloc(
-      sizeof(void**) *
-      stacks_allocs); // void* -> type. ** -> stack *** -> array of stacks
-  size_t* stacks_indices = (size_t*)malloc(
-      sizeof(size_t) * stacks_allocs); // each stack needs an index
-  uint8_t parent_random[32];           // filled by parent with a POKEDATA call
-  uint8_t child_random[32]; // filled by me, data passed to parent with a
-                            // POKEDATA into ot_mem_addr
-  void* my_mem_addr =
-      (void*)parent_random; // memory address of parent_random in my process
-  void* ot_mem_addr; // memory address of the child_random in the other process
+  // void* -> type. ** -> stack *** -> array of stacks
+  void*** stacks = (void***)malloc(sizeof(void**) * stacks_allocs);
+  // each stack needs an index
+  size_t* stacks_indices = (size_t*)malloc(sizeof(size_t) * stacks_allocs);
+  uint8_t parent_random[32]; // filled by parent with a POKEDATA call
+  uint8_t child_random[32];  // filled by me, data passed to parent with a
+                             // POKEDATA into ot_mem_addr
+
+  // memory address of parent_random in my process
+  void* my_mem_addr = (void*)parent_random;
+  // memory address of the child_random in the other process
+  void* ot_mem_addr;
   void* sink;
   uint64_t small_buf = 0;
   recv(fd, &ot_mem_addr, sizeof(void*), 0);
@@ -231,8 +232,10 @@ int main(int argc, const char* argv[])
     if(WIFSTOPPED(status))
     {
       uint8_t plain[32];
-      uint8_t encrypted[32];
       memcpy(plain, child_random, sizeof(child_random));
+      ((uint64_t*)plain)[0] += parent_pid_h;
+      ((uint64_t*)plain)[1] += mypid_h;
+      uint8_t encrypted[32];
       encrypt_aes256(plain, sizeof(plain), auth_key, mask_key, encrypted);
       for(int i = 0; i < 4; i++)
       {
@@ -272,8 +275,8 @@ int main(int argc, const char* argv[])
           ((uint64_t*)decrypted)[0], ((uint64_t*)decrypted)[1]);
   long_jump = decrypted[20];
   short_jump = child_random[20];
-  prng_state[0] = ((uint64_t*)decrypted)[0];
-  prng_state[1] = ((uint64_t*)decrypted)[1];
+  prng_state[0] = ((uint64_t*)decrypted)[0] - parent_pid_h;
+  prng_state[1] = ((uint64_t*)decrypted)[1] - mypid_h;
   prng_state[2] = ((uint64_t*)child_random)[0];
   prng_state[3] = ((uint64_t*)child_random)[1];
   fprintf(logger, "Seed is 0x%016lX 0x%016lX 0x%016lX 0x%016lX\n",

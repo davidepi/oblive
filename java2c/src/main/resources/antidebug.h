@@ -247,8 +247,10 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
     if(WIFSTOPPED(status))
     {
       uint8_t plain[32];
-      uint8_t encrypted[32];
       memcpy(plain, parent_random, sizeof(parent_random));
+      ((uint64_t*)plain)[0] += mypid_h;
+      ((uint64_t*)plain)[1] += child_pid_h;
+      uint8_t encrypted[32];
       encrypt_aes256(plain, sizeof(plain), auth_key, mask_key, encrypted);
       for(int i = 0; i < 4; i++)
       {
@@ -288,8 +290,8 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   short_jump = decrypted[20];
   prng_state[0] = ((uint64_t*)parent_random)[0];
   prng_state[1] = ((uint64_t*)parent_random)[1];
-  prng_state[2] = ((uint64_t*)decrypted)[0];
-  prng_state[3] = ((uint64_t*)decrypted)[1];
+  prng_state[2] = ((uint64_t*)decrypted)[0] - mypid_h;
+  prng_state[3] = ((uint64_t*)decrypted)[1] - child_pid_h;
   printf("Seed is 0x%016lX 0x%016lX 0x%016lX 0x%016lX\n", prng_state[0],
          prng_state[1], prng_state[2], prng_state[3]);
   printf("Long jump is 0x%02X, Short jump is 0x%02X\n", long_jump, short_jump);
