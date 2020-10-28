@@ -1,6 +1,22 @@
 #include <openssl/err.h>
 #include <openssl/evp.h>
+#include <sys/mman.h> //To change the protection of invoked libraries (and fuck up the java debugging library)
+#include <sys/prctl.h> // Here starts the includes for the AntidebugSelf Technique
+#include <sys/ptrace.h>
 #include <sys/random.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/un.h>
+#include <sys/wait.h> // Here ends the includes for the AntidebugSelf Technique
+#include <time.h> //required by the AntidebugTime and some performance test. Not a big deal if it is unnecessary
+
+#define DEBUG
+#ifdef DEBUG
+#define DEBUG_PRINT(fmt, ...) \
+            do {printf(fmt, __VA_ARGS__);fflush(stdout);} while (0)
+#else
+#define DEBUG_PRINT(fmt, ...)
+#endif
 
 #define EVP_ERR                  \
   {                              \
@@ -141,9 +157,8 @@ static inline generic_t run_command_params(int fd, enum Ops command,
   get_key(&opcode_key, &data_key);
   // log before encrypting
   const char* cmd = op_as_string(command);
-  printf("Sent: [%s][%lu]\n", cmd, data.j);
-  printf("My key is 0x%02X%016lX\n", opcode_key, data_key);
-  fflush(stdout);
+  DEBUG_PRINT("Sent: [%s][%lu]\n", cmd, data.j);
+  DEBUG_PRINT("My key is 0x%02X%016lX\n", opcode_key, data_key);
   // prepare encrypted data
   uint8_t buf[sizeof(void*) + 1];
   data.j = data.j ^ data_key;
@@ -158,9 +173,8 @@ static inline generic_t run_command_params(int fd, enum Ops command,
   memcpy(&data, buf + 1, sizeof(void*));
   data.j = data.j ^ data_key;
   cmd = op_as_string(buf[0] ^ opcode_key);
-  printf("Received: [%s][%lu]\n", cmd, data.j);
-  printf("The child key was 0x%02X%016lX\n", opcode_key, data_key);
-  fflush(stdout);
+  DEBUG_PRINT("Received: [%s][%lu]\n", cmd, data.j);
+  DEBUG_PRINT("The child key was 0x%02X%016lX\n", opcode_key, data_key);
   return data;
 }
 
@@ -186,7 +200,7 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   jmethodID method_id =
       (*env)->GetMethodID(env, pb_class, "<init>", "([Ljava/lang/String;)V");
   jobject pb = (*env)->NewObject(env, pb_class, method_id, func_param);
-  // setup self-debugging, parent side
+  // setup self-debugging, parent side.
   struct sockaddr_un addr;
   int fd, cl;
   // TODO: remove \0 at beginning for non-linux kernels
@@ -207,7 +221,8 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   jobject process = (*env)->CallObjectMethod(env, pb, method_id);
   if((cl = accept(fd, NULL, NULL)) == -1)
     return 0;
-  close(fd); // no more listening
+  // no more listening
+  close(fd);
   // exchange pids
   uint32_t mypid_h = getpid();
   uint32_t mypid_n = htonl(mypid_h);
@@ -216,33 +231,33 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   if(read(cl, &child_pid_n, sizeof(uint32_t)) == -1)
     return 0;
   child_pid_h = ntohl(child_pid_n);
-  printf("Spawned child %d\n", child_pid_h);
+  DEBUG_PRINT("Spawned child %d\n", child_pid_h);
   if(write(cl, &mypid_n, sizeof(uint32_t)) == -1)
     return 0;
   // start antidebug operations
   if(prctl(PR_SET_PTRACER, child_pid_h) == -1)
     return 0;
+  // filled by me, data passed to child with a POKEDATA into ot_mem_addr
   uint8_t parent_random[32];
-  uint8_t child_random[32];
-  void* my_mem_addr =
-      (void*)child_random; // memory address of child_random in my process
-  void* ot_mem_addr; // memory address of the parent_random in the other process
+  // filled by child with a POKEDATA call
+  volatile uint8_t child_random[32];
+  // memory address of child_random in my process
+  void* my_mem_addr = (void*)child_random;
+  // memory address of the parent_random in the other process
+  void* ot_mem_addr;
   void* sink;
   send(cl, &my_mem_addr, sizeof(void*), 0);
   recv(cl, &ot_mem_addr, sizeof(void*), 0);
-  printf("My address is 0x%016lX, Other address is 0x%016lX\n", my_mem_addr,
+  DEBUG_PRINT("My address is 0x%016lX, Other address is 0x%016lX\n", my_mem_addr,
          ot_mem_addr);
-  fflush(stdout);
-  // without this stop everything ends up in a deadlock
-  raise(SIGSTOP);
+  recv(cl, &sink, sizeof(void*), 0);
   if(ptrace(PTRACE_ATTACH, child_pid_h, NULL, NULL) != -1)
   {
-    printf("Ptraced\n");
-    fflush(stdout);
+    DEBUG_PRINT("%s\n", "Ptraced");
     int status;
     waitpid(child_pid_h, &status, 0);
     getrandom(&parent_random, sizeof(parent_random), 0);
-    printf("Generated data 0x%016lX 0x%016lX\n", ((uint64_t*)parent_random)[0],
+    DEBUG_PRINT("Generated data 0x%016lX 0x%016lX\n", ((uint64_t*)parent_random)[0],
            ((uint64_t*)parent_random)[1]);
     if(WIFSTOPPED(status))
     {
@@ -258,33 +273,31 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
         if(ptrace(PTRACE_POKEDATA, child_pid_h,
                   ot_mem_addr + (i * sizeof(void*)), data) == -1)
         {
-          printf("Poke Failed\n");
+          DEBUG_PRINT("%s\n","Poke Failed");
         }
         else
         {
-          printf("Poked %d/4\n", i + 1);
+          DEBUG_PRINT("Poked %d/4\n", i + 1);
         }
       }
     }
     else
     {
-      printf("Poke not even tried\n");
+      DEBUG_PRINT("%s\n", "Poke not even tried");
     }
-    fflush(stdout);
     ptrace(PTRACE_CONT, child_pid_h, NULL, NULL);
   }
   else
   {
-    getrandom(
-        &parent_random, sizeof(parent_random),
-        0); // fills the parent anyway to avoid having a seed of 0 by chance.
+    // fills the parent anyway to avoid having a seed of 0 by chance.
+    getrandom(&parent_random, sizeof(parent_random), 0);
   }
   send(cl, &sink, sizeof(void*), 0);
   uint8_t decrypted[32];
   decrypt_aes256(child_random, 32, auth_key, mask_key, decrypted);
-  printf("Encrypted was 0x%016lX 0x%016lX. ", ((uint64_t*)child_random)[0],
+  DEBUG_PRINT("Encrypted was 0x%016lX 0x%016lX. ", ((uint64_t*)child_random)[0],
          ((uint64_t*)child_random)[1]);
-  printf("Decrypted is 0x%016lX 0x%016lX.\n", ((uint64_t*)decrypted)[0],
+  DEBUG_PRINT("Decrypted is 0x%016lX 0x%016lX.\n", ((uint64_t*)decrypted)[0],
          ((uint64_t*)decrypted)[1]);
   long_jump = parent_random[20];
   short_jump = decrypted[20];
@@ -292,9 +305,9 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   prng_state[1] = ((uint64_t*)parent_random)[1];
   prng_state[2] = ((uint64_t*)decrypted)[0] - mypid_h;
   prng_state[3] = ((uint64_t*)decrypted)[1] - child_pid_h;
-  printf("Seed is 0x%016lX 0x%016lX 0x%016lX 0x%016lX\n", prng_state[0],
+  DEBUG_PRINT("Seed is 0x%016lX 0x%016lX 0x%016lX 0x%016lX\n", prng_state[0],
          prng_state[1], prng_state[2], prng_state[3]);
-  printf("Long jump is 0x%02X, Short jump is 0x%02X\n", long_jump, short_jump);
+  DEBUG_PRINT("Long jump is 0x%02X, Short jump is 0x%02X\n", long_jump, short_jump);
 
   return cl;
 }

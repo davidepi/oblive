@@ -14,6 +14,14 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#define DEBUG
+#ifdef DEBUG
+#define DEBUG_PRINT(fmt, ...) \
+            do {fprintf(logger, fmt, __VA_ARGS__);fflush(logger);} while (0)
+#else
+#define DEBUG_PRINT(fmt, ...)
+#endif
+
 #define DEFAULT_STACKS 8
 #define EVP_ERR                  \
   {                              \
@@ -136,9 +144,8 @@ static inline enum Ops fetch_command(int fd, void** data)
   data_enc ^= data_key;
   *data = data_enc;
   cmd ^= opcode_key;
-  fprintf(logger, "Command: [%s][%lu]\n", op_as_string(cmd), *data);
-  fprintf(logger, "The parent key was 0x%02X%016lX\n", opcode_key, data_key);
-  fflush(logger);
+  DEBUG_PRINT("Command: [%s][%lu]\n", op_as_string(cmd), *data);
+  DEBUG_PRINT("The parent key was 0x%02X%016lX\n", opcode_key, data_key);
   return cmd;
 }
 
@@ -148,9 +155,8 @@ static inline void send_result(int fd, void* data)
   uint8_t opcode_key;
   get_key(&opcode_key, &data_key);
   uint8_t buf[sizeof(void*) + 1];
-  fprintf(logger, "Answer: [%s][%lu]\n", op_as_string(ACK), data);
-  fprintf(logger, "My key is 0x%02X%016lX\n", opcode_key, data_key);
-  fflush(logger);
+  DEBUG_PRINT("Answer: [%s][%lu]\n", op_as_string(ACK), data);
+  DEBUG_PRINT("My key is 0x%02X%016lX\n", opcode_key, data_key);
   data = (uint64_t)data ^ data_key;
   // FIXME: possible leak: this ACK is constant, may leak information about the
   // prng
@@ -200,10 +206,10 @@ int main(int argc, const char* argv[])
   void*** stacks = (void***)malloc(sizeof(void**) * stacks_allocs);
   // each stack needs an index
   size_t* stacks_indices = (size_t*)malloc(sizeof(size_t) * stacks_allocs);
-  uint8_t parent_random[32]; // filled by parent with a POKEDATA call
-  uint8_t child_random[32];  // filled by me, data passed to parent with a
-                             // POKEDATA into ot_mem_addr
-
+  // filled by parent with a POKEDATA call
+  volatile uint8_t parent_random[32];
+  // filled by me, data passed to parent with a POKEDATA into ot_mem_addr
+  uint8_t child_random[32];
   // memory address of parent_random in my process
   void* my_mem_addr = (void*)parent_random;
   // memory address of the child_random in the other process
@@ -213,21 +219,20 @@ int main(int argc, const char* argv[])
   recv(fd, &ot_mem_addr, sizeof(void*), 0);
   if(prctl(PR_SET_PTRACER, parent_pid_h) == -1)
   {
-    fprintf(logger, "prctl failure\n");
+    DEBUG_PRINT("%s\n", "prctl failure");
     exit(0);
   }
-  fprintf(logger, "My address is 0x%016lX, Other address is 0x%016lX\n",
+  DEBUG_PRINT("My address is 0x%016lX, Other address is 0x%016lX\n",
           my_mem_addr, ot_mem_addr);
   send(fd, &my_mem_addr, sizeof(void*), 0);
   if(ptrace(PTRACE_ATTACH, parent_pid_h, NULL, NULL) != -1)
   {
-    fprintf(logger, "Ptraced\n");
-    fflush(logger);
+    DEBUG_PRINT("%s\n", "Ptraced");
     int status;
     waitpid(parent_pid_h, &status, 0);
-    getrandom(&child_random, sizeof(child_random),
-              0); // generates the random seed
-    fprintf(logger, "Generated data 0x%016lX 0x%016lX\n",
+    // generates the random seed
+    getrandom(&child_random, sizeof(child_random), 0);
+    DEBUG_PRINT("Generated data 0x%016lX 0x%016lX\n",
             ((uint64_t*)child_random)[0], ((uint64_t*)child_random)[1]);
     if(WIFSTOPPED(status))
     {
@@ -243,35 +248,36 @@ int main(int argc, const char* argv[])
         if(ptrace(PTRACE_POKEDATA, parent_pid_h,
                   ot_mem_addr + (i * sizeof(void*)), data) == -1)
         {
-          fprintf(logger, "Poke Failed\n");
+          DEBUG_PRINT("%s\n","Poke Failed");
         }
         else
         {
-          fprintf(logger, "Poked %d/4\n", i + 1);
+          DEBUG_PRINT("Poked %d/4\n", i + 1);
         }
       }
     }
     else
     {
-      fprintf(logger, "Poke not even tried\n");
+      DEBUG_PRINT("%s\n", "Poke not even tried");
     }
     fflush(logger);
     ptrace(PTRACE_CONT, parent_pid_h, NULL, NULL);
   }
   else
   {
-    fprintf(logger, "Ptrace failed, generating random seed\n");
-    fflush(logger);
-    getrandom(&child_random, sizeof(child_random),
-              0); // generates the random seed
+    DEBUG_PRINT("%s\n", "Ptrace failed, generating random seed\n");
+    // generates the random seed
+    getrandom(&child_random, sizeof(child_random), 0);
   }
-  kill(parent_pid_h, SIGCONT);
+  // let the parent continue with the debugging
+  send(fd, &sink, sizeof(void*), 0);
+  // now wait for him
   recv(fd, &sink, sizeof(void*), 0);
   uint8_t decrypted[32];
   decrypt_aes256(parent_random, 32, auth_key, mask_key, decrypted);
-  fprintf(logger, "Encrypted was 0x%016lX 0x%016lX. ",
+  DEBUG_PRINT("Encrypted was 0x%016lX 0x%016lX. ",
           ((uint64_t*)parent_random)[0], ((uint64_t*)parent_random)[1]);
-  fprintf(logger, "Decrypted is 0x%016lX 0x%016lX.\n",
+  DEBUG_PRINT("Decrypted is 0x%016lX 0x%016lX.\n",
           ((uint64_t*)decrypted)[0], ((uint64_t*)decrypted)[1]);
   long_jump = decrypted[20];
   short_jump = child_random[20];
@@ -279,9 +285,9 @@ int main(int argc, const char* argv[])
   prng_state[1] = ((uint64_t*)decrypted)[1] - mypid_h;
   prng_state[2] = ((uint64_t*)child_random)[0];
   prng_state[3] = ((uint64_t*)child_random)[1];
-  fprintf(logger, "Seed is 0x%016lX 0x%016lX 0x%016lX 0x%016lX\n",
+  DEBUG_PRINT("Seed is 0x%016lX 0x%016lX 0x%016lX 0x%016lX\n",
           prng_state[0], prng_state[1], prng_state[2], prng_state[3]);
-  fprintf(logger, "Long jump is 0x%02X, Short jump is 0x%02X\n", long_jump,
+  DEBUG_PRINT("Long jump is 0x%02X, Short jump is 0x%02X\n", long_jump,
           short_jump);
 
   while(command != KILL || cur_stack != -1)
@@ -293,14 +299,13 @@ int main(int argc, const char* argv[])
         cur_stack++;
         if(cur_stack == stacks_allocs)
         {
-          fprintf(logger,
-                  "Requested %d stacks but %d are allocated. Realloc.\n",
+          DEBUG_PRINT("Requested %d stacks but %d are allocated. Realloc.\n",
                   cur_stack + 1, stacks_allocs);
           stacks_allocs <<= 1;
           stacks = realloc(stacks, sizeof(void**) * stacks_allocs);
           stacks_indices =
               realloc(stacks_indices, sizeof(size_t) * stacks_allocs);
-          fprintf(logger, "Allocated %d stacks\n", stacks_allocs);
+          DEBUG_PRINT("Allocated %d stacks\n", stacks_allocs);
         }
         uint64_t stack_len;
         memcpy(&stack_len, &data, sizeof(void*));
