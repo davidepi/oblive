@@ -62,6 +62,13 @@ public abstract class Java2CTests implements TestInterface {
         NativeCompiler compiler = new NativeCompiler();
         File[] sources = new File[]{outSource};
         String error;
+        if(!outVM.exists()) {
+            compiler.setCompilationFlags("-Wall -Wno-unused-variable -Wno-unused-function -O3");
+        } else {
+            // antidebug requested, this requires libcrypto
+            compiler.setCompilationFlags("-Wall -Wno-unused-variable -Wno-unused-function -O3 -lcrypto");
+            compiler.setLinkerFlags("-lcrypto");
+        }
         try {
             error = compiler.compileFile(sources, outObject, false);
             if (outVM.exists() && error == null) {

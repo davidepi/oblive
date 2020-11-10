@@ -77,6 +77,13 @@ public class AppStart {
             File objectFile = new File(tempdir + File.separator + "lib" + libname + ".o");
             File objectVMFile = new File(outdir + File.separator + "lib" + libname + "vm.o");
             NativeCompiler compiler = new NativeCompiler();
+            if(!vmSource.exists()) {
+                compiler.setCompilationFlags("-Wall -Wno-unused-variable -Wno-unused-function -O3");
+            } else {
+                // antidebug requested, this requires libcrypto
+                compiler.setCompilationFlags("-Wall -Wno-unused-variable -Wno-unused-function -O3 -lcrypto");
+                compiler.setLinkerFlags("-lcrypto");
+            }
             compiler.compileFile(new File[]{inputSource}, objectFile, false);
             if (vmSource.exists()) {
                 compiler.compileFile(new File[]{vmSource}, objectVMFile, true);

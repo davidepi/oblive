@@ -230,6 +230,7 @@ int main(int argc, const char* argv[])
     DEBUG_PRINT("%s\n", "Ptraced");
     int status;
     waitpid(parent_pid_h, &status, 0);
+    DEBUG_PRINT("%s\n", "Parent stopped");
     // generates the random seed
     getrandom(&child_random, sizeof(child_random), 0);
     DEBUG_PRINT("Generated data 0x%016lX 0x%016lX\n",
@@ -270,9 +271,12 @@ int main(int argc, const char* argv[])
     getrandom(&child_random, sizeof(child_random), 0);
   }
   // let the parent continue with the debugging
+  DEBUG_PRINT("%s\n", "Resuming parent");
   send(fd, &sink, sizeof(void*), 0);
   // now wait for him
+  DEBUG_PRINT("%s\n", "Waiting for parent to finish");
   recv(fd, &sink, sizeof(void*), 0);
+  DEBUG_PRINT("%s\n", "Parent finished");
   uint8_t decrypted[32];
   decrypt_aes256(parent_random, 32, auth_key, mask_key, decrypted);
   DEBUG_PRINT("Encrypted was 0x%016lX 0x%016lX. ",

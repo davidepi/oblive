@@ -24,11 +24,12 @@ import java.util.stream.Collectors;
  */
 public class NativeCompiler {
 
-    private static final String FLAGS = "-Wall -Wno-unused-variable -Wno-unused-function -O3";
+    private String cflags;
     private String compiler;
     private String include;
     private final String objext;
     private final String libext;
+    private String ldflags;
 
     /**
      * Default constructor
@@ -94,8 +95,8 @@ public class NativeCompiler {
      * @param sources      A list of File that will be passed to the compiler
      * @param objectOutput The output of the compilation process. If the extension is wrong or missing it will be added
      *                     (by modifying this object). Note that if the output is already existent it will be replaced.
-     * @param executable   true if the file have a main
-     * @return a null string if the compilation was successfull, otherwise the compiler error
+     * @param executable   true if the file have a main. Otherwise the -c -fpic flags are added.
+     * @return a null string if the compilation was successful, otherwise the compiler error
      * @throws IOException in case the source files are not readable or with the wrong extension (only .c, folks)
      */
     @Nullable
@@ -113,10 +114,8 @@ public class NativeCompiler {
         StringBuilder command = new StringBuilder(compiler);
         if (!executable) {
             command.append(" -c -fpic ");
-        } else {
-            command.append(" /usr/lib/x86_64-linux-gnu/libcrypto.so ");
         }
-        command.append(' ').append(FLAGS).append(' ');
+        command.append(' ').append(cflags).append(' ');
         command.append(' ').append(include).append(' ');
 
         for (File source : sources) {
@@ -133,7 +132,6 @@ public class NativeCompiler {
         }
         command.append(' ').append("-o").append(' ');
         command.append(' ').append(objectOutput.getAbsolutePath());
-
         return runCompilation(command.toString());
     }
 
@@ -171,10 +169,8 @@ public class NativeCompiler {
                         "read or does not exists");
             }
         }
-        command.append(' ').append("-shared -o").append(' ');
+        command.append(' ').append(ldflags).append(" -shared -o ");
         command.append(libraryOutput.getAbsolutePath());
-        command.append(' ').append("/usr/lib/x86_64-linux-gnu/libcrypto.so");
-
         return runCompilation(command.toString());
     }
 
@@ -206,6 +202,22 @@ public class NativeCompiler {
             retval = e.getMessage();
         }
         return retval;
+    }
+
+    /**
+     * Sets the following flags that will be used when invoking the compileFile method.
+     * @param flags the flags that will be used
+     */
+    public void setCompilationFlags(@NotNull String flags) {
+        this.cflags = flags;
+    }
+
+    /**
+     * S
+     * @param flags
+     */
+    public void setLinkerFlags(@NotNull String flags) {
+        this.ldflags = flags;
     }
 
     /**

@@ -250,12 +250,15 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   recv(cl, &ot_mem_addr, sizeof(void*), 0);
   DEBUG_PRINT("My address is 0x%016lX, Other address is 0x%016lX\n", my_mem_addr,
          ot_mem_addr);
+  DEBUG_PRINT("%s\n", "Waiting for child to finish");
   recv(cl, &sink, sizeof(void*), 0);
+  DEBUG_PRINT("%s\n", "Child finished");
   if(ptrace(PTRACE_ATTACH, child_pid_h, NULL, NULL) != -1)
   {
-    DEBUG_PRINT("%s\n", "Ptraced");
+    DEBUG_PRINT("%s\n", "Ptrace sent");
     int status;
     waitpid(child_pid_h, &status, 0);
+    DEBUG_PRINT("%s\n", "Child stopped");
     getrandom(&parent_random, sizeof(parent_random), 0);
     DEBUG_PRINT("Generated data 0x%016lX 0x%016lX\n", ((uint64_t*)parent_random)[0],
            ((uint64_t*)parent_random)[1]);
@@ -292,6 +295,7 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
     // fills the parent anyway to avoid having a seed of 0 by chance.
     getrandom(&parent_random, sizeof(parent_random), 0);
   }
+  DEBUG_PRINT("%s\n", "Sending resume to child");
   send(cl, &sink, sizeof(void*), 0);
   uint8_t decrypted[32];
   decrypt_aes256(child_random, 32, auth_key, mask_key, decrypted);
