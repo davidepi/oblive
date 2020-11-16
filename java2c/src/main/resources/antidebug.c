@@ -16,10 +16,14 @@
 
 #define DEBUG
 #ifdef DEBUG
-#define DEBUG_PRINT(fmt, ...) \
-            do {fprintf(logger, fmt, __VA_ARGS__);fflush(logger);} while (0)
+#  define DEBUG_PRINT(fmt, ...)          \
+    do                                   \
+    {                                    \
+      fprintf(logger, fmt, __VA_ARGS__); \
+      fflush(logger);                    \
+    } while(0)
 #else
-#define DEBUG_PRINT(fmt, ...)
+#  define DEBUG_PRINT(fmt, ...)
 #endif
 
 #define DEFAULT_STACKS 8
@@ -223,7 +227,7 @@ int main(int argc, const char* argv[])
     exit(0);
   }
   DEBUG_PRINT("My address is 0x%016lX, Other address is 0x%016lX\n",
-          my_mem_addr, ot_mem_addr);
+              my_mem_addr, ot_mem_addr);
   send(fd, &my_mem_addr, sizeof(void*), 0);
   if(ptrace(PTRACE_ATTACH, parent_pid_h, NULL, NULL) != -1)
   {
@@ -234,7 +238,7 @@ int main(int argc, const char* argv[])
     // generates the random seed
     getrandom(&child_random, sizeof(child_random), 0);
     DEBUG_PRINT("Generated data 0x%016lX 0x%016lX\n",
-            ((uint64_t*)child_random)[0], ((uint64_t*)child_random)[1]);
+                ((uint64_t*)child_random)[0], ((uint64_t*)child_random)[1]);
     if(WIFSTOPPED(status))
     {
       uint8_t plain[32];
@@ -249,7 +253,7 @@ int main(int argc, const char* argv[])
         if(ptrace(PTRACE_POKEDATA, parent_pid_h,
                   ot_mem_addr + (i * sizeof(void*)), data) == -1)
         {
-          DEBUG_PRINT("%s\n","Poke Failed");
+          DEBUG_PRINT("%s\n", "Poke Failed");
         }
         else
         {
@@ -280,19 +284,19 @@ int main(int argc, const char* argv[])
   uint8_t decrypted[32];
   decrypt_aes256(parent_random, 32, auth_key, mask_key, decrypted);
   DEBUG_PRINT("Encrypted was 0x%016lX 0x%016lX. ",
-          ((uint64_t*)parent_random)[0], ((uint64_t*)parent_random)[1]);
-  DEBUG_PRINT("Decrypted is 0x%016lX 0x%016lX.\n",
-          ((uint64_t*)decrypted)[0], ((uint64_t*)decrypted)[1]);
+              ((uint64_t*)parent_random)[0], ((uint64_t*)parent_random)[1]);
+  DEBUG_PRINT("Decrypted is 0x%016lX 0x%016lX.\n", ((uint64_t*)decrypted)[0],
+              ((uint64_t*)decrypted)[1]);
   long_jump = decrypted[20];
   short_jump = child_random[20];
   prng_state[0] = ((uint64_t*)decrypted)[0] - parent_pid_h;
   prng_state[1] = ((uint64_t*)decrypted)[1] - mypid_h;
   prng_state[2] = ((uint64_t*)child_random)[0];
   prng_state[3] = ((uint64_t*)child_random)[1];
-  DEBUG_PRINT("Seed is 0x%016lX 0x%016lX 0x%016lX 0x%016lX\n",
-          prng_state[0], prng_state[1], prng_state[2], prng_state[3]);
+  DEBUG_PRINT("Seed is 0x%016lX 0x%016lX 0x%016lX 0x%016lX\n", prng_state[0],
+              prng_state[1], prng_state[2], prng_state[3]);
   DEBUG_PRINT("Long jump is 0x%02X, Short jump is 0x%02X\n", long_jump,
-          short_jump);
+              short_jump);
 
   while(command != KILL || cur_stack != -1)
   {
@@ -304,7 +308,7 @@ int main(int argc, const char* argv[])
         if(cur_stack == stacks_allocs)
         {
           DEBUG_PRINT("Requested %d stacks but %d are allocated. Realloc.\n",
-                  cur_stack + 1, stacks_allocs);
+                      cur_stack + 1, stacks_allocs);
           stacks_allocs <<= 1;
           stacks = realloc(stacks, sizeof(void**) * stacks_allocs);
           stacks_indices =

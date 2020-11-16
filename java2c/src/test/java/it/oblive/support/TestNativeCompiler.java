@@ -42,14 +42,14 @@ public class TestNativeCompiler {
         Assertions.assertNotNull(url);
         wrongC = new File(url.getPath());
         destinationObj =
-                new File(System.getProperty("user.dir") + File.separator + "buildedc" + SystemInfo.getObjectExtension());
-        destinationObjWrong = new File(System.getProperty("user.dir") + File.separator + "buildedc.txt");
+                new File(System.getProperty("user.dir") + File.separator + "builtdc" + SystemInfo.getObjectExtension());
+        destinationObjWrong = new File(System.getProperty("user.dir") + File.separator + "builtc.txt");
         destinationObjFixed = new File(destinationObjWrong.getAbsoluteFile() + SystemInfo.getObjectExtension());
         destinationLib =
-                new File(System.getProperty("user.dir") + File.separator + "buildedlib" + SystemInfo.getSharedLibraryExtension());
-        destinationLibWrong = new File(System.getProperty("user.dir") + File.separator + "buildedlib.txt");
+                new File(System.getProperty("user.dir") + File.separator + "builtlib" + SystemInfo.getSharedLibraryExtension());
+        destinationLibWrong = new File(System.getProperty("user.dir") + File.separator + "builtlib.txt");
         destinationLibFixed =
-                new File(System.getProperty("user.dir") + File.separator + "buildedlib.txt" + SystemInfo.getSharedLibraryExtension());
+                new File(System.getProperty("user.dir") + File.separator + "builtlib.txt" + SystemInfo.getSharedLibraryExtension());
     }
 
     @AfterAll

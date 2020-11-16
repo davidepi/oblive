@@ -35,6 +35,8 @@ public class NativeCompiler {
      * Default constructor
      */
     public NativeCompiler() {
+        cflags = "";
+        ldflags = "";
         objext = SystemInfo.getObjectExtension();
         libext = SystemInfo.getSharedLibraryExtension();
         if (SystemInfo.isNix())
@@ -206,6 +208,7 @@ public class NativeCompiler {
 
     /**
      * Sets the following flags that will be used when invoking the compileFile method.
+     *
      * @param flags the flags that will be used
      */
     public void setCompilationFlags(@NotNull String flags) {
@@ -214,6 +217,7 @@ public class NativeCompiler {
 
     /**
      * S
+     *
      * @param flags
      */
     public void setLinkerFlags(@NotNull String flags) {

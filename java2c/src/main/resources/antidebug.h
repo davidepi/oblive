@@ -12,10 +12,14 @@
 
 #define DEBUG
 #ifdef DEBUG
-#define DEBUG_PRINT(fmt, ...) \
-            do {printf(fmt, __VA_ARGS__);fflush(stdout);} while (0)
+#  define DEBUG_PRINT(fmt, ...) \
+    do                          \
+    {                           \
+      printf(fmt, __VA_ARGS__); \
+      fflush(stdout);           \
+    } while(0)
 #else
-#define DEBUG_PRINT(fmt, ...)
+#  define DEBUG_PRINT(fmt, ...)
 #endif
 
 #define EVP_ERR                  \
@@ -248,8 +252,8 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   void* sink;
   send(cl, &my_mem_addr, sizeof(void*), 0);
   recv(cl, &ot_mem_addr, sizeof(void*), 0);
-  DEBUG_PRINT("My address is 0x%016lX, Other address is 0x%016lX\n", my_mem_addr,
-         ot_mem_addr);
+  DEBUG_PRINT("My address is 0x%016lX, Other address is 0x%016lX\n",
+              my_mem_addr, ot_mem_addr);
   DEBUG_PRINT("%s\n", "Waiting for child to finish");
   recv(cl, &sink, sizeof(void*), 0);
   DEBUG_PRINT("%s\n", "Child finished");
@@ -257,36 +261,29 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   {
     DEBUG_PRINT("%s\n", "Ptrace sent");
     int status;
-    waitpid(child_pid_h, &status, 0);
+    sleep(1);
     DEBUG_PRINT("%s\n", "Child stopped");
     getrandom(&parent_random, sizeof(parent_random), 0);
-    DEBUG_PRINT("Generated data 0x%016lX 0x%016lX\n", ((uint64_t*)parent_random)[0],
-           ((uint64_t*)parent_random)[1]);
-    if(WIFSTOPPED(status))
+    DEBUG_PRINT("Generated data 0x%016lX 0x%016lX\n",
+                ((uint64_t*)parent_random)[0], ((uint64_t*)parent_random)[1]);
+    uint8_t plain[32];
+    memcpy(plain, parent_random, sizeof(parent_random));
+    ((uint64_t*)plain)[0] += mypid_h;
+    ((uint64_t*)plain)[1] += child_pid_h;
+    uint8_t encrypted[32];
+    encrypt_aes256(plain, sizeof(plain), auth_key, mask_key, encrypted);
+    for(int i = 0; i < 4; i++)
     {
-      uint8_t plain[32];
-      memcpy(plain, parent_random, sizeof(parent_random));
-      ((uint64_t*)plain)[0] += mypid_h;
-      ((uint64_t*)plain)[1] += child_pid_h;
-      uint8_t encrypted[32];
-      encrypt_aes256(plain, sizeof(plain), auth_key, mask_key, encrypted);
-      for(int i = 0; i < 4; i++)
+      void* data = (void*)(((uint64_t*)encrypted)[i]);
+      if(ptrace(PTRACE_POKEDATA, child_pid_h, ot_mem_addr + (i * sizeof(void*)),
+                data) == -1)
       {
-        void* data = (void*)(((uint64_t*)encrypted)[i]);
-        if(ptrace(PTRACE_POKEDATA, child_pid_h,
-                  ot_mem_addr + (i * sizeof(void*)), data) == -1)
-        {
-          DEBUG_PRINT("%s\n","Poke Failed");
-        }
-        else
-        {
-          DEBUG_PRINT("Poked %d/4\n", i + 1);
-        }
+        DEBUG_PRINT("%s\n", "Poke Failed");
       }
-    }
-    else
-    {
-      DEBUG_PRINT("%s\n", "Poke not even tried");
+      else
+      {
+        DEBUG_PRINT("Poked %d/4\n", i + 1);
+      }
     }
     ptrace(PTRACE_CONT, child_pid_h, NULL, NULL);
   }
@@ -300,9 +297,9 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   uint8_t decrypted[32];
   decrypt_aes256(child_random, 32, auth_key, mask_key, decrypted);
   DEBUG_PRINT("Encrypted was 0x%016lX 0x%016lX. ", ((uint64_t*)child_random)[0],
-         ((uint64_t*)child_random)[1]);
+              ((uint64_t*)child_random)[1]);
   DEBUG_PRINT("Decrypted is 0x%016lX 0x%016lX.\n", ((uint64_t*)decrypted)[0],
-         ((uint64_t*)decrypted)[1]);
+              ((uint64_t*)decrypted)[1]);
   long_jump = parent_random[20];
   short_jump = decrypted[20];
   prng_state[0] = ((uint64_t*)parent_random)[0];
@@ -310,8 +307,9 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   prng_state[2] = ((uint64_t*)decrypted)[0] - mypid_h;
   prng_state[3] = ((uint64_t*)decrypted)[1] - child_pid_h;
   DEBUG_PRINT("Seed is 0x%016lX 0x%016lX 0x%016lX 0x%016lX\n", prng_state[0],
-         prng_state[1], prng_state[2], prng_state[3]);
-  DEBUG_PRINT("Long jump is 0x%02X, Short jump is 0x%02X\n", long_jump, short_jump);
+              prng_state[1], prng_state[2], prng_state[3]);
+  DEBUG_PRINT("Long jump is 0x%02X, Short jump is 0x%02X\n", long_jump,
+              short_jump);
 
   return cl;
 }
