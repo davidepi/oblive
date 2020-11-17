@@ -189,9 +189,11 @@ int main(int argc, const char* argv[])
   uint32_t mypid_n = htonl(mypid_h);
   uint32_t parent_pid_h;
   uint32_t parent_pid_n;
+#ifdef DEBUG
   char log_filename[32];
   snprintf(log_filename, 32, "/tmp/log_child_%d.txt", mypid_h);
   logger = fopen(log_filename, "w");
+#endif
   if(send(fd, &mypid_n, sizeof(uint32_t), 0) == -1)
     exit(0);
   if(recv(fd, &parent_pid_n, sizeof(uint32_t), 0) == -1)
@@ -287,8 +289,9 @@ int main(int argc, const char* argv[])
               ((uint64_t*)parent_random)[0], ((uint64_t*)parent_random)[1]);
   DEBUG_PRINT("Decrypted is 0x%016lX 0x%016lX.\n", ((uint64_t*)decrypted)[0],
               ((uint64_t*)decrypted)[1]);
-  long_jump = decrypted[20];
-  short_jump = child_random[20];
+  long_jump = decrypted[20] | 0x11; // avoid having 0 or "common numbers" (they
+                                    // implies too many reseeds)
+  short_jump = child_random[20] | 0x11;
   prng_state[0] = ((uint64_t*)decrypted)[0] - parent_pid_h;
   prng_state[1] = ((uint64_t*)decrypted)[1] - mypid_h;
   prng_state[2] = ((uint64_t*)child_random)[0];
@@ -452,7 +455,9 @@ int main(int argc, const char* argv[])
     }
     send_result(fd, data);
   }
+#ifdef DEBUG
   fclose(logger);
+#endif
   free(stacks_indices);
   free(stacks);
   return 0;

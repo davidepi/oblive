@@ -123,7 +123,7 @@ public class NativeCompiler {
         for (File source : sources) {
             //the .c limitation is used to clearly separate this method from the compileSharedLib
             if (!source.getAbsolutePath().endsWith(".c")) {
-                throw new IOException("Only .c files can be compiled. Please change extension to " +
+                throw new IOException("Only .c files can be compiled. Please change extension of " +
                         source.getAbsolutePath());
             } else if (source.exists() && source.canRead()) {
                 command.append(' ').append(source.getAbsolutePath()).append(' ');
@@ -216,9 +216,9 @@ public class NativeCompiler {
     }
 
     /**
-     * S
+     * Sets the following flags that will be used when invoking the compileSharedLib method.
      *
-     * @param flags
+     * @param flags the flags that will be used
      */
     public void setLinkerFlags(@NotNull String flags) {
         this.ldflags = flags;

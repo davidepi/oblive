@@ -6,6 +6,8 @@ stages:
 
 before_script:
   - apt-get update && apt-get install -y gcc openjdk-8-jdk
+  - export LANG=C.UTF-8
+  - export LC_ALL=C.UTF-8
   - export JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-amd64"
 
 x86_build:
