@@ -7,9 +7,9 @@ import it.oblive.helpers.AbstractTestCorrectnessTemplate;
  */
 public class TestAntidebugSelfDebugging extends AbstractTestCorrectnessTemplate {
     private Class<?> className = testclasses.antidebug.AntidebugSelfDebugging.class;
-    private String[] methodTest = {"add"};
-    private Class[][] methodParam = {new Class[]{int.class, int.class}};
-    private Object[][] methodArgs = {new Object[]{256, 1}};
+    private String[] methodTest = {"pi"};
+    private Class[][] methodParam = {new Class[]{int.class}};
+    private Object[][] methodArgs = {new Object[]{1000}};
 
     @Override
     public Class<?> getTestClass() {

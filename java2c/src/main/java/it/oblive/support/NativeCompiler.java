@@ -132,7 +132,7 @@ public class NativeCompiler {
                         "read or does not exists");
             }
         }
-        command.append(' ').append("-o").append(' ');
+        command.append(' ').append("-g -o").append(' ');
         command.append(' ').append(objectOutput.getAbsolutePath());
         return runCompilation(command.toString());
     }
@@ -171,7 +171,7 @@ public class NativeCompiler {
                         "read or does not exists");
             }
         }
-        command.append(' ').append(ldflags).append(" -shared -o ");
+        command.append(' ').append(ldflags).append(" -g -shared -o ");
         command.append(libraryOutput.getAbsolutePath());
         return runCompilation(command.toString());
     }

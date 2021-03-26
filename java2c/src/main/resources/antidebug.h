@@ -10,7 +10,8 @@
 #include <sys/wait.h> // Here ends the includes for the AntidebugSelf Technique
 #include <time.h> //required by the AntidebugTime and some performance test. Not a big deal if it is unnecessary
 
-#define DEBUG
+unsigned int child_pid_h = 0;
+
 #ifdef DEBUG
 #  define DEBUG_PRINT(fmt, ...) \
     do                          \
@@ -230,7 +231,7 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
   // exchange pids
   uint32_t mypid_h = getpid();
   uint32_t mypid_n = htonl(mypid_h);
-  uint32_t child_pid_h;
+//  uint32_t child_pid_h;
   uint32_t child_pid_n;
   if(read(cl, &child_pid_n, sizeof(uint32_t)) == -1)
     return 0;

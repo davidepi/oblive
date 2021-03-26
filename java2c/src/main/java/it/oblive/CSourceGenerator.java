@@ -209,7 +209,9 @@ public class CSourceGenerator {
         if (antidebugSelf) {
             sb.append("run_command(child, KILL);\n");
             sb.append("calls--;\n");
-            sb.append("if(calls==0){close(child);child=0;}\n");
+            sb.append("if(calls==0){\n");
+            sb.append("waitpid(child_pid_h, NULL, 0);\n");
+            sb.append("close(child);child=0;}\n");
         }
         /* --------------------------------------- END OF FUNCTION ---------------------------------------------------*/
         sb.append(eb.returnType);

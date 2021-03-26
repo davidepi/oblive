@@ -14,7 +14,6 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#define DEBUG
 #ifdef DEBUG
 #  define DEBUG_PRINT(fmt, ...)          \
     do                                   \
