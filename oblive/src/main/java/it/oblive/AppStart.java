@@ -1,5 +1,6 @@
 package it.oblive;
 
+import it.oblive.support.CompilationException;
 import it.oblive.support.NativeCompiler;
 
 import java.io.File;
@@ -77,7 +78,7 @@ public class AppStart {
             File objectFile = new File(tempdir + File.separator + "lib" + libname + ".o");
             File objectVMFile = new File(outdir + File.separator + "lib" + libname + "vm.o");
             NativeCompiler compiler = new NativeCompiler();
-            if(!vmSource.exists()) {
+            if (!vmSource.exists()) {
                 compiler.setCompilationFlags("-Wall -Wno-unused-variable -Wno-unused-function -O3");
             } else {
                 // antidebug requested, this requires libcrypto
@@ -93,6 +94,12 @@ public class AppStart {
             Files.walk(tempdir).filter(Files::isRegularFile).map(Path::toFile).forEach(File::delete);
             Files.delete(tempdir);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (CompilationException e) {
+            System.err.println("Failed to compile file " + e.getExpectedFilename() + ": " + e.getMessage());
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            System.err.println("Compilation was interrupted externally");
             e.printStackTrace();
         } finally {
             if (jar != null) {

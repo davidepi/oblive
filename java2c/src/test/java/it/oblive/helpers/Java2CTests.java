@@ -1,6 +1,7 @@
 package it.oblive.helpers;
 
 import it.oblive.JavaToC;
+import it.oblive.support.CompilationException;
 import it.oblive.support.NativeCompiler;
 import it.oblive.support.SystemInfo;
 import org.junit.jupiter.api.Assertions;
@@ -62,7 +63,7 @@ public abstract class Java2CTests implements TestInterface {
         NativeCompiler compiler = new NativeCompiler();
         File[] sources = new File[]{outSource};
         String error;
-        if(!outVM.exists()) {
+        if (!outVM.exists()) {
             compiler.setCompilationFlags("-Wall -Wno-unused-variable -Wno-unused-function -O3");
         } else {
             // antidebug requested, this requires libcrypto
@@ -70,19 +71,12 @@ public abstract class Java2CTests implements TestInterface {
             compiler.setLinkerFlags("-lcrypto");
         }
         try {
-            error = compiler.compileFile(sources, outObject, false);
-            if (outVM.exists() && error == null) {
-                error = compiler.compileFile(new File[]{outVM}, outObjectVM, true);
+            compiler.compileFile(sources, outObject, false);
+            if (outVM.exists()) {
+                compiler.compileFile(new File[]{outVM}, outObjectVM, true);
+                compiler.compileSharedLib(new File[]{outObject}, outLib);
             }
-            if (error == null) {
-                error = compiler.compileSharedLib(new File[]{outObject}, outLib);
-                if (error != null) {
-                    Assertions.fail(error);
-                }
-            } else {
-                Assertions.fail(error);
-            }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException | CompilationException e) {
             Assertions.fail(e.getMessage());
         }
     }

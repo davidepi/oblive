@@ -75,9 +75,8 @@ public class TestNativeCompiler {
 
         //correct output extension
         try {
-            compilerError = compiler.compileFile(new File[]{sourceC}, destinationObj, false);
-            Assertions.assertNull(compilerError);
-        } catch (IOException e) {
+            compiler.compileFile(new File[]{sourceC}, destinationObj, false);
+        } catch (IOException | CompilationException | InterruptedException e) {
             Assertions.fail(e.getMessage());
         }
         Assertions.assertTrue(destinationObj.exists()); //the file exists
@@ -85,9 +84,8 @@ public class TestNativeCompiler {
 
         //incorrect output extension, the new extension should be appended
         try {
-            compilerError = compiler.compileFile(new File[]{sourceC}, destinationObjWrong, false);
-            Assertions.assertNull(compilerError);
-        } catch (IOException e) {
+            compiler.compileFile(new File[]{sourceC}, destinationObjWrong, false);
+        } catch (IOException | CompilationException | InterruptedException e) {
             Assertions.fail(e.getMessage());
         }
         Assertions.assertTrue(destinationObjFixed.exists());
@@ -96,74 +94,73 @@ public class TestNativeCompiler {
 
         //wrong input file
         try {
-            compilerError = compiler.compileFile(new File[]{sourceCPP}, destinationObj, false);
-            Assertions.assertNull(compilerError);
-            Assertions.fail();
+            compiler.compileFile(new File[]{sourceCPP}, destinationObj, false);
+            Assertions.fail("Exception not thrown");
         } catch (IOException e) {
             Assertions.assertFalse(destinationObj.exists());
+        } catch (CompilationException | InterruptedException e) {
+            Assertions.fail("Wrong exception thrown");
         }
 
         //compilation error
         try {
-            compilerError = compiler.compileFile(new File[]{wrongC}, destinationObj, false);
-            Assertions.assertNotNull(compilerError);
-            System.err.println(compilerError);
+            compiler.compileFile(new File[]{wrongC}, destinationObj, false);
+            Assertions.fail("Exception not thrown");
+        } catch (IOException | InterruptedException e) {
+            Assertions.fail("Wrong exception type");
+        } catch (CompilationException e) {
             Assertions.assertFalse(destinationObj.exists());
-        } catch (IOException e) {
-            Assertions.fail(e.getMessage());
         }
     }
 
     @Test
     public void compileSharedLibraryTest() {
-        String compilerError;
         NativeCompiler compiler = new NativeCompiler();
         try {
-            compilerError = compiler.compileFile(new File[]{sourceC}, destinationObj, false);
-            Assertions.assertNull(compilerError);
-        } catch (IOException e) {
+            compiler.compileFile(new File[]{sourceC}, destinationObj, false);
+        } catch (IOException | CompilationException | InterruptedException e) {
             Assertions.fail(e.getMessage());
         }
         Assertions.assertTrue(destinationObj.exists());
 
-        //unexistent file
+        //non-existent file
         try {
-            compilerError = compiler.compileSharedLib(new File[]{new File("iung" + SystemInfo.getObjectExtension())},
+            compiler.compileSharedLib(new File[]{new File("iung" + SystemInfo.getObjectExtension())},
                     destinationLib);
-            Assertions.assertNull(compilerError);
-            Assertions.fail();
+            Assertions.fail("Exception not thrown");
         } catch (IOException e) {
             //success!
             Assertions.assertFalse(destinationLib.exists());
+        } catch (CompilationException | InterruptedException e) {
+            Assertions.fail("Wrong exception thrown");
         }
 
         //not object file
         try {
-            compilerError = compiler.compileSharedLib(new File[]{sourceC}, destinationLib);
-            Assertions.assertNull(compilerError);
-            Assertions.fail();
+            compiler.compileSharedLib(new File[]{sourceC}, destinationLib);
+            Assertions.fail("Exception not thrown");
         } catch (IOException e) {
             Assertions.assertFalse(destinationLib.exists());
+        } catch (CompilationException | InterruptedException e) {
+            Assertions.fail("Wrong exception thrown");
         }
 
         //correct compilation
         try {
-            compilerError = compiler.compileSharedLib(new File[]{destinationObj}, destinationLib);
-            Assertions.assertNull(compilerError);
+            compiler.compileSharedLib(new File[]{destinationObj}, destinationLib);
             Assertions.assertTrue(destinationLib.exists());
             Assertions.assertTrue(destinationLib.delete());
-        } catch (IOException e) {
+        } catch (IOException | CompilationException | InterruptedException e) {
             Assertions.fail(e.getMessage());
         }
 
         //added extension
         try {
-            compilerError = compiler.compileSharedLib(new File[]{destinationObj}, destinationLibWrong);
-            Assertions.assertNull(compilerError);
+            compiler.compileSharedLib(new File[]{destinationObj}, destinationLibWrong);
             Assertions.assertFalse(destinationLibWrong.exists());
             Assertions.assertTrue(destinationLibFixed.exists());
             Assertions.assertTrue(destinationLibFixed.delete());
-        } catch (IOException e) {
+        } catch (IOException | CompilationException | InterruptedException e) {
             Assertions.fail(e.getMessage());
         }
     }

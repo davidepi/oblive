@@ -2,7 +2,6 @@ package it.oblive.support;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -98,11 +97,12 @@ public class NativeCompiler {
      * @param objectOutput The output of the compilation process. If the extension is wrong or missing it will be added
      *                     (by modifying this object). Note that if the output is already existent it will be replaced.
      * @param executable   true if the file have a main. Otherwise the -c -fpic flags are added.
-     * @return a null string if the compilation was successful, otherwise the compiler error
-     * @throws IOException in case the source files are not readable or with the wrong extension (only .c, folks)
+     * @throws IOException          in case the source files are not readable or with the wrong extension (only .c, folks)
+     * @throws CompilationException if there was an error during compilation
+     * @throws InterruptedException if the compilation was interrupted externally
      */
-    @Nullable
-    public String compileFile(final File[] sources, @NotNull File objectOutput, boolean executable) throws IOException {
+    public void compileFile(final File[] sources, @NotNull File objectOutput, boolean executable) throws IOException,
+            CompilationException, InterruptedException {
         //TODO: ASSERT THAT THIS WORKS ON WINDOWS
 
         //assert existence of folder if it is not the current one
@@ -132,9 +132,9 @@ public class NativeCompiler {
                         "read or does not exists");
             }
         }
-        command.append(' ').append("-g -o").append(' ');
+        command.append(' ').append("-o").append(' ');
         command.append(' ').append(objectOutput.getAbsolutePath());
-        return runCompilation(command.toString());
+        runCompilation(command.toString(), objectOutput.getAbsolutePath());
     }
 
     /**
@@ -143,11 +143,12 @@ public class NativeCompiler {
      * @param sources       A list of File that will be passed to the compiler
      * @param libraryOutput The output of the compilation process. If the extension is wrong or missing it will be added
      *                      (by modifying this object). Note that if the output is already existent it will be replaced.
-     * @return a null string if the compilation was successful, otherwise the compiler error
-     * @throws IOException in case the source files are not readable or with the wrong extension
+     * @throws IOException          in case the source files are not readable or with the wrong extension
+     * @throws CompilationException if there was an error during compilation
+     * @throws InterruptedException if the compilation was interrupted externally
      */
-    @Nullable
-    public String compileSharedLib(File[] sources, @NotNull File libraryOutput) throws IOException {
+    public void compileSharedLib(File[] sources, @NotNull File libraryOutput)
+            throws IOException, CompilationException, InterruptedException {
         //TODO: ASSERT THAT THIS WORKS ON WINDOWS
 
         //assert existence of folder if it is not the current one
@@ -171,39 +172,32 @@ public class NativeCompiler {
                         "read or does not exists");
             }
         }
-        command.append(' ').append(ldflags).append(" -g -shared -o ");
+        command.append(' ').append(ldflags).append(" -shared -o ");
         command.append(libraryOutput.getAbsolutePath());
-        return runCompilation(command.toString());
+        runCompilation(command.toString(), libraryOutput.getAbsolutePath());
     }
 
     /**
      * Spawn a process that runs the given command
      *
      * @param command The command that will be run
-     * @return null if everything was fine, a string with the error otherwise
-     * @throws IOException when it is not possible to spawn a process
+     * @throws IOException          when it is not possible to spawn a process
+     * @throws CompilationException if the compiler generated an error
+     * @throws InterruptedException if the compilation was interrupted by other means
      */
-    @Nullable
-    private String runCompilation(@NotNull String command) throws IOException {
+    private void runCompilation(@NotNull String command, @NotNull String expectedOutput) throws IOException, CompilationException, InterruptedException {
         String retval;
         String trimmedCommand = command.replaceAll("\\s+", " ");
         String[] commandArray = trimmedCommand.split(" ");
         ProcessBuilder compilationProcess = new ProcessBuilder(commandArray);
         Process child = compilationProcess.start();
-        try {
-            child.waitFor();
-            if (child.exitValue() == 0) {
-                retval = null;
-            } else {
-                //read compilation message
-                retval = new BufferedReader(new InputStreamReader(child.getErrorStream())).lines()
-                        .collect(Collectors.joining("\n"));
-            }
-
-        } catch (InterruptedException e) {
-            retval = e.getMessage();
+        child.waitFor();
+        if (child.exitValue() != 0) {
+            //read compilation message
+            retval = new BufferedReader(new InputStreamReader(child.getErrorStream())).lines()
+                    .collect(Collectors.joining("\n"));
+            throw new CompilationException(expectedOutput, retval);
         }
-        return retval;
     }
 
     /**
