@@ -95,11 +95,16 @@ public class CSourceGenerator {
         boolean antidebugTime = obfuscations.contains(AntidebugTime.class);
         boolean antidebugSelf = obfuscations.contains(AntidebugSelf.class);
 
+        //used in case the antidebug fails, this is the default statement to terminate the function.
+        //can be either "return;" or "return 0;" depending on the function signature itself.
+        String defaultReturnStatement;
         //if the function is void, the exception should not return 0, but just return
         if (signature.getReturnType().getJniName().equals("void")) {
             sb.append("#define RETURN_EXCEPTION goto exitpoint;\n");
+            defaultReturnStatement = "return;";
         } else {
             sb.append("#define RETURN_EXCEPTION __return_retval__.i = 0;goto exitpoint;\n");
+            defaultReturnStatement = "return 0;";
         }
 
         //generate JNI signature
@@ -138,7 +143,7 @@ public class CSourceGenerator {
             if (antidebugSelf) {
                 sb.append("if(child==0){\n"); //recursive calls won't apply selfdebug (or they will fail to attach)
                 sb.append("child = self_debug(env, \"").append(libname).append("vm.o\");\n");
-                sb.append("if(!child)return 0;\n");
+                sb.append("if(!child)").append(defaultReturnStatement).append("\n");
                 sb.append("}\n");
             }
         }
