@@ -72,9 +72,9 @@ public abstract class Java2CTests implements TestInterface {
         }
         try {
             compiler.compileFile(sources, outObject, false);
+            compiler.compileSharedLib(new File[]{outObject}, outLib);
             if (outVM.exists()) {
                 compiler.compileFile(new File[]{outVM}, outObjectVM, true);
-                compiler.compileSharedLib(new File[]{outObject}, outLib);
             }
         } catch (IOException | InterruptedException | CompilationException e) {
             Assertions.fail(e.getMessage());
