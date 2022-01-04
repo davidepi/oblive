@@ -301,7 +301,7 @@ static inline int self_debug(JNIEnv* env, const char* child_process)
               ((uint64_t*)child_random)[1]);
   DEBUG_PRINT("Decrypted is 0x%016lX 0x%016lX.\n", ((uint64_t*)decrypted)[0],
               ((uint64_t*)decrypted)[1]);
-  long_jump = parent_random[20] | 0x11; // avoid having 0 or "common numbers"
+  long_jump = parent_random[20] | 0x11; // avoid having 0 or "small numbers"
                                         // (they implies too many reseeds)
   short_jump = decrypted[20] | 0x11;
   prng_state[0] = ((uint64_t*)parent_random)[0];

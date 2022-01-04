@@ -143,7 +143,7 @@ public class CSourceGenerator {
             if (antidebugSelf) {
                 sb.append("if(child==0){\n"); //recursive calls won't apply selfdebug (or they will fail to attach)
                 sb.append("child = self_debug(env, \"").append(libname).append("vm.o\");\n");
-                sb.append("if(!child)").append(defaultReturnStatement).append("\n");
+                sb.append("if(!child)").append(defaultReturnStatement).append("\n"); //TODO: shouldn't this be if (child <0)?
                 sb.append("}\n");
             }
         }
