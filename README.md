@@ -1,6 +1,6 @@
 # Oblive
 
-![ci badge](https://github.com/davidepi/oblive/actions/workflows/ci/badge.svg)
+![ci badge](https://github.com/davidepi/oblive/actions/workflows/ci.yml/badge.svg)
 
 Oblive is an hardening tool that enables C obfuscations and antidebugging in languages running on the Java Virtual Machine (e.g. Java, Kotlin, ...).
 Protections are performed automatically, with the user having only to signal, with an annotation, which part of the code to protect.
