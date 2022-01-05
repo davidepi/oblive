@@ -28,14 +28,14 @@ public class NativeCompiler {
     private String include;
     private final String objext;
     private final String libext;
-    private String ldflags;
+    private String linklibs;
 
     /**
      * Default constructor
      */
     public NativeCompiler() {
         cflags = "";
-        ldflags = "";
+        linklibs = "";
         objext = SystemInfo.getObjectExtension();
         libext = SystemInfo.getSharedLibraryExtension();
         if (SystemInfo.isNix())
@@ -117,7 +117,6 @@ public class NativeCompiler {
         if (!executable) {
             command.append(" -c -fpic ");
         }
-        command.append(' ').append(cflags).append(' ');
         command.append(' ').append(include).append(' ');
 
         for (File source : sources) {
@@ -132,8 +131,8 @@ public class NativeCompiler {
                         "read or does not exists");
             }
         }
-        command.append(' ').append("-o").append(' ');
-        command.append(' ').append(objectOutput.getAbsolutePath());
+        command.append(' ').append(linklibs).append(' ').append(cflags).append(' ').append("-o ");
+        command.append(objectOutput.getAbsolutePath());
         runCompilation(command.toString(), objectOutput.getAbsolutePath());
     }
 
@@ -172,7 +171,7 @@ public class NativeCompiler {
                         "read or does not exists");
             }
         }
-        command.append(' ').append(ldflags).append(" -shared -o ");
+        command.append(' ').append(linklibs).append(' ').append(cflags).append(' ').append(" -shared -o ");
         command.append(libraryOutput.getAbsolutePath());
         runCompilation(command.toString(), libraryOutput.getAbsolutePath());
     }
@@ -210,12 +209,21 @@ public class NativeCompiler {
     }
 
     /**
-     * Sets the following flags that will be used when invoking the compileSharedLib method.
+     * Sets the static libraries that will be used for the compilation.
+     * Libraries are passed with their complete name, for example ["libssl", "libcrypto"] etc..
      *
-     * @param flags the flags that will be used
+     * @param staticLibs the name of the library that will be linked by the linker. Name must start with "lib".
      */
-    public void setLinkerFlags(@NotNull String flags) {
-        this.ldflags = flags;
+    public void setStaticLibs(@NotNull String[] staticLibs) {
+        StringBuilder sb = new StringBuilder();
+        for (String lib : staticLibs) {
+            if (lib.startsWith("lib")) {
+                sb.append("-l").append(lib.substring(3));
+            } else {
+                throw new AssertionError("Full library name not specified");
+            }
+        }
+        this.linklibs = sb.toString();
     }
 
     /**

@@ -67,8 +67,8 @@ public abstract class Java2CTests implements TestInterface {
             compiler.setCompilationFlags("-Wall -Wno-unused-variable -Wno-unused-function -O3");
         } else {
             // antidebug requested, this requires libcrypto
-            compiler.setCompilationFlags("-Wall -Wno-unused-variable -Wno-unused-function -O3 -lcrypto");
-            compiler.setLinkerFlags("-lcrypto");
+            compiler.setStaticLibs(new String[]{"libcrypto"});
+            compiler.setCompilationFlags("-Wall -Wno-unused-variable -Wno-unused-function -O3");
         }
         try {
             compiler.compileFile(sources, outObject, false);
