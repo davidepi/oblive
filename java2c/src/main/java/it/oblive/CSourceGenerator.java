@@ -219,8 +219,16 @@ public class CSourceGenerator {
             sb.append("close(child);child=0;}\n");
         }
         /* --------------------------------------- END OF FUNCTION ---------------------------------------------------*/
-        sb.append(eb.returnType);
-        sb.append("RETURN_EXEC;\n");
+        // in some cases, due to compiler optimizations, a function with signature 'int/char/whatever' may return void
+        // (the easiest way to generate this is to write an int method that immediately throws an exception)
+        // however, directly translating this to C is a hard error. Thus, this statement changes return; to return 0;
+        if (!signature.getReturnType().getJniName().equals("void") && eb.returnType == 'V') {
+            sb.append("return 0;\n");
+        } else {
+            // normal return
+            sb.append(eb.returnType);
+            sb.append("RETURN_EXEC;\n");
+        }
         sb.append("}\n");
         sb.append("#undef RETURN_EXCEPTION\n\n");
         methods.add(sb.toString());
