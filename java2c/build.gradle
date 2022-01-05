@@ -13,6 +13,7 @@ dependencies {
 compileTestJava { options.encoding = "UTF-8" }
 test {
     useJUnitPlatform()
+    exclude '**/antidebug/**'
 }
 
 tasks.withType(Test) {
