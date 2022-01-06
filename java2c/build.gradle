@@ -13,7 +13,11 @@ dependencies {
 compileTestJava { options.encoding = "UTF-8" }
 test {
     useJUnitPlatform()
+    // these used to work but now the antidebug have to be tested manually.
     exclude '**/antidebug/**'
+    testLogging {
+      events "PASSED", "SKIPPED", "FAILED"
+    }
 }
 
 tasks.withType(Test) {
