@@ -10,25 +10,66 @@ Please do **NOT** use this code in production.
 
 ## Usage
 
+### Build the transformator
+First, ensure that a JDK and `gcc` are installed in the system.
+To build the obfuscation and antidebugging tools, clone this repository, and build its contents with the following command:
+
+```bash
+./gradlew build && ./gradlew jar
+```
+This will run a long (several minutes) test suite to ensure the transformator correctness and will produce the transformator `.jar` file inside the sub-folder `oblive/build/libs`. Note that this is not the build folder in the root of the project.
+
+If the tests fail to run and `gcc` is installed in the system and in the `PATH` variable, the `JAVA_HOME` variable may be pointing to a wrong folder. Unsetting this variable should fix the issue.
+
+Alternatively, the built jar can be found in the release section.
+
+### Annotate the project to protect
+
+The decision on which method to protect is left to the user, and the project to protect must be annotated accordingly.
+In order to do so the following steps are necessary.
+
+- Add the `it.oblive.annotations` jar built in the previous step as a local dependency in the Gradle or Maven (at the time of writing GitHub does not allow unauthorized access to Maven packages hence the reason of the local dependency). The jar is `annotations/build/libs/annotations-1.0.0.jar`, from the root of the current repository.
+- Import the annotation(s) with the `import it.oblive.annotations.*;` statement and annotate the method(s) to protect, then build the application jar.
+
+  **NOTE:** the `@NativeObfuscation` annotation is required in order to apply antidebugging.
+
+### Apply the protection(s)
+
+The following command will run the transformator
+
+```bash
+java -jar oblive-1.0.0.jar <annotated_jar>.jar <output>.jar
+```
+
+where `<annotated_file>.jar` is the jar containing the annotated methods that will be protected, and `<output>.jar` is the results of the operation. This will likely generate additional files such as a `.so` library (the JNI part) and, if `@AntidebugSelf` was requested, an extcutable (the OVM).
+
+ This implementation currently works on the `x86_64` architecture and *nix kernels only.
+
+### Run the protected jar
+
+In order to run the protected application jar, there are two considerations to keep in mind:
+
+- The `libnative.so` library must be in the `java.library.path`. This is a limitation of the java language itself. In order to do so it is necessary to run the jar with the argument `-Djava.library.path=<path to libnative.so folder>`.
+- If `@AntidebugSelf` was requested, the additional executable must be in PATH in order to be run.
+
+After applying the protection, both the `.so` file and the additional executable will be in the same folder. To run the jar it is thus sufficient to move into that folder and run the following command:
+```bash
+java -Djava.library.path=. -jar <output>.jar
+```
+with `<output>.jar` being the same name specified in the previous subsection.
+
+Note that `@AntidebugSelf` requires libcrypto to be installed in the system.
+
+## Protections
+
+Brief description of all the protections that can be applied.
+
 The package `it.oblive.annotations` contains the Java Annotations that should be used to specify methods to be protected.
 The annotations are the following:
 - `@NativeObfuscation`: methods with this annotation are removed from their respective `.class` file and replaced with a semantically equivalent C implementation.
 - `@AntidebugTime`: methods with this annotation implement time-check antidebugging and backend damaging. This is a trivial type of antidebugging with very low resilience.
 - `@AntidebugSelf`: methods with this annotation implement self-debug antidebugging and backend damaging. The self debugging implemented by this annotation is currently state-of-the-art antidebugging, albeit with a heavy execution time cost.
 
-Usage:
-```bash
-java -jar oblive.jar <input_file>.jar <output_file>.jar
-```
-where `<input_file>.jar` is the jar containing the annotated methods that will be protected, and `<output_file>.jar` is the results of the operation. This will likely generate additional files such as a `.so` library that must be placed in the `java.library.path` during execution and an executable that must be in the PATH, if the antidebug was requested.
-
-Note that *libcrypto* is required to be installed in the system when applying the `@AntidebugSelf` protection.
-
-This implementation currently works on the `x86_64` architecture and *nix kernels only.
-
-## Protections
-
-Brief description of all the protections that can be applied.
 
 ### Native translation (Java2C)
 The `@NativeObfuscation` annotation uses the *Java2C* tool, contained in this repository, to translate a Java bytecode method into a C method.
