@@ -57,7 +57,7 @@ public class NativeCompiler {
             }
         }
         String javaHome = System.getenv("JAVA_HOME");
-        if (javaHome == null) {
+        if (javaHome == null || !(new File(javaHome).exists())) {
             javaHome = System.getProperty("java.home");
             if (javaHome.isEmpty()) {
                 throw new IncompleteConfigurationError("The JAVA_HOME environment variable used to specify the " +
@@ -86,7 +86,9 @@ public class NativeCompiler {
             else
                 include = "-I" + includes[0] + " -I" + includes[1];
         } catch (IOException e) {
-            throw new IncompleteConfigurationError("Could not find the file `jni.h` in the JAVA_HOME subtree");
+            String msg = "Could not find file `jni.h` and/or `jni_md.h in the JAVA_HOME subtre. JAVA_HOME is set to` " +
+                    javaHome;
+            throw new IncompleteConfigurationError(msg);
         }
     }
 
